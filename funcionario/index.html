@@ -527,12 +527,13 @@ function abrirWA(cid,tipo,prodNome){
   if(!waAtual)return;
   var c=waAtual;var nc=NC[c.nivel]||NC.BRONZE;
   var desc=c.nivel==='OURO'?'10% OFF exclusivo 🥇':c.nivel==='PRATA'?'5% OFF exclusivo 🥈':'';
+  var nl='\n';
   var tpls={
-    reposicao:'Olá, *'+c.nome+'*! 👋\n\nAqui é da *Alpha Suplementos* 💪\n\nSeu *'+(prodNome||'produto')+'* está acabando!'+(desc?'\n\n🎁 Como cliente *'+c.nivel+'*, você tem *'+desc+'* na próxima compra!':'')+'\n\nGaranta agora: alphasuplementos.com.br\n\n_Performance é o nosso negócio_ 🔥',
-    nivel:nc.emoji+' *Parabéns, '+c.nome+'!*\n\nVocê é *'+c.nivel+'* agora!\n✅ Você ganha *'+nc.pts+'pt/R$* e *'+(nc.cb*100).toFixed(0)+'% cashback*!\n\nalphasuplementos.com.br 💪',
-    aniversario:'🎂 *Feliz Aniversário, '+c.nome+'!*\n\nA *Alpha Suplementos* te deseja um dia incrível!\n\n🎁 Use o código *ANIV2025* e ganhe *15% OFF*! Válido por 7 dias.\n\nalphasuplementos.com.br 💪',
-    pontos:'⭐ *Olá, '+c.nome+'!*\n\nVocê tem *'+fP(c.pontos)+'* acumulados!\n\n🏆 Resgate prêmios em: alphasuplementos.com.br\n\n_Seus pontos estão te esperando!_ 🎁',
-    custom:'Olá, *'+c.nome+'*! 👋\n\n'
+    reposicao:'Ola, *'+c.nome+'*! '+nl+nl+'Aqui e da *Alpha Suplementos*'+nl+nl+'Seu *'+(prodNome||'produto')+'* esta acabando!'+(desc?nl+nl+'Como cliente *'+c.nivel+'*, voce tem *'+desc+'* na proxima compra!':'')+nl+nl+'Garanta agora: alphasuplementos.com.br'+nl+nl+'Alpha Suplementos - Performance e o nosso negocio!',
+    nivel:nc.emoji+' *Parabens, '+c.nome+'!*'+nl+nl+'Voce e nivel *'+c.nivel+'* agora!'+nl+'Voce ganha *'+nc.pts+'pt/R$* e *'+(nc.cb*100).toFixed(0)+'% cashback*!'+nl+nl+'alphasuplementos.com.br',
+    aniversario:'Feliz Aniversario, *'+c.nome+'*!'+nl+nl+'A *Alpha Suplementos* deseja um dia incrivel!'+nl+nl+'Use o codigo *ANIV2025* e ganhe *15% OFF*! Valido por 7 dias.'+nl+nl+'alphasuplementos.com.br',
+    pontos:'Ola, *'+c.nome+'*!'+nl+nl+'Voce tem *'+fP(c.pontos)+'* acumulados!'+nl+nl+'Resgate premios em: alphasuplementos.com.br'+nl+nl+'Seus pontos estao te esperando!',
+    custom:'Ola, *'+c.nome+'*!'+nl+nl
   };
   var t=tpls[tipo]||tpls.custom;
   el('mwa-t').textContent='📱 WhatsApp — '+c.nome;
@@ -540,16 +541,18 @@ function abrirWA(cid,tipo,prodNome){
   el('mwa-msg').value=t;
   window._waTpls=tpls;
   el('mwa-tpls').innerHTML=[{k:'reposicao',l:'📦 Reposição'},{k:'nivel',l:'🏆 Nível'},{k:'aniversario',l:'🎂 Aniversário'},{k:'pontos',l:'⭐ Pontos'},{k:'custom',l:'✏️ Custom'}].map(function(x){
-    return '<button class="bgh" style="font-size:11px;padding:5px 9px;'+(tipo===x.k?'background:var(--red);color:#fff;border-color:var(--red)':'')+'" onclick="usarTplWA(''+x.k+'')">'+x.l+'</button>';
+    return '<button class="bgh" style="font-size:11px;padding:5px 9px;'+(tipo===x.k?'background:var(--red);color:#fff;border-color:var(--red)':'')+'" onclick="usarTplWA(this.dataset.k)" data-k="'+x.k+'">'+x.l+'</button>';
   }).join('');
   el('mwa').style.display='flex';
 }
 function fMWA(){el('mwa').style.display='none';}
 function usarTplWA(k){
-  if(window._waTpls && window._waTpls[k]){
-    var msg=el('mwa-msg');
-    if(msg) msg.value=window._waTpls[k];
-  }
+  try {
+    if(window._waTpls && window._waTpls[k]){
+      var msg=el('mwa-msg');
+      if(msg) msg.value=window._waTpls[k];
+    }
+  } catch(e){ console.log('usarTplWA erro:',e); }
 }
 function enviarWA(){
   if(!waAtual)return;
