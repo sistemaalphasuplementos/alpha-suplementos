@@ -162,7 +162,7 @@ body{color:#FFFFFF;font-size:15px}
       <button class="tbt" onclick="ir('financeiro',this)">💰 Financeiro</button>
       <button class="tbt" onclick="ir('promocoes',this)">⚡ Promoções</button>
       <button class="tbt" onclick="ir('indicacoes',this)">🎯 Indicações</button>
-      <button class="tbt" onclick="ir('desempenho',this)">📈 Desempenho</button>
+      <button class="tbt" onclick="ir('desempenho',this);rDesemp()">📈 Desempenho</button>
     </div>
     <div class="tbright"><span id="unome">CEO</span><button id="sbtn">Sair</button></div>
   </div>
@@ -497,8 +497,9 @@ function ir(n,b){
 }
 
 // RENDER
-function rTudo(){rDash();rClientes();rRank();rCRM();rFin();rInd();rPLog();upPv();try{rDesemp();}catch(e){}}
+function rTudo(){rDash();rClientes();rRank();rCRM();rFin();rInd();rPLog();upPv();rDesemp();}
 function rDesemp(){
+  console.log('rDesemp chamado!');
   // Dados de funcionários com vendas e cadastros
   var FUNCS=['André','Hesllen','Sabina','Érica'];
   // Simular dados baseados nos clientes cadastrados
