@@ -382,8 +382,38 @@ async function fazerLogin(){
     }
   } catch(e){ console.log('API offline, tentando local'); }
 
-  // Fallback: verificar nos dados demo por nome + tel
-  var primNome = nome.charAt(0).toUpperCase() + nome.slice(1);
+  // Fallback: tentar carregar clientes da planilha e buscar localmente
+  try {
+    var r2 = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos');
+    var d2 = await r2.json();
+    if(d2.sucesso && d2.dados && d2.dados.length>0){
+      var encontrado = null;
+      for(var i=0; i<d2.dados.length; i++){
+        var row = d2.dados[i];
+        var primNomeRow = (row[1]||'').split(' ')[0].toLowerCase().trim();
+        var telRow = (row[3]||'').replace(/[^0-9]/g,'');
+        var nomeOk = primNomeRow === nome;
+        var telOk  = telRow === tel || telRow.endsWith(tel) || tel.endsWith(telRow.slice(-8));
+        if(nomeOk && telOk){
+          encontrado = row;
+          break;
+        }
+      }
+      if(encontrado){
+        U = {
+          id: encontrado[0]||'', nome: encontrado[1]||nome,
+          email: encontrado[2]||'', tel: encontrado[3]||tel,
+          nivel: encontrado[7]||'BRONZE', pontos: Number(encontrado[6])||0,
+          cashback: Number(encontrado[10])||0, gastoMes: Number(encontrado[8])||0,
+          mesesRec: Number(encontrado[9])||0, ref: encontrado[11]||gerarRefLocal()
+        };
+        iniciar();
+        return;
+      }
+    }
+  } catch(e2){ console.log('Fallback lista erro:', e2); }
+
+  // Último fallback: dados demo
   var found = Object.values(DEMOS).find(function(d){
     var dNome = d.nome.split(' ')[0].toLowerCase();
     var dTel  = (d.tel||'').replace(/[^0-9]/g,'');
@@ -395,7 +425,7 @@ async function fazerLogin(){
     iniciar();
   } else {
     err.style.display='block';
-    err.textContent='Nome ou telefone não encontrados. Cadastre-se na loja!';
+    err.textContent='Nome ou telefone nao encontrados. Verifique os dados ou cadastre-se na loja!';
   }
 }
 
