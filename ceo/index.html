@@ -23,14 +23,14 @@ body{background:#0a0a0a;color:#f0f0f0;font-family:'Barlow',sans-serif;font-size:
 .llinks{margin-top:14px;font-size:12px;color:#666}
 .llinks a{color:#666;text-decoration:none;margin:0 8px}
 #app{display:none}
-.topbar{background:#111;border-bottom:2px solid #CC0000;padding:0 24px;display:flex;align-items:center;height:56px;gap:16px;position:sticky;top:0;z-index:50}
+.topbar{background:#111;border-bottom:2px solid #CC0000;padding:8px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:50;min-height:56px}
 .tblogo{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .tblogo img{height:32px}
 .tbnome{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;color:#CC0000}
 .tbnome span{color:#f0f0f0}
 .tbbadge{background:#CC000022;border:1px solid #CC000044;border-radius:20px;padding:3px 12px;font-size:11px;color:#CC0000;font-weight:700}
-.tbtabs{display:flex;gap:2px;flex:1;justify-content:center;overflow-x:auto}
-.tbt{padding:6px 14px;background:none;border:none;color:#666;font-size:12px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif;border-bottom:2px solid transparent;white-space:nowrap}
+.tbtabs{display:flex;gap:2px;flex-wrap:wrap;justify-content:center;width:100%;padding:4px 0}
+.tbt{padding:5px 10px;background:none;border:none;color:#aaa;font-size:12px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif;border-bottom:2px solid transparent;white-space:nowrap}
 .tbt:hover{color:#f0f0f0}
 .tbt.on{color:#CC0000;border-bottom-color:#CC0000}
 .tbright{display:flex;align-items:center;gap:10px;flex-shrink:0;font-size:12px;color:#666}
@@ -290,10 +290,10 @@ body{color:#FFFFFF;font-size:15px}
 
 
     <!-- DESEMPENHO -->
-    <div id="p-desempenho" class="pnl" style="min-height:200px">
+    <div id="p-desempenho" class="pnl">
       <div style="margin-bottom:18px">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">📈 Desempenho da Equipe</div>
-        <div style="font-size:12px;color:#aaa;margin-top:2px">Ranking de funcionários · Vendas · Cadastros · Ticket médio</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#FF2244">📈 Desempenho da Equipe</div>
+        <div style="font-size:13px;color:#aaa;margin-top:4px">Ranking de funcionários · Vendas · Cadastros · Ticket médio</div>
       </div>
 
       <!-- KPIs gerais -->
