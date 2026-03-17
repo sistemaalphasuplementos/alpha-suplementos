@@ -85,7 +85,7 @@ select.inp{cursor:pointer}
     <input type="email" class="inp" id="l-email" placeholder="funcionario@alpha.com" value="funcionario@alphasuplementos.com.br">
     <input type="password" class="inp" id="l-senha" placeholder="Senha" value="func2025">
     <div id="login-err" style="color:#FF4444;font-size:12px;margin-bottom:10px;display:none">Senha incorreta</div>
-    <button class="btn-red" onclick="fazerLogin()">ENTRAR →</button>
+    <button class="btn-red" id="func-lbtn">ENTRAR →</button>
     <div class="login-links">
       <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/ceo/">Sou CEO</a> · <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/cliente/">Sou Cliente</a>
     </div>
@@ -594,7 +594,7 @@ function gerarCodigoSeguro(){
 function renderResgates(){
   preencherSelectsResgates();
   var pend=[
-    {email:'joao@email.com',nome:'João Silva',premio:'Coqueteleira Alpha',codigo:'A8F2D1C4',data:'14/01'},
+    {email:'<template class="__cf_email__" data-cfemail="066c69676946636b676f6a2865696b">[email&#160;protected]</template>',nome:'João Silva',premio:'Coqueteleira Alpha',codigo:'A8F2D1C4',data:'14/01'},
   ];
   document.getElementById('resgates-pendentes').innerHTML=pend.map(function(r){
     return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid var(--border)">'+
@@ -813,9 +813,4 @@ function fazerLogout(){
         <div style="font-size:10px;color:#666;margin-bottom:4px">Código de indicação único</div>
         <div style="font-family:monospace;font-size:20px;letter-spacing:4px;font-weight:700;color:#FFD700" id="cad-suc-ref"></div>
       </div>
-      <button onclick="fecharCadastro();resetVenda()" style="background:#CC0000;color:#fff;border:none;border-radius:9px;padding:12px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">Nova venda para este cliente</button>
-    </div>
-  </div>
-</div>
-</body>
-</html>
+      <button onclick="fecharCadastro();resetVenda()" style="background:#CC0000;color:#fff;border:none;border-radius:9px;padding:12px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barl
