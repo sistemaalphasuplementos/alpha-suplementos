@@ -21,7 +21,7 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font
 #lbtn{width:100%;background:var(--red);color:#fff;border:none;border-radius:9px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;margin-top:4px}
 .ll{margin-top:14px;font-size:12px;color:var(--text3)}
 .ll a{color:var(--text3);text-decoration:none;margin:0 8px}
-#app{display:none;min-height:100vh;flex-direction:column}
+#app{display:none;min-height:100vh}
 .tb{background:var(--bg2);border-bottom:2px solid var(--red);padding:0 24px;display:flex;align-items:center;height:56px;gap:16px;position:sticky;top:0;z-index:50}
 .tbl2{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .tbl2 img{height:30px}
@@ -33,7 +33,7 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font
 .tab:hover{color:var(--text)}.tab.on{color:var(--red);border-bottom-color:var(--red)}
 .tbr{display:flex;align-items:center;gap:8px;flex-shrink:0;font-size:12px;color:var(--text3)}
 #sbtn{background:none;border:.5px solid #333;border-radius:6px;padding:5px 10px;color:var(--text3);font-size:11px;cursor:pointer;font-family:'Barlow',sans-serif}
-.main{flex:1;padding:20px 24px}
+.main{padding:20px 24px;min-height:calc(100vh - 56px);background:var(--bg)}
 .p{display:none}.p.on{display:block}
 .card{background:var(--bg3);border:.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px}
 .ct{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:6px}
@@ -334,9 +334,10 @@ el('lbtn').onclick=function(){
   if(s==='func2025'){
     err.style.display='none';
     el('lwrap').style.display='none';
-    el('app').style.display='flex';
+    el('app').style.display='block';
     el('tnome').textContent=em?em.split('@')[0]:'Funcionário';
-    carregarClientes().then(function(){ renderTudo(); });
+    renderTudo(); // render immediately with demo data
+    carregarClientes().then(function(){ renderTudo(); }).catch(function(e){ console.log('fetch err',e); });
   } else {
     err.style.display='block';
     err.textContent='Senha incorreta. Use: func2025';
@@ -358,7 +359,10 @@ function ir(n,b){
 // RENDER
 async function carregarClientes(){
   try{
-    var r=await fetch(WEB_APP_URL+'?acao=listar_clientes_todos');
+    var controller=new AbortController();
+    var timeout=setTimeout(function(){controller.abort();},5000);
+    var r=await fetch(WEB_APP_URL+'?acao=listar_clientes_todos',{signal:controller.signal});
+    clearTimeout(timeout);
     var d=await r.json();
     if(d.sucesso && d.dados && d.dados.length>0){
       CL=d.dados.map(function(c){
@@ -369,15 +373,21 @@ async function carregarClientes(){
           mesesRec:Number(c[9])||0, ref:c[11]||''
         };
       });
-      console.log('Clientes carregados da planilha:', CL.length);
+      console.log('Clientes da planilha:', CL.length);
     }
   }catch(e){ console.log('Usando dados demo:', e.message); }
+  return true;
 }
 
 function renderTudo(){
   var sel=el('vsel');
   if(sel)sel.innerHTML='<option value="">Selecione o cliente...</option>'+CL.map(function(c){return '<option value="'+c.id+'">'+c.nome+' — '+c.email+'</option>';}).join('');
-  renderCRM();renderClis();renderInd();renderRes();preencherResSelects();
+  try{renderCRM();}catch(e){console.error('CRM',e);}
+  try{renderClis();}catch(e){console.error('Clis',e);}
+  try{renderInd();}catch(e){console.error('Ind',e);}
+  try{renderRes();}catch(e){console.error('Res',e);}
+  try{preencherResSelects();}catch(e){console.error('Sel',e);}
+  } catch(ex){ console.error('renderTudo',ex); }
 }
 
 function renderCRM(){
