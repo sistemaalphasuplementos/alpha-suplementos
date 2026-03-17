@@ -313,9 +313,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const DEMOS={
-  ouro:  {id:'C01',nome:'João Silva',    email:'joao@email.com',  nivel:'OURO',  pontos:3420,cashback:241.40,gastoMes:380,mesesRec:3,ref:'ALPHA01'},
-  prata: {id:'C02',nome:'Maria Oliveira',email:'maria@email.com', nivel:'PRATA', pontos:920, cashback:46.00, gastoMes:210,mesesRec:2,ref:'ALPHA02'},
-  bronze:{id:'C03',nome:'Pedro Santos',  email:'pedro@email.com', nivel:'BRONZE',pontos:310, cashback:6.20,  gastoMes:80, mesesRec:0,ref:'ALPHA03'},
+  ouro:  {id:'C01',nome:'João Silva',    email:'joao@email.com',  tel:'47991234567',nivel:'OURO',  pontos:3420,cashback:241.40,gastoMes:380,mesesRec:3,ref:'ALPHA01'},
+  prata: {id:'C02',nome:'Maria Oliveira',email:'maria@email.com', tel:'47987654321',nivel:'PRATA', pontos:920, cashback:46.00, gastoMes:210,mesesRec:2,ref:'ALPHA02'},
+  bronze:{id:'C03',nome:'Pedro Santos',  email:'pedro@email.com', tel:'47976543210',nivel:'BRONZE',pontos:310, cashback:6.20,  gastoMes:80, mesesRec:0,ref:'ALPHA03'},
 };
 const TODOS=[
   {id:'C05',nome:'Carlos Ramos',  nivel:'OURO', pontos:4100},
@@ -386,7 +386,7 @@ async function fazerLogin(){
   var primNome = nome.charAt(0).toUpperCase() + nome.slice(1);
   var found = Object.values(DEMOS).find(function(d){
     var dNome = d.nome.split(' ')[0].toLowerCase();
-    var dTel  = d.tel.replace(/[^0-9]/g,'');
+    var dTel  = (d.tel||'').replace(/[^0-9]/g,'');
     return dNome === nome && (dTel.endsWith(tel) || tel.endsWith(dTel.slice(-8)));
   });
 
