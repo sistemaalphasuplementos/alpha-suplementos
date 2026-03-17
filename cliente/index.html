@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Alpha Suplementos">
+<link rel="apple-touch-icon" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
+<title>Alpha Suplementos — Fidelidade</title>
+<link rel="manifest" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--red:#CC0000;--red2:#FF2222;--gold:#FFD700;--green:#1D9E75;--bg:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;--border:#2a2a2a;--text:#fff;--text2:#ccc;--text3:#888;--safe:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:14px}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+/* LOGIN */
+.login-screen{min-height:100vh;display:flex;flex-direction:column;background:var(--bg)}
+.login-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 24px 16px;text-align:center}
+.login-hero img{width:160px;height:160px;object-fit:contain;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.login-tagline{font-size:12px;color:var(--text3);margin-top:6px;letter-spacing:.8px}
+.login-form{background:var(--bg2);border-top:2px solid var(--red);padding:24px}
+.login-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;text-align:center;margin-bottom:16px}
+.inp{width:100%;background:var(--bg4);border:.5px solid #333;border-radius:8px;padding:11px 13px;color:var(--text);font-size:15px;outline:none;font-family:'Barlow',sans-serif;margin-bottom:12px;-webkit-appearance:none}
+.inp:focus{border-color:var(--red)}
+.btn-red{background:var(--red);color:#fff;border:none;border-radius:9px;padding:12px;font-size:14px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;width:100%;letter-spacing:.5px}
+.btn-red:active{background:#aa0000;transform:scale(.98)}
+.login-sep{display:flex;align-items:center;gap:8px;color:var(--text3);font-size:11px;margin:12px 0}
+.login-sep::before,.login-sep::after{content:'';flex:1;height:.5px;background:#333}
+.demo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.demo-btn{background:var(--bg4);border:.5px solid #333;border-radius:8px;padding:10px 4px;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif;text-align:center}
+.demo-btn:active{background:var(--red);color:#fff;border-color:var(--red)}
+.login-links{text-align:center;margin-top:14px;font-size:12px;color:var(--text3)}
+.login-links a{color:var(--text3);text-decoration:none;margin:0 8px}
+/* APP */
+.app{display:none;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+.header{background:rgba(10,10,10,.95);border-bottom:1px solid #CC000033;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:sticky;top:0;z-index:10}
+.hdr-logo{display:flex;align-items:center;gap:8px}
+.hdr-logo img{height:30px}
+.hdr-logo-txt{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;color:var(--red)}
+.hdr-logo-txt span{color:var(--text)}
+.hdr-right{display:flex;gap:8px;align-items:center}
+.hdr-av{width:30px;height:30px;border-radius:50%;background:#CC000022;color:var(--red);border:1.5px solid var(--red);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;cursor:pointer}
+.screen{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(68px + var(--safe));display:none;flex-direction:column}
+.screen.on{display:flex}
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,10,.97);border-top:1px solid var(--red);display:flex;justify-content:space-around;padding:7px 0 calc(8px + var(--safe));z-index:20}
+.bn{display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:none;cursor:pointer;padding:4px 14px;color:var(--text3);font-family:'Barlow',sans-serif}
+.bn.on{color:var(--red)}
+.bn-ico{font-size:20px;transition:transform .15s}
+.bn.on .bn-ico{transform:scale(1.12)}
+.bn-lbl{font-size:9px;font-weight:600;letter-spacing:.3px}
+/* CARDS */
+.lcard{margin:12px;border-radius:14px;background:var(--bg2);border:1px solid #CC000033;overflow:hidden}
+.lcard-stripe{height:3px;background:linear-gradient(90deg,#990000,#CC0000,#FF3333)}
+.lcard-body{padding:16px}
+.lcard-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.lcard-brand{display:flex;align-items:center;gap:7px}
+.lcard-brand img{height:22px}
+.nivel-pill{display:flex;align-items:center;gap:4px;background:var(--bg4);border:.5px solid #333;border-radius:20px;padding:3px 9px}
+.np-e{font-size:14px}.np-t{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:900}
+.lcard-name{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;margin-bottom:2px}
+.lcard-email{font-size:11px;color:var(--text3);margin-bottom:12px}
+.lcard-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ls{background:var(--bg4);border-radius:8px;padding:9px 11px}
+.ls-v{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;line-height:1}
+.ls-l{font-size:9px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+/* AVISO SOMENTE LEITURA */
+.readonly-banner{background:#CC000011;border:.5px solid #CC000022;margin:0 12px 12px;border-radius:8px;padding:8px 12px;font-size:11px;color:#CC000088;display:flex;align-items:center;gap:6px}
+/* PROGRESS */
+.prog{margin:0 12px 12px;background:var(--bg3);border:.5px solid var(--border);border-radius:10px;padding:12px}
+.prog-hdr{display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px}
+.prog-title{font-weight:600}
+.prog-msg{color:var(--text3);font-size:11px}
+.prog-levels{display:flex;justify-content:space-around;margin-bottom:8px}
+.pl{display:flex;flex-direction:column;align-items:center;gap:2px;opacity:.3}
+.pl.done{opacity:.6}.pl.active{opacity:1}
+.pl-e{font-size:18px}.pl-n{font-size:9px;font-weight:700}
+.bar-bg{background:var(--bg4);border-radius:20px;height:6px;overflow:hidden;margin-bottom:5px}
+.bar-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#990000,#CC0000);transition:width .6s}
+.bar-info{display:flex;justify-content:space-between;font-size:10px;color:var(--text3)}
+/* QA */
+.qa-row{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:0 12px 12px}
+.qa{display:flex;flex-direction:column;align-items:center;gap:5px;background:var(--bg3);border:.5px solid var(--border);border-radius:10px;padding:10px 4px;cursor:pointer;border:none;transition:all .15s}
+.qa:active{background:var(--bg4);transform:scale(.94)}
+.qa-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.qa-lbl{font-size:10px;color:var(--text2);font-weight:500;text-align:center;line-height:1.2}
+/* SECTION */
+.sec{padding:0 12px 12px}
+.card{background:var(--bg3);border:.5px solid var(--border);border-radius:10px;padding:13px}
+.card-title{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.card-title::before{content:'';width:2px;height:10px;background:var(--red);border-radius:2px}
+/* RANKING */
+.rk{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:.5px solid var(--border)}
+.rk:last-child{border-bottom:none}
+.rk-pos{width:20px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;text-align:center}
+.rk-av{width:32px;height:32px;border-radius:50%;background:#CC000022;color:var(--red);border:1px solid #CC000033;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.rk-info{flex:1;min-width:0}
+.rk-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk-sub{font-size:10px;color:var(--text3);margin-top:1px}
+.rk-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
+.rk-me{background:linear-gradient(90deg,#CC000012,transparent);border-radius:6px;padding:9px 6px;margin:0 -6px}
+/* PAGE HEADER */
+.pg-hdr{padding:14px 12px 8px}
+.pg-title{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900}
+.pg-sub{font-size:12px;color:var(--text3);margin-top:1px}
+/* PREMIOS */
+.premios-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px}
+.pc{background:var(--bg3);border:.5px solid var(--border);border-radius:10px;padding:12px;position:relative;overflow:hidden}
+.pc.av{border-color:#CC000033}
+.pc.av::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#990000,#FF3333)}
+.pc.lk{opacity:.5}
+.pc-cat{font-size:9px;color:var(--text3);margin-bottom:3px}
+.pc-nome{font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)}
+.pc-pts{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--gold);margin-bottom:6px}
+.pc-bar-bg{height:3px;background:var(--bg4);border-radius:20px;margin-bottom:5px;overflow:hidden}
+.pc-bar-fill{height:100%;border-radius:20px}
+.pc-info{font-size:10px;color:var(--text3)}
+.pc-badge{position:absolute;top:6px;right:6px;background:var(--red);color:#fff;font-size:8px;font-weight:700;padding:2px 5px;border-radius:20px}
+.pc-lock{position:absolute;top:6px;right:6px;font-size:9px;color:var(--text3)}
+/* INDICAR */
+.ref-card{background:var(--bg3);border:1px solid #CC000033;border-radius:10px;padding:14px;text-align:center;position:relative;overflow:hidden;margin-bottom:12px}
+.ref-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#990000,#CC0000,#FF3333)}
+.ref-code{font-family:monospace;font-size:22px;letter-spacing:5px;font-weight:700;color:var(--text);margin:8px 0}
+.ref-link{font-size:10px;color:var(--text3)}
+.ben-row{display:flex;align-items:center;gap:10px;padding:9px 10px;background:var(--bg4);border-radius:7px;margin-bottom:6px}
+.ben-ico{font-size:20px;flex-shrink:0}
+.ben-txt{font-size:12px;color:var(--text2)}
+.ben-pts{font-weight:700;color:var(--red)}
+.btn-outline{background:transparent;color:var(--text);border:.5px solid #333;border-radius:8px;padding:8px 18px;font-size:12px;font-weight:600;font-family:'Barlow',sans-serif;cursor:pointer}
+/* HIST */
+.hi{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--border)}
+.hi:last-child{border-bottom:none}
+.hi-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.hi-info{flex:1;min-width:0}
+.hi-desc{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hi-date{font-size:10px;color:var(--text3);margin-top:1px}
+.hi-val{text-align:right;flex-shrink:0}
+.hi-main{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700}
+/* BENEFICIOS */
+.ben-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:.5px solid var(--border);font-size:12px;color:var(--text2)}
+.ben-item:last-child{border-bottom:none}
+/* INDIC */
+.ind-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid var(--border)}
+.ind-item:last-child{border-bottom:none}
+.ind-nome{font-size:12px;font-weight:600}
+.ind-date{font-size:10px;color:var(--text3);margin-top:1px}
+/* TOAST */
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-10px);background:var(--bg3);border:1px solid var(--red);border-radius:20px;padding:9px 18px;font-size:12px;font-weight:600;z-index:99;opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen" class="login-screen">
+  <div class="login-hero">
+    <img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha Suplementos">
+    <div class="login-tagline">ACUMULE PONTOS · SUBA DE NÍVEL · GANHE PRÊMIOS</div>
+  </div>
+  <div class="login-form">
+    <div class="login-title">ENTRAR NA MINHA CONTA</div>
+    <input type="email" class="inp" id="l-email" placeholder="seu@email.com" autocomplete="email">
+    <div id="l-err" style="color:#FF4444;font-size:12px;margin-bottom:8px;display:none">E-mail não encontrado</div>
+    <button class="btn-red" onclick="fazerLogin()">ENTRAR →</button>
+    <div class="login-sep">ENTRAR COMO DEMO</div>
+    <div class="demo-grid">
+      <button class="demo-btn" onclick="loginDemo('ouro')">🥇 OURO<br><span style="color:var(--text3);font-weight:400">3.420 pts</span></button>
+      <button class="demo-btn" onclick="loginDemo('prata')">🥈 PRATA<br><span style="color:var(--text3);font-weight:400">920 pts</span></button>
+      <button class="demo-btn" onclick="loginDemo('bronze')">🥉 BRONZE<br><span style="color:var(--text3);font-weight:400">310 pts</span></button>
+    </div>
+    <div class="login-links">
+      <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/ceo/">Sou CEO</a> · <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/funcionario/">Sou Funcionário</a>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="app">
+  <div class="header">
+    <div class="hdr-logo">
+      <img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha">
+      <span class="hdr-logo-txt">ALPHA <span>SUPLEMENTOS</span></span>
+    </div>
+    <div class="hdr-right">
+      <button style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3);position:relative" onclick="toast('🔔 Sem novas notificações')">🔔<span style="position:absolute;top:0;right:0;width:7px;height:7px;background:var(--red);border-radius:50%;border:1.5px solid var(--bg)"></span></button>
+      <div class="hdr-av" id="hdr-av" onclick="fazerLogout()"></div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div id="sc-home" class="screen on">
+    <div class="lcard">
+      <div class="lcard-stripe"></div>
+      <div class="lcard-body">
+        <div class="lcard-top">
+          <div class="lcard-brand"><img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha"></div>
+          <div class="nivel-pill"><span class="np-e" id="lc-e">🥇</span><span class="np-t" id="lc-nt" style="color:#FFD700">OURO</span></div>
+        </div>
+        <div class="lcard-name" id="lc-nm">JOÃO SILVA</div>
+        <div class="lcard-email" id="lc-em"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3c56535d537c59515d5550125f5351">[email&#160;protected]</a></div>
+        <div class="lcard-stats">
+          <div class="ls"><div class="ls-v" id="lc-pts" style="color:var(--gold)">3.420</div><div class="ls-l">pontos</div></div>
+          <div class="ls"><div class="ls-v" id="lc-cb" style="color:var(--green)">R$241,40</div><div class="ls-l">cashback</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="readonly-banner">🔒 Somente visualização — compras e resgates são processados pelo funcionário na loja</div>
+    <div class="prog">
+      <div class="prog-hdr"><span class="prog-title">Progresso de nível</span><span class="prog-msg" id="prog-msg"></span></div>
+      <div class="prog-levels">
+        <div class="pl" id="pl-b"><span class="pl-e">🥉</span><span class="pl-n" style="color:#CD7F32">Bronze</span></div>
+        <div class="pl" id="pl-p"><span class="pl-e">🥈</span><span class="pl-n" style="color:#C8C8C8">Prata</span></div>
+        <div class="pl" id="pl-o"><span class="pl-e">🥇</span><span class="pl-n" style="color:#FFD700">Ouro</span></div>
+      </div>
+      <div class="bar-bg"><div class="bar-fill" id="prog-bar" style="width:100%"></div></div>
+      <div class="bar-info"><span id="prog-gasto"></span><span id="prog-meta"></span></div>
+    </div>
+    <div class="qa-row">
+      <button class="qa" onclick="goScreen('premios')"><div class="qa-ico" style="background:#FFD70022">🏆</div><div class="qa-lbl">Prêmios</div></button>
+      <button class="qa" onclick="goScreen('indicar')"><div class="qa-ico" style="background:#ffffff10">🐺</div><div class="qa-lbl">Indicar</div></button>
+      <button class="qa" onclick="goScreen('historico')"><div class="qa-ico" style="background:#CC000022">📋</div><div class="qa-lbl">Histórico</div></button>
+      <button class="qa" onclick="goScreen('beneficios')"><div class="qa-ico" style="background:#1D9E7522">⭐</div><div class="qa-lbl">Benefícios</div></button>
+    </div>
+    <div class="sec">
+      <div class="card">
+        <div class="card-title">Ranking — minha posição</div>
+        <div id="rk-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRÊMIOS -->
+  <div id="sc-premios" class="screen">
+    <div class="pg-hdr"><div class="pg-title">LOJA DE PRÊMIOS</div><div class="pg-sub" id="premios-sub">Carregando...</div></div>
+    <div class="premios-grid" id="premios-grid" style="padding-bottom:10px"></div>
+    <div class="sec" style="padding-top:10px">
+      <div style="background:var(--bg3);border:.5px solid #CC000033;border-radius:10px;padding:12px;font-size:12px;color:var(--text3);line-height:1.8">
+        🔒 Para resgatar um prêmio, dirija-se à loja e solicite ao funcionário.<br>
+        O resgate é feito presencialmente e gera um código de retirada.
+      </div>
+    </div>
+  </div>
+
+  <!-- INDICAR -->
+  <div id="sc-indicar" class="screen">
+    <div class="pg-hdr"><div class="pg-title">INDICAR AMIGOS</div><div class="pg-sub">Ganhe pontos indicando!</div></div>
+    <div class="sec">
+      <div class="ref-card">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:4px;letter-spacing:.5px">SEU CÓDIGO EXCLUSIVO</div>
+        <div class="ref-code" id="ref-code">ALPHA01</div>
+        <div class="ref-link" id="ref-link">alphasuplementos.com.br/ref/ALPHA01</div>
+        <button class="btn-outline" style="margin-top:12px" onclick="copiarLink()">📋 Copiar link</button>
+      </div>
+      <div class="ben-row"><span class="ben-ico">🐺</span><div class="ben-txt">Você ganha <span class="ben-pts">+200 pontos</span> quando seu amigo fizer a 1ª compra</div></div>
+      <div class="ben-row"><span class="ben-ico">🎉</span><div class="ben-txt">Seu amigo ganha <span class="ben-pts">+100 pontos</span> no cadastro</div></div>
+      <div class="ben-row"><span class="ben-ico">♾️</span><div class="ben-txt">Sem limite — indique quantos quiser!</div></div>
+      <div class="card" style="margin-top:12px">
+        <div class="card-title">Minhas indicações</div>
+        <div id="ind-lista"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTÓRICO -->
+  <div id="sc-historico" class="screen">
+    <div class="pg-hdr"><div class="pg-title">HISTÓRICO</div><div class="pg-sub">Compras e resgates</div></div>
+    <div class="sec"><div class="card"><div id="hist-list"></div></div></div>
+  </div>
+
+  <!-- BENEFÍCIOS -->
+  <div id="sc-beneficios" class="screen">
+    <div class="pg-hdr"><div class="pg-title">MEUS BENEFÍCIOS</div><div class="pg-sub" id="ben-sub"></div></div>
+    <div class="sec">
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">Benefícios do meu nível</div>
+        <div id="ben-lista"></div>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">Todos os níveis</div>
+        <div id="niveis-lista"></div>
+      </div>
+      <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:10px;padding:12px;font-size:12px;color:var(--text3);line-height:1.9">
+        <div style="font-weight:600;color:var(--text);margin-bottom:6px">Como funciona o cashback?</div>
+        Você ganha cashback em toda compra. Para usar: a cada <strong style="color:var(--text)">R$4</strong> em compras você pode descontar <strong style="color:var(--text)">R$1</strong> do saldo acumulado. Solicite ao funcionário na hora da compra.
+      </div>
+    </div>
+  </div>
+
+  <div class="bnav">
+    <button class="bn on" id="bn-home" onclick="goScreen('home')"><span class="bn-ico">🏠</span><span class="bn-lbl">Início</span></button>
+    <button class="bn" id="bn-premios" onclick="goScreen('premios')"><span class="bn-ico">🏆</span><span class="bn-lbl">Prêmios</span></button>
+    <button class="bn" id="bn-indicar" onclick="goScreen('indicar')"><span class="bn-ico">🐺</span><span class="bn-lbl">Indicar</span></button>
+    <button class="bn" id="bn-historico" onclick="goScreen('historico')"><span class="bn-ico">📋</span><span class="bn-lbl">Histórico</span></button>
+    <button class="bn" id="bn-beneficios" onclick="goScreen('beneficios')"><span class="bn-ico">⭐</span><span class="bn-lbl">Benefícios</span></button>
+  </div>
+</div>
+
+<div class="toast" id="toast-el"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const DEMOS={
+  ouro:  {id:'C01',nome:'João Silva',    email:'joao@email.com',  nivel:'OURO',  pontos:3420,cashback:241.40,gastoMes:380,mesesRec:3,ref:'ALPHA01'},
+  prata: {id:'C02',nome:'Maria Oliveira',email:'maria@email.com', nivel:'PRATA', pontos:920, cashback:46.00, gastoMes:210,mesesRec:2,ref:'ALPHA02'},
+  bronze:{id:'C03',nome:'Pedro Santos',  email:'pedro@email.com', nivel:'BRONZE',pontos:310, cashback:6.20,  gastoMes:80, mesesRec:0,ref:'ALPHA03'},
+};
+const TODOS=[
+  {id:'C05',nome:'Carlos Ramos',  nivel:'OURO', pontos:4100},
+  {id:'C01',nome:'João Silva',    nivel:'OURO', pontos:3420},
+  {id:'C04',nome:'Ana Lima',      nivel:'PRATA',pontos:1850},
+  {id:'C02',nome:'Maria Oliveira',nivel:'PRATA',pontos:920},
+  {id:'C03',nome:'Pedro Santos',  nivel:'BRONZE',pontos:310},
+];
+const PREMIOS=[
+  {id:'P01',nome:'Coqueteleira Alpha',   pts:100, nivel:'BRONZE',cat:'Brinde'},
+  {id:'P02',nome:'Amostra Creatina 100g',pts:200, nivel:'BRONZE',cat:'Creatina'},
+  {id:'P03',nome:'Desconto 10%',         pts:350, nivel:'BRONZE',cat:'Desconto'},
+  {id:'P04',nome:'Whey 900g grátis',     pts:1500,nivel:'PRATA', cat:'Proteína'},
+  {id:'P05',nome:'Kit Treino Alpha',      pts:3000,nivel:'OURO',  cat:'Kit VIP'},
+  {id:'P06',nome:'Suplementação 1 mês',  pts:5000,nivel:'OURO',  cat:'Kit VIP'},
+];
+const HIST=[
+  {tipo:'compra', desc:'Creatina + Whey Protein',valor:380,pts:760, cb:26.60,data:'14/01/2025'},
+  {tipo:'compra', desc:'Pré-Treino + BCAA',       valor:350,pts:700, cb:24.50,data:'05/01/2025'},
+  {tipo:'resgate',desc:'Coqueteleira Alpha',        valor:0,  pts:-100,cb:0,   data:'02/01/2025'},
+  {tipo:'compra', desc:'Hipercalórico + Vitaminas', valor:290,pts:580, cb:20.30,data:'22/12/2024'},
+];
+const INDICACOES=[
+  {nome:'Maria Oliveira',status:'CONFIRMADA',data:'10/01/2025',pts:200},
+  {nome:'Carlos Ramos',  status:'CONFIRMADA',data:'15/12/2024',pts:200},
+];
+const NCFG={OURO:{emoji:'🥇',cor:'#FFD700',pts:2.0,cb:0.07,min:300},PRATA:{emoji:'🥈',cor:'#C8C8C8',pts:1.5,cb:0.05,min:150},BRONZE:{emoji:'🥉',cor:'#CD7F32',pts:1.0,cb:0.02,min:0}};
+const fR=v=>'R$'+Number(v).toFixed(2).replace('.',',');
+const fP=v=>Number(v).toLocaleString('pt-BR')+' pts';
+const ini=n=>n.split(' ').slice(0,2).map(p=>p[0]).join('');
+const niO=n=>['BRONZE','PRATA','OURO'].indexOf(n);
+
+let U=null;
+function toast(msg){const t=document.getElementById('toast-el');t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2800)}
+function loginDemo(k){U={...DEMOS[k]};iniciar()}
+function fazerLogin(){
+  const e=document.getElementById('l-email').value.trim();
+  const err=document.getElementById('l-err');
+  // Aceita qualquer email ou sem @
+  if(!e){err.style.display='block';err.textContent='Digite seu email';return}
+  err.style.display='none';
+  const found=Object.values(DEMOS).find(d=>d.email===e);
+  U=found?{...found}:{...DEMOS.bronze,email:e,nome:e.includes('@')?e.split('@')[0].charAt(0).toUpperCase()+e.split('@')[0].slice(1):e};
+  iniciar();
+}
+function fazerLogout(){U=null;document.getElementById('app').style.display='none';document.getElementById('login-screen').style.display='flex';toast('Até logo! 🐺')}
+function pedirPermissaoNotificacao(){
+  if('Notification' in window){
+    if(Notification.permission === 'default'){
+      Notification.requestPermission().then(function(perm){
+        if(perm === 'granted'){
+          console.log('Notificações permitidas!');
+        }
+      });
+    }
+  }
+}
+function iniciar(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  renderAll();goScreen('home');pedirPermissaoNotificacao();
+}
+
+function goScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.bn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('sc-'+name).classList.add('on');
+  const bn=document.getElementById('bn-'+name);
+  if(bn)bn.classList.add('on');
+}
+
+function renderAll(){
+  if(!U)return;
+  const cfg=NCFG[U.nivel];
+  // Header
+  const av=document.getElementById('hdr-av');
+  av.textContent=ini(U.nome);
+  // Card
+  document.getElementById('lc-e').textContent=cfg.emoji;
+  const nt=document.getElementById('lc-nt');nt.textContent=U.nivel;nt.style.color=cfg.cor;
+  document.getElementById('lc-nm').textContent=U.nome.toUpperCase();
+  document.getElementById('lc-em').textContent=U.email;
+  document.getElementById('lc-pts').textContent=Number(U.pontos).toLocaleString('pt-BR');
+  document.getElementById('lc-cb').textContent=fR(U.cashback);
+  // Progress
+  ['b','p','o'].forEach((k,i)=>{
+    const el=document.getElementById('pl-'+k);
+    const nv=['BRONZE','PRATA','OURO'][i];
+    el.classList.remove('active','done');
+    if(nv===U.nivel)el.classList.add('active');
+    else if(niO(nv)<niO(U.nivel))el.classList.add('done');
+  });
+  if(U.nivel==='OURO'){
+    document.getElementById('prog-bar').style.width='100%';
+    document.getElementById('prog-msg').textContent='🏆 Nível máximo!';
+    document.getElementById('prog-gasto').textContent=fR(U.gastoMes)+' gastos';
+    document.getElementById('prog-meta').textContent='';
+  } else {
+    const prox=U.nivel==='BRONZE'?'PRATA':'OURO';
+    const meta=NCFG[prox].min;
+    const pct=Math.min(100,Math.round(U.gastoMes/meta*100));
+    document.getElementById('prog-bar').style.width=pct+'%';
+    document.getElementById('prog-msg').textContent='Falta '+fR(Math.max(0,meta-U.gastoMes))+' para '+prox;
+    document.getElementById('prog-gasto').textContent=fR(U.gastoMes)+' este mês';
+    document.getElementById('prog-meta').textContent=fR(meta);
+  }
+  // Ranking
+  const rk=[...TODOS].sort((a,b)=>b.pontos-a.pontos);
+  document.getElementById('rk-list').innerHTML=rk.slice(0,5).map((c,i)=>{
+    const rc=NCFG[c.nivel];
+    const isMe=c.id===U.id;
+    const posC=i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#555';
+    const posL=i===0?'🏆':i+1;
+    return `<div class="rk ${isMe?'rk-me':''}">
+      <div class="rk-pos" style="color:${posC}">${posL}</div>
+      <div class="rk-av">${ini(c.nome)}</div>
+      <div class="rk-info"><div class="rk-name" style="color:${isMe?'var(--red)':'var(--text)'}">${isMe?'VOCÊ':c.nome.split(' ')[0].toUpperCase()}</div><div class="rk-sub" style="color:${rc.cor}">${rc.emoji} ${c.nivel}</div></div>
+      <div class="rk-pts">${fP(c.pontos)}</div>
+    </div>`;
+  }).join('');
+  // Prêmios
+  document.getElementById('premios-sub').innerHTML=`Você tem <strong style="color:var(--gold)">${fP(U.pontos)}</strong>`;
+  document.getElementById('premios-grid').innerHTML=PREMIOS.map(p=>{
+    const niOk=niO(U.nivel)>=niO(p.nivel);
+    const ptOk=U.pontos>=p.pts;
+    const pode=niOk&&ptOk;
+    const pct=Math.min(100,Math.round(U.pontos/p.pts*100));
+    return `<div class="pc ${pode?'av':niOk?'':'lk'}">
+      ${pode?'<div class="pc-badge">DISPONÍVEL</div>':!niOk?`<div class="pc-lock">🔒${p.nivel}</div>`:''}
+      <div class="pc-cat">${p.cat}</div>
+      <div class="pc-nome">${p.nome}</div>
+      <div class="pc-pts">${fP(p.pts)}</div>
+      <div class="pc-bar-bg"><div class="pc-bar-fill" style="width:${pct}%;background:${pode?'var(--red)':'#444'}"></div></div>
+      <div class="pc-info">${pode?'Solicite na loja!':!niOk?'Exige '+p.nivel:'Faltam '+fP(p.pts-U.pontos)}</div>
+    </div>`;
+  }).join('');
+  // Indicar
+  document.getElementById('ref-code').textContent=U.ref;
+  document.getElementById('ref-link').textContent='alphasuplementos.com.br/ref/'+U.ref;
+  document.getElementById('ind-lista').innerHTML=INDICACOES.map(i=>`
+    <div class="ind-item">
+      <div><div class="ind-nome">${i.nome}</div><div class="ind-date">${i.data}</div></div>
+      <div style="text-align:right">
+        <span style="background:${i.status==='CONFIRMADA'?'#1D9E7522':'#EF9F2722'};color:${i.status==='CONFIRMADA'?'#1D9E75':'#EF9F27'};border:.5px solid ${i.status==='CONFIRMADA'?'#1D9E7533':'#EF9F2733'};padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700">${i.status==='CONFIRMADA'?'✅ Confirmada':'⏳ Pendente'}</span>
+        ${i.pts>0?`<div style="font-size:10px;color:var(--gold);margin-top:3px">+${i.pts} pts</div>`:''}
+      </div>
+    </div>`).join('');
+  // Histórico
+  document.getElementById('hist-list').innerHTML=HIST.map(h=>{
+    const isC=h.tipo==='compra';
+    return `<div class="hi">
+      <div class="hi-ico" style="background:${isC?'#CC000022':'#FFD70022'}">${isC?'🛍️':'🎁'}</div>
+      <div class="hi-info"><div class="hi-desc">${h.desc}</div><div class="hi-date">${h.data} · ${isC?'compra':'resgate'}</div></div>
+      <div class="hi-val">
+        ${isC?`<div class="hi-main" style="color:var(--green)">${fR(h.valor)}</div>`:''}
+        <div class="hi-main" style="color:${h.pts>0?'var(--gold)':'#E24B4A'}">${h.pts>0?'+':''}${fP(h.pts)}</div>
+        ${h.cb>0?`<div style="font-size:10px;color:var(--green);margin-top:1px">+${fR(h.cb)} CB</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+  // Benefícios
+  document.getElementById('ben-sub').textContent=`Nível ${U.nivel} · ${cfg.pts}pt/R$ · ${(cfg.cb*100).toFixed(0)}% cashback`;
+  const bens=[
+    {i:'⭐',t:`<strong>${cfg.pts}pt</strong> por real gasto`},
+    {i:'💰',t:`<strong>${(cfg.cb*100).toFixed(0)}% cashback</strong> em toda compra`},
+    {i:'💳',t:'<strong>R$1</strong> cashback a cada <strong>R$4</strong> em compras'},
+    {i:'🎁',t:'Prêmios exclusivos na loja'},
+    U.nivel==='OURO'&&{i:'🔥',t:'<strong style="color:var(--red)">10% OFF</strong> exclusivo Ouro nos alertas de reposição'},
+    U.nivel==='PRATA'&&{i:'🔥',t:'<strong style="color:var(--red)">5% OFF</strong> exclusivo Prata nos alertas de reposição'},
+  ].filter(Boolean);
+  document.getElementById('ben-lista').innerHTML=bens.map(b=>`<div class="ben-item"><span style="font-size:18px;flex-shrink:0">${b.i}</span><span>${b.t}</span></div>`).join('');
+  document.getElementById('niveis-lista').innerHTML=Object.entries(NCFG).reverse().map(([k,n])=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:.5px solid var(--border);${k===U.nivel?'background:#CC000008;border-radius:6px;padding:9px 8px;margin:0 -8px':''}">
+      <span style="font-size:22px">${n.emoji}</span>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:13px;color:${n.cor}">${k}</div>
+        <div style="font-size:11px;color:var(--text3)">${k==='OURO'?'≥ R$300/mês · 2+ meses':k==='PRATA'?'≥ R$150/mês':'Compras abaixo de R$150'}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:12px;font-weight:600">${n.pts}pt/R$</div>
+        <div style="font-size:11px;color:var(--green)">${(n.cb*100).toFixed(0)}% cashback</div>
+      </div>
+    </div>`).join('');
+}
+
+function copiarLink(){
+  const link='alphasuplementos.com.br/ref/'+U.ref;
+  if(navigator.clipboard)navigator.clipboard.writeText(link).then(()=>toast('📋 Link copiado!'));
+  else toast('📋 Link: '+link);
+}
+</script>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+  import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging.js';
+  import { getDatabase, ref, onValue, set } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBUZaER1-J4-sui90-lHW56P7JTBvfAQHE",
+    authDomain: "sistema-alpha-b12d0.firebaseapp.com",
+    projectId: "sistema-alpha-b12d0",
+    storageBucket: "sistema-alpha-b12d0.firebasestorage.app",
+    messagingSenderId: "714388410138",
+    appId: "1:714388410138:web:c42c2391931d25acc0e6a3",
+    measurementId: "G-M706VJSX9F",
+    databaseURL: "https://sistema-alpha-b12d0-default-rtdb.firebaseio.com"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  // Tornar auth global para o login
+  window.firebaseAuth = auth;
+  window.firebaseDB = db;
+  window.firebaseSignIn = signInWithEmailAndPassword;
+  window.firebaseCreateUser = createUserWithEmailAndPassword;
+  window.firebaseOnAuthStateChanged = onAuthStateChanged;
+  window.firebaseRef = ref;
+  window.firebaseSet = set;
+  window.firebaseOnValue = onValue;
+
+  // Push notifications
+  if ('serviceWorker' in navigator && 'Notification' in window) {
+    navigator.serviceWorker.register('https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/firebase-sw.js').then(function(reg) {
+      try {
+        const messaging = getMessaging(app);
+        getToken(messaging, {
+          vapidKey: 'BL2KdPeb1VExfCJ2cGHrhY4_dMoGBMHZZh08pl9HnsvRcSz3TRllo59EkgNOAex_4UzWCr4V4GRq4lY5qohER6M',
+          serviceWorkerRegistration: reg
+        }).then(function(token) {
+          if(token) {
+            window.fcmToken = token;
+            console.log('FCM Token:', token);
+            // Salvar token no banco
+            if(window.U && window.U.email) {
+              var safeEmail = window.U.email.replace(/\./g,'_').replace(/@/g,'_at_');
+              set(ref(db, 'tokens/' + safeEmail), {token: token, updated: Date.now()});
+            }
+          }
+        }).catch(function(e){ console.log('FCM token error:', e); });
+
+        onMessage(messaging, function(payload) {
+          console.log('Push recebido:', payload);
+          var n = payload.notification;
+          if(n) {
+            // Mostrar notificação visual no app
+            var banner = document.createElement('div');
+            banner.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#CC0000;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:999;max-width:90vw;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.3)';
+            banner.innerHTML = '🔔 <strong>' + (n.title||'Alpha Suplementos') + '</strong><br><span style="font-weight:400">' + (n.body||'') + '</span>';
+            document.body.appendChild(banner);
+            setTimeout(function(){ banner.remove(); }, 5000);
+          }
+        });
+      } catch(e){ console.log('Messaging not supported:', e); }
+    }).catch(function(e){ console.log('SW error:', e); });
+  }
+
+  // Monitorar promoções relâmpago em tempo real
+  onValue(ref(db, 'promocoes/ativa'), function(snapshot) {
+    var promo = snapshot.val();
+    if(promo && promo.ativa && Date.now() - promo.timestamp < 7200000) {
+      var banner = document.createElement('div');
+      banner.style.cssText = 'position:fixed;bottom:80px;left:12px;right:12px;background:linear-gradient(135deg,#CC0000,#FF4500);color:#fff;padding:14px 16px;border-radius:12px;font-size:13px;font-weight:600;z-index:99;box-shadow:0 4px 20px rgba(204,0,0,.4);display:flex;align-items:center;justify-content:space-between';
+      banner.innerHTML = '<span>⚡ <strong>' + promo.titulo + '</strong><br><span style="font-weight:400;font-size:12px">' + promo.mensagem + '</span></span><button onclick="this.parentElement.remove()" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;padding:0 0 0 10px">×</button>';
+      document.body.appendChild(banner);
+    }
+  });
+</script>
+</body>
+</html>
