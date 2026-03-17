@@ -9,808 +9,680 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--red:#CC0000;--gold:#FFD700;--green:#1D9E75;--bg:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;--border:#2a2a2a;--text:#f0f0f0;--text2:#aaa;--text3:#666}
 body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;min-height:100vh}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
-.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px}
-.login-box{background:var(--bg2);border:1px solid #CC000033;border-radius:16px;padding:36px;width:100%;max-width:380px;text-align:center}
-.login-box img{height:60px;margin-bottom:8px}
-.login-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--text3);margin-bottom:20px}
-.login-title span{color:var(--red)}
-.login-badge{background:#1D9E7511;border:1px solid #1D9E7533;border-radius:8px;padding:7px 16px;font-size:12px;color:var(--green);font-weight:700;letter-spacing:1px;margin-bottom:20px;display:inline-block}
-.inp{width:100%;background:var(--bg4);border:.5px solid #333;border-radius:8px;padding:11px 13px;color:var(--text);font-size:14px;outline:none;font-family:'Barlow',sans-serif;margin-bottom:12px}
-.inp:focus{border-color:var(--red)}
-.btn-red{background:var(--red);color:#fff;border:none;border-radius:9px;padding:12px;font-size:14px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;width:100%;transition:all .15s}
-.btn-red:hover{background:#aa0000}
-.btn-green{background:var(--green);color:#fff;border:none;border-radius:9px;padding:11px;font-size:13px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;width:100%;transition:all .15s}
-.btn-green:hover{background:#0F6E56}
-.btn-wa{background:#25D36622;color:#25D366;border:1px solid #25D36633;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s}
-.btn-wa:hover{background:#25D36633}
-.btn-ghost{background:var(--bg4);color:var(--text2);border:.5px solid var(--border);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;font-family:'Barlow',sans-serif;cursor:pointer}
-.login-links{margin-top:14px;font-size:12px;color:var(--text3)}
-.login-links a{color:var(--text3);text-decoration:none;margin:0 8px}
-.app{display:none;min-height:100vh;flex-direction:column}
-.topbar{background:var(--bg2);border-bottom:2px solid var(--red);padding:0 24px;display:flex;align-items:center;height:56px;gap:16px;position:sticky;top:0;z-index:50}
-.tb-brand{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.tb-brand img{height:30px}
-.tb-brand-txt{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;color:var(--red)}
-.tb-brand-txt span{color:var(--text)}
-.tb-badge{background:#1D9E7522;border:1px solid #1D9E7533;border-radius:20px;padding:3px 12px;font-size:11px;color:var(--green);font-weight:700}
-.tb-tabs{display:flex;gap:2px;flex:1;justify-content:center}
-.tb-tab{padding:6px 14px;background:none;border:none;color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
-.tb-tab:hover{color:var(--text)}
-.tb-tab.on{color:var(--red);border-bottom-color:var(--red)}
-.tb-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.logout-btn{background:none;border:.5px solid #333;border-radius:6px;padding:5px 10px;color:var(--text3);font-size:11px;cursor:pointer;font-family:'Barlow',sans-serif}
-.logout-btn:hover{border-color:var(--red);color:var(--red)}
+#lwrap{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999}
+.lbox{background:var(--bg2);border:1px solid #1D9E7544;border-radius:16px;padding:36px;width:100%;max-width:380px;text-align:center}
+.lbox img{height:70px;margin-bottom:8px}
+.lm{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--text3);margin-bottom:4px}
+.lm span{color:var(--red)}
+.lt{background:#1D9E7522;border:1px solid #1D9E7544;border-radius:8px;padding:6px 16px;font-size:12px;color:var(--green);font-weight:700;margin-bottom:20px;display:inline-block}
+.li{width:100%;background:var(--bg4);border:1px solid #333;border-radius:8px;padding:11px 13px;color:var(--text);font-size:14px;outline:none;font-family:'Barlow',sans-serif;margin-bottom:10px;display:block}
+.li:focus{border-color:var(--red)}
+#lerro{color:#FF4444;font-size:12px;margin-bottom:10px;display:none;padding:6px;background:#FF444411;border-radius:6px}
+#lbtn{width:100%;background:var(--red);color:#fff;border:none;border-radius:9px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;margin-top:4px}
+.ll{margin-top:14px;font-size:12px;color:var(--text3)}
+.ll a{color:var(--text3);text-decoration:none;margin:0 8px}
+#app{display:none;min-height:100vh;flex-direction:column}
+.tb{background:var(--bg2);border-bottom:2px solid var(--red);padding:0 24px;display:flex;align-items:center;height:56px;gap:16px;position:sticky;top:0;z-index:50}
+.tbl2{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.tbl2 img{height:30px}
+.tbs{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;color:var(--red)}
+.tbs span{color:var(--text)}
+.tbg{background:#1D9E7522;border:1px solid #1D9E7544;border-radius:20px;padding:3px 12px;font-size:11px;color:var(--green);font-weight:700}
+.tabs{display:flex;gap:2px;flex:1;justify-content:center;overflow-x:auto}
+.tab{padding:6px 14px;background:none;border:none;color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif;border-bottom:2px solid transparent;white-space:nowrap}
+.tab:hover{color:var(--text)}.tab.on{color:var(--red);border-bottom-color:var(--red)}
+.tbr{display:flex;align-items:center;gap:8px;flex-shrink:0;font-size:12px;color:var(--text3)}
+#sbtn{background:none;border:.5px solid #333;border-radius:6px;padding:5px 10px;color:var(--text3);font-size:11px;cursor:pointer;font-family:'Barlow',sans-serif}
 .main{flex:1;padding:20px 24px}
-.panel{display:none}.panel.on{display:block}
-.card{background:var(--bg3);border:.5px solid var(--border);border-radius:12px;padding:16px}
-.card-title{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:6px}
-.card-title::before{content:'';width:3px;height:12px;background:var(--red);border-radius:2px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.grid-1-2{display:grid;grid-template-columns:1fr 1.6fr;gap:16px}
-.inp-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600;display:block;margin-bottom:5px;margin-top:12px}
-.inp-lbl:first-child{margin-top:0}
-select.inp{cursor:pointer}
+.p{display:none}.p.on{display:block}
+.card{background:var(--bg3);border:.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px}
+.ct{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:6px}
+.ct::before{content:'';width:3px;height:12px;background:var(--red);border-radius:2px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
+.inp{width:100%;background:var(--bg4);border:.5px solid #333;border-radius:8px;padding:10px 13px;color:var(--text);font-size:13px;outline:none;font-family:'Barlow',sans-serif;margin-bottom:12px}
+.inp:focus{border-color:var(--red)}
+.lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600;display:block;margin-bottom:5px}
+.bv{background:var(--red);color:#fff;border:none;border-radius:9px;padding:11px;font-size:13px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;width:100%;margin-bottom:8px}
+.bv:hover{background:#aa0000}
+.bg{background:var(--green);color:#fff;border:none;border-radius:9px;padding:11px;font-size:13px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;width:100%;margin-bottom:8px}
+.bgh{background:var(--bg4);color:var(--text2);border:.5px solid var(--border);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;font-family:'Barlow',sans-serif;cursor:pointer}
+.bwa{background:#25D36622;color:#25D366;border:1px solid #25D36633;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer}
+.nb{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.nbo{background:#3D300015;color:var(--gold);border:.5px solid #FFD70033}
+.nbp{background:#28282815;color:#C8C8C8;border:.5px solid #C8C8C833}
+.nbb{background:#3D200015;color:#CD7F32;border:.5px solid #CD7F3233}
 .tbl{width:100%;border-collapse:collapse;font-size:13px}
 .tbl th{text-align:left;padding:8px 10px;font-size:10px;color:var(--text3);border-bottom:.5px solid var(--border);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
 .tbl td{padding:10px;border-bottom:.5px solid #1e1e1e;vertical-align:middle}
 .tbl tr:hover td{background:#1e1e1e}
-.tbl tr:last-child td{border-bottom:none}
-.nivel-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
-.nb-o{background:#3D300015;color:var(--gold);border:.5px solid #FFD70033}
-.nb-p{background:#28282815;color:#C8C8C8;border:.5px solid #C8C8C833}
-.nb-b{background:#3D200015;color:#CD7F32;border:.5px solid #CD7F3233}
-.alerta-card{border-radius:10px;padding:13px 15px;border:.5px solid;display:flex;align-items:center;gap:12px;margin-bottom:8px}
-.urg-chip{border-radius:6px;padding:6px 8px;text-align:center;min-width:50px;flex-shrink:0}
-.toast-el{position:fixed;bottom:20px;right:20px;background:var(--bg3);border:1px solid var(--green);border-radius:10px;padding:12px 18px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:all .3s;pointer-events:none;max-width:340px}
-.toast-el.on{opacity:1}
-.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
-.modal-box{background:var(--bg2);border:1px solid var(--red);border-radius:14px;padding:24px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto}
-.modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.modal-title{font-weight:700;font-size:16px;color:var(--red)}
-.close-btn{background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;line-height:1}
-.resultado-compra{background:var(--bg4);border:.5px solid var(--border);border-radius:9px;padding:14px;margin:12px 0;display:none}
-.res-row{display:flex;justify-content:space-between;padding:4px 0;font-size:13px}
-.res-total{border-top:.5px solid var(--border);margin-top:7px;padding-top:8px;font-size:15px;font-weight:700;display:flex;justify-content:space-between}
+.acard{border-radius:10px;padding:13px;border:.5px solid;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.uch{border-radius:6px;padding:5px 8px;font-size:11px;font-weight:700;text-align:center;min-width:52px;flex-shrink:0}
+.mov{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.mbox{background:var(--bg2);border:1px solid var(--red);border-radius:14px;padding:24px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.mt{font-weight:700;font-size:16px;color:var(--red)}
+.mc{background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--bg3);border:1px solid var(--green);border-radius:10px;padding:12px 18px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:all .3s;pointer-events:none;max-width:340px}
+.toast.on{opacity:1}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div class="login-wrap" id="login-wrap">
-  <div class="login-box">
+<div id="lwrap">
+  <div class="lbox">
     <img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha">
-    <div class="login-title">ALPHA <span>SUPLEMENTOS</span></div>
-    <div class="login-badge">🧑‍💼 ACESSO FUNCIONÁRIO</div>
-    <input type="email" class="inp" id="l-email" placeholder="funcionario@alpha.com" value="funcionario@alphasuplementos.com.br">
-    <input type="password" class="inp" id="l-senha" placeholder="Senha" value="func2025">
-    <div id="login-err" style="color:#FF4444;font-size:12px;margin-bottom:10px;display:none">Senha incorreta</div>
-    <button class="btn-red" id="func-lbtn">ENTRAR →</button>
-    <div class="login-links">
-      <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/ceo/">Sou CEO</a> · <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/cliente/">Sou Cliente</a>
+    <div class="lm">ALPHA <span>SUPLEMENTOS</span></div>
+    <div class="lt">🧑‍💼 ACESSO FUNCIONÁRIO</div>
+    <div id="lerro"></div>
+    <input type="email" class="li" id="lemail" placeholder="funcionario@alpha.com">
+    <input type="password" class="li" id="lsenha" placeholder="Senha">
+    <button id="lbtn">ENTRAR →</button>
+    <div class="ll">
+      <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/ceo/">Sou CEO</a> ·
+      <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/cliente/">Sou Cliente</a>
     </div>
   </div>
 </div>
 
-<!-- APP -->
-<div class="app" id="app">
-  <div class="topbar">
-    <div class="tb-brand">
+<div id="app">
+  <div class="tb">
+    <div class="tbl2">
       <img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha">
-      <span class="tb-brand-txt">ALPHA <span>SUPLEMENTOS</span></span>
-      <span class="tb-badge">🧑‍💼 FUNCIONÁRIO</span>
+      <span class="tbs">ALPHA <span>SUPLEMENTOS</span></span>
+      <span class="tbg">🧑‍💼 FUNCIONÁRIO</span>
     </div>
-    <div class="tb-tabs">
-      <button class="tb-tab on" onclick="goTab('venda',this)">🛍️ Registrar Venda</button>
-      <button class="tb-tab" onclick="goTab('crm',this)">📦 CRM Alertas</button>
-      <button class="tb-tab" onclick="goTab('clientes',this)">👥 Clientes</button>
-      <button class="tb-tab" onclick="goTab('indicacoes',this)">🎯 Indicações</button>
-      <button class="tb-tab" onclick="goTab('resgates',this)">🏆 Resgates</button>
+    <div class="tabs">
+      <button class="tab on" onclick="ir('venda',this)">🛍️ Registrar Venda</button>
+      <button class="tab" onclick="ir('crm',this)">📦 CRM Alertas</button>
+      <button class="tab" onclick="ir('clientes',this)">👥 Clientes</button>
+      <button class="tab" onclick="ir('indicacoes',this)">🎯 Indicações</button>
+      <button class="tab" onclick="ir('resgates',this)">🏆 Resgates</button>
     </div>
-    <div class="tb-right">
-      <span style="font-size:12px;color:var(--text3)" id="tb-nome">Funcionário</span>
-      <button class="logout-btn" onclick="fazerLogout()">Sair</button>
-    </div>
+    <div class="tbr"><span id="tnome">Funcionário</span><button id="sbtn">Sair</button></div>
   </div>
-
   <div class="main">
 
-    <!-- REGISTRAR VENDA -->
-    <div class="panel on" id="tab-venda">
+    <!-- VENDA -->
+    <div id="pv" class="p on">
       <div style="margin-bottom:16px">
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Registrar Venda</div>
-        <div style="font-size:12px;color:var(--text3)">Informe os dados da compra — o sistema calcula e distribui pontos e cashback automaticamente</div>
+        <div style="font-size:12px;color:var(--text3)">O sistema calcula pontos e cashback automaticamente</div>
       </div>
-      <div class="grid-1-2">
+      <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:16px">
         <div class="card">
-          <div class="card-title">Dados da venda</div>
-          <label class="inp-lbl">Email do cliente</label>
-          <div style="display:flex;gap:8px;align-items:flex-end">
-            <select class="inp" id="v-cliente" onchange="selecionarCliente()" style="flex:1;margin:0">
+          <div class="ct">Dados da venda</div>
+          <label class="lbl">Cliente</label>
+          <div style="display:flex;gap:8px;margin-bottom:12px">
+            <select id="vsel" onchange="selCli()" style="flex:1;background:var(--bg4);border:.5px solid #333;border-radius:8px;padding:10px 13px;color:var(--text);font-size:13px;outline:none;font-family:'Barlow',sans-serif">
               <option value="">Selecione o cliente...</option>
             </select>
-            <button onclick="abrirCadastro()" style="background:#CC0000;color:#fff;border:none;border-radius:8px;padding:10px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;white-space:nowrap;flex-shrink:0">+ Novo</button>
+            <button onclick="abrirCad()" style="background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;white-space:nowrap">+ Novo</button>
           </div>
-          <div id="cliente-info" style="display:none;background:var(--bg4);border-radius:8px;padding:11px;margin-bottom:12px">
-            <div style="display:flex;align-items:center;gap:10px">
-              <div id="ci-av" style="width:36px;height:36px;border-radius:50%;background:#CC000022;color:var(--red);border:1px solid #CC000033;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0"></div>
-              <div>
-                <div id="ci-nome" style="font-weight:600;font-size:14px"></div>
-                <div style="display:flex;gap:10px;margin-top:3px;font-size:12px">
-                  <span id="ci-nivel"></span>
-                  <span id="ci-pontos" style="color:var(--gold)"></span>
-                  <span id="ci-cb" style="color:var(--green)"></span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <label class="inp-lbl">Valor da compra (R$)</label>
-          <input type="number" class="inp" id="v-valor" placeholder="0,00" min="0.01" step="0.01" oninput="calcVenda()">
-          <label class="inp-lbl">Descrição / Produtos</label>
-          <input type="text" class="inp" id="v-desc" placeholder="Ex: Creatina 300g + Whey Protein 900g">
-          <label class="inp-lbl">Produto p/ CRM (nome)</label>
-          <input type="text" class="inp" id="v-prod" placeholder="Ex: Creatina Monohidratada 300g">
-          <label class="inp-lbl">Dias de consumo estimado</label>
-          <input type="number" class="inp" id="v-dias" placeholder="30" value="30" min="1">
-          <button class="btn-red" id="btn-registrar" disabled onclick="registrarVenda()" style="margin-top:4px">✅ REGISTRAR VENDA</button>
+          <div id="vinfo" style="display:none;background:var(--bg4);border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px"></div>
+          <label class="lbl">Valor (R$)</label>
+          <input type="number" class="inp" id="vval" placeholder="0,00" min="0.01" step="0.01" oninput="calcV()">
+          <label class="lbl">Descrição</label>
+          <input type="text" class="inp" id="vdesc" placeholder="Ex: Creatina 300g + Whey 900g">
+          <label class="lbl">Produto p/ CRM</label>
+          <input type="text" class="inp" id="vprod" placeholder="Ex: Creatina 300g">
+          <label class="lbl">Dias de consumo</label>
+          <input type="number" class="inp" id="vdias" value="30" min="1">
+          <button class="bv" id="vbtn" disabled onclick="registrarVenda()">✅ REGISTRAR VENDA</button>
         </div>
-
         <div>
-          <div class="card" style="margin-bottom:14px">
-            <div class="card-title">Preview — o que o cliente vai ganhar</div>
-            <div id="venda-preview" style="color:var(--text3);font-size:13px">Selecione o cliente e informe o valor para ver o preview.</div>
-            <div class="resultado-compra" id="resultado-compra">
-              <div class="res-row"><span style="color:var(--text3)">Valor da compra</span><span id="r-valor" style="color:var(--text)">R$0</span></div>
-              <div class="res-row"><span style="color:var(--text3)">Nível do cliente</span><span id="r-nivel"></span></div>
-              <div class="res-row"><span style="color:var(--text3)">Pts por R$1</span><span id="r-mult" style="color:var(--text)"></span></div>
-              <div class="res-row res-total"><span>Pontos ganhos</span><span id="r-pts" style="color:var(--gold)">+0 pts</span></div>
-              <div class="res-row" style="font-size:12px"><span style="color:var(--text3)">Cashback gerado</span><span id="r-cb" style="color:var(--green)">+R$0</span></div>
-              <div class="res-row" style="font-size:12px"><span style="color:var(--text3)">Novo saldo de pontos</span><span id="r-novo-pts" style="color:var(--gold)"></span></div>
-              <div class="res-row" style="font-size:12px"><span style="color:var(--text3)">Novo cashback acumulado</span><span id="r-novo-cb" style="color:var(--green)"></span></div>
-            </div>
+          <div class="card" id="vprev-card">
+            <div class="ct">Preview</div>
+            <div id="vprev" style="color:var(--text3);font-size:13px">Selecione o cliente e informe o valor.</div>
           </div>
-          <div class="card" id="sucesso-card" style="display:none;text-align:center;padding:24px;border-color:#1D9E7533">
+          <div class="card" id="vsuc-card" style="display:none;text-align:center;padding:24px;border-color:#1D9E7533">
             <div style="font-size:44px;margin-bottom:10px">✅</div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;margin-bottom:6px;color:var(--green)">VENDA REGISTRADA!</div>
-            <div style="font-size:13px;color:var(--text2);line-height:1.8" id="sucesso-txt"></div>
-            <button class="btn-red" style="margin-top:14px;max-width:200px;margin-left:auto;margin-right:auto" onclick="resetVenda()">NOVA VENDA</button>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--green);margin-bottom:6px">VENDA REGISTRADA!</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.8" id="vsuc-txt"></div>
+            <button class="bv" style="margin-top:14px;max-width:200px;margin-left:auto;margin-right:auto" onclick="resetV()">NOVA VENDA</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- CRM ALERTAS -->
-    <div class="panel" id="tab-crm">
+    <!-- CRM -->
+    <div id="pc" class="p">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-        <div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">CRM — Alertas de Reposição</div>
-          <div style="font-size:12px;color:var(--text3)">Clique em WhatsApp para enviar mensagem personalizada ao cliente</div>
-        </div>
-        <button class="btn-red" onclick="toast('🔔 Push disparado para todos os clientes com alertas!')">🔔 Push para todos</button>
+        <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">CRM — Alertas</div></div>
+        <button class="bv" style="width:auto;padding:9px 16px" onclick="toast('🔔 Push enviado!')">🔔 Push para todos</button>
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
-        <div style="background:#E24B4A11;border:.5px solid #E24B4A22;border-radius:10px;padding:12px"><div style="font-size:20px;font-weight:700;color:#E24B4A;font-family:'Barlow Condensed',sans-serif" id="crm-c-acabou">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">⛔ Acabou</div></div>
-        <div style="background:#EF9F2711;border:.5px solid #EF9F2722;border-radius:10px;padding:12px"><div style="font-size:20px;font-weight:700;color:#EF9F27;font-family:'Barlow Condensed',sans-serif" id="crm-c-urgente">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">🚨 Urgente</div></div>
-        <div style="background:#FFD70011;border:.5px solid #FFD70022;border-radius:10px;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--gold);font-family:'Barlow Condensed',sans-serif" id="crm-c-proximo">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">⚠️ Próximo</div></div>
-        <div style="background:#1D9E7511;border:.5px solid #1D9E7522;border-radius:10px;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--green);font-family:'Barlow Condensed',sans-serif" id="crm-c-aviso">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">📦 Aviso</div></div>
+        <div style="background:#E24B4A11;border:.5px solid #E24B4A22;border-radius:10px;padding:12px"><div style="font-size:20px;font-weight:700;color:#E24B4A;font-family:'Barlow Condensed',sans-serif" id="ca">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">⛔ Acabou</div></div>
+        <div style="background:#EF9F2711;border:.5px solid #EF9F2722;border-radius:10px;padding:12px"><div style="font-size:20px;font-weight:700;color:#EF9F27;font-family:'Barlow Condensed',sans-serif" id="cu">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">🚨 Urgente</div></div>
+        <div style="background:#FFD70011;border:.5px solid #FFD70022;border-radius:10px;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--gold);font-family:'Barlow Condensed',sans-serif" id="cp">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">⚠️ Próximo</div></div>
+        <div style="background:#1D9E7511;border:.5px solid #1D9E7522;border-radius:10px;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--green);font-family:'Barlow Condensed',sans-serif" id="cv">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">📦 Aviso</div></div>
       </div>
-      <div id="crm-cards"></div>
+      <div id="crm-lista"></div>
     </div>
 
     <!-- CLIENTES -->
-    <div class="panel" id="tab-clientes">
+    <div id="pclientes" class="p">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-        <div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Clientes</div>
-          <div style="font-size:12px;color:var(--text3)">Consultar pontos, cashback e histórico</div>
-        </div>
-        <input id="busca-func" placeholder="🔍 Buscar cliente..." style="background:var(--bg4);border:.5px solid #333;border-radius:7px;padding:7px 12px;color:var(--text);font-size:12px;outline:none;width:200px" oninput="renderClientesFunc()">
+        <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Clientes</div></div>
+        <input id="cbusca" placeholder="🔍 Buscar..." class="inp" style="width:200px;margin:0" oninput="renderClis()">
       </div>
-      <div class="card">
-        <table class="tbl">
-          <thead><tr><th>Cliente</th><th>Nível</th><th>Pontos</th><th>Cashback</th><th>Gasto/mês</th><th>Produto acabando</th><th>Ações</th></tr></thead>
-          <tbody id="cli-func-tbody"></tbody>
-        </table>
-      </div>
+      <div class="card"><table class="tbl"><thead><tr><th>Cliente</th><th>Nível</th><th>Pontos</th><th>Cashback</th><th>Gasto/mês</th><th>Alerta</th><th>Ações</th></tr></thead><tbody id="clis-tb"></tbody></table></div>
     </div>
 
     <!-- INDICAÇÕES -->
-    <div class="panel" id="tab-indicacoes">
-      <div style="margin-bottom:16px">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Confirmar Indicações</div>
-        <div style="font-size:12px;color:var(--text3)">Quando o indicado fizer a primeira compra, confirme aqui para liberar os pontos</div>
-      </div>
-      <div class="grid2">
+    <div id="pind" class="p">
+      <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Indicações</div></div>
+      <div class="g2">
         <div class="card">
-          <div class="card-title">Confirmar primeira compra do indicado</div>
-          <label class="inp-lbl" style="margin-top:0">Email do cliente indicado</label>
+          <div class="ct">Confirmar indicação</div>
+          <label class="lbl">Email do indicado</label>
           <input type="email" class="inp" id="ind-email" placeholder="email do indicado">
-          <button class="btn-green" onclick="confirmarIndicacao()">✅ Confirmar indicação</button>
-          <div id="ind-suc" style="display:none;background:#1D9E7522;border:.5px solid #1D9E7533;border-radius:8px;padding:12px;margin-top:12px;font-size:13px;color:var(--green);text-align:center"></div>
-          <div style="background:var(--bg4);border-radius:8px;padding:12px;margin-top:14px;font-size:12px;color:var(--text3);line-height:1.9">
-            • Indicador recebe <strong style="color:var(--text)">+200 pontos</strong><br>
-            • Indicado recebe <strong style="color:var(--text)">+100 pontos</strong><br>
-            • Confirmação feita apenas uma vez por indicado
+          <button class="bg" onclick="confirmarInd()">✅ Confirmar</button>
+          <div id="ind-suc" style="display:none;background:#1D9E7522;border:.5px solid #1D9E7533;border-radius:8px;padding:12px;margin-top:10px;font-size:13px;color:var(--green);text-align:center"></div>
+          <div style="background:var(--bg4);border-radius:8px;padding:12px;margin-top:12px;font-size:12px;color:var(--text3);line-height:1.9">
+            • Indicador: <strong style="color:var(--text)">+200 pts</strong><br>
+            • Indicado: <strong style="color:var(--text)">+100 pts</strong>
           </div>
         </div>
-        <div class="card">
-          <div class="card-title">Indicações pendentes</div>
-          <div id="ind-pendentes"></div>
-        </div>
+        <div class="card"><div class="ct">Pendentes</div><div id="ind-pend"></div></div>
       </div>
     </div>
 
     <!-- RESGATES -->
-    <div class="p      <div class="panel on" id="tab-resgates">
-      <div style="margin-bottom:16px">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Resgates</div>
-        <div style="font-size:12px;color:var(--text3)">Cashback · Pontos · Confirmação de entrega</div>
-      </div>
-
-      <!-- RESGATE DE CASHBACK -->
-      <div class="grid2" style="margin-bottom:16px">
+    <div id="pres" class="p">
+      <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Resgates</div><div style="font-size:12px;color:var(--text3)">Cashback · Pontos · Confirmação de entrega</div></div>
+      <div class="g2" style="margin-bottom:14px">
         <div class="card">
-          <div class="card-title">💰 Resgatar Cashback</div>
-          <div style="background:var(--bg4);border-radius:8px;padding:11px;margin-bottom:12px;font-size:12px;color:var(--text3);line-height:1.7">
-            Regra: <strong style="color:var(--text)">R$1 de cashback a cada R$4</strong> em compras.<br>
-            Selecione o cliente para ver o saldo disponível.
-          </div>
-          <label class="inp-lbl">Cliente</label>
-          <select class="inp" id="cb-cliente-sel" onchange="selecionarClienteCB()">
-            <option value="">Selecione o cliente...</option>
-          </select>
-          <div id="cb-cliente-info" style="display:none;background:var(--bg4);border-radius:8px;padding:10px;margin-bottom:12px">
-            <div style="display:flex;justify-content:space-between;font-size:13px">
-              <span id="cb-cli-nome" style="font-weight:600"></span>
-              <span id="cb-cli-saldo" style="color:var(--green);font-weight:700"></span>
+          <div class="ct">💰 Cashback</div>
+          <label class="lbl">Cliente</label>
+          <select id="cbsel" onchange="selCliCB()" class="inp"><option value="">Selecione...</option></select>
+          <div id="cbinfo" style="display:none;background:var(--bg4);border-radius:8px;padding:10px;margin-bottom:12px;font-size:13px"></div>
+          <label class="lbl">Valor da compra (R$)</label>
+          <input type="number" class="inp" id="cbval" placeholder="0,00" min="1" step="0.01" oninput="calcCB()">
+          <div id="cbrange" style="display:none">
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+              <label class="lbl" style="margin:0">Cashback a usar</label>
+              <span id="cbvlbl" style="color:var(--green);font-weight:700;font-size:13px">R$0,00</span>
             </div>
-          </div>
-          <label class="inp-lbl">Valor da compra (R$)</label>
-          <input type="number" class="inp" id="cb-res-valor" placeholder="0,00" min="1" step="0.01" oninput="calcCBResgate()">
-          <div id="cb-res-slider-area" style="display:none;margin-bottom:12px">
-            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-              <label class="inp-lbl" style="margin:0">Cashback a usar</label>
-              <span id="cb-res-val" style="color:var(--green);font-weight:700;font-size:13px">R$0,00</span>
-            </div>
-            <input type="range" id="cb-res-slider" min="0" max="0" step="0.01" value="0"
-              style="width:100%;accent-color:#CC0000;cursor:pointer" oninput="updateCBResgate()">
-            <div style="display:flex;justify-content:space-between;margin-top:4px">
+            <input type="range" id="cbr" min="0" max="0" step="0.01" value="0" style="width:100%;accent-color:var(--red);cursor:pointer;margin-bottom:8px" oninput="updCB()">
+            <div style="display:flex;justify-content:space-between;margin-bottom:10px">
               <span style="font-size:11px;color:var(--text3)">R$0</span>
-              <button onclick="usarMaxCBResgate()" style="background:none;border:none;color:var(--green);font-size:12px;font-weight:700;cursor:pointer">Usar máximo</button>
-              <span style="font-size:11px;color:var(--text3)" id="cb-res-max-lbl">R$0</span>
+              <button onclick="usarMaxCB()" style="background:none;border:none;color:var(--green);font-size:12px;font-weight:700;cursor:pointer">Usar máximo</button>
+              <span style="font-size:11px;color:var(--text3)" id="cbmaxlbl">R$0</span>
             </div>
+            <div id="cbprev" style="display:none;background:var(--bg4);border:.5px solid #1D9E7533;border-radius:9px;padding:12px;margin-bottom:12px"></div>
           </div>
-          <div id="cb-res-preview" class="cashback-sim" style="display:none;background:var(--bg4);border:.5px solid #1D9E7533;border-radius:9px;padding:12px;margin-bottom:12px"></div>
-          <button class="btn-green" id="cb-res-btn" disabled onclick="confirmarCBResgate()">💰 Aplicar Cashback</button>
-          <div id="cb-res-suc" style="display:none;background:#1D9E7522;border:.5px solid #1D9E7533;border-radius:8px;padding:12px;margin-top:10px;font-size:13px;color:var(--green);text-align:center"></div>
+          <button class="bg" id="cbbtn" disabled onclick="confirmarCB()">💰 Aplicar Cashback</button>
+          <div id="cbsuc" style="display:none;background:#1D9E7522;border:.5px solid #1D9E7533;border-radius:8px;padding:12px;margin-top:10px;font-size:13px;color:var(--green);text-align:center"></div>
         </div>
-
-        <!-- RESGATE DE PONTOS -->
         <div class="card">
-          <div class="card-title">🏆 Resgatar Pontos por Prêmio</div>
-          <label class="inp-lbl">Cliente</label>
-          <select class="inp" id="pts-cliente-sel" onchange="selecionarClientePts()">
-            <option value="">Selecione o cliente...</option>
-          </select>
-          <div id="pts-cliente-info" style="display:none;background:var(--bg4);border-radius:8px;padding:10px;margin-bottom:12px">
-            <div style="display:flex;justify-content:space-between;font-size:13px">
-              <span id="pts-cli-nome" style="font-weight:600"></span>
-              <span id="pts-cli-saldo" style="color:var(--gold);font-weight:700"></span>
-            </div>
-          </div>
-          <label class="inp-lbl">Prêmio</label>
-          <select class="inp" id="pts-premio-sel" disabled onchange="selecionarPremio()">
-            <option value="">Selecione primeiro o cliente...</option>
-          </select>
-          <div id="pts-preview" style="display:none;background:var(--bg4);border-radius:8px;padding:11px;margin-bottom:12px">
-            <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
-              <span style="color:var(--text3)">Pontos do prêmio</span><span id="pts-custo" style="color:var(--gold)"></span>
-            </div>
-            <div style="display:flex;justify-content:space-between;font-size:13px">
-              <span style="color:var(--text3)">Saldo após</span><span id="pts-saldo-apos" style="color:var(--gold)"></span>
-            </div>
-          </div>
-          <button class="btn-red" id="pts-res-btn" disabled onclick="confirmarPtsResgate()" style="margin-bottom:8px">🏆 Confirmar Resgate</button>
-          <div id="pts-res-suc" style="display:none;background:#CC000022;border:.5px solid #CC000033;border-radius:8px;padding:12px;margin-top:8px;font-size:13px;text-align:center"></div>
+          <div class="ct">🏆 Pontos por Prêmio</div>
+          <label class="lbl">Cliente</label>
+          <select id="ptssel" onchange="selCliPts()" class="inp"><option value="">Selecione...</option></select>
+          <div id="ptsinfo" style="display:none;background:var(--bg4);border-radius:8px;padding:10px;margin-bottom:12px;font-size:13px"></div>
+          <label class="lbl">Prêmio</label>
+          <select id="ptspremio" disabled onchange="selPremio()" class="inp"><option value="">Selecione o cliente primeiro...</option></select>
+          <div id="ptsprev" style="display:none;background:var(--bg4);border-radius:8px;padding:11px;margin-bottom:12px;font-size:13px"></div>
+          <button class="bv" id="ptsbtn" disabled onclick="confirmarPts()" style="margin-bottom:8px">🏆 Confirmar Resgate</button>
+          <div id="ptssuc" style="display:none;background:#CC000022;border:.5px solid #CC000033;border-radius:8px;padding:12px;margin-top:8px;font-size:13px;text-align:center"></div>
         </div>
       </div>
-
-      <!-- CONFIRMAR ENTREGA -->
-      <div class="grid2">
+      <div class="g2">
         <div class="card">
-          <div class="card-title">✅ Confirmar Entrega de Prêmio</div>
-          <div style="font-size:12px;color:var(--text3);margin-bottom:12px">Cliente apresenta o código gerado ao retirar o prêmio na loja.</div>
-          <label class="inp-lbl" style="margin-top:0">Código de retirada</label>
-          <input type="text" class="inp" id="cod-entrega" placeholder="Ex: A8F2D1C4" maxlength="10"
-            style="font-family:monospace;font-size:18px;letter-spacing:4px;text-transform:uppercase"
-            oninput="this.value=this.value.toUpperCase()">
-          <button class="btn-green" onclick="confirmarEntrega()">✅ Confirmar entrega</button>
-          <div id="entrega-suc" style="display:none;border-radius:8px;padding:12px;margin-top:10px;font-size:13px;text-align:center"></div>
+          <div class="ct">✅ Confirmar Entrega</div>
+          <label class="lbl">Código de retirada</label>
+          <input type="text" class="inp" id="codent" placeholder="Ex: A8F2D1C4" maxlength="10" style="font-family:monospace;font-size:18px;letter-spacing:4px;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+          <button class="bg" onclick="confirmarEnt()">✅ Confirmar entrega</button>
+          <div id="entsuc" style="display:none;border-radius:8px;padding:12px;margin-top:10px;font-size:13px;text-align:center"></div>
         </div>
-        <div class="card">
-          <div class="card-title">📋 Resgates pendentes</div>
-          <div id="resgates-pendentes"></div>
-        </div>
-      </div>function abrirWA(cid,tipo,prodNome){
-  waClienteAtual=CLIENTES.find(function(c){return c.id===cid;});
-  if(!waClienteAtual)return;
-  var c=waClienteAtual;
-  var nc=NCFG[c.nivel]||{emoji:'🥉',cor:'#CD7F32'};
-  var desc=c.nivel==='OURO'?'10% OFF exclusivo 🥇':c.nivel==='PRATA'?'5% OFF exclusivo 🥈':'';
-  var fR=function(v){return 'R$'+Number(v).toFixed(2).replace('.',',');};
-  var fP=function(v){return Number(v).toLocaleString('pt-BR')+' pts';};
+        <div class="card"><div class="ct">📋 Resgates pendentes</div><div id="respend"></div></div>
+      </div>
+    </div>
 
-  var templates={
-    reposicao:'Olá, *'+c.nome+'*! 👋
-
-Aqui é da *Alpha Suplementos* 💪
-
-Seu *'+(prodNome||'produto')+'* está acabando!'+(desc?'
-
-🎁 Como cliente *'+c.nivel+'*, você tem *'+desc+'* na próxima compra!':'')+'
-
-Garanta agora: alphasuplementos.com.br
-
-_Alpha Suplementos — Performance é o nosso negócio_ 🔥',
-    nivel:nc.emoji+' *Parabéns, '+c.nome+'!*
-
-Você é *'+c.nivel+'* agora!
-✅ Você ganha *'+nc.pts+'pt por R$1* e *'+(nc.cb*100).toFixed(0)+'% de cashback* em toda compra!
-
-Acesse seus benefícios: alphasuplementos.com.br
-
-_Alpha Suplementos 💪_',
-    aniversario:'🎂 *Feliz Aniversário, '+c.nome+'!*
-
-A *Alpha Suplementos* deseja um dia incrível!
-
-🎁 Presente especial: use o código *ANIV2025* e ganhe *15% OFF* em qualquer compra!
-
-⏰ Válido por 7 dias.
-
-👉 alphasuplementos.com.br
-
-_Com carinho, Alpha Suplementos 💪_',
-    pontos:'⭐ *Olá, '+c.nome+'!*
-
-Você tem *'+fP(c.pontos)+'* acumulados na *Alpha Suplementos*!
-
-🏆 Que tal resgatar um prêmio? Acesse:
-alphasuplementos.com.br
-
-_Seus pontos estão esperando por você!_ 🎁',
-    custom:'Olá, *'+c.nome+'*! 👋
-
-'
-  };
-
-  var tplAtual=templates[tipo]||templates.custom;
-
-  document.getElementById('wa-modal-title').textContent='📱 WhatsApp — '+c.nome;
-  document.getElementById('wa-para').textContent=c.tel+' · '+c.email;
-  document.getElementById('wa-msg').value=tplAtual;
-
-  // Template buttons
-  document.getElementById('wa-templates').innerHTML=[
-    {k:'reposicao',l:'📦 Reposição'},
-    {k:'nivel',    l:'🏆 Nível'},
-    {k:'aniversario',l:'🎂 Aniversário'},
-    {k:'pontos',   l:'⭐ Pontos'},
-    {k:'custom',   l:'✏️ Personalizada'},
-  ].map(function(t){
-    return '<button class="btn-ghost" style="font-size:11px;padding:5px 10px;'+(tipo===t.k?'background:var(--red);color:#fff;border-color:var(--red)':'')+'" onclick="document.getElementById('wa-msg').value='+JSON.stringify(templates[t.k]||templates.custom)+'">'+t.l+'</button>';
-  }).join('');
-
-  // Open modal
-  var modal=document.getElementById('modal-wa');
-  modal.style.display='flex';
-}
-
-
-function fecharModal(id){
-  var modalId=id||'modal-wa';
-  var m=document.getElementById(modalId);
-  if(m)m.style.display='none';
-}
-
-function enviarWA(){
-  if(!waClienteAtual)return;
-  var msg=document.getElementById('wa-msg').value;
-  if(!msg.trim()){toast('Digite uma mensagem!','var(--red)');return;}
-  fecharModal('modal-wa');
-  var tel=waClienteAtual.tel.replace(/[^0-9]/g,'');
-  if(tel.length>=10){
-    var url='https://wa.me/55'+tel+'?text='+encodeURIComponent(msg);
-    window.open(url,'_blank');
-  }
-  toast('📱 WhatsApp aberto para '+waClienteAtual.nome+'!');
-}
-
-// ── RESGATES ──────────────────────────────────────────────────
-var cbClienteResgate=null;
-var ptsClienteResgate=null;
-var ptsPremioSel=null;
-
-var PREMIOS_LISTA=[
-  {id:'P01',nome:'Coqueteleira Alpha',   pts:100, nivel:'BRONZE',cat:'Brinde'},
-  {id:'P02',nome:'Amostra Creatina 100g',pts:200, nivel:'BRONZE',cat:'Creatina'},
-  {id:'P03',nome:'Desconto 10%',         pts:350, nivel:'BRONZE',cat:'Desconto'},
-  {id:'P04',nome:'Whey 900g grátis',     pts:1500,nivel:'PRATA', cat:'Proteína'},
-  {id:'P05',nome:'Kit Treino Alpha',      pts:3000,nivel:'OURO',  cat:'Kit VIP'},
-  {id:'P06',nome:'Suplementação 1 mês',  pts:5000,nivel:'OURO',  cat:'Kit VIP'},
-];
-
-function preencherSelectsResgates(){
-  var selCB=document.getElementById('cb-cliente-sel');
-  var selPTS=document.getElementById('pts-cliente-sel');
-  if(!selCB||!selPTS)return;
-  var opts='<option value="">Selecione o cliente...</option>'+
-    CLIENTES.map(function(c){return '<option value="'+c.id+'">'+c.nome+' (CB: '+fR(c.cashback)+' | Pts: '+fP(c.pontos)+')</option>';}).join('');
-  selCB.innerHTML=opts;
-  selPTS.innerHTML=opts;
-}
-
-function selecionarClienteCB(){
-  var id=document.getElementById('cb-cliente-sel').value;
-  cbClienteResgate=CLIENTES.find(function(c){return c.id===id;})||null;
-  var info=document.getElementById('cb-cliente-info');
-  if(cbClienteResgate){
-    info.style.display='block';
-    document.getElementById('cb-cli-nome').textContent=cbClienteResgate.nome;
-    document.getElementById('cb-cli-saldo').textContent='Saldo: '+fR(cbClienteResgate.cashback);
-  } else {
-    info.style.display='none';
-  }
-  document.getElementById('cb-res-valor').value='';
-  document.getElementById('cb-res-slider-area').style.display='none';
-  document.getElementById('cb-res-preview').style.display='none';
-  document.getElementById('cb-res-btn').disabled=true;
-  document.getElementById('cb-res-suc').style.display='none';
-}
-
-function calcCBResgate(){
-  if(!cbClienteResgate)return;
-  var v=parseFloat(document.getElementById('cb-res-valor').value)||0;
-  var maxCB=Math.min(Math.floor(v/4),cbClienteResgate.cashback);
-  var sl=document.getElementById('cb-res-slider');
-  sl.max=maxCB; if(parseFloat(sl.value)>maxCB)sl.value=0;
-  document.getElementById('cb-res-max-lbl').textContent=fR(maxCB);
-  document.getElementById('cb-res-slider-area').style.display=v>0?'block':'none';
-  updateCBResgate();
-}
-
-function updateCBResgate(){
-  if(!cbClienteResgate)return;
-  var v=parseFloat(document.getElementById('cb-res-valor').value)||0;
-  var cb=parseFloat(document.getElementById('cb-res-slider').value)||0;
-  var cfg=NCFG[cbClienteResgate.nivel];
-  var fin=parseFloat((v-cb).toFixed(2));
-  var cbG=parseFloat((fin*cfg.cb).toFixed(2));
-  var pts=Math.floor(fin*cfg.pts);
-  document.getElementById('cb-res-val').textContent=fR(cb);
-  document.getElementById('cb-res-btn').disabled=!(v>0&&cb>0);
-  if(v>0){
-    document.getElementById('cb-res-preview').style.display='block';
-    document.getElementById('cb-res-preview').innerHTML=
-      '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px"><span style="color:var(--text3)">Compra original</span><span>'+fR(v)+'</span></div>'+
-      '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px"><span style="color:var(--text3)">Desconto CB</span><span style="color:var(--green)">-'+fR(cb)+'</span></div>'+
-      '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:15px;font-weight:700;border-top:.5px solid var(--border);margin-top:4px"><span>Valor final</span><span style="color:var(--green)">'+fR(fin)+'</span></div>'+
-      '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px"><span style="color:var(--text3)">Cashback ganho</span><span style="color:var(--green)">+'+fR(cbG)+'</span></div>'+
-      '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px"><span style="color:var(--text3)">Pontos ganhos</span><span style="color:var(--gold)">+'+fP(pts)+'</span></div>';
-  } else {
-    document.getElementById('cb-res-preview').style.display='none';
-  }
-}
-
-function usarMaxCBResgate(){
-  if(!cbClienteResgate)return;
-  var v=parseFloat(document.getElementById('cb-res-valor').value)||0;
-  document.getElementById('cb-res-slider').value=Math.min(Math.floor(v/4),cbClienteResgate.cashback);
-  updateCBResgate();
-}
-
-function confirmarCBResgate(){
-  if(!cbClienteResgate)return;
-  var v=parseFloat(document.getElementById('cb-res-valor').value)||0;
-  var cb=parseFloat(document.getElementById('cb-res-slider').value)||0;
-  if(v<=0||cb<=0)return;
-  var cfg=NCFG[cbClienteResgate.nivel];
-  var fin=parseFloat((v-cb).toFixed(2));
-  var cbG=parseFloat((fin*cfg.cb).toFixed(2));
-  var pts=Math.floor(fin*cfg.pts);
-  cbClienteResgate.cashback=parseFloat((cbClienteResgate.cashback-cb+cbG).toFixed(2));
-  cbClienteResgate.pontos+=pts;
-  CLIENTES=CLIENTES.map(function(c){return c.id===cbClienteResgate.id?cbClienteResgate:c;});
-  var suc=document.getElementById('cb-res-suc');
-  suc.style.display='block';
-  suc.innerHTML='✅ <strong>'+cbClienteResgate.nome+'</strong><br>Cashback: <span style="color:var(--green)">-'+fR(cb)+'</span> | Valor final: <strong>'+fR(fin)+'</strong><br>Ganhou: +'+fR(cbG)+' CB · +'+fP(pts);
-  document.getElementById('cb-res-btn').disabled=true;
-  toast('✅ Cashback de '+fR(cb)+' aplicado para '+cbClienteResgate.nome+'!');
-}
-
-function selecionarClientePts(){
-  var id=document.getElementById('pts-cliente-sel').value;
-  ptsClienteResgate=CLIENTES.find(function(c){return c.id===id;})||null;
-  var info=document.getElementById('pts-cliente-info');
-  if(ptsClienteResgate){
-    info.style.display='block';
-    document.getElementById('pts-cli-nome').textContent=ptsClienteResgate.nome;
-    document.getElementById('pts-cli-saldo').textContent=fP(ptsClienteResgate.pontos);
-    // Preencher prêmios disponíveis
-    var sel=document.getElementById('pts-premio-sel');
-    var niOrd=['BRONZE','PRATA','OURO'].indexOf(ptsClienteResgate.nivel);
-    sel.innerHTML='<option value="">Selecione o prêmio...</option>'+
-      PREMIOS_LISTA.map(function(p){
-        var niMin=['BRONZE','PRATA','OURO'].indexOf(p.nivel);
-        var pode=ptsClienteResgate.pontos>=p.pts&&niOrd>=niMin;
-        return '<option value="'+p.id+'" '+(pode?'':'disabled')+'>'+p.nome+' — '+fP(p.pts)+(pode?'':' ('+(!pode&&niOrd<niMin?'exige '+p.nivel:'pts insuficientes')+')')+' </option>';
-      }).join('');
-    sel.disabled=false;
-  } else {
-    info.style.display='none';
-    document.getElementById('pts-premio-sel').disabled=true;
-  }
-  document.getElementById('pts-preview').style.display='none';
-  document.getElementById('pts-res-btn').disabled=true;
-  document.getElementById('pts-res-suc').style.display='none';
-}
-
-function selecionarPremio(){
-  if(!ptsClienteResgate)return;
-  var pid=document.getElementById('pts-premio-sel').value;
-  ptsPremioSel=PREMIOS_LISTA.find(function(p){return p.id===pid;})||null;
-  if(ptsPremioSel){
-    document.getElementById('pts-preview').style.display='block';
-    document.getElementById('pts-custo').textContent=fP(ptsPremioSel.pts);
-    document.getElementById('pts-saldo-apos').textContent=fP(ptsClienteResgate.pontos-ptsPremioSel.pts);
-    document.getElementById('pts-res-btn').disabled=false;
-  } else {
-    document.getElementById('pts-preview').style.display='none';
-    document.getElementById('pts-res-btn').disabled=true;
-  }
-}
-
-function confirmarPtsResgate(){
-  if(!ptsClienteResgate||!ptsPremioSel)return;
-  var cod=gerarCodigoSeguro();
-  ptsClienteResgate.pontos-=ptsPremioSel.pts;
-  CLIENTES=CLIENTES.map(function(c){return c.id===ptsClienteResgate.id?ptsClienteResgate:c;});
-  var suc=document.getElementById('pts-res-suc');
-  suc.style.display='block';
-  suc.innerHTML='✅ <strong>'+ptsPremioSel.nome+'</strong> para <strong>'+ptsClienteResgate.nome+'</strong><br>'+
-    '<div style="font-family:monospace;font-size:18px;letter-spacing:4px;font-weight:700;color:var(--gold);margin-top:8px">'+cod+'</div>'+
-    '<div style="font-size:11px;color:var(--text3);margin-top:4px">Apresentar na retirada</div>';
-  document.getElementById('pts-res-btn').disabled=true;
-  toast('🏆 Resgate de '+ptsPremioSel.nome+' confirmado!');
-}
-
-function gerarCodigoSeguro(){
-  var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  var cod='';
-  for(var i=0;i<8;i++) cod+=chars.charAt(Math.floor(Math.random()*chars.length));
-  return cod;
-}
-
-function renderResgates(){
-  preencherSelectsResgates();
-  var pend=[
-    {email:'<template class="__cf_email__" data-cfemail="066c69676946636b676f6a2865696b">[email&#160;protected]</template>',nome:'João Silva',premio:'Coqueteleira Alpha',codigo:'A8F2D1C4',data:'14/01'},
-  ];
-  document.getElementById('resgates-pendentes').innerHTML=pend.map(function(r){
-    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid var(--border)">'+
-      '<div><div style="font-size:13px;font-weight:600">'+r.nome+'</div>'+
-      '<div style="font-size:11px;color:var(--text3)">'+r.premio+' · '+r.data+'</div>'+
-      '<div style="font-family:monospace;font-size:13px;letter-spacing:3px;margin-top:3px">'+r.codigo+'</div></div>'+
-      '<button class="btn-green" style="font-size:11px;padding:6px 12px;width:auto" onclick="toast('✅ Entrega confirmada!')">✅ Confirmar</button>'+
-      '</div>';
-  }).join('')||'<div style="color:var(--text3);font-size:13px;padding:12px 0">Nenhum resgate pendente.</div>';
-}
-
-// ── INDICAÇÕES com código seguro ──────────────────────────────
-function confirmarIndicacao(){
-  var e=document.getElementById('ind-email').value.trim();
-  if(!e){toast('Informe o email do indicado','var(--red)');return;}
-  var el=document.getElementById('ind-suc');
-  el.style.display='block';
-  el.textContent='✅ Indicação de '+e+' confirmada! +200 pts para o indicador · +100 pts para o indicado.';
-  toast('✅ Indicação confirmada!');
-}
-
-function confirmarIndicacaoDireta(nome){
-  toast('✅ Indicação de '+nome+' confirmada! Pontos liberados.');
-}
-
-function confirmarEntrega(){
-  var cod=document.getElementById('cod-entrega').value.trim().toUpperCase();
-  if(cod.length<4){toast('Informe o código de retirada','var(--red)');return;}
-  var el=document.getElementById('entrega-suc');
-  el.style.display='block';
-  el.style.background='#1D9E7522';el.style.border='.5px solid #1D9E7533';el.style.color='var(--green)';
-  el.textContent='✅ Entrega do código '+cod+' confirmada com sucesso!';
-  toast('✅ Entrega confirmada!');
-}
-
-function confirmarEntregaDireta(cod,nome,premio){
-  toast('✅ Entrega de "'+premio+'" para '+nome+' confirmada!');
-}
-
-// ── CADASTRO NOVO CLIENTE ─────────────────────────────────────
-function abrirCadastro(){
-  var m=document.getElementById('modal-cadastro');
-  if(m){
-    document.getElementById('cad-form').style.display='block';
-    document.getElementById('cad-suc').style.display='none';
-    document.getElementById('cad-err').style.display='none';
-    ['cad-nome','cad-email','cad-tel','cad-cpf','cad-ref'].forEach(function(id){
-      var el=document.getElementById(id); if(el)el.value='';
-    });
-    var nasc=document.getElementById('cad-nasc'); if(nasc)nasc.value='';
-    m.style.display='flex';
-  }
-}
-
-function fecharCadastro(){
-  var m=document.getElementById('modal-cadastro');
-  if(m)m.style.display='none';
-}
-
-async function cadastrarCliente(){
-  var nome=document.getElementById('cad-nome').value.trim();
-  var email=document.getElementById('cad-email').value.trim();
-  var tel=document.getElementById('cad-tel').value.trim();
-  var cpf=document.getElementById('cad-cpf').value.trim();
-  var nasc=document.getElementById('cad-nasc').value;
-  var ref=document.getElementById('cad-ref').value.trim();
-  var err=document.getElementById('cad-err');
-  if(!nome){err.style.display='block';err.textContent='Nome é obrigatório';return;}
-  if(!email||!email.includes('@')){err.style.display='block';err.textContent='Email inválido';return;}
-  err.style.display='none';
-  var btn=document.querySelector('#cad-form .btn-green');
-  if(btn){btn.disabled=true;btn.textContent='⏳ Cadastrando...';}
-  var refCodigo=ref||gerarCodigoSeguro();
-  var payload={acao:'cadastrar_cliente',dados:{nome,email,telefone:tel,cpf,dataNascimento:nasc,codigoIndicacao:ref}};
-  try {
-    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
-    var data=await resp.json();
-    if(data.sucesso){
-      var novo={id:data.dados.id||'C'+Date.now(),nome,email,tel,nivel:'BRONZE',pontos:0,cashback:0,gastoMes:0,mesesRec:0,ref:data.dados.codigoReferral||refCodigo};
-      CLIENTES.push(novo); renderAll();
-      document.getElementById('cad-form').style.display='none';
-      document.getElementById('cad-suc').style.display='block';
-      document.getElementById('cad-suc-nome').textContent=nome+' — '+email;
-      document.getElementById('cad-suc-ref').textContent=novo.ref;
-      toast('✅ '+nome+' cadastrado!');
-    } else {
-      err.style.display='block'; err.textContent='Erro: '+(data.erro||'Tente novamente');
-      if(btn){btn.disabled=false;btn.textContent='✅ Cadastrar';}
-    }
-  } catch(e){
-    var novo={id:'C'+Date.now(),nome,email,tel,nivel:'BRONZE',pontos:0,cashback:0,gastoMes:0,mesesRec:0,ref:refCodigo};
-    CLIENTES.push(novo); renderAll();
-    document.getElementById('cad-form').style.display='none';
-    document.getElementById('cad-suc').style.display='block';
-    document.getElementById('cad-suc-nome').textContent=nome+' — '+email;
-    document.getElementById('cad-suc-ref').textContent=novo.ref;
-    toast('✅ '+nome+' cadastrado localmente!','#EF9F27');
-    if(btn){btn.disabled=false;btn.textContent='✅ Cadastrar';}
-  }
-}
-
-
-function renderCRM(){
-  var sorted=PRODUTOS.filter(function(p){return p.dias<=7;}).sort(function(a,b){return a.dias-b.dias;});
-  var counts={acabou:0,urgente:0,proximo:0,aviso:0};
-  sorted.forEach(function(p){if(p.dias<=0)counts.acabou++;else if(p.dias<=2)counts.urgente++;else if(p.dias<=5)counts.proximo++;else counts.aviso++;});
-  var s=function(id,v){var e=document.getElementById(id);if(e)e.textContent=v;};
-  s('crm-c-acabou',counts.acabou);s('crm-c-urgente',counts.urgente);s('crm-c-proximo',counts.proximo);s('crm-c-aviso',counts.aviso);
-  var el=document.getElementById('crm-cards');if(!el)return;
-  var nb=function(n){var cfg=NCFG[n]||{emoji:'🥉'};return '<span class="nivel-badge '+(n==='OURO'?'nb-o':n==='PRATA'?'nb-p':'nb-b')+'">'+cfg.emoji+' '+n+'</span>';};
-  el.innerHTML=sorted.map(function(a){
-    var cl=CLIENTES.find(function(c){return c.id===a.cid;})||{nome:'?',nivel:'BRONZE',tel:'—'};
-    var cor=a.dias<=0?'#E24B4A':a.dias<=2?'#EF9F27':a.dias<=5?'#FFD700':'#1D9E75';
-    var urg=a.dias<=0?'⛔ Acabou':a.dias<=2?'🚨 '+a.dias+'d':a.dias<=5?'⚠️ '+a.dias+'d':'📦 '+a.dias+'d';
-    return '<div class="alerta-card" style="background:'+cor+'08;border-color:'+cor+'33;border-left:3px solid '+cor+'"><div class="urg-chip" style="background:'+cor+'22;color:'+cor+';font-weight:700;font-size:12px">'+urg+'</div><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13px">'+cl.nome+' '+nb(cl.nivel)+'</div><div style="font-size:11px;color:var(--text3);margin-top:2px">'+a.nome+' · '+a.cat+'</div><div style="font-size:11px;color:var(--text3)">📱 '+cl.tel+'</div></div><div style="display:flex;gap:7px;flex-shrink:0"><button class="btn-wa" onclick="abrirWA(''+a.cid+'','reposicao',''+a.nome+'')">📱 WA Reposição</button><button class="btn-ghost" onclick="abrirWA(''+a.cid+'','custom','')">✏️ Personalizado</button></div></div>';
-  }).join('')||'<div style="color:var(--text3);font-size:13px;padding:20px 0;text-align:center">Nenhum alerta. 🎉</div>';
-}
-
-function renderClientesFunc(){
-  var busca=(document.getElementById('busca-func')||{value:''}).value.toLowerCase();
-  var lista=CLIENTES.filter(function(c){return !busca||c.nome.toLowerCase().includes(busca)||c.email.includes(busca);}).sort(function(a,b){return b.pontos-a.pontos;});
-  var nb=function(n){var cfg=NCFG[n]||{emoji:'🥉'};return '<span class="nivel-badge '+(n==='OURO'?'nb-o':n==='PRATA'?'nb-p':'nb-b')+'">'+cfg.emoji+' '+n+'</span>';};
-  var el=document.getElementById('cli-func-tbody');if(!el)return;
-  el.innerHTML=lista.map(function(c){
-    var prod=PRODUTOS.filter(function(p){return p.cid===c.id&&p.dias<=7;}).sort(function(a,b){return a.dias-b.dias;})[0];
-    var cor=prod?(prod.dias<=0?'#E24B4A':prod.dias<=2?'#EF9F27':prod.dias<=5?'#FFD700':'#1D9E75'):null;
-    return '<tr><td><div style="font-weight:600">'+c.nome+'</div><div style="font-size:11px;color:var(--text3)">'+c.email+'</div></td><td>'+nb(c.nivel)+'</td><td style="color:#FFD700;font-weight:600">'+fP(c.pontos)+'</td><td style="color:#1D9E75">'+fR(c.cashback)+'</td><td>'+fR(c.gastoMes)+'</td><td>'+(prod?'<span style="color:'+cor+';font-weight:700;font-size:12px">'+(prod.dias<=0?'⛔':prod.dias<=2?'🚨':prod.dias<=5?'⚠️':'📦')+' '+prod.nome+'('+prod.dias+'d)</span>':'—')+'</td><td style="display:flex;gap:5px"><button class="btn-wa" style="font-size:11px;padding:5px 9px" onclick="abrirWA(''+c.id+'','custom','')">📱 WA</button>'+(prod?'<button class="btn-wa" style="font-size:11px;padding:5px 9px" onclick="abrirWA(''+c.id+'','reposicao',''+prod.nome+'')">📦</button>':'')+'</td></tr>';
-  }).join('');
-}
-
-function renderIndicacoes(){
-  var pend=INDICACOES.filter(function(i){return i.status==='PENDENTE';});
-  var el=document.getElementById('ind-pendentes');
-  if(el) el.innerHTML=pend.length===0?'<div style="color:var(--text3);font-size:13px">Nenhuma indicação pendente.</div>':
-    pend.map(function(i){return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid var(--border)"><div><div style="font-size:13px;font-weight:600">'+i.indNome+' → '+i.indado+'</div><div style="font-size:11px;color:var(--text3)">'+i.data+'</div></div><div style="display:flex;gap:7px;align-items:center"><span style="background:#EF9F2722;color:#EF9F27;border:.5px solid #EF9F2733;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700">⏳ Pendente</span><button class="btn-green" style="font-size:11px;padding:5px 10px;width:auto" onclick="confirmarIndicacaoDireta(''+i.indado+'')">✅</button></div></div>';}).join('');
-}
-
-function fR(v){return 'R$'+Number(v).toFixed(2).replace('.',',');}
-function fP(v){return Number(v).toLocaleString('pt-BR')+' pts';}
-
-function renderAll(){
-  var sel=document.getElementById('v-cliente');
-  if(sel) sel.innerHTML='<option value="">Selecione o cliente...</option>'+
-    CLIENTES.map(function(c){return '<option value="'+c.id+'">'+c.nome+' — '+c.email+' ('+c.nivel+')</option>';}).join('');
-  renderCRM();
-  renderClientesFunc();
-  renderIndicacoes();
-  renderResgates();
-  preencherSelectsResgates();
-}
-
-function fazerLogin(){
-  var s=document.getElementById('l-senha').value;
-  var e=document.getElementById('l-email').value;
-  if(s==='func2025'){
-    document.getElementById('login-wrap').style.display='none';
-    document.getElementById('app').style.display='flex';
-    document.getElementById('tb-nome').textContent=e.split('@')[0];
-    renderAll();
-  } else {
-    document.getElementById('login-err').style.display='block';
-  }
-}
-document.getElementById('l-senha').addEventListener('keydown',function(e){if(e.key==='Enter')fazerLogin();});
-
-function fazerLogout(){
-  document.getElementById('app').style.display='none';
-  document.getElementById('login-wrap').style.display='flex';
-}
-</script>
+  </div>
+</div>
 
 <!-- MODAL WA -->
-<div class="modal-ov" id="modal-wa" onclick="if(event.target===this)fecharModal('modal-wa')" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;align-items:center;justify-content:center;padding:20px">
-  <div class="modal-box" style="background:#1a1a1a;border:1px solid #CC0000;border-radius:14px;padding:24px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <span style="font-weight:700;font-size:16px;color:#CC0000" id="wa-modal-title">📱 WhatsApp</span>
-      <button style="background:none;border:none;color:#888;font-size:22px;cursor:pointer;line-height:1" onclick="fecharModal('modal-wa')">×</button>
-    </div>
-    <div style="font-size:11px;color:#888;margin-bottom:8px">Para: <strong id="wa-para" style="color:#f0f0f0"></strong></div>
-    <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap" id="wa-templates"></div>
-    <textarea id="wa-msg" style="width:100%;background:#222;border:.5px solid #333;border-radius:8px;padding:11px 13px;color:#f0f0f0;font-size:13px;outline:none;font-family:'Barlow',sans-serif;min-height:140px;resize:vertical;margin-bottom:14px"></textarea>
+<div id="mwa" class="mov" onclick="if(event.target===this)fMWA()">
+  <div class="mbox">
+    <div class="mh"><span class="mt" id="mwa-t">📱 WhatsApp</span><button class="mc" onclick="fMWA()">×</button></div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:8px">Para: <strong id="mwa-p" style="color:var(--text)"></strong></div>
+    <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap" id="mwa-tpls"></div>
+    <textarea id="mwa-msg" class="inp" style="min-height:140px;resize:vertical;margin-bottom:12px"></textarea>
     <div style="display:flex;gap:8px">
-      <button onclick="enviarWA()" style="flex:1;background:#25D36622;color:#25D366;border:1px solid #25D36633;border-radius:8px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">📱 Abrir WhatsApp</button>
-      <button onclick="fecharModal('modal-wa')" style="background:#2a2a2a;color:#ccc;border:.5px solid #333;border-radius:8px;padding:11px 16px;font-size:12px;cursor:pointer;font-family:'Barlow',sans-serif">Cancelar</button>
+      <button onclick="enviarWA()" style="flex:1;background:#25D36633;color:#25D366;border:1px solid #25D36644;border-radius:8px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">📱 Abrir WhatsApp</button>
+      <button onclick="fMWA()" class="bgh">Cancelar</button>
     </div>
   </div>
 </div>
 
 <!-- MODAL CADASTRO -->
-<div id="modal-cadastro" onclick="if(event.target===this)fecharCadastro()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;align-items:center;justify-content:center;padding:20px">
-  <div style="background:#1a1a1a;border:1px solid #1D9E7544;border-radius:14px;padding:24px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <span style="font-weight:700;font-size:16px;color:#1D9E75">👤 Novo Cliente</span>
-      <button onclick="fecharCadastro()" style="background:none;border:none;color:#888;font-size:22px;cursor:pointer">×</button>
-    </div>
+<div id="mcad" class="mov" onclick="if(event.target===this)fCad()">
+  <div class="mbox" style="border-color:#1D9E7544">
+    <div class="mh"><span class="mt" style="color:var(--green)">👤 Novo Cliente</span><button class="mc" onclick="fCad()">×</button></div>
     <div id="cad-form">
-      <div style="margin-bottom:10px"><label style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;font-weight:600;display:block;margin-bottom:5px">Nome completo *</label><input type="text" id="cad-nome" placeholder="Ex: João da Silva" style="width:100%;background:#222;border:.5px solid #333;border-radius:8px;padding:11px 13px;color:#f0f0f0;font-size:14px;outline:none;font-family:'Barlow',sans-serif"></div>
-      <div style="margin-bottom:10px"><label style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;font-weight:600;display:block;margin-bottom:5px">Email *</label><input type="email" id="cad-email" placeholder="joao@email.com" style="width:100%;background:#222;border:.5px solid #333;border-radius:8px;padding:11px 13px;color:#f0f0f0;font-size:14px;outline:none;font-family:'Barlow',sans-serif"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-        <div><label style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;font-weight:600;display:block;margin-bottom:5px">Telefone</label><input type="tel" id="cad-tel" placeholder="(47) 99999-9999" style="width:100%;background:#222;border:.5px solid #333;border-radius:8px;padding:11px 13px;color:#f0f0f0;font-size:14px;outline:none;font-family:'Barlow',sans-serif"></div>
-        <div><label style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;font-weight:600;display:block;margin-bottom:5px">CPF</label><input type="text" id="cad-cpf" placeholder="000.000.000-00" style="width:100%;background:#222;border:.5px solid #333;border-radius:8px;padding:11px 13px;color:#f0f0f0;font-size:14px;outline:none;font-family:'Barlow',sans-serif"></div>
+      <label class="lbl">Nome completo *</label><input type="text" class="inp" id="cad-nome" placeholder="João da Silva">
+      <label class="lbl">Email *</label><input type="email" class="inp" id="cad-email" placeholder="joao@email.com">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><label class="lbl">Telefone</label><input type="tel" class="inp" id="cad-tel" placeholder="(47) 99999-9999"></div>
+        <div><label class="lbl">CPF</label><input type="text" class="inp" id="cad-cpf" placeholder="000.000.000-00"></div>
       </div>
-      <div style="margin-bottom:14px"><label style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;font-weight:600;display:block;margin-bottom:5px">Data de Nascimento</label><input type="date" id="cad-nasc" style="width:100%;background:#222;border:.5px solid #333;border-radius:8px;padding:11px 13px;color:#f0f0f0;font-size:14px;outline:none;font-family:'Barlow',sans-serif"></div>
-      <div style="margin-bottom:14px"><label style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;font-weight:600;display:block;margin-bottom:5px">Código de indicação (opcional)</label><input type="text" id="cad-ref" placeholder="Ex: ALPHA01" style="width:100%;background:#222;border:.5px solid #333;border-radius:8px;padding:11px 13px;color:#f0f0f0;font-size:14px;outline:none;font-family:'Barlow',sans-serif;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></div>
+      <label class="lbl">Nascimento</label><input type="date" class="inp" id="cad-nasc">
+      <label class="lbl">Código de indicação (opcional)</label>
+      <input type="text" class="inp" id="cad-ref" placeholder="Ex: ALPHA01" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
       <div id="cad-err" style="display:none;background:#E24B4A22;border:.5px solid #E24B4A33;border-radius:8px;padding:10px;font-size:12px;color:#E24B4A;margin-bottom:10px"></div>
       <div style="display:flex;gap:8px">
-        <button onclick="cadastrarCliente()" class="btn-green" style="flex:1">✅ Cadastrar</button>
-        <button onclick="fecharCadastro()" style="background:#2a2a2a;color:#ccc;border:.5px solid #333;border-radius:8px;padding:11px 16px;font-size:12px;cursor:pointer;font-family:'Barlow',sans-serif">Cancelar</button>
+        <button class="bg" style="flex:1" onclick="cadastrar()">✅ Cadastrar</button>
+        <button onclick="fCad()" class="bgh">Cancelar</button>
       </div>
     </div>
     <div id="cad-suc" style="display:none;text-align:center;padding:20px">
       <div style="font-size:40px;margin-bottom:10px">✅</div>
-      <div style="font-weight:700;font-size:16px;margin-bottom:6px;color:#1D9E75">Cliente cadastrado!</div>
-      <div style="font-size:13px;color:#aaa;margin-bottom:10px" id="cad-suc-nome"></div>
-      <div style="background:#222;border-radius:8px;padding:12px;margin-bottom:14px">
-        <div style="font-size:10px;color:#666;margin-bottom:4px">Código de indicação único</div>
-        <div style="font-family:monospace;font-size:20px;letter-spacing:4px;font-weight:700;color:#FFD700" id="cad-suc-ref"></div>
+      <div style="font-weight:700;font-size:16px;margin-bottom:6px;color:var(--green)">Cliente cadastrado!</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:10px" id="cad-suc-nm"></div>
+      <div style="background:var(--bg4);border-radius:8px;padding:12px;margin-bottom:14px">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:4px">Código de indicação único</div>
+        <div style="font-family:monospace;font-size:20px;letter-spacing:4px;font-weight:700;color:var(--gold)" id="cad-suc-ref"></div>
       </div>
-      <button onclick="fecharCadastro();resetVenda()" style="background:#CC0000;color:#fff;border:none;border-radius:9px;padding:12px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barl
+      <button onclick="fCad();resetV()" class="bv">Nova venda para este cliente</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="tst"></div>
+
+<script>
+var WEB_APP_URL='https://script.google.com/macros/s/AKfycbw7AIr8DrCMGFhpoaz6gE7_v0M4sElvNPZh7PaEpP4h_oX_vwfraiUAaGOQNMoQK_8WpQ/exec';
+var CL=[
+  {id:'C01',nome:'João Silva',    email:'joao@email.com',  tel:'47991234567',nivel:'OURO',  pontos:3420,cashback:241.40,gastoMes:380,mesesRec:3,ref:'ALPHA01'},
+  {id:'C02',nome:'Maria Oliveira',email:'maria@email.com', tel:'47987654321',nivel:'PRATA', pontos:920, cashback:46.00, gastoMes:210,mesesRec:2,ref:'ALPHA02'},
+  {id:'C03',nome:'Pedro Santos',  email:'pedro@email.com', tel:'47976543210',nivel:'BRONZE',pontos:310, cashback:6.20,  gastoMes:80, mesesRec:0,ref:'ALPHA03'},
+  {id:'C04',nome:'Ana Lima',      email:'ana@email.com',   tel:'47965432109',nivel:'PRATA', pontos:1850,cashback:92.50, gastoMes:190,mesesRec:2,ref:'ALPHA04'},
+  {id:'C05',nome:'Carlos Ramos',  email:'carlos@email.com',tel:'47954321098',nivel:'OURO',  pontos:4100,cashback:287.00,gastoMes:420,mesesRec:4,ref:'ALPHA05'},
+];
+var PRD=[
+  {cid:'C01',nome:'Creatina Mono 300g',   cat:'Creatina', dias:1},
+  {cid:'C02',nome:'Whey Protein 900g',    cat:'Proteína', dias:3},
+  {cid:'C04',nome:'Pré-Treino Black 300g',cat:'Pré-Treino',dias:5},
+  {cid:'C05',nome:'BCAA 250g',            cat:'Aminoác.', dias:0},
+  {cid:'C03',nome:'Vitamina C 1000mg',    cat:'Vitaminas',dias:7},
+];
+var IND=[
+  {indNome:'João Silva',  indado:'Maria Oliveira',status:'CONFIRMADA',data:'10/01'},
+  {indNome:'Ana Lima',    indado:'Larissa Costa', status:'PENDENTE',  data:'12/01'},
+];
+var PREMIOS=[
+  {id:'P01',nome:'Coqueteleira Alpha',   pts:100, nivel:'BRONZE'},
+  {id:'P02',nome:'Amostra Creatina 100g',pts:200, nivel:'BRONZE'},
+  {id:'P03',nome:'Desconto 10%',         pts:350, nivel:'BRONZE'},
+  {id:'P04',nome:'Whey 900g grátis',     pts:1500,nivel:'PRATA'},
+  {id:'P05',nome:'Kit Treino Alpha',      pts:3000,nivel:'OURO'},
+];
+var NC={OURO:{emoji:'🥇',cor:'#FFD700',pts:2.0,cb:0.07},PRATA:{emoji:'🥈',cor:'#C8C8C8',pts:1.5,cb:0.05},BRONZE:{emoji:'🥉',cor:'#CD7F32',pts:1.0,cb:0.02}};
+var cliSel=null, waAtual=null, cbCli=null, ptsCli=null, ptsPremioSel=null;
+function fR(v){return 'R$'+Number(v).toFixed(2).replace('.',',');}
+function fP(v){return Number(v).toLocaleString('pt-BR')+' pts';}
+function el(id){return document.getElementById(id);}
+function nb(n){var c=NC[n]||NC.BRONZE;return '<span class="nb '+(n==='OURO'?'nbo':n==='PRATA'?'nbp':'nbb')+'">'+c.emoji+' '+n+'</span>';}
+function toast(msg,cor){var t=el('tst');t.textContent=msg;t.style.borderColor=cor||'var(--green)';t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on');},3000);}
+function set(id,v){var e=el(id);if(e)e.innerHTML=v;}
+
+// LOGIN
+el('lbtn').onclick=function(){
+  var s=el('lsenha').value;
+  var em=el('lemail').value;
+  var err=el('lerro');
+  if(s==='func2025'){
+    err.style.display='none';
+    el('lwrap').style.display='none';
+    el('app').style.display='flex';
+    el('tnome').textContent=em?em.split('@')[0]:'Funcionário';
+    renderTudo();
+  } else {
+    err.style.display='block';
+    err.textContent='Senha incorreta. Use: func2025';
+  }
+};
+el('lsenha').onkeydown=function(e){if(e.key==='Enter')el('lbtn').click();};
+el('sbtn').onclick=function(){el('app').style.display='none';el('lwrap').style.display='flex';el('lsenha').value='';};
+
+// TABS
+function ir(n,b){
+  document.querySelectorAll('.p').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on');});
+  var e=el('p'+n[0]+(n==='clientes'?'clientes':n==='indicacoes'?'ind':n==='resgates'?'res':n.slice(1)));
+  if(!e)e=el('p'+n);
+  if(e)e.classList.add('on');
+  if(b)b.classList.add('on');
+}
+
+// RENDER
+function renderTudo(){
+  var sel=el('vsel');
+  if(sel)sel.innerHTML='<option value="">Selecione o cliente...</option>'+CL.map(function(c){return '<option value="'+c.id+'">'+c.nome+' — '+c.email+'</option>';}).join('');
+  renderCRM();renderClis();renderInd();renderRes();preencherResSelects();
+}
+
+function renderCRM(){
+  var s=PRD.filter(function(p){return p.dias<=7;}).sort(function(a,b){return a.dias-b.dias;});
+  var ct={a:0,u:0,p:0,v:0};
+  s.forEach(function(x){if(x.dias<=0)ct.a++;else if(x.dias<=2)ct.u++;else if(x.dias<=5)ct.p++;else ct.v++;});
+  ['ca','cu','cp','cv'].forEach(function(id,i){var e=el(id);if(e)e.textContent=[ct.a,ct.u,ct.p,ct.v][i];});
+  var e=el('crm-lista');if(!e)return;
+  e.innerHTML=s.map(function(a){
+    var c=CL.find(function(x){return x.id===a.cid;})||{nome:'?',nivel:'BRONZE',tel:'—'};
+    var cor=a.dias<=0?'#E24B4A':a.dias<=2?'#EF9F27':a.dias<=5?'#FFD700':'#1D9E75';
+    var u=a.dias<=0?'⛔ Acabou':a.dias<=2?'🚨 '+a.dias+'d':a.dias<=5?'⚠️ '+a.dias+'d':'📦 '+a.dias+'d';
+    return '<div class="acard" style="background:'+cor+'08;border-color:'+cor+'33;border-left:3px solid '+cor+'">'+
+      '<div class="uch" style="background:'+cor+'22;color:'+cor+'">'+u+'</div>'+
+      '<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13px">'+c.nome+' '+nb(c.nivel)+'</div>'+
+      '<div style="font-size:11px;color:var(--text3);margin-top:2px">'+a.nome+' · '+a.cat+'</div>'+
+      '<div style="font-size:11px;color:var(--text3)">📱 '+c.tel+'</div></div>'+
+      '<div style="display:flex;gap:7px;flex-shrink:0">'+
+      '<button class="bwa" onclick="abrirWA(\''+a.cid+'\',\'reposicao\',\''+a.nome+'\')">📱 WA Reposição</button>'+
+      '<button class="bgh" onclick="abrirWA(\''+a.cid+'\',\'custom\',\'\')">✏️ Custom</button>'+
+      '</div></div>';
+  }).join('')||'<div style="color:var(--text3);font-size:13px;padding:20px;text-align:center">Nenhum alerta. 🎉</div>';
+}
+
+function renderClis(){
+  var b=(el('cbusca')||{value:''}).value.toLowerCase();
+  var lista=CL.filter(function(c){return !b||c.nome.toLowerCase().includes(b)||c.email.includes(b);}).sort(function(a,b2){return b2.pontos-a.pontos;});
+  var e=el('clis-tb');if(!e)return;
+  e.innerHTML=lista.map(function(c){
+    var p=PRD.filter(function(x){return x.cid===c.id&&x.dias<=7;}).sort(function(a,b2){return a.dias-b2.dias;})[0];
+    var cor=p?(p.dias<=0?'#E24B4A':p.dias<=2?'#EF9F27':p.dias<=5?'#FFD700':'#1D9E75'):null;
+    return '<tr><td><div style="font-weight:600">'+c.nome+'</div><div style="font-size:11px;color:var(--text3)">'+c.email+'</div></td>'+
+      '<td>'+nb(c.nivel)+'</td><td style="color:var(--gold);font-weight:600">'+fP(c.pontos)+'</td>'+
+      '<td style="color:var(--green)">'+fR(c.cashback)+'</td><td>'+fR(c.gastoMes)+'</td>'+
+      '<td>'+(p?'<span style="color:'+cor+';font-weight:700;font-size:12px">'+(p.dias<=0?'⛔':p.dias<=2?'🚨':p.dias<=5?'⚠️':'📦')+' '+p.nome+'</span>':'—')+'</td>'+
+      '<td style="display:flex;gap:5px">'+
+      '<button class="bwa" style="font-size:11px;padding:5px 9px" onclick="abrirWA(\''+c.id+'\',\'custom\',\'\')">📱 WA</button>'+
+      (p?'<button class="bwa" style="font-size:11px;padding:5px 9px" onclick="abrirWA(\''+c.id+'\',\'reposicao\',\''+p.nome+'\')">📦</button>':'')+
+      '</td></tr>';
+  }).join('');
+}
+
+function renderInd(){
+  var pend=IND.filter(function(i){return i.status==='PENDENTE';});
+  var e=el('ind-pend');if(!e)return;
+  e.innerHTML=pend.length===0?'<div style="color:var(--text3);font-size:13px">Nenhuma pendente.</div>':
+    pend.map(function(i){return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid var(--border)">'+
+      '<div><div style="font-size:13px;font-weight:600">'+i.indNome+' → '+i.indado+'</div><div style="font-size:11px;color:var(--text3)">'+i.data+'</div></div>'+
+      '<button class="bg" style="font-size:11px;padding:5px 10px;width:auto" onclick="toast(\'✅ Confirmado!\')">✅</button></div>';}).join('');
+}
+
+function renderRes(){
+  var e=el('respend');if(!e)return;
+  e.innerHTML='<div style="color:var(--text3);font-size:13px">Nenhum resgate pendente.</div>';
+}
+
+function preencherResSelects(){
+  var opts='<option value="">Selecione...</option>'+CL.map(function(c){return '<option value="'+c.id+'">'+c.nome+' (CB: '+fR(c.cashback)+' | Pts: '+fP(c.pontos)+')</option>';}).join('');
+  var cb=el('cbsel'),pts=el('ptssel');
+  if(cb)cb.innerHTML=opts;if(pts)pts.innerHTML=opts;
+}
+
+// VENDA
+function selCli(){
+  var id=(el('vsel')||{value:''}).value;
+  cliSel=CL.find(function(c){return c.id===id;})||null;
+  var info=el('vinfo');
+  if(cliSel&&info){
+    info.style.display='block';
+    var nc=NC[cliSel.nivel];
+    info.innerHTML='<strong>'+cliSel.nome+'</strong> '+nb(cliSel.nivel)+
+      ' &nbsp; <span style="color:var(--gold)">'+fP(cliSel.pontos)+'</span>'+
+      ' &nbsp; <span style="color:var(--green)">CB: '+fR(cliSel.cashback)+'</span>';
+  } else if(info){info.style.display='none';}
+  calcV();
+}
+
+function calcV(){
+  var v=parseFloat((el('vval')||{value:''}).value)||0;
+  var btn=el('vbtn');
+  if(!cliSel||v<=0){if(btn)btn.disabled=true;el('vprev').style.display='block';el('vprev').textContent='Selecione o cliente e informe o valor.';return;}
+  var nc=NC[cliSel.nivel];
+  var pts=Math.floor(v*nc.pts);var cb=parseFloat((v*nc.cb).toFixed(2));
+  if(btn)btn.disabled=false;
+  el('vprev').innerHTML=
+    '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px"><span style="color:var(--text3)">Valor</span><span style="font-weight:600">'+fR(v)+'</span></div>'+
+    '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px"><span style="color:var(--text3)">Nível</span><span>'+nb(cliSel.nivel)+'</span></div>'+
+    '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px"><span style="color:var(--text3)">Pts/R$</span><span>'+nc.pts+'pt</span></div>'+
+    '<div style="border-top:.5px solid var(--border);margin-top:6px;padding-top:8px;display:flex;justify-content:space-between;font-size:16px;font-weight:700"><span>Pontos ganhos</span><span style="color:var(--gold)">+'+fP(pts)+'</span></div>'+
+    '<div style="display:flex;justify-content:space-between;font-size:13px;margin-top:4px"><span style="color:var(--text3)">Cashback gerado</span><span style="color:var(--green)">+'+fR(cb)+'</span></div>';
+}
+
+async function registrarVenda(){
+  if(!cliSel)return;
+  var v=parseFloat((el('vval')||{value:''}).value)||0;
+  if(v<=0)return;
+  var desc=(el('vdesc')||{value:''}).value||'Compra registrada';
+  var prod=(el('vprod')||{value:''}).value;
+  var dias=parseInt((el('vdias')||{value:'30'}).value)||30;
+  var nc=NC[cliSel.nivel];
+  var pts=Math.floor(v*nc.pts);var cb=parseFloat((v*nc.cb).toFixed(2));
+  var btn=el('vbtn');if(btn){btn.disabled=true;btn.textContent='⏳ Enviando...';}
+  try{
+    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({acao:'registrar_compra',dados:{email:cliSel.email,valorCompra:v,descricao:desc,loja:'Alpha Suplementos',produtos:prod?[{produtoId:'P'+prod.substr(0,4).toUpperCase(),nome:prod,quantidade:1,unidade:'un',diasConsumo:dias,categoria:'Produto'}]:[]}})});
+    var data=await resp.json();
+    if(data.sucesso){cliSel.pontos+=(data.dados.pontosGanhos||pts);cliSel.cashback=parseFloat((cliSel.cashback+(data.dados.cashbackGanhoNaCompra||cb)).toFixed(2));mostrarSucVenda(v,data.dados.pontosGanhos||pts,data.dados.cashbackGanhoNaCompra||cb,desc,true);}
+    else{mostrarSucVenda(v,pts,cb,desc,false);}
+  }catch(e){mostrarSucVenda(v,pts,cb,desc,false);}
+  CL=CL.map(function(c){return c.id===cliSel.id?cliSel:c;});
+  if(prod)PRD.push({cid:cliSel.id,nome:prod,cat:'Produto',dias:dias});
+  renderCRM();renderClis();
+}
+
+function mostrarSucVenda(v,pts,cb,desc,planilha){
+  el('vprev-card').style.display='none';
+  el('vsuc-card').style.display='block';
+  el('vsuc-txt').innerHTML='<strong>'+cliSel.nome+'</strong> ganhou <strong style="color:var(--gold)">+'+fP(pts)+'</strong> e <strong style="color:var(--green)">+'+fR(cb)+' cashback</strong><br>'+
+    'Compra: '+fR(v)+' · '+desc+'<br>'+
+    (planilha?'<span style="color:var(--green);font-size:12px">✅ Salvo na planilha!</span>':'<span style="color:#EF9F27;font-size:12px">⚠️ Salvo localmente</span>');
+  toast('✅ Venda de '+fR(v)+' registrada!');
+}
+
+function resetV(){
+  cliSel=null;
+  var ids=['vsel','vval','vdesc','vprod'];
+  ids.forEach(function(id){var e=el(id);if(e)e.value='';});
+  var dias=el('vdias');if(dias)dias.value='30';
+  var info=el('vinfo');if(info)info.style.display='none';
+  var btn=el('vbtn');if(btn){btn.disabled=true;btn.textContent='✅ REGISTRAR VENDA';}
+  el('vprev-card').style.display='block';el('vsuc-card').style.display='none';
+  el('vprev').textContent='Selecione o cliente e informe o valor.';
+}
+
+// WHATSAPP
+function abrirWA(cid,tipo,prodNome){
+  waAtual=CL.find(function(c){return c.id===cid;})||null;
+  if(!waAtual)return;
+  var c=waAtual;var nc=NC[c.nivel]||NC.BRONZE;
+  var desc=c.nivel==='OURO'?'10% OFF exclusivo 🥇':c.nivel==='PRATA'?'5% OFF exclusivo 🥈':'';
+  var tpls={
+    reposicao:'Olá, *'+c.nome+'*! 👋\n\nAqui é da *Alpha Suplementos* 💪\n\nSeu *'+(prodNome||'produto')+'* está acabando!'+(desc?'\n\n🎁 Como cliente *'+c.nivel+'*, você tem *'+desc+'* na próxima compra!':'')+'\n\nGaranta agora: alphasuplementos.com.br\n\n_Performance é o nosso negócio_ 🔥',
+    nivel:nc.emoji+' *Parabéns, '+c.nome+'!*\n\nVocê é *'+c.nivel+'* agora!\n✅ Você ganha *'+nc.pts+'pt/R$* e *'+(nc.cb*100).toFixed(0)+'% cashback*!\n\nalphasuplementos.com.br 💪',
+    aniversario:'🎂 *Feliz Aniversário, '+c.nome+'!*\n\nA *Alpha Suplementos* te deseja um dia incrível!\n\n🎁 Use o código *ANIV2025* e ganhe *15% OFF*! Válido por 7 dias.\n\nalphasuplementos.com.br 💪',
+    pontos:'⭐ *Olá, '+c.nome+'!*\n\nVocê tem *'+fP(c.pontos)+'* acumulados!\n\n🏆 Resgate prêmios em: alphasuplementos.com.br\n\n_Seus pontos estão te esperando!_ 🎁',
+    custom:'Olá, *'+c.nome+'*! 👋\n\n'
+  };
+  var t=tpls[tipo]||tpls.custom;
+  el('mwa-t').textContent='📱 WhatsApp — '+c.nome;
+  el('mwa-p').textContent=c.tel+' · '+c.email;
+  el('mwa-msg').value=t;
+  el('mwa-tpls').innerHTML=[{k:'reposicao',l:'📦 Reposição'},{k:'nivel',l:'🏆 Nível'},{k:'aniversario',l:'🎂 Aniversário'},{k:'pontos',l:'⭐ Pontos'},{k:'custom',l:'✏️ Custom'}].map(function(x){
+    return '<button class="bgh" style="font-size:11px;padding:5px 9px;'+(tipo===x.k?'background:var(--red);color:#fff;border-color:var(--red)':'')+'" onclick="el(\'mwa-msg\').value='+JSON.stringify(tpls[x.k])+'">'+ x.l+'</button>';
+  }).join('');
+  el('mwa').style.display='flex';
+}
+function fMWA(){el('mwa').style.display='none';}
+function enviarWA(){
+  if(!waAtual)return;
+  var msg=(el('mwa-msg')||{value:''}).value;
+  if(!msg.trim()){toast('Digite uma mensagem!','var(--red)');return;}
+  fMWA();
+  var tel=waAtual.tel.replace(/[^0-9]/g,'');
+  if(tel.length>=10)window.open('https://wa.me/55'+tel+'?text='+encodeURIComponent(msg),'_blank');
+  toast('📱 WhatsApp aberto para '+waAtual.nome+'!');
+}
+
+// CONFIRMAR INDICAÇÃO
+function confirmarInd(){
+  var e=(el('ind-email')||{value:''}).value.trim();
+  if(!e){toast('Informe o email','var(--red)');return;}
+  var s=el('ind-suc');if(s){s.style.display='block';s.textContent='✅ Indicação de '+e+' confirmada! +200 pts ao indicador · +100 pts ao indicado.';}
+  toast('✅ Indicação confirmada!');
+}
+
+// CASHBACK RESGATE
+function selCliCB(){
+  var id=(el('cbsel')||{value:''}).value;
+  cbCli=CL.find(function(c){return c.id===id;})||null;
+  var info=el('cbinfo');
+  if(cbCli&&info){info.style.display='flex';info.innerHTML='<span style="font-weight:600">'+cbCli.nome+'</span><span style="color:var(--green);font-weight:700">Saldo: '+fR(cbCli.cashback)+'</span>';}
+  else if(info)info.style.display='none';
+  var vf=el('cbval');if(vf)vf.value='';
+  var r=el('cbrange');if(r)r.style.display='none';
+  var p=el('cbprev');if(p)p.style.display='none';
+  var btn=el('cbbtn');if(btn)btn.disabled=true;
+  var s=el('cbsuc');if(s)s.style.display='none';
+}
+function calcCB(){
+  if(!cbCli)return;
+  var v=parseFloat((el('cbval')||{value:''}).value)||0;
+  var maxCB=Math.min(Math.floor(v/4*100)/100,cbCli.cashback);
+  var sl=el('cbr');if(sl){sl.max=maxCB;if(parseFloat(sl.value)>maxCB)sl.value=0;}
+  var ml=el('cbmaxlbl');if(ml)ml.textContent=fR(maxCB);
+  var r=el('cbrange');if(r)r.style.display=v>0?'block':'none';
+  updCB();
+}
+function updCB(){
+  if(!cbCli)return;
+  var v=parseFloat((el('cbval')||{value:''}).value)||0;
+  var cb=parseFloat((el('cbr')||{value:'0'}).value)||0;
+  var nc=NC[cbCli.nivel];
+  var fin=parseFloat((v-cb).toFixed(2));
+  var cbG=parseFloat((fin*nc.cb).toFixed(2));
+  var pts=Math.floor(fin*nc.pts);
+  var lbl=el('cbvlbl');if(lbl)lbl.textContent=fR(cb);
+  var btn=el('cbbtn');if(btn)btn.disabled=!(v>0&&cb>0);
+  var prev=el('cbprev');
+  if(prev&&v>0){
+    prev.style.display='block';
+    prev.innerHTML='<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:13px"><span style="color:var(--text3)">Compra original</span><span>'+fR(v)+'</span></div>'+
+      '<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:13px"><span style="color:var(--text3)">Desconto CB</span><span style="color:var(--green)">-'+fR(cb)+'</span></div>'+
+      '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:16px;font-weight:700;border-top:.5px solid var(--border);margin-top:4px"><span>Valor final</span><span style="color:var(--green)">'+fR(fin)+'</span></div>'+
+      '<div style="display:flex;justify-content:space-between;font-size:12px;margin-top:4px"><span style="color:var(--text3)">CB ganho na compra</span><span style="color:var(--green)">+'+fR(cbG)+'</span></div>'+
+      '<div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--text3)">Pontos ganhos</span><span style="color:var(--gold)">+'+fP(pts)+'</span></div>';
+  }
+}
+function usarMaxCB(){
+  if(!cbCli)return;
+  var v=parseFloat((el('cbval')||{value:''}).value)||0;
+  var sl=el('cbr');if(sl)sl.value=Math.min(Math.floor(v/4*100)/100,cbCli.cashback);
+  updCB();
+}
+function confirmarCB(){
+  if(!cbCli)return;
+  var v=parseFloat((el('cbval')||{value:''}).value)||0;
+  var cb=parseFloat((el('cbr')||{value:'0'}).value)||0;
+  if(v<=0||cb<=0)return;
+  var nc=NC[cbCli.nivel];var fin=parseFloat((v-cb).toFixed(2));
+  var cbG=parseFloat((fin*nc.cb).toFixed(2));var pts=Math.floor(fin*nc.pts);
+  cbCli.cashback=parseFloat((cbCli.cashback-cb+cbG).toFixed(2));cbCli.pontos+=pts;
+  CL=CL.map(function(c){return c.id===cbCli.id?cbCli:c;});
+  var s=el('cbsuc');if(s){s.style.display='block';s.innerHTML='✅ <strong>'+cbCli.nome+'</strong> — Cashback <span style="color:var(--green)">-'+fR(cb)+'</span> | Final: <strong>'+fR(fin)+'</strong> | Ganhou: +'+fR(cbG)+' CB · +'+fP(pts);}
+  var btn=el('cbbtn');if(btn)btn.disabled=true;
+  toast('✅ Cashback de '+fR(cb)+' aplicado!');
+}
+
+// PONTOS RESGATE
+function selCliPts(){
+  var id=(el('ptssel')||{value:''}).value;
+  ptsCli=CL.find(function(c){return c.id===id;})||null;
+  var info=el('ptsinfo');
+  if(ptsCli&&info){info.style.display='flex';info.innerHTML='<span style="font-weight:600">'+ptsCli.nome+'</span><span style="color:var(--gold);font-weight:700">'+fP(ptsCli.pontos)+'</span>';}
+  else if(info)info.style.display='none';
+  var sel=el('ptspremio');
+  if(sel&&ptsCli){
+    var niOrd=['BRONZE','PRATA','OURO'].indexOf(ptsCli.nivel);
+    sel.innerHTML='<option value="">Selecione o prêmio...</option>'+PREMIOS.map(function(p){
+      var niMin=['BRONZE','PRATA','OURO'].indexOf(p.nivel);
+      var ok=ptsCli.pontos>=p.pts&&niOrd>=niMin;
+      return '<option value="'+p.id+'" '+(ok?'':'disabled')+'>'+p.nome+' — '+fP(p.pts)+(ok?'':' ('+(!ok&&niOrd<niMin?'exige '+p.nivel:'pts insuficientes')+')')+'</option>';
+    }).join('');
+    sel.disabled=false;
+  } else if(sel){sel.innerHTML='<option value="">Selecione o cliente primeiro...</option>';sel.disabled=true;}
+  var prev=el('ptsprev');if(prev)prev.style.display='none';
+  var btn=el('ptsbtn');if(btn)btn.disabled=true;
+  var s=el('ptssuc');if(s)s.style.display='none';
+}
+function selPremio(){
+  if(!ptsCli)return;
+  var pid=(el('ptspremio')||{value:''}).value;
+  ptsPremioSel=PREMIOS.find(function(p){return p.id===pid;})||null;
+  var prev=el('ptsprev');
+  if(prev&&ptsPremioSel){
+    prev.style.display='block';
+    prev.innerHTML='<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--text3)">Custo do prêmio</span><span style="color:var(--gold);font-weight:700">'+fP(ptsPremioSel.pts)+'</span></div>'+
+      '<div style="display:flex;justify-content:space-between"><span style="color:var(--text3)">Saldo após resgate</span><span style="color:var(--gold)">'+fP(ptsCli.pontos-ptsPremioSel.pts)+'</span></div>';
+  }
+  var btn=el('ptsbtn');if(btn)btn.disabled=!ptsPremioSel;
+}
+function gerarCod(){var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',s='';for(var i=0;i<8;i++)s+=c[Math.floor(Math.random()*c.length)];return s;}
+function confirmarPts(){
+  if(!ptsCli||!ptsPremioSel)return;
+  var cod=gerarCod();
+  ptsCli.pontos-=ptsPremioSel.pts;CL=CL.map(function(c){return c.id===ptsCli.id?ptsCli:c;});
+  var s=el('ptssuc');if(s){s.style.display='block';s.innerHTML='✅ <strong>'+ptsPremioSel.nome+'</strong> para <strong>'+ptsCli.nome+'</strong><br><div style="font-family:monospace;font-size:18px;letter-spacing:4px;font-weight:700;color:var(--gold);margin:8px 0">'+cod+'</div><div style="font-size:11px;color:var(--text3)">Apresentar na retirada</div>';}
+  var btn=el('ptsbtn');if(btn)btn.disabled=true;
+  toast('🏆 Resgate de '+ptsPremioSel.nome+' confirmado!');
+}
+
+// CONFIRMAR ENTREGA
+function confirmarEnt(){
+  var cod=(el('codent')||{value:''}).value.trim().toUpperCase();
+  if(cod.length<4){toast('Informe o código','var(--red)');return;}
+  var s=el('entsuc');if(s){s.style.display='block';s.style.background='#1D9E7522';s.style.border='.5px solid #1D9E7533';s.style.color='var(--green)';s.textContent='✅ Entrega do código '+cod+' confirmada!';}
+  toast('✅ Entrega confirmada!');
+}
+
+// CADASTRO
+function abrirCad(){
+  var m=el('mcad');if(!m)return;
+  el('cad-form').style.display='block';el('cad-suc').style.display='none';
+  var err=el('cad-err');if(err)err.style.display='none';
+  ['cad-nome','cad-email','cad-tel','cad-cpf','cad-ref'].forEach(function(id){var e=el(id);if(e)e.value='';});
+  var n=el('cad-nasc');if(n)n.value='';
+  m.style.display='flex';
+}
+function fCad(){var m=el('mcad');if(m)m.style.display='none';}
+async function cadastrar(){
+  var nome=(el('cad-nome')||{value:''}).value.trim();
+  var email=(el('cad-email')||{value:''}).value.trim();
+  var tel=(el('cad-tel')||{value:''}).value.trim();
+  var cpf=(el('cad-cpf')||{value:''}).value.trim();
+  var nasc=(el('cad-nasc')||{value:''}).value;
+  var ref=(el('cad-ref')||{value:''}).value.trim();
+  var err=el('cad-err');
+  if(!nome){if(err){err.style.display='block';err.textContent='Nome é obrigatório';}return;}
+  if(!email||!email.includes('@')){if(err){err.style.display='block';err.textContent='Email inválido';}return;}
+  if(err)err.style.display='none';
+  var refCod=ref||gerarCod();
+  var btn=el('cad-form').querySelector('.bg');if(btn){btn.disabled=true;btn.textContent='⏳ Cadastrando...';}
+  var novo={id:'C'+Date.now(),nome:nome,email:email,tel:tel,nivel:'BRONZE',pontos:0,cashback:0,gastoMes:0,mesesRec:0,ref:refCod};
+  try{
+    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({acao:'cadastrar_cliente',dados:{nome:nome,email:email,telefone:tel,cpf:cpf,dataNascimento:nasc,codigoIndicacao:ref}})});
+    var data=await resp.json();
+    if(data.sucesso){novo.id=data.dados.id||novo.id;novo.ref=data.dados.codigoReferral||refCod;}
+  }catch(e){console.log('API off, usando local');}
+  CL.push(novo);renderTudo();
+  el('cad-form').style.display='none';el('cad-suc').style.display='block';
+  var nm=el('cad-suc-nm');if(nm)nm.textContent=nome+' — '+email;
+  var rf=el('cad-suc-ref');if(rf)rf.textContent=novo.ref;
+  toast('✅ '+nome+' cadastrado!');
+  if(btn){btn.disabled=false;btn.textContent='✅ Cadastrar';}
+}
+</script>
+</body>
+</html>
