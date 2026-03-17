@@ -578,6 +578,23 @@ function renderAll(){
     </div>`).join('');
 }
 
+async function salvarTokenNaPlanilha(token){
+  if(!window.U || !window.U.email) return;
+  try {
+    await fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'text/plain'},
+      body: JSON.stringify({
+        acao: 'salvar_token_push',
+        dados: { email: window.U.email, token: token }
+      })
+    });
+    console.log('Token FCM salvo na planilha!');
+  } catch(e) {
+    console.log('Erro ao salvar token:', e);
+  }
+}
+
 function copiarCodigo(){
   var cod=U.ref;
   if(navigator.clipboard){
@@ -639,11 +656,13 @@ function compartilharWA(){
           if(token) {
             window.fcmToken = token;
             console.log('FCM Token:', token);
-            // Salvar token no banco
+            // Salvar token no Firebase
             if(window.U && window.U.email) {
               var safeEmail = window.U.email.replace(/\./g,'_').replace(/@/g,'_at_');
               set(ref(db, 'tokens/' + safeEmail), {token: token, updated: Date.now()});
             }
+            // Salvar token na planilha Google Sheets para push nativo
+            salvarTokenNaPlanilha(token);
           }
         }).catch(function(e){ console.log('FCM token error:', e); });
 

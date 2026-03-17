@@ -13,20 +13,74 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-// Receber push quando app estiver em background
+// Push quando app está em BACKGROUND ou FECHADO
 messaging.onBackgroundMessage(function(payload) {
-  console.log('Push em background:', payload);
-  const n = payload.notification || {};
-  self.registration.showNotification(n.title || 'Alpha Suplementos', {
-    body: n.body || '',
-    icon: '/shared/logo.png',
-    badge: '/shared/logo.png',
-    vibrate: [200, 100, 200],
-    data: payload.data || {}
-  });
+  console.log('Push background recebido:', payload);
+
+  var n = payload.notification || {};
+  var titulo = n.title || 'Alpha Suplementos 💪';
+  var corpo  = n.body  || '';
+  var dados  = payload.data || {};
+
+  // Ícone e badge
+  var opcoes = {
+    body: corpo,
+    icon: '/alpha-suplementos/shared/logo.png',
+    badge: '/alpha-suplementos/shared/logo.png',
+    vibrate: [200, 100, 200, 100, 200],
+    requireInteraction: true, // mantém na tela até o usuário interagir
+    data: dados,
+    actions: [
+      { action: 'ver', title: '👀 Ver oferta' },
+      { action: 'fechar', title: '✕ Fechar' }
+    ]
+  };
+
+  // Cor de fundo dependendo do tipo
+  if(dados.tipo === 'PROMOCAO') {
+    opcoes.tag = 'promo-alpha';
+    opcoes.renotify = true;
+  } else if(dados.tipo === 'REPOSICAO') {
+    opcoes.tag = 'reposicao-' + (dados.produtoId || 'produto');
+  } else if(dados.tipo === 'COMPRA') {
+    opcoes.tag = 'compra-alpha';
+  }
+
+  return self.registration.showNotification(titulo, opcoes);
 });
 
+// Clique na notificação
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
-  event.waitUntil(clients.openWindow('https://sistemaalphasuplementos.github.io/alpha-suplementos/cliente/'));
+
+  var url = 'https://sistemaalphasuplementos.github.io/alpha-suplementos/cliente/';
+
+  if(event.action === 'fechar') return;
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clientList) {
+      // Se o app já está aberto, foca nele
+      for(var i = 0; i < clientList.length; i++) {
+        var client = clientList[i];
+        if(client.url.includes('/cliente/') && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      // Senão abre o app
+      if(clients.openWindow) {
+        return clients.openWindow(url);
+      }
+    })
+  );
+});
+
+// Instalação do service worker
+self.addEventListener('install', function(event) {
+  console.log('Alpha SW instalado!');
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', function(event) {
+  console.log('Alpha SW ativado!');
+  event.waitUntil(clients.claim());
 });
