@@ -10,15 +10,15 @@
 :root{--red:#CC0000;--gold:#FFD700;--green:#1D9E75;--bg:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;--border:#2a2a2a;--text:#f0f0f0;--text2:#aaa;--text3:#666}
 body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;min-height:100vh}
 #lwrap{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999}
-.lbox{background:var(--bg2);border:1px solid #1D9E7544;border-radius:16px;padding:36px;width:100%;max-width:380px;text-align:center}
+.lbox{background:var(--bg2);border:1px solid #1D9E7544;border-radius:16px;padding:24px;width:100%;max-width:380px;text-align:center}
 .lbox img{height:70px;margin-bottom:8px}
 .lm{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--text3);margin-bottom:4px}
 .lm span{color:var(--red)}
 .lt{background:#1D9E7522;border:1px solid #1D9E7544;border-radius:8px;padding:6px 16px;font-size:12px;color:var(--green);font-weight:700;margin-bottom:20px;display:inline-block}
-.li{width:100%;background:var(--bg4);border:1px solid #333;border-radius:8px;padding:11px 13px;color:var(--text);font-size:14px;outline:none;font-family:'Barlow',sans-serif;margin-bottom:10px;display:block}
+.li{width:100%;background:var(--bg4);border:1px solid #333;border-radius:8px;padding:13px 15px;color:var(--text);font-size:16px;outline:none;font-family:'Barlow',sans-serif;margin-bottom:12px;display:block}
 .li:focus{border-color:var(--red)}
 #lerro{color:#FF4444;font-size:12px;margin-bottom:10px;display:none;padding:6px;background:#FF444411;border-radius:6px}
-#lbtn{width:100%;background:var(--red);color:#fff;border:none;border-radius:9px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;margin-top:4px}
+#lbtn{width:100%;background:var(--red);color:#fff;border:none;border-radius:9px;padding:16px;font-size:16px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;margin-top:4px}
 .ll{margin-top:14px;font-size:12px;color:var(--text3)}
 .ll a{color:var(--text3);text-decoration:none;margin:0 8px}
 #app{display:none;min-height:100vh}
@@ -109,6 +109,146 @@ body{color:#FFFFFF;font-size:15px}
 /* Better contrast for all text */
 .kv,.kpi-val,.smv,.stat2-v{text-shadow:0 0 10px currentColor}
 
+
+
+.crm-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:768px){.crm-kpis{grid-template-columns:repeat(2,1fr)!important}}
+/* Venda grid responsive */
+.venda-grid { display:grid; grid-template-columns:1fr 1.6fr; gap:16px; }
+.g2-stack { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media (max-width:768px) {
+  .venda-grid { grid-template-columns:1fr !important; display:block !important; }
+  .g2-stack { grid-template-columns:1fr !important; display:block !important; }
+  .g2-stack > * { margin-bottom:12px; }
+}
+
+/* ═══ RESPONSIVO MOBILE ═══ */
+@media (max-width: 768px) {
+  /* Topbar mobile */
+  .tb { padding:0 10px; height:auto; min-height:50px; flex-wrap:wrap; gap:6px; padding:6px 10px; }
+  .tbl2 img { height:24px; }
+  .tbs { font-size:12px; }
+  .tbg { font-size:10px; padding:2px 8px; }
+  .tbr { font-size:11px; }
+  #sbtn { padding:4px 8px; font-size:10px; }
+
+  /* Tabs mobile - horizontal scroll */
+  .tabs { 
+    width:100%; 
+    justify-content:flex-start; 
+    overflow-x:auto; 
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding-bottom:2px;
+    gap:0;
+  }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab { 
+    padding:8px 12px; 
+    font-size:11px; 
+    flex-shrink:0;
+    border-bottom:3px solid transparent;
+  }
+  .tab.on { border-bottom-color:var(--red); }
+
+  /* Main padding */
+  .main { padding:12px; }
+
+  /* Cards full width */
+  .card { padding:12px; margin-bottom:12px; }
+
+  /* ALL grids become single column on mobile */
+  .g2, [style*="grid-template-columns:1fr 1fr"],
+  [style*="grid-template-columns:1fr 1.6fr"] {
+    display:block !important;
+  }
+  .g2 > *, 
+  [style*="grid-template-columns:1fr 1fr"] > *,
+  [style*="grid-template-columns:1fr 1.6fr"] > * {
+    margin-bottom:12px;
+  }
+
+  /* CRM grid 4 cols -> 2x2 */
+  [style*="grid-template-columns:repeat(4,1fr)"] {
+    grid-template-columns:1fr 1fr !important;
+    gap:8px !important;
+  }
+
+  /* Tables - scrollable */
+  .tbl { font-size:12px; }
+  .card > .tbl,
+  .card > table { 
+    display:block; 
+    overflow-x:auto; 
+    -webkit-overflow-scrolling:touch;
+  }
+  .tbl th, .tbl td { padding:8px 6px; }
+
+  /* Buttons bigger for touch */
+  .bv, .bg, .bgh, .bwa {
+    padding:14px !important;
+    font-size:14px !important;
+    min-height:48px;
+  }
+
+  /* Inputs bigger for mobile */
+  .inp, select.inp {
+    padding:13px !important;
+    font-size:15px !important;
+    min-height:48px;
+  }
+
+  /* Labels bigger */
+  .lbl { font-size:12px !important; margin-bottom:6px; }
+
+  /* Modals full screen */
+  .mov { padding:0 !important; align-items:flex-end !important; }
+  .mbox { 
+    border-radius:16px 16px 0 0 !important; 
+    max-height:90vh !important;
+    max-width:100% !important;
+    width:100% !important;
+    padding:20px !important;
+  }
+
+  /* Preview card on venda - hidden on mobile unless has content */
+  #vprev-card { margin-top:0; }
+  
+  /* Acard (CRM alerts) */
+  .acard { flex-wrap:wrap; gap:8px; }
+  .acard > div:last-child { width:100%; display:flex; gap:6px; }
+  .uch { min-width:70px; font-size:12px; }
+
+  /* CT section titles */
+  .ct { font-size:11px; margin-bottom:10px; }
+
+  /* NB badges */
+  .nb { font-size:11px !important; }
+
+  /* Range slider bigger */
+  input[type=range] { height:32px; }
+
+  /* Sucesso card */
+  #vsuc-card { padding:20px !important; }
+
+  /* Toast bottom */
+  .toast { 
+    bottom:10px; right:10px; left:10px; 
+    max-width:none !important;
+    font-size:14px;
+  }
+
+  /* Page titles */
+  [style*="font-size:26px"] { font-size:20px !important; }
+}
+
+/* Extra small phones */
+@media (max-width: 380px) {
+  .tab { padding:8px 8px; font-size:10px; }
+  .main { padding:8px; }
+  .card { padding:10px; }
+}
+
 </style>
 </head>
 <body>
@@ -136,7 +276,7 @@ body{color:#FFFFFF;font-size:15px}
       <span class="tbs">ALPHA <span>SUPLEMENTOS</span></span>
       <span class="tbg">🧑‍💼 FUNCIONÁRIO</span>
     </div>
-    <div class="tabs">
+    <div class="tabs" style="-webkit-overflow-scrolling:touch">
       <button class="tab on" onclick="ir('venda',this)">🛍️ Registrar Venda</button>
       <button class="tab" onclick="ir('crm',this)">📦 CRM Alertas</button>
       <button class="tab" onclick="ir('clientes',this)">👥 Clientes</button>
@@ -153,7 +293,7 @@ body{color:#FFFFFF;font-size:15px}
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Registrar Venda</div>
         <div style="font-size:12px;color:var(--text3)">O sistema calcula pontos e cashback automaticamente</div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:16px">
+      <div class="venda-grid">
         <div class="card">
           <div class="ct">Dados da venda</div>
           <label class="lbl">Cliente</label>
@@ -195,7 +335,7 @@ body{color:#FFFFFF;font-size:15px}
         <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">CRM — Alertas</div></div>
         <button class="bv" style="width:auto;padding:9px 16px" onclick="toast('🔔 Push enviado!')">🔔 Push para todos</button>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+      <div class="crm-kpis">
         <div style="background:#E24B4A11;border:.5px solid #E24B4A22;border-radius:10px;padding:12px"><div style="font-size:20px;font-weight:700;color:#E24B4A;font-family:'Barlow Condensed',sans-serif" id="ca">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">⛔ Acabou</div></div>
         <div style="background:#EF9F2711;border:.5px solid #EF9F2722;border-radius:10px;padding:12px"><div style="font-size:20px;font-weight:700;color:#EF9F27;font-family:'Barlow Condensed',sans-serif" id="cu">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">🚨 Urgente</div></div>
         <div style="background:#FFD70011;border:.5px solid #FFD70022;border-radius:10px;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--gold);font-family:'Barlow Condensed',sans-serif" id="cp">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">⚠️ Próximo</div></div>
@@ -216,7 +356,7 @@ body{color:#FFFFFF;font-size:15px}
     <!-- INDICAÇÕES -->
     <div id="pind" class="p">
       <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Indicações</div></div>
-      <div class="g2">
+      <div class="g2 g2-stack">
         <div class="card">
           <div class="ct">Confirmar indicação</div>
           <label class="lbl">Email do indicado</label>
@@ -235,7 +375,7 @@ body{color:#FFFFFF;font-size:15px}
     <!-- RESGATES -->
     <div id="pres" class="p">
       <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Resgates</div><div style="font-size:12px;color:var(--text3)">Cashback · Pontos · Confirmação de entrega</div></div>
-      <div class="g2" style="margin-bottom:14px">
+      <div class="g2 g2-stack" style="margin-bottom:14px">
         <div class="card">
           <div class="ct">💰 Cashback</div>
           <label class="lbl">Cliente</label>
@@ -271,7 +411,7 @@ body{color:#FFFFFF;font-size:15px}
           <div id="ptssuc" style="display:none;background:#CC000022;border:.5px solid #CC000033;border-radius:8px;padding:12px;margin-top:8px;font-size:13px;text-align:center"></div>
         </div>
       </div>
-      <div class="g2">
+      <div class="g2 g2-stack">
         <div class="card">
           <div class="ct">✅ Confirmar Entrega</div>
           <label class="lbl">Código de retirada</label>
@@ -408,7 +548,7 @@ el('lbtn').onclick=function(){
     var sel=el('cad-func');
     if(sel) for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===funcOk.nome){sel.selectedIndex=i;break;}}
     renderTudo();
-    carregarClientes().then(function(){ renderTudo(); }).catch(function(e){ console.log('fetch err',e); })
+    carregarClientes().then(function(){ renderTudo(); setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800); }).catch(function(e){ console.log('fetch err',e); setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800); })
   } else {
     err.style.display='block';
     err.textContent='Login ou senha incorretos.';
@@ -791,6 +931,126 @@ async function cadastrar(){
   toast('✅ '+nome+' cadastrado!');
   if(btn){btn.disabled=false;btn.textContent='✅ Cadastrar';}
 }
+
+// ── ALERTA CRM NO LOGIN ─────────────────────────────
+function mostrarAlertaCRM(nomeFunc) {
+  // Buscar alertas reais da API ou usar PRD local
+  var alertas = [];
+  
+  // Verificar PRD (dados locais de produtos)
+  PRD.forEach(function(p) {
+    if (p.dias <= 7) {
+      var cli = CL.find(function(c){ return c.id === p.cid; }) || {nome:'Cliente', nivel:'BRONZE', tel:''};
+      alertas.push({
+        nome: cli.nome,
+        nivel: cli.nivel,
+        tel: cli.tel,
+        produto: p.nome,
+        dias: p.dias,
+        cid: p.cid,
+        urgencia: p.dias <= 0 ? 'ACABOU' : p.dias <= 2 ? 'URGENTE' : p.dias <= 5 ? 'PROXIMO' : 'AVISO'
+      });
+    }
+  });
+
+  // Tentar buscar da API também
+  fetch(WEB_APP_URL + '?acao=listar_alertas_crm')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.sucesso && d.dados && d.dados.length > 0) {
+        // Merge com dados da API
+        d.dados.forEach(function(a) {
+          if (!alertas.find(function(x){ return x.nome === a.nomeCliente; })) {
+            alertas.push({
+              nome: a.nomeCliente,
+              nivel: a.nivelCliente,
+              tel: a.telefone,
+              produto: a.nomeProduto,
+              dias: a.diasRestantes,
+              urgencia: a.urgencia
+            });
+          }
+        });
+      }
+      renderAlertaCRM(alertas, nomeFunc);
+    })
+    .catch(function(){ renderAlertaCRM(alertas, nomeFunc); });
+}
+
+function renderAlertaCRM(alertas, nomeFunc) {
+  if (alertas.length === 0) return; // sem alertas, não mostra nada
+
+  var modal = el('modal-crm-alerta');
+  var lista = el('crm-alerta-lista');
+  var sub = el('crm-alerta-subtitulo');
+  if (!modal || !lista) return;
+
+  // Ordenar por urgência
+  alertas.sort(function(a,b){ return a.dias - b.dias; });
+
+  var urgCount = alertas.filter(function(a){ return a.dias <= 2; }).length;
+  var acabCount = alertas.filter(function(a){ return a.dias <= 0; }).length;
+
+  sub.textContent = 'Olá, ' + nomeFunc + '! ' + alertas.length + ' cliente(s) precisam de atenção hoje.';
+
+  lista.innerHTML = alertas.map(function(a) {
+    var cor = a.dias <= 0 ? '#FF4444' : a.dias <= 2 ? '#EF9F27' : a.dias <= 5 ? '#FFD700' : '#1D9E75';
+    var icone = a.dias <= 0 ? '⛔' : a.dias <= 2 ? '🚨' : a.dias <= 5 ? '⚠️' : '📦';
+    var msg = a.dias <= 0 ? 'Produto acabou!' : 'Faltam ' + a.dias + ' dia(s)';
+    var nivelCor = a.nivel === 'OURO' ? '#FFD700' : a.nivel === 'PRATA' ? '#C8C8C8' : '#CD7F32';
+    var nivelEmoji = a.nivel === 'OURO' ? '🥇' : a.nivel === 'PRATA' ? '🥈' : '🥉';
+
+    return '<div style="background:' + cor + '11;border:.5px solid ' + cor + '33;border-left:3px solid ' + cor + ';border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px">' +
+      '<div style="font-size:22px;flex-shrink:0">' + icone + '</div>' +
+      '<div style="flex:1;min-width:0">' +
+        '<div style="font-weight:700;font-size:14px;color:#fff">' + a.nome + 
+          ' <span style="color:' + nivelCor + ';font-size:12px">' + nivelEmoji + ' ' + a.nivel + '</span>' +
+        '</div>' +
+        '<div style="font-size:12px;color:#ddd;margin-top:2px">📦 ' + a.produto + '</div>' +
+        '<div style="font-size:12px;color:' + cor + ';font-weight:700;margin-top:2px">' + msg + '</div>' +
+      '</div>' +
+      (a.tel ? '<button onclick="abrirWA('' + a.cid + '','reposicao','' + a.produto + '');fecharAlertaCRM()" style="background:#25D36622;color:#25D366;border:1px solid #25D36633;border-radius:8px;padding:8px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;flex-shrink:0">📱 WA</button>' : '') +
+    '</div>';
+  }).join('');
+
+  modal.style.display = 'flex';
+}
+
+function fecharAlertaCRM() {
+  var modal = el('modal-crm-alerta');
+  if (modal) modal.style.display = 'none';
+}
+
+function irParaCRM() {
+  fecharAlertaCRM();
+  // Navegar para aba CRM
+  var btn = document.querySelector('.tab[onclick*="crm"]');
+  if (btn) { ir('crm', btn); }
+}
+
 </script>
+
+<!-- MODAL ALERTA CRM LOGIN -->
+<div id="modal-crm-alerta" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;align-items:center;justify-content:center;padding:16px" onclick="if(event.target===this)fecharAlertaCRM()">
+  <div style="background:#111;border:1px solid #EF9F27;border-radius:16px;padding:24px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:#EF9F27">⚠️ Atenção — CRM</div>
+        <div style="font-size:12px;color:#aaa;margin-top:2px" id="crm-alerta-subtitulo">Clientes que precisam de contato hoje</div>
+      </div>
+      <button onclick="fecharAlertaCRM()" style="background:none;border:none;color:#888;font-size:24px;cursor:pointer;line-height:1">×</button>
+    </div>
+    <div id="crm-alerta-lista" style="margin-bottom:16px"></div>
+    <div style="display:flex;gap:8px">
+      <button onclick="irParaCRM()" style="flex:1;background:#EF9F2722;color:#EF9F27;border:1px solid #EF9F2744;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">
+        📦 Ver CRM Completo
+      </button>
+      <button onclick="fecharAlertaCRM()" style="background:#222;color:#aaa;border:.5px solid #333;border-radius:10px;padding:12px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif">
+        OK
+      </button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

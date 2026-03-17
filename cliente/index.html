@@ -195,6 +195,20 @@ body{color:#FFFFFF;font-size:15px}
 /* Better contrast for all text */
 .kv,.kpi-val,.smv,.stat2-v{text-shadow:0 0 10px currentColor}
 
+
+@media (max-width: 768px) {
+  .topbar, .tb { flex-wrap:wrap; height:auto; min-height:50px; padding:6px 10px; }
+  .tbtabs, .tabs { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .tbtabs::-webkit-scrollbar, .tabs::-webkit-scrollbar { display:none; }
+  .tbt, .tab { flex-shrink:0; font-size:11px; padding:7px 10px; }
+  .main { padding:10px; }
+  .g2, .g3 { grid-template-columns:1fr !important; }
+  .card { padding:12px; }
+  .bv, .bverm, .bg, .btn-red { padding:14px !important; font-size:15px !important; }
+  .inp, select { padding:12px !important; font-size:15px !important; }
+  .mov { padding:0 !important; align-items:flex-end !important; }
+  .mbox { border-radius:16px 16px 0 0 !important; max-width:100% !important; width:100% !important; }
+}
 </style>
 </head>
 <body>
