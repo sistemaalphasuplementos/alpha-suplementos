@@ -336,7 +336,7 @@ el('lbtn').onclick=function(){
     el('lwrap').style.display='none';
     el('app').style.display='flex';
     el('tnome').textContent=em?em.split('@')[0]:'Funcionário';
-    renderTudo();
+    carregarClientes().then(function(){ renderTudo(); });
   } else {
     err.style.display='block';
     err.textContent='Senha incorreta. Use: func2025';
@@ -349,13 +349,31 @@ el('sbtn').onclick=function(){el('app').style.display='none';el('lwrap').style.d
 function ir(n,b){
   document.querySelectorAll('.p').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on');});
-  var e=el('p'+n[0]+(n==='clientes'?'clientes':n==='indicacoes'?'ind':n==='resgates'?'res':n.slice(1)));
-  if(!e)e=el('p'+n);
+  var mapa={venda:'pv',crm:'pc',clientes:'pclientes',indicacoes:'pind',resgates:'pres'};
+  var e=el(mapa[n]||'pv');
   if(e)e.classList.add('on');
   if(b)b.classList.add('on');
 }
 
 // RENDER
+async function carregarClientes(){
+  try{
+    var r=await fetch(WEB_APP_URL+'?acao=listar_clientes_todos');
+    var d=await r.json();
+    if(d.sucesso && d.dados && d.dados.length>0){
+      CL=d.dados.map(function(c){
+        return {
+          id:c[0]||'', nome:c[1]||'', email:c[2]||'', tel:(c[3]||'').replace(/[^0-9]/g,''),
+          nivel:c[7]||'BRONZE', pontos:Number(c[6])||0,
+          cashback:Number(c[10])||0, gastoMes:Number(c[8])||0,
+          mesesRec:Number(c[9])||0, ref:c[11]||''
+        };
+      });
+      console.log('Clientes carregados da planilha:', CL.length);
+    }
+  }catch(e){ console.log('Usando dados demo:', e.message); }
+}
+
 function renderTudo(){
   var sel=el('vsel');
   if(sel)sel.innerHTML='<option value="">Selecione o cliente...</option>'+CL.map(function(c){return '<option value="'+c.id+'">'+c.nome+' — '+c.email+'</option>';}).join('');
@@ -510,12 +528,19 @@ function abrirWA(cid,tipo,prodNome){
   el('mwa-t').textContent='📱 WhatsApp — '+c.nome;
   el('mwa-p').textContent=c.tel+' · '+c.email;
   el('mwa-msg').value=t;
+  window._waTpls=tpls;
   el('mwa-tpls').innerHTML=[{k:'reposicao',l:'📦 Reposição'},{k:'nivel',l:'🏆 Nível'},{k:'aniversario',l:'🎂 Aniversário'},{k:'pontos',l:'⭐ Pontos'},{k:'custom',l:'✏️ Custom'}].map(function(x){
-    return '<button class="bgh" style="font-size:11px;padding:5px 9px;'+(tipo===x.k?'background:var(--red);color:#fff;border-color:var(--red)':'')+'" onclick="el(\'mwa-msg\').value='+JSON.stringify(tpls[x.k])+'">'+ x.l+'</button>';
+    return '<button class="bgh" style="font-size:11px;padding:5px 9px;'+(tipo===x.k?'background:var(--red);color:#fff;border-color:var(--red)':'')+'" onclick="usarTplWA(''+x.k+'')">'+x.l+'</button>';
   }).join('');
   el('mwa').style.display='flex';
 }
 function fMWA(){el('mwa').style.display='none';}
+function usarTplWA(k){
+  if(window._waTpls && window._waTpls[k]){
+    var msg=el('mwa-msg');
+    if(msg) msg.value=window._waTpls[k];
+  }
+}
 function enviarWA(){
   if(!waAtual)return;
   var msg=(el('mwa-msg')||{value:''}).value;
