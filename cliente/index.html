@@ -391,8 +391,8 @@ async function fazerLogin(){
       var encontrado = null;
       for(var i=0; i<d2.dados.length; i++){
         var row = d2.dados[i];
-        var primNomeRow = (row[1]||'').split(' ')[0].toLowerCase().trim();
-        var telRow = (row[3]||'').replace(/[^0-9]/g,'');
+        var primNomeRow = String(row[1]||'').split(' ')[0].toLowerCase().trim();
+        var telRow = String(row[3]||'').replace(/[^0-9]/g,'');
         var nomeOk = primNomeRow === nome;
         var telOk  = telRow === tel || telRow.endsWith(tel) || tel.endsWith(telRow.slice(-8));
         if(nomeOk && telOk){
