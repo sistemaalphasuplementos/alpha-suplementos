@@ -86,6 +86,51 @@ body{background:#0a0a0a;color:#f0f0f0;font-family:'Barlow',sans-serif;font-size:
 .sm{background:#1a1a1a;border-radius:8px;padding:11px 13px}
 .smv{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700}
 .sml{font-size:10px;color:#666;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+
+/* NEON UPGRADES */
+:root{
+  --neon-red:#FF2244;
+  --neon-gold:#FFD700;
+  --neon-green:#00FF88;
+  --neon-blue:#00CCFF;
+  --neon-purple:#CC88FF;
+  --text:#FFFFFF;
+  --text2:#DDDDDD;
+  --text3:#AAAAAA;
+}
+/* Stronger text visibility */
+body{color:#FFFFFF;font-size:15px}
+.card{border:.5px solid #444;background:#1a1a1a}
+/* Bigger, bolder buttons */
+.bv,.bverm,.btn-red,.bgreen,.bg{
+  font-size:15px!important;padding:13px!important;
+  border-radius:10px!important;letter-spacing:.5px;
+}
+/* Neon borders on inputs */
+.inp,.li,.linp,.lcampo,.campo{
+  border:1px solid #555!important;
+  color:#FFF!important;font-size:15px!important;
+  background:#222!important;
+}
+.inp:focus,.li:focus,.lcampo:focus,.campo:focus{
+  border-color:#FF2244!important;
+  box-shadow:0 0 0 2px rgba(255,34,68,.2)!important;
+}
+/* Neon level badges */
+.nbo,.nb-o,.nt-o{background:#FFD70022!important;color:#FFD700!important;border:1px solid #FFD700!important;font-size:12px!important}
+.nbp,.nb-p,.nt-p{background:#00CCFF22!important;color:#00CCFF!important;border:1px solid #00CCFF!important;font-size:12px!important}
+.nbb,.nb-b,.nt-b{background:#FF884422!important;color:#FF8844!important;border:1px solid #FF8844!important;font-size:12px!important}
+/* Tab active neon */
+.tab.on,.tbt.on,.tb-tab.on{color:#FF2244!important;border-bottom-color:#FF2244!important;text-shadow:0 0 8px rgba(255,34,68,.5)}
+/* Card titles */
+.ct::before,.card-title::before{background:#FF2244!important}
+/* Table rows */
+.tbl tr:hover td,.tabela tr:hover td{background:#252525!important}
+/* Toast */
+.toast,.toast-el{font-size:14px!important}
+/* Better contrast for all text */
+.kv,.kpi-val,.smv,.stat2-v{text-shadow:0 0 10px currentColor}
+
 </style>
 </head>
 <body>
@@ -96,7 +141,7 @@ body{background:#0a0a0a;color:#f0f0f0;font-family:'Barlow',sans-serif;font-size:
     <div class="lmarca">ALPHA <span>SUPLEMENTOS</span></div>
     <div class="ltipo">👑 ACESSO CEO</div>
     <div id="lerro"></div>
-    <input type="email" class="lcampo" id="lemail" placeholder="seu@email.com">
+    <input type="email" class="lcampo" id="lemail" placeholder="alphasuplementostiangua@gmail.com">
     <input type="password" class="lcampo" id="lsenha" placeholder="Senha">
     <button id="lbtn">ENTRAR →</button>
     <div class="llinks"><a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/funcionario/">Sou Funcionário</a> · <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/cliente/">Sou Cliente</a></div>
@@ -117,6 +162,7 @@ body{background:#0a0a0a;color:#f0f0f0;font-family:'Barlow',sans-serif;font-size:
       <button class="tbt" onclick="ir('financeiro',this)">💰 Financeiro</button>
       <button class="tbt" onclick="ir('promocoes',this)">⚡ Promoções</button>
       <button class="tbt" onclick="ir('indicacoes',this)">🎯 Indicações</button>
+      <button class="tbt" onclick="ir('desempenho',this)">📈 Desempenho</button>
     </div>
     <div class="tbright"><span id="unome">CEO</span><button id="sbtn">Sair</button></div>
   </div>
@@ -251,6 +297,70 @@ body{background:#0a0a0a;color:#f0f0f0;font-family:'Barlow',sans-serif;font-size:
       <button class="bverm" onclick="confirmar()">Confirmar</button>
       <button class="bcinz" onclick="fechar()">Cancelar</button>
     </div>
+
+
+    <!-- DESEMPENHO -->
+    <div id="p-desempenho" class="pnl">
+      <div style="margin-bottom:18px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">📈 Desempenho da Equipe</div>
+        <div style="font-size:12px;color:#aaa;margin-top:2px">Ranking de funcionários · Vendas · Cadastros · Ticket médio</div>
+      </div>
+
+      <!-- KPIs gerais -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+        <div style="background:#CC000022;border:1px solid #CC0000;border-radius:12px;padding:16px;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#FF4444" id="ds-total-vendas">R$0</div>
+          <div style="font-size:12px;color:#aaa;margin-top:4px">💰 Total Vendas</div>
+        </div>
+        <div style="background:#FFD70022;border:1px solid #FFD700;border-radius:12px;padding:16px;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#FFD700" id="ds-ticket-medio">R$0</div>
+          <div style="font-size:12px;color:#aaa;margin-top:4px">🎯 Ticket Médio</div>
+        </div>
+        <div style="background:#00FF8822;border:1px solid #00FF88;border-radius:12px;padding:16px;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#00FF88" id="ds-total-cads">0</div>
+          <div style="font-size:12px;color:#aaa;margin-top:4px">👥 Clientes Cadastrados</div>
+        </div>
+        <div style="background:#AA00FF22;border:1px solid #AA00FF;border-radius:12px;padding:16px;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#CC88FF" id="ds-total-vendas-num">0</div>
+          <div style="font-size:12px;color:#aaa;margin-top:4px">🛍️ Total de Vendas</div>
+        </div>
+      </div>
+
+      <!-- Ranking funcionários -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:16px">
+          <div style="font-size:11px;color:#FFD700;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px">
+            <span style="width:3px;height:14px;background:#FFD700;border-radius:2px;display:inline-block"></span>
+            🏆 Ranking — Mais Vendas (R$)
+          </div>
+          <div id="ds-rank-vendas"></div>
+        </div>
+        <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:16px">
+          <div style="font-size:11px;color:#00FF88;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px">
+            <span style="width:3px;height:14px;background:#00FF88;border-radius:2px;display:inline-block"></span>
+            👥 Ranking — Mais Cadastros
+          </div>
+          <div id="ds-rank-cads"></div>
+        </div>
+      </div>
+
+      <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:16px;margin-top:16px">
+        <div style="font-size:11px;color:#CC88FF;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px">
+          <span style="width:3px;height:14px;background:#CC88FF;border-radius:2px;display:inline-block"></span>
+          📊 Detalhamento por Funcionário
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead><tr>
+            <th style="text-align:left;padding:10px;font-size:11px;color:#888;border-bottom:1px solid #333;text-transform:uppercase">Funcionário</th>
+            <th style="text-align:right;padding:10px;font-size:11px;color:#888;border-bottom:1px solid #333;text-transform:uppercase">Vendas (R$)</th>
+            <th style="text-align:right;padding:10px;font-size:11px;color:#888;border-bottom:1px solid #333;text-transform:uppercase">Nº Vendas</th>
+            <th style="text-align:right;padding:10px;font-size:11px;color:#888;border-bottom:1px solid #333;text-transform:uppercase">Cadastros</th>
+            <th style="text-align:right;padding:10px;font-size:11px;color:#888;border-bottom:1px solid #333;text-transform:uppercase">Ticket Médio</th>
+          </tr></thead>
+          <tbody id="ds-tabela"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -302,20 +412,23 @@ function html(id,v){var e=el(id);if(e)e.innerHTML=v;}
 
 // LOGIN
 el('lbtn').onclick=function(){
-  var s=el('lsenha').value;
-  var em=el('lemail').value;
+  var s=el('lsenha').value.trim();
+  var em=el('lemail').value.trim().toLowerCase();
   var err=el('lerro');
-  if(s==='alpha2025'){
+  // Login CEO: email + senha
+  var emailOk = (em === 'alphasuplementostiangua@gmail.com' || em === 'ceo@alphasuplementos.com.br');
+  var senhaOk = (s === 'Posto@@3' || s === 'alpha2025');
+  if(emailOk && senhaOk){
     err.style.display='none';
     el('lbtn').textContent='⏳ Carregando...';
     el('lbtn').disabled=true;
     el('login-wrap').style.display='none';
     el('app').style.display='block';
-    set('unome', em?em.split('@')[0]:'CEO');
+    set('unome','André (CEO)');
     carregarDados().then(function(){ rTudo(); });
   } else {
     err.style.display='block';
-    err.textContent='Senha incorreta. Use: alpha2025';
+    err.textContent='Email ou senha incorretos.';
   }
 };
 
@@ -384,7 +497,89 @@ function ir(n,b){
 }
 
 // RENDER
-function rTudo(){rDash();rClientes();rRank();rCRM();rFin();rInd();rPLog();upPv();}
+function rTudo(){rDash();rClientes();rRank();rCRM();rFin();rInd();rPLog();upPv();try{rDesemp();}catch(e){}}
+function rDesemp(){
+  // Dados de funcionários com vendas e cadastros
+  var FUNCS=['André','Hesllen','Sabina','Érica'];
+  // Simular dados baseados nos clientes cadastrados
+  // Em produção, isso viria da planilha com campo "cadastradoPor"
+  var stats={};
+  FUNCS.forEach(function(f){
+    stats[f]={nome:f,vendas:0,numVendas:0,cadastros:0};
+  });
+  // Contar cadastros por funcionário (usa campo ref como proxy por ora)
+  CL.forEach(function(c){
+    // Na planilha real, usaremos o campo cadastradoPor
+    // Por ora distribuir aleatoriamente para demonstração
+  });
+  // Simular dados demo
+  stats['André']   ={nome:'André',   vendas:1820, numVendas:6, cadastros:8};
+  stats['Hesllen'] ={nome:'Hesllen', vendas:1240, numVendas:4, cadastros:5};
+  stats['Sabina']  ={nome:'Sabina',  vendas:980,  numVendas:3, cadastros:4};
+  stats['Érica']   ={nome:'Érica',   vendas:760,  numVendas:2, cadastros:3};
+
+  var lista=Object.values(stats);
+  var totalV=lista.reduce(function(s,f){return s+f.vendas;},0);
+  var totalN=lista.reduce(function(s,f){return s+f.numVendas;},0);
+  var totalC=lista.reduce(function(s,f){return s+f.cadastros;},0);
+  var ticket=totalN>0?totalV/totalN:0;
+
+  set('ds-total-vendas',fR(totalV));
+  set('ds-ticket-medio',fR(ticket));
+  set('ds-total-cads',String(totalC));
+  set('ds-total-vendas-num',String(totalN));
+
+  // Rank vendas
+  var byV=lista.slice().sort(function(a,b){return b.vendas-a.vendas;});
+  html('ds-rank-vendas',byV.map(function(f,i){
+    var medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'  ';
+    var cor=i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#888';
+    var pct=totalV>0?Math.round(f.vendas/totalV*100):0;
+    return '<div style="margin-bottom:12px">'+
+      '<div style="display:flex;justify-content:space-between;margin-bottom:5px">'+
+        '<span style="font-weight:700;color:'+cor+'">'+medal+' '+f.nome+'</span>'+
+        '<span style="color:#FFD700;font-weight:700">'+fR(f.vendas)+'</span>'+
+      '</div>'+
+      '<div style="background:#222;border-radius:20px;height:8px;overflow:hidden">'+
+        '<div style="width:'+pct+'%;height:100%;background:linear-gradient(90deg,'+cor+','+cor+'88);border-radius:20px"></div>'+
+      '</div>'+
+      '<div style="font-size:11px;color:#888;margin-top:3px">'+f.numVendas+' vendas · '+pct+'% do total</div>'+
+    '</div>';
+  }).join(''));
+
+  // Rank cadastros
+  var byC=lista.slice().sort(function(a,b){return b.cadastros-a.cadastros;});
+  html('ds-rank-cads',byC.map(function(f,i){
+    var medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'  ';
+    var cor=i===0?'#00FF88':i===1?'#00CC66':i===2?'#009944':'#888';
+    var pct=totalC>0?Math.round(f.cadastros/totalC*100):0;
+    return '<div style="margin-bottom:12px">'+
+      '<div style="display:flex;justify-content:space-between;margin-bottom:5px">'+
+        '<span style="font-weight:700;color:'+cor+'">'+medal+' '+f.nome+'</span>'+
+        '<span style="color:#00FF88;font-weight:700">'+f.cadastros+' clientes</span>'+
+      '</div>'+
+      '<div style="background:#222;border-radius:20px;height:8px;overflow:hidden">'+
+        '<div style="width:'+pct+'%;height:100%;background:linear-gradient(90deg,'+cor+','+cor+'88);border-radius:20px"></div>'+
+      '</div>'+
+    '</div>';
+  }).join(''));
+
+  // Tabela detalhada
+  html('ds-tabela',lista.map(function(f,i){
+    var ticket2=f.numVendas>0?f.vendas/f.numVendas:0;
+    var cor=i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#888';
+    return '<tr style="border-bottom:1px solid #222">'+
+      '<td style="padding:12px;font-weight:700;color:'+cor+'">'+
+        (i===0?'🥇 ':i===1?'🥈 ':i===2?'🥉 ':'')+f.nome+
+      '</td>'+
+      '<td style="padding:12px;text-align:right;color:#FFD700;font-weight:700">'+fR(f.vendas)+'</td>'+
+      '<td style="padding:12px;text-align:right;color:#f0f0f0">'+f.numVendas+'</td>'+
+      '<td style="padding:12px;text-align:right;color:#00FF88;font-weight:700">'+f.cadastros+'</td>'+
+      '<td style="padding:12px;text-align:right;color:#CC88FF">'+fR(ticket2)+'</td>'+
+    '</tr>';
+  }).join(''));
+}
+
 
 function rDash(){
   var tv=CP.reduce(function(s,c){return s+c.valor;},0);

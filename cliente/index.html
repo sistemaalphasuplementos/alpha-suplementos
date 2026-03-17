@@ -150,6 +150,51 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 /* TOAST */
 .toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-10px);background:var(--bg3);border:1px solid var(--red);border-radius:20px;padding:9px 18px;font-size:12px;font-weight:600;z-index:99;opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;max-width:90vw;text-align:center}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* NEON UPGRADES */
+:root{
+  --neon-red:#FF2244;
+  --neon-gold:#FFD700;
+  --neon-green:#00FF88;
+  --neon-blue:#00CCFF;
+  --neon-purple:#CC88FF;
+  --text:#FFFFFF;
+  --text2:#DDDDDD;
+  --text3:#AAAAAA;
+}
+/* Stronger text visibility */
+body{color:#FFFFFF;font-size:15px}
+.card{border:.5px solid #444;background:#1a1a1a}
+/* Bigger, bolder buttons */
+.bv,.bverm,.btn-red,.bgreen,.bg{
+  font-size:15px!important;padding:13px!important;
+  border-radius:10px!important;letter-spacing:.5px;
+}
+/* Neon borders on inputs */
+.inp,.li,.linp,.lcampo,.campo{
+  border:1px solid #555!important;
+  color:#FFF!important;font-size:15px!important;
+  background:#222!important;
+}
+.inp:focus,.li:focus,.lcampo:focus,.campo:focus{
+  border-color:#FF2244!important;
+  box-shadow:0 0 0 2px rgba(255,34,68,.2)!important;
+}
+/* Neon level badges */
+.nbo,.nb-o,.nt-o{background:#FFD70022!important;color:#FFD700!important;border:1px solid #FFD700!important;font-size:12px!important}
+.nbp,.nb-p,.nt-p{background:#00CCFF22!important;color:#00CCFF!important;border:1px solid #00CCFF!important;font-size:12px!important}
+.nbb,.nb-b,.nt-b{background:#FF884422!important;color:#FF8844!important;border:1px solid #FF8844!important;font-size:12px!important}
+/* Tab active neon */
+.tab.on,.tbt.on,.tb-tab.on{color:#FF2244!important;border-bottom-color:#FF2244!important;text-shadow:0 0 8px rgba(255,34,68,.5)}
+/* Card titles */
+.ct::before,.card-title::before{background:#FF2244!important}
+/* Table rows */
+.tbl tr:hover td,.tabela tr:hover td{background:#252525!important}
+/* Toast */
+.toast,.toast-el{font-size:14px!important}
+/* Better contrast for all text */
+.kv,.kpi-val,.smv,.stat2-v{text-shadow:0 0 10px currentColor}
+
 </style>
 </head>
 <body>
