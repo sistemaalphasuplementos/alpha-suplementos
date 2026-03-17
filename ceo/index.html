@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alpha Suplementos — CEO</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#f0f0f0;font-family:'Barlow',sans-serif;font-size:14px;min-height:100vh}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+#login-wrap{position:fixed;inset:0;background:#0a0a0a;display:flex;align-items:center;justify-content:center;z-index:999}
+#login-box{background:#111;border:1px solid #CC000044;border-radius:16px;padding:36px;width:100%;max-width:380px;text-align:center}
+#login-box img{height:70px;margin-bottom:8px}
+.lmarca{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:#888;margin-bottom:4px}
+.lmarca span{color:#CC0000}
+.ltipo{background:#CC000022;border:1px solid #CC000044;border-radius:8px;padding:6px 16px;font-size:12px;color:#CC0000;font-weight:700;letter-spacing:1px;margin-bottom:20px;display:inline-block}
+.lcampo{width:100%;background:#222;border:1px solid #333;border-radius:8px;padding:11px 13px;color:#f0f0f0;font-size:14px;outline:none;font-family:'Barlow',sans-serif;margin-bottom:10px;display:block}
+.lcampo:focus{border-color:#CC0000}
+#lerro{color:#FF4444;font-size:12px;margin-bottom:10px;display:none;padding:6px;background:#FF444411;border-radius:6px}
+#lbtn{width:100%;background:#CC0000;color:#fff;border:none;border-radius:9px;padding:13px;font-size:14px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer}
+#lbtn:hover{background:#aa0000}
+.llinks{margin-top:14px;font-size:12px;color:#666}
+.llinks a{color:#666;text-decoration:none;margin:0 8px}
+#app{display:none}
+.topbar{background:#111;border-bottom:2px solid #CC0000;padding:0 24px;display:flex;align-items:center;height:56px;gap:16px;position:sticky;top:0;z-index:50}
+.tblogo{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.tblogo img{height:32px}
+.tbnome{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;color:#CC0000}
+.tbnome span{color:#f0f0f0}
+.tbbadge{background:#CC000022;border:1px solid #CC000044;border-radius:20px;padding:3px 12px;font-size:11px;color:#CC0000;font-weight:700}
+.tbtabs{display:flex;gap:2px;flex:1;justify-content:center;overflow-x:auto}
+.tbt{padding:6px 14px;background:none;border:none;color:#666;font-size:12px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif;border-bottom:2px solid transparent;white-space:nowrap}
+.tbt:hover{color:#f0f0f0}
+.tbt.on{color:#CC0000;border-bottom-color:#CC0000}
+.tbright{display:flex;align-items:center;gap:10px;flex-shrink:0;font-size:12px;color:#666}
+#sbtn{background:none;border:.5px solid #333;border-radius:6px;padding:5px 10px;color:#666;font-size:11px;cursor:pointer;font-family:'Barlow',sans-serif}
+#sbtn:hover{border-color:#CC0000;color:#CC0000}
+.main{padding:20px 24px}
+.pnl{display:none}.pnl.on{display:block}
+.card{background:#1a1a1a;border:.5px solid #2a2a2a;border-radius:12px;padding:16px;margin-bottom:14px}
+.ct{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:6px}
+.ct::before{content:'';width:3px;height:12px;background:#CC0000;border-radius:2px}
+.kg{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.kp{border-radius:12px;padding:16px;border:.5px solid}
+.kr{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;font-weight:600}
+.kv{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;line-height:1}
+.ks{font-size:11px;color:#555;margin-top:4px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.g2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-bottom:14px}
+.g2b{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.bbg{background:#222;border-radius:20px;height:8px;overflow:hidden;margin-bottom:5px}
+.bfl{height:100%;border-radius:20px;transition:width .6s}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;padding:8px 10px;font-size:10px;color:#666;border-bottom:.5px solid #2a2a2a;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.tbl td{padding:10px;border-bottom:.5px solid #1e1e1e;vertical-align:middle}
+.tbl tr:hover td{background:#1e1e1e}
+.tbl tr:last-child td{border-bottom:none}
+.nt{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.nto{background:#3D300015;color:#FFD700;border:.5px solid #FFD70033}
+.ntp{background:#28282815;color:#C8C8C8;border:.5px solid #C8C8C833}
+.ntb{background:#3D200015;color:#CD7F32;border:.5px solid #CD7F3233}
+.rk{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:.5px solid #1e1e1e}
+.rk:last-child{border-bottom:none}
+.rkpos{width:24px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;text-align:center;flex-shrink:0}
+.rkav{width:34px;height:34px;border-radius:50%;background:#CC000022;border:1px solid #CC000033;color:#CC0000;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.rkin{flex:1;min-width:0}
+.rknm{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rksb{font-size:11px;color:#666;margin-top:1px}
+.rkpt{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:#FFD700}
+.aln{border-radius:9px;padding:12px 14px;border:.5px solid;display:flex;align-items:center;gap:12px;margin-bottom:7px}
+.bverm{background:#CC0000;color:#fff;border:none;border-radius:9px;padding:11px 16px;font-size:13px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;width:100%;margin-bottom:8px}
+.bverm:hover{background:#aa0000}
+.bcinz{background:#222;color:#ccc;border:.5px solid #333;border-radius:9px;padding:11px 16px;font-size:13px;font-weight:600;font-family:'Barlow',sans-serif;cursor:pointer;width:100%;margin-bottom:8px}
+.campo{width:100%;background:#111;border:.5px solid #333;border-radius:8px;padding:10px 13px;color:#f0f0f0;font-size:13px;outline:none;font-family:'Barlow',sans-serif;margin-bottom:12px}
+.campo:focus{border-color:#CC0000}
+.rot{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;font-weight:600;display:block;margin-bottom:5px}
+.sg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:14px}
+.sgb{padding:9px;border-radius:8px;font-size:12px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;border:.5px solid #333;background:none;color:#666}
+.sgb.on{background:#CC000022;border-color:#CC0000;color:#CC0000}
+.pvw{background:#111;border-radius:10px;padding:14px;margin:12px 0;display:flex;gap:10px;align-items:flex-start}
+.pvi{width:36px;height:36px;background:#CC0000;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.mfundo{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.mfundo.on{display:flex}
+.mcaixa{background:#111;border:1px solid #CC0000;border-radius:14px;padding:24px;width:100%;max-width:440px}
+.sm{background:#1a1a1a;border-radius:8px;padding:11px 13px}
+.smv{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700}
+.sml{font-size:10px;color:#666;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+</style>
+</head>
+<body>
+
+<div id="login-wrap">
+  <div id="login-box">
+    <img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha">
+    <div class="lmarca">ALPHA <span>SUPLEMENTOS</span></div>
+    <div class="ltipo">👑 ACESSO CEO</div>
+    <div id="lerro"></div>
+    <input type="email" class="lcampo" id="lemail" placeholder="seu@email.com">
+    <input type="password" class="lcampo" id="lsenha" placeholder="Senha">
+    <button id="lbtn">ENTRAR →</button>
+    <div class="llinks"><a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/funcionario/">Sou Funcionário</a> · <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/cliente/">Sou Cliente</a></div>
+  </div>
+</div>
+
+<div id="app">
+  <div id="loading-bar" style="position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CC0000,#FF4500);z-index:999;display:none;animation:loadbar 1.5s ease-in-out infinite">
+  </div>
+  <style>@keyframes loadbar{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}</style>
+  <div class="topbar">
+    <div class="tblogo"><img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha"><span class="tbnome">ALPHA <span>SUPLEMENTOS</span></span><span class="tbbadge">👑 CEO</span></div>
+    <div class="tbtabs">
+      <button class="tbt on" onclick="ir('dashboard',this)">📊 Dashboard</button>
+      <button class="tbt" onclick="ir('clientes',this)">👥 Clientes</button>
+      <button class="tbt" onclick="ir('ranking',this)">🏆 Ranking</button>
+      <button class="tbt" onclick="ir('crm',this)">📦 CRM</button>
+      <button class="tbt" onclick="ir('financeiro',this)">💰 Financeiro</button>
+      <button class="tbt" onclick="ir('promocoes',this)">⚡ Promoções</button>
+      <button class="tbt" onclick="ir('indicacoes',this)">🎯 Indicações</button>
+    </div>
+    <div class="tbright"><span id="unome">CEO</span><button id="sbtn">Sair</button></div>
+  </div>
+  <div class="main">
+
+    <div id="p-dashboard" class="pnl on">
+      <div style="margin-bottom:18px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Dashboard Geral</div><div style="font-size:12px;color:#666;margin-top:2px">Visão estratégica · Alpha Suplementos</div></div>
+      <div class="kg">
+        <div class="kp" style="background:#CC000010;border-color:#CC000022"><div class="kr">Clientes</div><div class="kv" id="kc" style="color:#CC0000">0</div><div class="ks">ativos</div></div>
+        <div class="kp" style="background:#1D9E7510;border-color:#1D9E7522"><div class="kr">Vendas</div><div class="kv" id="kv" style="color:#1D9E75">R$0</div><div class="ks">do mês</div></div>
+        <div class="kp" style="background:#FFD70010;border-color:#FFD70022"><div class="kr">Pontos</div><div class="kv" id="kp" style="color:#FFD700">0</div><div class="ks">emitidos</div></div>
+        <div class="kp" style="background:#4285F410;border-color:#4285F422"><div class="kr">Cashback</div><div class="kv" id="kcb" style="color:#4285F4">R$0</div><div class="ks">acumulado</div></div>
+      </div>
+      <div class="g3">
+        <div class="card"><div class="ct">Níveis</div><div id="niveis"></div><div style="border-top:.5px solid #2a2a2a;margin-top:12px;padding-top:10px;font-size:11px;color:#555;line-height:1.9">🥉 Bronze: &lt;R$150/mês<br>🥈 Prata: ≥R$150/mês<br>🥇 Ouro: ≥R$300 · 2+ meses<br>💰 R$1 cashback a cada R$4</div></div>
+        <div class="card"><div class="ct">Top ranking</div><div id="drk"></div></div>
+        <div class="card"><div class="ct">Alertas CRM</div><div id="dal"></div><button class="bverm" style="margin-top:12px;font-size:12px;padding:8px" onclick="ir('crm',document.querySelectorAll('.tbt')[3])">Ver todos →</button></div>
+      </div>
+      <div class="g2">
+        <div class="card"><div class="ct">Últimas compras</div><table class="tbl" id="dcp"></table></div>
+        <div class="card"><div class="ct">Ações rápidas</div>
+          <button class="bverm" onclick="abrirPromo()">⚡ Promoção Relâmpago</button>
+          <button class="bcinz" onclick="alert('Relatório em desenvolvimento')">📊 Exportar Relatório</button>
+          <button class="bcinz" onclick="alert('Configure Firebase nas Script Properties')">☁️ Sincronizar Firebase</button>
+          <div style="background:#111;border-radius:9px;padding:12px;margin-top:4px;font-size:12px;color:#555;line-height:2">🥉 1pt/R$ · 2%CB&nbsp;&nbsp;🥈 1,5pt/R$ · 5%CB&nbsp;&nbsp;🥇 2pt/R$ · 7%CB</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="p-clientes" class="pnl">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Clientes</div></div>
+        <div style="display:flex;gap:8px">
+          <select id="fnivel" onchange="rClientes()" class="campo" style="width:140px;margin:0"><option value="">Todos</option><option value="OURO">🥇 Ouro</option><option value="PRATA">🥈 Prata</option><option value="BRONZE">🥉 Bronze</option></select>
+          <input id="fbusca" placeholder="🔍 Buscar..." class="campo" style="width:160px;margin:0" oninput="rClientes()">
+        </div>
+      </div>
+      <div class="card"><table class="tbl"><thead><tr><th>#</th><th>Cliente</th><th>Nível</th><th>Pontos</th><th>Cashback</th><th>Gasto/mês</th><th>Última compra</th></tr></thead><tbody id="tcorp"></tbody></table></div>
+    </div>
+
+    <div id="p-ranking" class="pnl">
+      <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Ranking</div></div>
+      <div class="g2b">
+        <div class="card"><div class="ct">Ranking por pontos</div><div id="rfull"></div></div>
+        <div>
+          <div class="card" style="margin-bottom:14px"><div class="ct">Estatísticas</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+              <div class="sm"><div class="smv" id="so" style="color:#FFD700">0</div><div class="sml">🥇 Ouro</div></div>
+              <div class="sm"><div class="smv" id="sp" style="color:#C8C8C8">0</div><div class="sml">🥈 Prata</div></div>
+              <div class="sm"><div class="smv" id="sb" style="color:#CD7F32">0</div><div class="sml">🥉 Bronze</div></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div class="sm"><div class="smv" id="sm" style="color:#FFD700">0</div><div class="sml">Média pts</div></div>
+              <div class="sm"><div class="smv" id="scb" style="color:#1D9E75">R$0</div><div class="sml">Total CB</div></div>
+            </div>
+          </div>
+          <div class="card"><div class="ct">Top indicadores</div><div id="tind"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="p-crm" class="pnl">
+      <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">CRM — Alertas</div></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+        <div style="background:#E24B4A11;border:.5px solid #E24B4A22;border-radius:10px;padding:13px"><div class="smv" id="ca" style="color:#E24B4A">0</div><div style="font-size:10px;color:#666;margin-top:2px">⛔ Acabou</div></div>
+        <div style="background:#EF9F2711;border:.5px solid #EF9F2722;border-radius:10px;padding:13px"><div class="smv" id="cu" style="color:#EF9F27">0</div><div style="font-size:10px;color:#666;margin-top:2px">🚨 Urgente</div></div>
+        <div style="background:#FFD70011;border:.5px solid #FFD70022;border-radius:10px;padding:13px"><div class="smv" id="cp" style="color:#FFD700">0</div><div style="font-size:10px;color:#666;margin-top:2px">⚠️ Próximo</div></div>
+        <div style="background:#1D9E7511;border:.5px solid #1D9E7522;border-radius:10px;padding:13px"><div class="smv" id="cv" style="color:#1D9E75">0</div><div style="font-size:10px;color:#666;margin-top:2px">📦 Aviso</div></div>
+      </div>
+      <div class="card"><div class="ct">Todos os alertas</div><div id="clista"></div></div>
+    </div>
+
+    <div id="p-financeiro" class="pnl">
+      <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Financeiro</div></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px">
+        <div class="kp" style="background:#1D9E7510;border-color:#1D9E7522"><div class="kr">Total vendas</div><div class="kv" id="fv" style="color:#1D9E75">R$0</div></div>
+        <div class="kp" style="background:#4285F410;border-color:#4285F422"><div class="kr">Cashback gerado</div><div class="kv" id="fc" style="color:#4285F4">R$0</div></div>
+        <div class="kp" style="background:#FFD70010;border-color:#FFD70022"><div class="kr">Pontos emitidos</div><div class="kv" id="fp" style="color:#FFD700">0</div></div>
+      </div>
+      <div class="card"><div class="ct">Histórico de compras</div><table class="tbl"><thead><tr><th>Data</th><th>Cliente</th><th>Nível</th><th>Valor</th><th>Pontos</th><th>Cashback</th><th>Descrição</th></tr></thead><tbody id="fcorp"></tbody></table></div>
+    </div>
+
+    <div id="p-promocoes" class="pnl">
+      <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Promoções Relâmpago</div></div>
+      <div class="g2b">
+        <div class="card">
+          <div class="ct">Nova promoção</div>
+          <label class="rot">Título</label><input type="text" id="ptit" class="campo" value="⚡ OFERTA FLASH!" oninput="upPv()">
+          <label class="rot">Mensagem</label><textarea id="pmsg" class="campo" style="min-height:70px;resize:vertical" oninput="upPv()">Creatina com 30% OFF nas próximas 2 horas!</textarea>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div><label class="rot">Desconto %</label><input type="number" id="pdesc" class="campo" value="30" oninput="upPv()"></div>
+            <div><label class="rot">Válido até</label><input type="text" id="pval" class="campo" value="hoje 23:59" oninput="upPv()"></div>
+          </div>
+          <label class="rot">Segmento</label>
+          <div class="sg">
+            <button class="sgb on" onclick="selSeg(this,'todos')">Todos</button>
+            <button class="sgb" onclick="selSeg(this,'PRATA')">Prata+</button>
+            <button class="sgb" onclick="selSeg(this,'OURO')">Só Ouro</button>
+          </div>
+          <button class="bverm" onclick="abrirPromo()">🚀 DISPARAR — Push + WhatsApp</button>
+          <div id="psuc" style="display:none;background:#1D9E7522;border:.5px solid #1D9E7533;border-radius:9px;padding:12px;font-size:13px;color:#1D9E75;text-align:center"></div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:14px"><div class="ct">Preview</div>
+            <div class="pvw"><div class="pvi">🐺</div><div><div id="pvt" style="font-weight:700;font-size:13px"></div><div id="pvc" style="font-size:12px;color:#666;margin-top:2px"></div></div></div>
+            <div id="pva" style="font-size:12px;color:#666;margin-top:8px"></div>
+          </div>
+          <div class="card"><div class="ct">Histórico</div><div id="phist"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="p-indicacoes" class="pnl">
+      <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Indicações</div><div style="font-size:12px;color:#666">Indicador +200pts · Indicado +100pts</div></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px">
+        <div class="kp" style="background:#CC000010;border-color:#CC000022"><div class="kr">Total</div><div class="kv" id="it" style="color:#CC0000">0</div></div>
+        <div class="kp" style="background:#1D9E7510;border-color:#1D9E7522"><div class="kr">Confirmadas</div><div class="kv" id="ic" style="color:#1D9E75">0</div></div>
+        <div class="kp" style="background:#EF9F2710;border-color:#EF9F2722"><div class="kr">Pendentes</div><div class="kv" id="ip" style="color:#EF9F27">0</div></div>
+        <div class="kp" style="background:#FFD70010;border-color:#FFD70022"><div class="kr">Pts gerados</div><div class="kv" id="ipt" style="color:#FFD700">0</div></div>
+      </div>
+      <div class="card"><div class="ct">Todas as indicações</div><table class="tbl"><thead><tr><th>Indicador</th><th>Indicado</th><th>Data</th><th>Status</th><th>Pontos</th></tr></thead><tbody id="icorp"></tbody></table></div>
+    </div>
+
+  </div>
+</div>
+
+<div id="mpromo" class="mfundo">
+  <div class="mcaixa">
+    <div style="font-weight:700;font-size:16px;color:#CC0000;margin-bottom:12px">⚡ Confirmar disparo</div>
+    <p style="font-size:13px;color:#aaa;margin-bottom:16px" id="mtxt"></p>
+    <div style="display:flex;gap:8px">
+      <button class="bverm" onclick="confirmar()">Confirmar</button>
+      <button class="bcinz" onclick="fechar()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var WEB_APP_URL='https://script.google.com/macros/s/AKfycbw7AIr8DrCMGFhpoaz6gE7_v0M4sElvNPZh7PaEpP4h_oX_vwfraiUAaGOQNMoQK_8WpQ/exec';
+var CL=[
+  {id:'C01',nome:'João Silva',    email:'joao@email.com',  nivel:'OURO',  pontos:3420,cashback:241.40,gastoMes:380,mesesRec:3,ultimaCompra:'14/01/2025',indicacoes:3},
+  {id:'C02',nome:'Maria Oliveira',email:'maria@email.com', nivel:'PRATA', pontos:920, cashback:46.00, gastoMes:210,mesesRec:2,ultimaCompra:'13/01/2025',indicacoes:1},
+  {id:'C03',nome:'Pedro Santos',  email:'pedro@email.com', nivel:'BRONZE',pontos:310, cashback:6.20,  gastoMes:80, mesesRec:0,ultimaCompra:'10/01/2025',indicacoes:0},
+  {id:'C04',nome:'Ana Lima',      email:'ana@email.com',   nivel:'PRATA', pontos:1850,cashback:92.50, gastoMes:190,mesesRec:2,ultimaCompra:'11/01/2025',indicacoes:2},
+  {id:'C05',nome:'Carlos Ramos',  email:'carlos@email.com',nivel:'OURO',  pontos:4100,cashback:287.00,gastoMes:420,mesesRec:4,ultimaCompra:'12/01/2025',indicacoes:5},
+  {id:'C06',nome:'Larissa Costa', email:'larissa@email.com',nivel:'BRONZE',pontos:140,cashback:2.80,  gastoMes:40, mesesRec:0,ultimaCompra:'08/01/2025',indicacoes:0},
+];
+var CP=[
+  {cid:'C01',valor:380,pts:760, cb:26.60,data:'14/01',nivel:'OURO',  desc:'Creatina + Whey'},
+  {cid:'C02',valor:210,pts:315, cb:10.50,data:'13/01',nivel:'PRATA', desc:'Pré-Treino + BCAA'},
+  {cid:'C05',valor:420,pts:840, cb:29.40,data:'12/01',nivel:'OURO',  desc:'Kit Mensal'},
+  {cid:'C04',valor:190,pts:285, cb:9.50, data:'11/01',nivel:'PRATA', desc:'Whey + Vitaminas'},
+  {cid:'C03',valor:80, pts:80,  cb:1.60, data:'10/01',nivel:'BRONZE',desc:'Creatina 150g'},
+  {cid:'C01',valor:350,pts:700, cb:24.50,data:'05/01',nivel:'OURO',  desc:'Hipercalórico + Whey'},
+];
+var PC=[
+  {cid:'C01',nome:'Creatina Mono 300g',   cat:'Creatina', dias:1},
+  {cid:'C02',nome:'Whey Protein 900g',    cat:'Proteína', dias:3},
+  {cid:'C04',nome:'Pré-Treino Black 300g',cat:'Pré-Treino',dias:5},
+  {cid:'C05',nome:'BCAA 250g',            cat:'Aminoác.', dias:0},
+  {cid:'C03',nome:'Vitamina C 1000mg',    cat:'Vitaminas',dias:7},
+  {cid:'C06',nome:'Albumina 500g',        cat:'Proteína', dias:2},
+];
+var IND=[
+  {indNome:'João Silva',  indado:'Maria Oliveira',status:'CONFIRMADA',data:'10/01',pts:200},
+  {indNome:'João Silva',  indado:'Carlos Ramos',  status:'CONFIRMADA',data:'15/12',pts:200},
+  {indNome:'Ana Lima',    indado:'Larissa Costa', status:'PENDENTE',  data:'12/01',pts:0},
+  {indNome:'Carlos Ramos',indado:'Fernanda Souza',status:'CONFIRMADA',data:'05/01',pts:200},
+];
+var PL=[
+  {titulo:'⚡ Whey 25% OFF',enviados:6,data:'10/01',seg:'Todos'},
+  {titulo:'🥇 Exclusivo Ouro',enviados:2,data:'05/01',seg:'Ouro'},
+];
+var NC={OURO:{e:'🥇',c:'#FFD700'},PRATA:{e:'🥈',c:'#C8C8C8'},BRONZE:{e:'🥉',c:'#CD7F32'}};
+var seg='todos';
+function fR(v){return 'R$'+Number(v).toFixed(2).replace('.',',');}
+function fP(v){return Number(v).toLocaleString('pt-BR')+' pts';}
+function ini(n){return n.split(' ').slice(0,2).map(function(p){return p[0];}).join('');}
+function nt(n){return '<span class="nt '+(n==='OURO'?'nto':n==='PRATA'?'ntp':'ntb')+'">'+NC[n].e+' '+n+'</span>';}
+function el(id){return document.getElementById(id);}
+function set(id,v){var e=el(id);if(e)e.textContent=v;}
+function html(id,v){var e=el(id);if(e)e.innerHTML=v;}
+
+// LOGIN
+el('lbtn').onclick=function(){
+  var s=el('lsenha').value;
+  var em=el('lemail').value;
+  var err=el('lerro');
+  if(s==='alpha2025'){
+    err.style.display='none';
+    el('lbtn').textContent='⏳ Carregando...';
+    el('lbtn').disabled=true;
+    el('login-wrap').style.display='none';
+    el('app').style.display='block';
+    set('unome', em?em.split('@')[0]:'CEO');
+    carregarDados().then(function(){ rTudo(); });
+  } else {
+    err.style.display='block';
+    err.textContent='Senha incorreta. Use: alpha2025';
+  }
+};
+
+async function carregarDados(){
+  try {
+    // Carregar clientes reais
+    var r1 = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos');
+    var d1 = await r1.json();
+    if(d1.sucesso && d1.dados && d1.dados.length>0){
+      CL = d1.dados.map(function(c){
+        return {
+          id:       c[0]||'',
+          nome:     c[1]||'',
+          email:    c[2]||'',
+          tel:      c[3]||'',
+          nivel:    c[7]||'BRONZE',
+          pontos:   Number(c[6])||0,
+          cashback: Number(c[10])||0,
+          gastoMes: Number(c[8])||0,
+          mesesRec: Number(c[9])||0,
+          ref:      c[11]||'',
+          ultimaCompra: c[14]?new Date(c[14]).toLocaleDateString('pt-BR'):'—',
+          indicacoes: 0
+        };
+      });
+      console.log('Clientes carregados da planilha:', CL.length);
+    }
+  } catch(e){
+    console.log('Usando dados demo:', e.message);
+  }
+  try {
+    // Carregar compras reais
+    var r2 = await fetch(WEB_APP_URL+'?acao=listar_historico');
+    var d2 = await r2.json();
+    if(d2.sucesso && d2.dados && d2.dados.length>0){
+      CP = d2.dados.map(function(c){
+        return {
+          cid:   c[1]||'',
+          valor: Number(c[3])||0,
+          pts:   Number(c[4])||0,
+          cb:    Number(c[5])||0,
+          data:  c[8]?new Date(c[8]).toLocaleDateString('pt-BR'):'—',
+          nivel: c[9]||'BRONZE',
+          desc:  c[2]||''
+        };
+      });
+      console.log('Compras carregadas:', CP.length);
+    }
+  } catch(e){
+    console.log('Usando compras demo:', e.message);
+  }
+}
+el('lsenha').onkeydown=function(e){if(e.key==='Enter')el('lbtn').click();};
+el('sbtn').onclick=function(){
+  el('app').style.display='none';
+  el('login-wrap').style.display='flex';
+  el('lsenha').value='';
+};
+
+// TABS
+function ir(n,b){
+  document.querySelectorAll('.pnl').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.tbt').forEach(function(x){x.classList.remove('on');});
+  var e=el('p-'+n); if(e)e.classList.add('on');
+  if(b)b.classList.add('on');
+}
+
+// RENDER
+function rTudo(){rDash();rClientes();rRank();rCRM();rFin();rInd();rPLog();upPv();}
+
+function rDash(){
+  var tv=CP.reduce(function(s,c){return s+c.valor;},0);
+  var tp=CL.reduce(function(s,c){return s+c.pontos;},0);
+  var tc=CL.reduce(function(s,c){return s+c.cashback;},0);
+  set('kc',CL.length); set('kv',fR(tv));
+  set('kp',tp.toLocaleString('pt-BR')); set('kcb',fR(tc));
+  var byN={BRONZE:0,PRATA:0,OURO:0};
+  CL.forEach(function(c){byN[c.nivel]++;});
+  html('niveis',Object.entries(byN).map(function(e){
+    var n=e[0],q=e[1],cfg=NC[n],pct=Math.round(q/CL.length*100);
+    return '<div style="margin-bottom:13px"><div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="color:'+cfg.c+';font-weight:600;font-size:13px">'+cfg.e+' '+n+'</span><span style="color:#666;font-size:12px">'+q+' · '+pct+'%</span></div><div class="bbg"><div class="bfl" style="width:'+pct+'%;background:'+cfg.c+'"></div></div></div>';
+  }).join(''));
+  var rk=CL.slice().sort(function(a,b){return b.pontos-a.pontos;});
+  html('drk',rk.slice(0,5).map(function(c,i){
+    var pc=i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#555';
+    var pl=i===0?'🏆':i+1;
+    return '<div class="rk"><div class="rkpos" style="color:'+pc+'">'+pl+'</div><div class="rkav">'+ini(c.nome)+'</div><div class="rkin"><div class="rknm">'+c.nome+'</div><div class="rksb" style="color:'+NC[c.nivel].c+'">'+NC[c.nivel].e+' '+c.nivel+'</div></div><div class="rkpt">'+fP(c.pontos)+'</div></div>';
+  }).join(''));
+  var al=PC.slice().sort(function(a,b){return a.dias-b.dias;}).slice(0,4);
+  html('dal',al.map(function(a){
+    var cl=CL.find(function(c){return c.id===a.cid;})||{nome:'?'};
+    var cor=a.dias<=0?'#E24B4A':a.dias<=2?'#EF9F27':a.dias<=5?'#FFD700':'#1D9E75';
+    var u=a.dias<=0?'⛔':a.dias<=2?'🚨 '+a.dias+'d':a.dias<=5?'⚠️ '+a.dias+'d':'📦 '+a.dias+'d';
+    return '<div style="display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:.5px solid #1e1e1e"><span style="color:'+cor+';font-size:12px;font-weight:700;min-width:40px">'+u+'</span><div><div style="font-size:12px;font-weight:500">'+cl.nome+'</div><div style="font-size:10px;color:#666">'+a.nome+'</div></div></div>';
+  }).join(''));
+  var cpRows = CP.length>0 ? CP.slice(0,6).map(function(c){
+    var cl=CL.find(function(x){return x.id===c.cid||x.email===c.cid;})||{nome:c.cid||'?'};
+    return '<tr><td style="color:#666">'+c.data+'</td><td>'+cl.nome+'</td><td style="color:#1D9E75;font-weight:600">'+fR(c.valor)+'</td><td style="color:#FFD700">+'+fP(c.pts)+'</td><td style="color:#1D9E75">+'+fR(c.cb)+'</td></tr>';
+  }).join('') : '<tr><td colspan="5" style="color:#666;text-align:center;padding:20px">Nenhuma compra registrada ainda</td></tr>';
+  el('dcp').innerHTML='<thead><tr><th>Data</th><th>Cliente</th><th>Valor</th><th>Pontos</th><th>CB</th></tr></thead><tbody>'+cpRows+'</tbody>';
+}
+
+function rClientes(){
+  var b=(el('fbusca')||{value:''}).value.toLowerCase();
+  var f=(el('fnivel')||{value:''}).value;
+  var l=CL.filter(function(c){return(!b||c.nome.toLowerCase().includes(b)||c.email.includes(b))&&(!f||c.nivel===f);}).sort(function(a,b){return b.pontos-a.pontos;});
+  html('tcorp',l.map(function(c,i){return '<tr><td style="color:#666">'+(i+1)+'</td><td><div style="font-weight:600">'+c.nome+'</div><div style="font-size:11px;color:#666">'+c.email+'</div></td><td>'+nt(c.nivel)+'</td><td style="color:#FFD700;font-weight:600">'+fP(c.pontos)+'</td><td style="color:#1D9E75">'+fR(c.cashback)+'</td><td>'+fR(c.gastoMes)+'</td><td style="color:#666">'+c.ultimaCompra+'</td></tr>';}).join(''));
+}
+
+function rRank(){
+  var rk=CL.slice().sort(function(a,b){return b.pontos-a.pontos;});
+  html('rfull',rk.map(function(c,i){var pc=i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#555';var pl=i===0?'🏆':i===1?'🥈':i===2?'🥉':i+1;return '<div class="rk"><div class="rkpos" style="color:'+pc+'">'+pl+'</div><div class="rkav">'+ini(c.nome)+'</div><div class="rkin"><div class="rknm">'+c.nome+'</div><div class="rksb" style="color:'+NC[c.nivel].c+'">'+NC[c.nivel].e+' '+c.nivel+' · '+c.email+'</div></div><div class="rkpt">'+fP(c.pontos)+'</div></div>';}).join(''));
+  var byN={BRONZE:0,PRATA:0,OURO:0};CL.forEach(function(c){byN[c.nivel]++;});
+  set('so',byN.OURO);set('sp',byN.PRATA);set('sb',byN.BRONZE);
+  set('sm',Math.round(CL.reduce(function(s,c){return s+c.pontos;},0)/CL.length).toLocaleString('pt-BR'));
+  set('scb',fR(CL.reduce(function(s,c){return s+c.cashback;},0)));
+  html('tind',CL.slice().sort(function(a,b){return b.indicacoes-a.indicacoes;}).filter(function(c){return c.indicacoes>0;}).map(function(c,i){return '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:.5px solid #1e1e1e;font-size:13px"><span>'+(i+1)+'. '+c.nome+'</span><span style="color:#CC0000;font-weight:600">'+c.indicacoes+' indicações</span></div>';}).join(''));
+}
+
+function rCRM(){
+  var ct={a:0,u:0,p:0,v:0};
+  PC.forEach(function(x){if(x.dias<=0)ct.a++;else if(x.dias<=2)ct.u++;else if(x.dias<=5)ct.p++;else ct.v++;});
+  set('ca',ct.a);set('cu',ct.u);set('cp',ct.p);set('cv',ct.v);
+  html('clista',PC.slice().sort(function(a,b){return a.dias-b.dias;}).map(function(a){
+    var cl=CL.find(function(c){return c.id===a.cid;})||{nome:'?',nivel:'BRONZE',email:'—'};
+    var cor=a.dias<=0?'#E24B4A':a.dias<=2?'#EF9F27':a.dias<=5?'#FFD700':'#1D9E75';
+    var u=a.dias<=0?'⛔ Acabou':a.dias<=2?'🚨 '+a.dias+'d':a.dias<=5?'⚠️ '+a.dias+'d':'📦 '+a.dias+'d';
+    return '<div class="aln" style="background:'+cor+'08;border-color:'+cor+'33;border-left:3px solid '+cor+'"><div style="background:'+cor+'22;color:'+cor+';border-radius:6px;padding:5px 8px;font-size:11px;font-weight:700;min-width:52px;text-align:center">'+u+'</div><div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px">'+cl.nome+' '+nt(cl.nivel)+'</div><div style="font-size:11px;color:#666;margin-top:2px">'+a.nome+' · '+a.cat+'</div><div style="font-size:10px;color:#555">'+cl.email+'</div></div><div style="font-size:11px;color:#555">Ações pelo<br>Funcionário</div></div>';
+  }).join(''));
+}
+
+function rFin(){
+  set('fv',fR(CP.reduce(function(s,c){return s+c.valor;},0)));
+  set('fc',fR(CP.reduce(function(s,c){return s+c.cb;},0)));
+  set('fp',CL.reduce(function(s,c){return s+c.pontos;},0).toLocaleString('pt-BR'));
+  html('fcorp',CP.map(function(c){var cl=CL.find(function(x){return x.id===c.cid;})||{nome:'?',nivel:'BRONZE'};return '<tr><td style="color:#666">'+c.data+'</td><td>'+cl.nome+'</td><td>'+nt(cl.nivel)+'</td><td style="color:#1D9E75;font-weight:600">'+fR(c.valor)+'</td><td style="color:#FFD700">+'+fP(c.pts)+'</td><td style="color:#1D9E75">+'+fR(c.cb)+'</td><td style="color:#666">'+c.desc+'</td></tr>';}).join(''));
+}
+
+function rInd(){
+  var cf=IND.filter(function(i){return i.status==='CONFIRMADA';}).length;
+  var pn=IND.filter(function(i){return i.status==='PENDENTE';}).length;
+  set('it',IND.length);set('ic',cf);set('ip',pn);set('ipt',(cf*200)+' pts');
+  html('icorp',IND.map(function(i){var ok=i.status==='CONFIRMADA';return '<tr><td><div style="font-weight:600">'+i.indNome+'</div></td><td>'+i.indado+'</td><td style="color:#666">'+i.data+'</td><td><span style="background:'+(ok?'#1D9E7522':'#EF9F2722')+';color:'+(ok?'#1D9E75':'#EF9F27')+';border:.5px solid '+(ok?'#1D9E7533':'#EF9F2733')+';padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700">'+(ok?'✅ Confirmada':'⏳ Pendente')+'</span></td><td style="color:#FFD700">'+(i.pts>0?'+'+i.pts+' pts':'—')+'</td></tr>';}).join(''));
+}
+
+function rPLog(){
+  html('phist',PL.map(function(p){return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid #1e1e1e;font-size:13px"><div><div style="font-weight:600">'+p.titulo+'</div><div style="font-size:11px;color:#666;margin-top:2px">'+p.data+' · '+p.seg+'</div></div><div style="text-align:right"><div style="color:#CC0000;font-weight:700;font-size:14px">'+p.enviados+'</div><div style="font-size:10px;color:#666">enviados</div></div></div>';}).join(''));
+}
+
+function selSeg(b,v){
+  seg=v;
+  document.querySelectorAll('.sgb').forEach(function(x){x.classList.remove('on');});
+  b.classList.add('on');upPv();
+}
+function alvo(){return seg==='OURO'?CL.filter(function(c){return c.nivel==='OURO';}).length:seg==='PRATA'?CL.filter(function(c){return c.nivel!=='BRONZE';}).length:CL.length;}
+function upPv(){
+  var t=(el('ptit')||{value:''}).value;
+  var m=(el('pmsg')||{value:''}).value;
+  var d=(el('pdesc')||{value:''}).value;
+  var v=(el('pval')||{value:''}).value;
+  if(el('pvt'))el('pvt').textContent=t;
+  if(el('pvc'))el('pvc').textContent=m+(d?' — '+d+'% OFF':'')+(v?' | Até '+v:'');
+  if(el('pva'))el('pva').innerHTML='Será enviado para <strong style="color:#CC0000">'+alvo()+' clientes</strong>';
+}
+function abrirPromo(){
+  el('mtxt').textContent='Disparar push + WhatsApp para '+alvo()+' clientes?';
+  el('mpromo').classList.add('on');
+}
+function fechar(){el('mpromo').classList.remove('on');}
+function confirmar(){
+  var t=el('ptit').value;
+  var m=el('pmsg').value;
+  var d=el('pdesc').value;
+  var v=el('pval').value;
+  var a=alvo();
+  var s=seg==='todos'?'Todos':seg==='PRATA'?'Prata+':'Ouro';
+  fechar();
+
+  // Salvar no Firebase para notificar clientes em tempo real
+  if(window.fbDB && window.fbRef && window.fbSet){
+    var promoData={
+      ativa:true,
+      titulo:t,
+      mensagem:m+(d?' — '+d+'% OFF':'')+(v?' | Até '+v:''),
+      desconto:d,
+      validade:v,
+      segmento:seg,
+      timestamp:Date.now(),
+      enviados:a
+    };
+    window.fbSet(window.fbRef(window.fbDB,'promocoes/ativa'),promoData)
+      .then(function(){console.log('Promo no Firebase!');})
+      .catch(function(e){console.log('Erro Firebase:',e);});
+    window.fbSet(window.fbRef(window.fbDB,'promocoes/historico/'+Date.now()),promoData);
+  }
+
+  PL.unshift({titulo:t,enviados:a,data:new Date().toLocaleDateString('pt-BR'),seg:s});
+  rPLog();
+  var ps=el('psuc');
+  ps.style.display='block';
+  ps.textContent='✅ "'+t+'" disparado! Banner aparecerá no app dos clientes em tempo real.';
+  ir('promocoes',document.querySelectorAll('.tbt')[5]);
+}
+</script>
+
+<!-- Firebase CEO -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+  import { getDatabase, ref, set, push } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBUZaER1-J4-sui90-lHW56P7JTBvfAQHE",
+    authDomain: "sistema-alpha-b12d0.firebaseapp.com",
+    projectId: "sistema-alpha-b12d0",
+    storageBucket: "sistema-alpha-b12d0.firebasestorage.app",
+    messagingSenderId: "714388410138",
+    appId: "1:714388410138:web:c42c2391931d25acc0e6a3",
+    databaseURL: "https://sistema-alpha-b12d0-default-rtdb.firebaseio.com"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Tornar funções disponíveis globalmente
+  window.fbDB = db;
+  window.fbRef = ref;
+  window.fbSet = set;
+  window.fbPush = push;
+
+  console.log('Firebase CEO conectado!');
+</script>
+</body>
+</html>
