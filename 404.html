@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script>
+  var path = window.location.pathname;
+  var base = '/alpha-suplementos';
+  if(path.indexOf('/ceo') > -1) window.location.href = base + '/ceo/';
+  else if(path.indexOf('/funcionario') > -1) window.location.href = base + '/funcionario/';
+  else if(path.indexOf('/cliente') > -1) window.location.href = base + '/cliente/';
+  else window.location.href = base + '/funcionario/';
+</script>
+</head>
+<body></body>
+</html>
