@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alpha Suplementos — Funcionário</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--red:#CC0000;--gold:#FFD700;--green:#1D9E75;--bg:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;--border:#2a2a2a;--text:#f0f0f0;--text2:#aaa;--text3:#666}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;min-height:100vh}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px}
+.login-box{background:var(--bg2);border:1px solid #CC000033;border-radius:16px;padding:36px;width:100%;max-width:380px;text-align:center}
+.login-box img{height:60px;margin-bottom:8px}
+.login-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--text3);margin-bottom:20px}
+.login-title span{color:var(--red)}
+.login-badge{background:#1D9E7511;border:1px solid #1D9E7533;border-radius:8px;padding:7px 16px;font-size:12px;color:var(--green);font-weight:700;letter-spacing:1px;margin-bottom:20px;display:inline-block}
+.inp{width:100%;background:var(--bg4);border:.5px solid #333;border-radius:8px;padding:11px 13px;color:var(--text);font-size:14px;outline:none;font-family:'Barlow',sans-serif;margin-bottom:12px}
+.inp:focus{border-color:var(--red)}
+.btn-red{background:var(--red);color:#fff;border:none;border-radius:9px;padding:12px;font-size:14px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;width:100%;transition:all .15s}
+.btn-red:hover{background:#aa0000}
+.btn-green{background:var(--green);color:#fff;border:none;border-radius:9px;padding:11px;font-size:13px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;width:100%;transition:all .15s}
+.btn-green:hover{background:#0F6E56}
+.btn-wa{background:#25D36622;color:#25D366;border:1px solid #25D36633;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s}
+.btn-wa:hover{background:#25D36633}
+.btn-ghost{background:var(--bg4);color:var(--text2);border:.5px solid var(--border);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;font-family:'Barlow',sans-serif;cursor:pointer}
+.login-links{margin-top:14px;font-size:12px;color:var(--text3)}
+.login-links a{color:var(--text3);text-decoration:none;margin:0 8px}
+.app{display:none;min-height:100vh;flex-direction:column}
+.topbar{background:var(--bg2);border-bottom:2px solid var(--red);padding:0 24px;display:flex;align-items:center;height:56px;gap:16px;position:sticky;top:0;z-index:50}
+.tb-brand{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.tb-brand img{height:30px}
+.tb-brand-txt{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;color:var(--red)}
+.tb-brand-txt span{color:var(--text)}
+.tb-badge{background:#1D9E7522;border:1px solid #1D9E7533;border-radius:20px;padding:3px 12px;font-size:11px;color:var(--green);font-weight:700}
+.tb-tabs{display:flex;gap:2px;flex:1;justify-content:center}
+.tb-tab{padding:6px 14px;background:none;border:none;color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+.tb-tab:hover{color:var(--text)}
+.tb-tab.on{color:var(--red);border-bottom-color:var(--red)}
+.tb-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.logout-btn{background:none;border:.5px solid #333;border-radius:6px;padding:5px 10px;color:var(--text3);font-size:11px;cursor:pointer;font-family:'Barlow',sans-serif}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
+.main{flex:1;padding:20px 24px}
+.panel{display:none}.panel.on{display:block}
+.card{background:var(--bg3);border:.5px solid var(--border);border-radius:12px;padding:16px}
+.card-title{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:6px}
+.card-title::before{content:'';width:3px;height:12px;background:var(--red);border-radius:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.grid-1-2{display:grid;grid-template-columns:1fr 1.6fr;gap:16px}
+.inp-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:600;display:block;margin-bottom:5px;margin-top:12px}
+.inp-lbl:first-child{margin-top:0}
+select.inp{cursor:pointer}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;padding:8px 10px;font-size:10px;color:var(--text3);border-bottom:.5px solid var(--border);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.tbl td{padding:10px;border-bottom:.5px solid #1e1e1e;vertical-align:middle}
+.tbl tr:hover td{background:#1e1e1e}
+.tbl tr:last-child td{border-bottom:none}
+.nivel-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.nb-o{background:#3D300015;color:var(--gold);border:.5px solid #FFD70033}
+.nb-p{background:#28282815;color:#C8C8C8;border:.5px solid #C8C8C833}
+.nb-b{background:#3D200015;color:#CD7F32;border:.5px solid #CD7F3233}
+.alerta-card{border-radius:10px;padding:13px 15px;border:.5px solid;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.urg-chip{border-radius:6px;padding:6px 8px;text-align:center;min-width:50px;flex-shrink:0}
+.toast-el{position:fixed;bottom:20px;right:20px;background:var(--bg3);border:1px solid var(--green);border-radius:10px;padding:12px 18px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:all .3s;pointer-events:none;max-width:340px}
+.toast-el.on{opacity:1}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-box{background:var(--bg2);border:1px solid var(--red);border-radius:14px;padding:24px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto}
+.modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.modal-title{font-weight:700;font-size:16px;color:var(--red)}
+.close-btn{background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;line-height:1}
+.resultado-compra{background:var(--bg4);border:.5px solid var(--border);border-radius:9px;padding:14px;margin:12px 0;display:none}
+.res-row{display:flex;justify-content:space-between;padding:4px 0;font-size:13px}
+.res-total{border-top:.5px solid var(--border);margin-top:7px;padding-top:8px;font-size:15px;font-weight:700;display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-wrap">
+  <div class="login-box">
+    <img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha">
+    <div class="login-title">ALPHA <span>SUPLEMENTOS</span></div>
+    <div class="login-badge">🧑‍💼 ACESSO FUNCIONÁRIO</div>
+    <input type="email" class="inp" id="l-email" placeholder="funcionario@alpha.com" value="funcionario@alphasuplementos.com.br">
+    <input type="password" class="inp" id="l-senha" placeholder="Senha" value="func2025">
+    <div id="login-err" style="color:#FF4444;font-size:12px;margin-bottom:10px;display:none">Senha incorreta</div>
+    <button class="btn-red" onclick="fazerLogin()">ENTRAR →</button>
+    <div class="login-links">
+      <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/ceo/">Sou CEO</a> · <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/cliente/">Sou Cliente</a>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+  <div class="topbar">
+    <div class="tb-brand">
+      <img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha">
+      <span class="tb-brand-txt">ALPHA <span>SUPLEMENTOS</span></span>
+      <span class="tb-badge">🧑‍💼 FUNCIONÁRIO</span>
+    </div>
+    <div class="tb-tabs">
+      <button class="tb-tab on" onclick="goTab('venda',this)">🛍️ Registrar Venda</button>
+      <button class="tb-tab" onclick="goTab('crm',this)">📦 CRM Alertas</button>
+      <button class="tb-tab" onclick="goTab('clientes',this)">👥 Clientes</button>
+      <button class="tb-tab" onclick="goTab('indicacoes',this)">🎯 Indicações</button>
+      <button class="tb-tab" onclick="goTab('resgates',this)">🏆 Resgates</button>
+    </div>
+    <div class="tb-right">
+      <span style="font-size:12px;color:var(--text3)" id="tb-nome">Funcionário</span>
+      <button class="logout-btn" onclick="fazerLogout()">Sair</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- REGISTRAR VENDA -->
+    <div class="panel on" id="tab-venda">
+      <div style="margin-bottom:16px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Registrar Venda</div>
+        <div style="font-size:12px;color:var(--text3)">Informe os dados da compra — o sistema calcula e distribui pontos e cashback automaticamente</div>
+      </div>
+      <div class="grid-1-2">
+        <div class="card">
+          <div class="card-title">Dados da venda</div>
+          <label class="inp-lbl">Email do cliente</label>
+          <div style="display:flex;gap:8px;align-items:flex-end">
+            <select class="inp" id="v-cliente" onchange="selecionarCliente()" style="flex:1;margin:0">
+              <option value="">Selecione o cliente...</option>
+            </select>
+            <button onclick="abrirCadastro()" style="background:#CC0000;color:#fff;border:none;border-radius:8px;padding:10px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;white-space:nowrap;flex-shrink:0">+ Novo</button>
+          </div>
+          <div id="cliente-info" style="display:none;background:var(--bg4);border-radius:8px;padding:11px;margin-bottom:12px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div id="ci-av" style="width:36px;height:36px;border-radius:50%;background:#CC000022;color:var(--red);border:1px solid #CC000033;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0"></div>
+              <div>
+                <div id="ci-nome" style="font-weight:600;font-size:14px"></div>
+                <div style="display:flex;gap:10px;margin-top:3px;font-size:12px">
+                  <span id="ci-nivel"></span>
+                  <span id="ci-pontos" style="color:var(--gold)"></span>
+                  <span id="ci-cb" style="color:var(--green)"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <label class="inp-lbl">Valor da compra (R$)</label>
+          <input type="number" class="inp" id="v-valor" placeholder="0,00" min="0.01" step="0.01" oninput="calcVenda()">
+          <label class="inp-lbl">Descrição / Produtos</label>
+          <input type="text" class="inp" id="v-desc" placeholder="Ex: Creatina 300g + Whey Protein 900g">
+          <label class="inp-lbl">Produto p/ CRM (nome)</label>
+          <input type="text" class="inp" id="v-prod" placeholder="Ex: Creatina Monohidratada 300g">
+          <label class="inp-lbl">Dias de consumo estimado</label>
+          <input type="number" class="inp" id="v-dias" placeholder="30" value="30" min="1">
+          <button class="btn-red" id="btn-registrar" disabled onclick="registrarVenda()" style="margin-top:4px">✅ REGISTRAR VENDA</button>
+        </div>
+
+        <div>
+          <div class="card" style="margin-bottom:14px">
+            <div class="card-title">Preview — o que o cliente vai ganhar</div>
+            <div id="venda-preview" style="color:var(--text3);font-size:13px">Selecione o cliente e informe o valor para ver o preview.</div>
+            <div class="resultado-compra" id="resultado-compra">
+              <div class="res-row"><span style="color:var(--text3)">Valor da compra</span><span id="r-valor" style="color:var(--text)">R$0</span></div>
+              <div class="res-row"><span style="color:var(--text3)">Nível do cliente</span><span id="r-nivel"></span></div>
+              <div class="res-row"><span style="color:var(--text3)">Pts por R$1</span><span id="r-mult" style="color:var(--text)"></span></div>
+              <div class="res-row res-total"><span>Pontos ganhos</span><span id="r-pts" style="color:var(--gold)">+0 pts</span></div>
+              <div class="res-row" style="font-size:12px"><span style="color:var(--text3)">Cashback gerado</span><span id="r-cb" style="color:var(--green)">+R$0</span></div>
+              <div class="res-row" style="font-size:12px"><span style="color:var(--text3)">Novo saldo de pontos</span><span id="r-novo-pts" style="color:var(--gold)"></span></div>
+              <div class="res-row" style="font-size:12px"><span style="color:var(--text3)">Novo cashback acumulado</span><span id="r-novo-cb" style="color:var(--green)"></span></div>
+            </div>
+          </div>
+          <div class="card" id="sucesso-card" style="display:none;text-align:center;padding:24px;border-color:#1D9E7533">
+            <div style="font-size:44px;margin-bottom:10px">✅</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;margin-bottom:6px;color:var(--green)">VENDA REGISTRADA!</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.8" id="sucesso-txt"></div>
+            <button class="btn-red" style="margin-top:14px;max-width:200px;margin-left:auto;margin-right:auto" onclick="resetVenda()">NOVA VENDA</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRM ALERTAS -->
+    <div class="panel" id="tab-crm">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">CRM — Alertas de Reposição</div>
+          <div style="font-size:12px;color:var(--text3)">Clique em WhatsApp para enviar mensagem personalizada ao cliente</div>
+        </div>
+        <button class="btn-red" onclick="toast('🔔 Push disparado para todos os clientes com alertas!')">🔔 Push para todos</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+        <div style="background:#E24B4A11;border:.5px solid #E24B4A22;border-radius:10px;padding:12px"><div style="font-size:20px;font-weight:700;color:#E24B4A;font-family:'Barlow Condensed',sans-serif" id="crm-c-acabou">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">⛔ Acabou</div></div>
+        <div style="background:#EF9F2711;border:.5px solid #EF9F2722;border-radius:10px;padding:12px"><div style="font-size:20px;font-weight:700;color:#EF9F27;font-family:'Barlow Condensed',sans-serif" id="crm-c-urgente">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">🚨 Urgente</div></div>
+        <div style="background:#FFD70011;border:.5px solid #FFD70022;border-radius:10px;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--gold);font-family:'Barlow Condensed',sans-serif" id="crm-c-proximo">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">⚠️ Próximo</div></div>
+        <div style="background:#1D9E7511;border:.5px solid #1D9E7522;border-radius:10px;padding:12px"><div style="font-size:20px;font-weight:700;color:var(--green);font-family:'Barlow Condensed',sans-serif" id="crm-c-aviso">0</div><div style="font-size:10px;color:var(--text3);margin-top:2px">📦 Aviso</div></div>
+      </div>
+      <div id="crm-cards"></div>
+    </div>
+
+    <!-- CLIENTES -->
+    <div class="panel" id="tab-clientes">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Clientes</div>
+          <div style="font-size:12px;color:var(--text3)">Consultar pontos, cashback e histórico</div>
+        </div>
+        <input id="busca-func" placeholder="🔍 Buscar cliente..." style="background:var(--bg4);border:.5px solid #333;border-radius:7px;padding:7px 12px;color:var(--text);font-size:12px;outline:none;width:200px" oninput="renderClientesFunc()">
+      </div>
+      <div class="card">
+        <table class="tbl">
+          <thead><tr><th>Cliente</th><th>Nível</th><th>Pontos</th><th>Cashback</th><th>Gasto/mês</th><th>Produto acabando</th><th>Ações</th></tr></thead>
+          <tbody id="cli-func-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- INDICAÇÕES -->
+    <div class="panel" id="tab-indicacoes">
+      <div style="margin-bottom:16px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Confirmar Indicações</div>
+        <div style="font-size:12px;color:var(--text3)">Quando o indicado fizer a primeira compra, confirme aqui para liberar os pontos</div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">Confirmar primeira compra do indicado</div>
+          <label class="inp-lbl" style="margin-top:0">Email do cliente indicado</label>
+          <input type="email" class="inp" id="ind-email" placeholder="email do indicado">
+          <button class="btn-green" onclick="confirmarIndicacao()">✅ Confirmar indicação</button>
+          <div id="ind-suc" style="display:none;background:#1D9E7522;border:.5px solid #1D9E7533;border-radius:8px;padding:12px;margin-top:12px;font-size:13px;color:var(--green);text-align:center"></div>
+          <div style="background:var(--bg4);border-radius:8px;padding:12px;margin-top:14px;font-size:12px;color:var(--text3);line-height:1.9">
+            • Indicador recebe <strong style="color:var(--text)">+200 pontos</strong><br>
+            • Indicado recebe <strong style="color:var(--text)">+100 pontos</strong><br>
+            • Confirmação feita apenas uma vez por indicado
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Indicações pendentes</div>
+          <div id="ind-pendentes"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESGATES -->
+    <div class="panel" id="tab-resgates">
+      <div style="margin-bottom:16px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Confirmar Entrega de Prêmio</div>
+        <div style="font-size:12px;color:var(--text3)">Cliente apresenta o código ao retirar o prêmio na loja</div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">Confirmar entrega pelo código</div>
+          <label class="inp-lbl" style="margin-top:0">Código de retirada</label>
+          <input type="text" class="inp" id="cod-entrega" placeholder="Ex: A8F2D1C4" maxlength="8" style="font-family:monospace;font-size:18px;letter-spacing:4px;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+          <button class="btn-green" onclick="confirmarEntrega()">✅ Confirmar entrega</button>
+          <div id="entrega-suc" style="display:none;border-radius:8px;padding:12px;margin-top:12px;font-size:13px;text-align:center"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Resgates pendentes</div>
+          <div id="resgates-pendentes"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL WA -->
+<div class="modal-ov" id="modal-wa" onclick="if(event.target===this)fecharModal()">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <span class="modal-title" id="wa-modal-title">📱 WhatsApp</span>
+      <button class="close-btn" onclick="fecharModal()">×</button>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-bottom:8px">Para: <strong id="wa-para" style="color:var(--text)"></strong></div>
+    <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap" id="wa-templates"></div>
+    <textarea id="wa-msg" class="inp" style="min-height:140px;resize:vertical"></textarea>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn-wa" style="flex:1;justify-content:center;font-size:13px;padding:11px" onclick="enviarWA()">📱 Enviar WhatsApp</button>
+      <button class="btn-ghost" onclick="fecharModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL CADASTRO -->
+<div class="modal-ov" id="modal-cadastro" onclick="if(event.target===this)fecharCadastro()">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <span class="modal-title" style="color:var(--green)">👤 Cadastrar Novo Cliente</span>
+      <button class="close-btn" onclick="fecharCadastro()">×</button>
+    </div>
+    <div id="cad-form">
+      <div style="margin-bottom:10px"><label class="inp-lbl">Nome completo *</label><input type="text" class="inp" id="cad-nome" placeholder="Ex: João da Silva"></div>
+      <div style="margin-bottom:10px"><label class="inp-lbl">Email *</label><input type="email" class="inp" id="cad-email" placeholder="joao@email.com"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div><label class="inp-lbl">Telefone</label><input type="tel" class="inp" id="cad-tel" placeholder="(47) 99999-9999"></div>
+        <div><label class="inp-lbl">CPF</label><input type="text" class="inp" id="cad-cpf" placeholder="000.000.000-00"></div>
+      </div>
+      <div style="margin-bottom:10px"><label class="inp-lbl">Data de Nascimento</label><input type="date" class="inp" id="cad-nasc"></div>
+      <div id="cad-err" style="display:none;background:#E24B4A22;border:.5px solid #E24B4A33;border-radius:8px;padding:10px;font-size:12px;color:#E24B4A;margin-bottom:10px"></div>
+      <div style="background:var(--bg4);border-radius:8px;padding:11px;margin-bottom:14px;font-size:11px;color:var(--text3)">
+        ℹ️ O cliente receberá <strong style="color:var(--text)">código de indicação único</strong> e iniciará no nível <strong style="color:#CD7F32">🥉 Bronze</strong>. Se indicado por alguém, informe o código abaixo.
+      </div>
+      <div style="margin-bottom:14px"><label class="inp-lbl">Código de indicação (opcional)</label><input type="text" class="inp" id="cad-ref" placeholder="Ex: ALPHA01" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-green" onclick="cadastrarCliente()" style="flex:1">✅ Cadastrar</button>
+        <button class="btn-ghost" onclick="fecharCadastro()">Cancelar</button>
+      </div>
+    </div>
+    <div id="cad-suc" style="display:none;text-align:center;padding:20px">
+      <div style="font-size:40px;margin-bottom:10px">✅</div>
+      <div style="font-weight:700;font-size:16px;margin-bottom:6px;color:var(--green)">Cliente cadastrado!</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:6px" id="cad-suc-nome"></div>
+      <div style="background:var(--bg4);border-radius:8px;padding:12px;margin-bottom:14px">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:4px">Código de indicação</div>
+        <div style="font-family:monospace;font-size:20px;letter-spacing:4px;font-weight:700;color:var(--gold)" id="cad-suc-ref"></div>
+      </div>
+      <button class="btn-red" onclick="fecharCadastro();resetVenda()">Nova venda para este cliente</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-el" id="toast-el"></div>
+
+<script>
+const WEB_APP_URL='https://script.google.com/macros/s/AKfycbw7AIr8DrCMGFhpoaz6gE7_v0M4sElvNPZh7PaEpP4h_oX_vwfraiUAaGOQNMoQK_8WpQ/exec';
+let CLIENTES=[
+  {id:'C01',nome:'João Silva',    email:'joao@email.com',  tel:'(47)99123-4567',nivel:'OURO',  pontos:3420,cashback:241.40,gastoMes:380,mesesRec:3,ref:'ALPHA01'},
+  {id:'C02',nome:'Maria Oliveira',email:'maria@email.com', tel:'(47)98765-4321',nivel:'PRATA', pontos:920, cashback:46.00, gastoMes:210,mesesRec:2,ref:'ALPHA02'},
+  {id:'C03',nome:'Pedro Santos',  email:'pedro@email.com', tel:'(47)97654-3210',nivel:'BRONZE',pontos:310, cashback:6.20,  gastoMes:80, mesesRec:0,ref:'ALPHA03'},
+  {id:'C04',nome:'Ana Lima',      email:'ana@email.com',   tel:'(47)96543-2109',nivel:'PRATA', pontos:1850,cashback:92.50, gastoMes:190,mesesRec:2,ref:'ALPHA04'},
+  {id:'C05',nome:'Carlos Ramos',  email:'carlos@email.com',tel:'(47)95432-1098',nivel:'OURO',  pontos:4100,cashback:287.00,gastoMes:420,mesesRec:4,ref:'ALPHA05'},
+  {id:'C06',nome:'Larissa Costa', email:'larissa@email.com',tel:'(47)94321-0987',nivel:'BRONZE',pontos:140,cashback:2.80, gastoMes:40, mesesRec:0,ref:'ALPHA06'},
+];
+let PRODUTOS=[
+  {cid:'C01',nome:'Creatina Mono 300g',   cat:'Creatina',  dias:1},
+  {cid:'C02',nome:'Whey Protein 900g',    cat:'Proteína',  dias:3},
+  {cid:'C04',nome:'Pré-Treino Black 300g',cat:'Pré-Treino',dias:5},
+  {cid:'C05',nome:'BCAA 250g',            cat:'Aminoác.',  dias:0},
+  {cid:'C03',nome:'Vitamina C 1000mg',    cat:'Vitaminas', dias:7},
+  {cid:'C06',nome:'Albumina 500g',        cat:'Proteína',  dias:2},
+];
+const INDICACOES=[
+  {ind:'C01',indNome:'João Silva',  indado:'Maria Oliveira',status:'CONFIRMADA',data:'10/01'},
+  {ind:'C04',indNome:'Ana Lima',    indado:'Larissa Costa', status:'PENDENTE',  data:'12/01'},
+  {ind:'C05',indNome:'Carlos Ramos',indado:'Fernanda Souza',status:'PENDENTE',  data:'13/01'},
+];
+const RESGATES_PEND=[
+  {email:'maria@email.com',nome:'Maria Oliveira',premio:'Coqueteleira Alpha',codigo:'A8F2D1C4',data:'14/01'},
+  {email:'joao@email.com', nome:'João Silva',    premio:'Desconto 10%',      codigo:'B3E9F7A2',data:'12/01'},
+];
+const NCFG={OURO:{emoji:'🥇',cor:'#FFD700',pts:2.0,cb:0.07},PRATA:{emoji:'🥈',cor:'#C8C8C8',pts:1.5,cb:0.05},BRONZE:{emoji:'🥉',cor:'#CD7F32',pts:1.0,cb:0.02}};
+const fR=v=>'R$'+Number(v).toFixed(2).replace('.',',');
+const fP=v=>Number(v).toLocaleString('pt-BR')+' pts';
+const ini=n=>n.split(' ').slice(0,2).map(p=>p[0]).join('');
+const nb=n=>`<span class="nivel-badge ${n==='OURO'?'nb-o':n==='PRATA'?'nb-p':'nb-b'}">${NCFG[n].emoji} ${n}</span>`;
+
+let waClienteAtual=null;
+
+function toast(msg,cor='var(--green)'){
+  const t=document.getElementById('toast-el');
+  t.textContent=msg;t.style.borderColor=cor;t.classList.add('on');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),3000);
+}
+function goTab(name,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tb-tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('tab-'+name).classList.add('on');
+  if(btn)btn.classList.add('on');
+}
+async function fazerLogin(){
+  const s=document.getElementById('l-senha').value;
+  const e=document.getElementById('l-email').value;
+  if(s==='func2025'){
+    document.getElementById('login-wrap').style.display='none';
+    document.getElementById('app').style.display='flex';
+    document.getElementById('tb-nome').textContent=e.split('@')[0];
+    await carregarClientesReais();
+    renderAll();
+  } else {
+    document.getElementById('login-err').style.display='block';
+  }
+}
+
+async function carregarClientesReais(){
+  try {
+    const resp = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos');
+    const data = await resp.json();
+    if(data.sucesso && data.dados && data.dados.length>0){
+      CLIENTES = data.dados.map(c=>({
+        id:c[0], nome:c[1], email:c[2], tel:c[3],
+        nivel:c[7]||'BRONZE', pontos:Number(c[5])||0,
+        cashback:Number(c[10])||0, gastoMes:Number(c[8])||0,
+        mesesRec:Number(c[9])||0, ref:c[11]||''
+      }));
+    }
+  } catch(err){
+    console.log('Usando dados demo:', err.message);
+  }
+}
+document.getElementById('l-senha').addEventListener('keydown',e=>{if(e.key==='Enter')fazerLogin()});
+function fazerLogout(){
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-wrap').style.display='flex';
+}
+
+function renderAll(){
+  // Preencher select de clientes
+  const sel=document.getElementById('v-cliente');
+  sel.innerHTML='<option value="">Selecione o cliente...</option>'+
+    CLIENTES.map(c=>`<option value="${c.id}">${c.nome} — ${c.email} (${c.nivel})</option>`).join('');
+  renderCRM();renderClientesFunc();renderIndicacoes();renderResgates();
+}
+
+// VENDA
+let clienteSel=null;
+function selecionarCliente(){
+  const id=document.getElementById('v-cliente').value;
+  clienteSel=CLIENTES.find(c=>c.id===id)||null;
+  const info=document.getElementById('cliente-info');
+  if(clienteSel){
+    info.style.display='block';
+    document.getElementById('ci-av').textContent=ini(clienteSel.nome);
+    document.getElementById('ci-nome').textContent=clienteSel.nome;
+    document.getElementById('ci-nivel').innerHTML=nb(clienteSel.nivel);
+    document.getElementById('ci-pontos').textContent=fP(clienteSel.pontos);
+    document.getElementById('ci-cb').textContent='CB: '+fR(clienteSel.cashback);
+  } else {
+    info.style.display='none';
+  }
+  calcVenda();
+}
+function calcVenda(){
+  const v=parseFloat(document.getElementById('v-valor').value)||0;
+  const btn=document.getElementById('btn-registrar');
+  if(!clienteSel||v<=0){
+    btn.disabled=true;
+    document.getElementById('resultado-compra').style.display='none';
+    document.getElementById('venda-preview').style.display='block';
+    return;
+  }
+  document.getElementById('venda-preview').style.display='none';
+  document.getElementById('resultado-compra').style.display='block';
+  const cfg=NCFG[clienteSel.nivel];
+  const pts=Math.floor(v*cfg.pts);
+  const cb=parseFloat((v*cfg.cb).toFixed(2));
+  document.getElementById('r-valor').textContent=fR(v);
+  document.getElementById('r-nivel').innerHTML=nb(clienteSel.nivel);
+  document.getElementById('r-mult').textContent=cfg.pts+'pt por R$1';
+  document.getElementById('r-pts').textContent='+'+fP(pts);
+  document.getElementById('r-cb').textContent='+'+fR(cb);
+  document.getElementById('r-novo-pts').textContent=fP(clienteSel.pontos+pts);
+  document.getElementById('r-novo-cb').textContent=fR(parseFloat((clienteSel.cashback+cb).toFixed(2)));
+  btn.disabled=false;
+}
+async function registrarVenda(){
+  if(!clienteSel)return;
+  const v=parseFloat(document.getElementById('v-valor').value)||0;
+  if(v<=0){toast('Informe o valor da compra','var(--red)');return}
+  const desc=document.getElementById('v-desc').value||'Compra registrada';
+  const prod=document.getElementById('v-prod').value;
+  const dias=parseInt(document.getElementById('v-dias').value)||30;
+
+  // Desabilitar botão e mostrar loading
+  const btn=document.getElementById('btn-registrar');
+  btn.disabled=true;
+  btn.textContent='⏳ Enviando...';
+
+  const payload={
+    acao:'registrar_compra',
+    dados:{
+      email:clienteSel.email,
+      valorCompra:v,
+      descricao:desc,
+      loja:'Loja Alpha',
+      produtos: prod ? [{produtoId:'PROD_'+prod.replace(/\s/g,'').toUpperCase().substr(0,8), nome:prod, quantidade:1, unidade:'un', diasConsumo:dias, categoria:'Produto'}] : []
+    }
+  };
+
+  try {
+    const resp = await fetch(WEB_APP_URL, {
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify(payload)
+    });
+    const data = await resp.json();
+
+    if(data.sucesso){
+      const r=data.dados;
+      // Atualizar dados locais
+      clienteSel.pontos=(r.novosPontos||clienteSel.pontos);
+      clienteSel.cashback=(r.novoCashback||clienteSel.cashback);
+      clienteSel.gastoMes=(r.novoGastoMes||clienteSel.gastoMes);
+      clienteSel.nivel=(r.novoNivel||clienteSel.nivel);
+      CLIENTES=CLIENTES.map(c=>c.id===clienteSel.id?clienteSel:c);
+      if(prod) PRODUTOS.push({cid:clienteSel.id,nome:prod,cat:'Produto',dias});
+      document.getElementById('resultado-compra').style.display='none';
+      document.getElementById('sucesso-card').style.display='block';
+      document.getElementById('sucesso-txt').innerHTML=
+        `<strong>${clienteSel.nome}</strong> ganhou <strong style="color:var(--gold)">+${fP(r.pontosGanhos||0)}</strong> e <strong style="color:var(--green)">+${fR(r.cashbackGanhoNaCompra||0)} cashback</strong><br>`+
+        `Nível: ${NCFG[clienteSel.nivel].emoji} ${clienteSel.nivel} · Compra: ${fR(v)}<br>`+
+        `<span style="color:var(--text3)">${desc}</span><br>`+
+        `<span style="color:#1D9E75;font-size:12px">✅ Salvo na planilha Google Sheets!</span>`;
+      toast('✅ Venda registrada na planilha!');
+      renderCRM();renderClientesFunc();
+    } else {
+      toast('❌ Erro: '+(data.erro||'Tente novamente'),'var(--red)');
+      btn.disabled=false;
+      btn.textContent='✅ REGISTRAR VENDA';
+    }
+  } catch(err){
+    // Se falhar a chamada real, salva localmente com aviso
+    const cfg=NCFG[clienteSel.nivel];
+    const pts=Math.floor(v*cfg.pts);
+    const cb=parseFloat((v*cfg.cb).toFixed(2));
+    clienteSel.pontos+=pts;
+    clienteSel.cashback=parseFloat((clienteSel.cashback+cb).toFixed(2));
+    clienteSel.gastoMes=parseFloat((clienteSel.gastoMes+v).toFixed(2));
+    CLIENTES=CLIENTES.map(c=>c.id===clienteSel.id?clienteSel:c);
+    if(prod) PRODUTOS.push({cid:clienteSel.id,nome:prod,cat:'Produto',dias});
+    document.getElementById('resultado-compra').style.display='none';
+    document.getElementById('sucesso-card').style.display='block';
+    document.getElementById('sucesso-txt').innerHTML=
+      `<strong>${clienteSel.nome}</strong> ganhou <strong style="color:var(--gold)">+${fP(pts)}</strong> e <strong style="color:var(--green)">+${fR(cb)} cashback</strong><br>`+
+      `<span style="color:#EF9F27;font-size:12px">⚠️ Salvo localmente — verifique a conexão com o Apps Script</span>`;
+    toast('⚠️ Salvo localmente. Verifique o Apps Script.','#EF9F27');
+    renderCRM();renderClientesFunc();
+  }
+}
+function resetVenda(){
+  document.getElementById('v-cliente').value='';
+  document.getElementById('v-valor').value='';
+  document.getElementById('v-desc').value='';
+  document.getElementById('v-prod').value='';
+  document.getElementById('v-dias').value='30';
+  document.getElementById('cliente-info').style.display='none';
+  document.getElementById('resultado-compra').style.display='none';
+  document.getElementById('sucesso-card').style.display='none';
+  document.getElementById('venda-preview').style.display='block';
+  document.getElementById('btn-registrar').disabled=true;
+  clienteSel=null;
+}
+
+// CRM
+function renderCRM(){
+  const sorted=[...PRODUTOS].sort((a,b)=>a.dias-b.dias).filter(p=>p.dias<=7);
+  const counts={acabou:0,urgente:0,proximo:0,aviso:0};
+  sorted.forEach(p=>{if(p.dias<=0)counts.acabou++;else if(p.dias<=2)counts.urgente++;else if(p.dias<=5)counts.proximo++;else counts.aviso++;});
+  document.getElementById('crm-c-acabou').textContent=counts.acabou;
+  document.getElementById('crm-c-urgente').textContent=counts.urgente;
+  document.getElementById('crm-c-proximo').textContent=counts.proximo;
+  document.getElementById('crm-c-aviso').textContent=counts.aviso;
+
+  document.getElementById('crm-cards').innerHTML=sorted.map(a=>{
+    const cl=CLIENTES.find(c=>c.id===a.cid)||{nome:'?',nivel:'BRONZE',tel:'—'};
+    const cor=a.dias<=0?'#E24B4A':a.dias<=2?'#EF9F27':a.dias<=5?'#FFD700':'#1D9E75';
+    const urg=a.dias<=0?'⛔ Acabou':a.dias<=2?`🚨 ${a.dias}d`:a.dias<=5?`⚠️ ${a.dias}d`:`📦 ${a.dias}d`;
+    const desc=cl.nivel==='OURO'?'10% OFF exclusivo Ouro':cl.nivel==='PRATA'?'5% OFF exclusivo Prata':'Produto acabando';
+    return `<div class="alerta-card" style="background:${cor}08;border-color:${cor}33;border-left:3px solid ${cor}">
+      <div class="urg-chip" style="background:${cor}22;color:${cor};font-weight:700;font-size:12px">${urg}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:13px;display:flex;align-items:center;gap:7px">${cl.nome} ${nb(cl.nivel)}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px">${a.nome} · ${a.cat}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:1px">📱 ${cl.tel}</div>
+      </div>
+      <div style="display:flex;gap:7px;flex-shrink:0">
+        <button class="btn-wa" onclick="abrirWA('${a.cid}','reposicao','${a.nome}')">📱 WA Reposição</button>
+        <button class="btn-ghost" onclick="abrirWA('${a.cid}','custom','')">✏️ Personalizado</button>
+      </div>
+    </div>`;
+  }).join('') || '<div style="color:var(--text3);font-size:13px;padding:20px 0;text-align:center">Nenhum alerta no momento. 🎉</div>';
+}
+
+// CLIENTES
+function renderClientesFunc(){
+  const busca=(document.getElementById('busca-func')||{value:''}).value.toLowerCase();
+  const lista=CLIENTES.filter(c=>!busca||c.nome.toLowerCase().includes(busca)||c.email.includes(busca))
+    .sort((a,b)=>b.pontos-a.pontos);
+  document.getElementById('cli-func-tbody').innerHTML=lista.map(c=>{
+    const prod=PRODUTOS.filter(p=>p.cid===c.id&&p.dias<=7).sort((a,b)=>a.dias-b.dias)[0];
+    const cor=prod?(prod.dias<=0?'#E24B4A':prod.dias<=2?'#EF9F27':prod.dias<=5?'#FFD700':'#1D9E75'):null;
+    return `<tr>
+      <td><div style="font-weight:600">${c.nome}</div><div style="font-size:11px;color:var(--text3)">${c.email}</div></td>
+      <td>${nb(c.nivel)}</td>
+      <td style="color:var(--gold);font-weight:600">${fP(c.pontos)}</td>
+      <td style="color:var(--green)">${fR(c.cashback)}</td>
+      <td>${fR(c.gastoMes)}</td>
+      <td>${prod?`<span style="color:${cor};font-weight:700;font-size:12px">${prod.dias<=0?'⛔':prod.dias<=2?'🚨':prod.dias<=5?'⚠️':'📦'} ${prod.nome} (${prod.dias<=0?'acabou':prod.dias+'d'})</span>`:'<span style="color:var(--text3)">—</span>'}</td>
+      <td style="display:flex;gap:5px">
+        <button class="btn-wa" style="font-size:11px;padding:5px 9px" onclick="abrirWA('${c.id}','custom','')">📱 WA</button>
+        ${prod?`<button class="btn-wa" style="font-size:11px;padding:5px 9px" onclick="abrirWA('${c.id}','reposicao','${prod.nome}')">📦 Reposição</button>`:''}
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// INDICAÇÕES
+function renderIndicacoes(){
+  const pend=INDICACOES.filter(i=>i.status==='PENDENTE');
+  document.getElementById('ind-pendentes').innerHTML=pend.length===0
+    ?'<div style="color:var(--text3);font-size:13px">Nenhuma indicação pendente.</div>'
+    :pend.map(i=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid #1e1e1e">
+        <div><div style="font-size:13px;font-weight:600">${i.indNome} → ${i.indado}</div><div style="font-size:11px;color:var(--text3)">${i.data}</div></div>
+        <div style="display:flex;gap:7px;align-items:center">
+          <span style="background:#EF9F2722;color:#EF9F27;border:.5px solid #EF9F2733;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700">⏳ Pendente</span>
+          <button class="btn-green" style="font-size:11px;padding:5px 10px;width:auto" onclick="confirmarIndicacaoDireta('${i.indado}')">✅ Confirmar</button>
+        </div>
+      </div>`).join('');
+}
+function confirmarIndicacao(){
+  const e=document.getElementById('ind-email').value.trim();
+  if(!e){toast('Informe o email do indicado','var(--red)');return}
+  const el=document.getElementById('ind-suc');
+  el.style.display='block';
+  el.textContent=`✅ Indicação de ${e} confirmada! +200 pts para o indicador · +100 pts para ${e}`;
+  toast('✅ Indicação confirmada!');
+}
+function confirmarIndicacaoDireta(nome){
+  toast(`✅ Indicação de ${nome} confirmada! Pontos liberados.`);
+  renderIndicacoes();
+}
+
+// RESGATES
+function renderResgates(){
+  document.getElementById('resgates-pendentes').innerHTML=RESGATES_PEND.map(r=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid #1e1e1e">
+      <div>
+        <div style="font-size:13px;font-weight:600">${r.nome}</div>
+        <div style="font-size:11px;color:var(--text3)">${r.premio} · ${r.data}</div>
+        <div style="font-family:monospace;font-size:13px;color:var(--text);letter-spacing:3px;margin-top:3px">${r.codigo}</div>
+      </div>
+      <button class="btn-green" style="font-size:11px;padding:6px 12px;width:auto" onclick="confirmarEntregaDireta('${r.codigo}','${r.nome}','${r.premio}')">✅ Confirmar entrega</button>
+    </div>`).join('') || '<div style="color:var(--text3);font-size:13px">Nenhum resgate pendente.</div>';
+}
+function confirmarEntrega(){
+  const cod=document.getElementById('cod-entrega').value.trim().toUpperCase();
+  if(cod.length<4){toast('Informe o código de retirada','var(--red)');return}
+  const r=RESGATES_PEND.find(x=>x.codigo===cod);
+  const el=document.getElementById('entrega-suc');
+  el.style.display='block';
+  if(r){
+    el.style.background='#1D9E7522';el.style.color=var_green='var(--green)';el.style.border='.5px solid #1D9E7533';
+    el.textContent=`✅ Entrega confirmada! ${r.nome} retirou "${r.premio}"`;
+    toast('✅ Entrega confirmada!');
+  } else {
+    el.style.background='#E24B4A22';el.style.color='#E24B4A';el.style.border='.5px solid #E24B4A33';
+    el.textContent='❌ Código não encontrado ou já entregue.';
+  }
+}
+function confirmarEntregaDireta(cod,nome,premio){
+  toast(`✅ Entrega de "${premio}" para ${nome} confirmada!`);
+}
+
+// WHATSAPP
+function abrirWA(cid,tipo,prodNome){
+  waClienteAtual=CLIENTES.find(c=>c.id===cid);
+  if(!waClienteAtual)return;
+  const c=waClienteAtual;
+  const desc=c.nivel==='OURO'?'10% OFF exclusivo 🥇':c.nivel==='PRATA'?'5% OFF exclusivo 🥈':'';
+  const templates={
+    reposicao: `Olá, *${c.nome}*! 👋\n\nAqui é da *Alpha Suplementos* 💪\n\nSeu *${prodNome||'produto'}* está acabando!\n\n${desc?`🎁 Como cliente *${c.nivel}*, você tem *${desc}* na próxima compra!\n\n`:''}Garanta agora: alphasuplementos.com.br\n\n_Alpha Suplementos — Performance é o nosso negócio_ 🔥`,
+    nivel:     `${NCFG[c.nivel].emoji} *Parabéns, ${c.nome}!*\n\nVocê atingiu o nível *${c.nivel}*!\nAgora você ganha *${NCFG[c.nivel].pts}pt/R$* e *${(NCFG[c.nivel].cb*100).toFixed(0)}% cashback*! 🔥`,
+    aniversario:`🎂 *Feliz Aniversário, ${c.nome}!*\n\nA *Alpha Suplementos* te deseja um dia incrível!\n\n🎁 Use o código *ANIV2025* e ganhe *15% OFF*! Válido por 7 dias.\n\nalphasuplementos.com.br 💪`,
+    pontos:    `Olá, *${c.nome}*! 👋\n\nVocê tem *${fP(c.pontos)}* acumulados na *Alpha Suplementos*!\n\nResgate prêmios incríveis: alphasuplementos.com.br/ref/${c.ref}\n\n_Use seus pontos antes que expirem!_ 🏆`,
+    custom:    `Olá, *${c.nome}*! 👋\n\n`,
+  };
+  document.getElementById('wa-modal-title').textContent=`📱 WhatsApp — ${c.nome}`;
+  document.getElementById('wa-para').textContent=`${c.tel} · ${c.email}`;
+  document.getElementById('wa-msg').value=templates[tipo]||templates.custom;
+  document.getElementById('wa-templates').innerHTML=[
+    {k:'reposicao',l:'📦 Reposição'},
+    {k:'nivel',    l:'🏆 Nível'},
+    {k:'aniversario',l:'🎂 Aniversário'},
+    {k:'pontos',   l:'⭐ Pontos'},
+    {k:'custom',   l:'✏️ Personalizada'},
+  ].map(t=>`<button class="btn-ghost" style="font-size:11px;padding:5px 10px" onclick="document.getElementById('wa-msg').value=${JSON.stringify(templates[t.k])}">${t.l}</button>`).join('');
+  document.getElementById('modal-wa').style.display='flex';
+}
+function fecharModal(){document.getElementById('modal-wa').style.display='none'}
+function enviarWA(){
+  if(!waClienteAtual)return;
+  fecharModal();
+  toast(`📱 WhatsApp enviado para ${waClienteAtual.nome} (${waClienteAtual.tel})!`);
+}
+
+// CADASTRO DE NOVO CLIENTE
+function abrirCadastro(){
+  document.getElementById('cad-form').style.display='block';
+  document.getElementById('cad-suc').style.display='none';
+  document.getElementById('cad-err').style.display='none';
+  document.getElementById('cad-nome').value='';
+  document.getElementById('cad-email').value='';
+  document.getElementById('cad-tel').value='';
+  document.getElementById('cad-cpf').value='';
+  document.getElementById('cad-nasc').value='';
+  document.getElementById('cad-ref').value='';
+  document.getElementById('modal-cadastro').style.display='flex';
+}
+function fecharCadastro(){
+  document.getElementById('modal-cadastro').style.display='none';
+}
+async function cadastrarCliente(){
+  var nome  = document.getElementById('cad-nome').value.trim();
+  var email = document.getElementById('cad-email').value.trim();
+  var tel   = document.getElementById('cad-tel').value.trim();
+  var cpf   = document.getElementById('cad-cpf').value.trim();
+  var nasc  = document.getElementById('cad-nasc').value;
+  var ref   = document.getElementById('cad-ref').value.trim();
+  var err   = document.getElementById('cad-err');
+
+  if(!nome){err.style.display='block';err.textContent='Nome é obrigatório';return;}
+  if(!email||!email.includes('@')){err.style.display='block';err.textContent='Email inválido';return;}
+  err.style.display='none';
+
+  var btn=document.querySelector('#cad-form .btn-green');
+  btn.disabled=true; btn.textContent='⏳ Cadastrando...';
+
+  var payload={
+    acao:'cadastrar_cliente',
+    dados:{nome,email,telefone:tel,cpf,dataNascimento:nasc,codigoIndicacao:ref}
+  };
+
+  try {
+    var resp = await fetch(WEB_APP_URL, {
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify(payload)
+    });
+    var data = await resp.json();
+    if(data.sucesso){
+      var novoCliente={
+        id: data.dados.id||'C'+Date.now(),
+        nome, email, tel,
+        nivel:'BRONZE', pontos:0, cashback:0, gastoMes:0, mesesRec:0,
+        ref: data.dados.codigoReferral||gerarRefLocal()
+      };
+      CLIENTES.push(novoCliente);
+      renderAll();
+      document.getElementById('cad-form').style.display='none';
+      document.getElementById('cad-suc').style.display='block';
+      document.getElementById('cad-suc-nome').textContent=nome+' — '+email;
+      document.getElementById('cad-suc-ref').textContent=novoCliente.ref;
+      toast('✅ '+nome+' cadastrado com sucesso!');
+    } else {
+      err.style.display='block';
+      err.textContent='Erro: '+(data.erro||'Tente novamente');
+      btn.disabled=false; btn.textContent='✅ Cadastrar';
+    }
+  } catch(e){
+    // Cadastro local se falhar a API
+    var novoCliente={
+      id:'C'+Date.now(),
+      nome, email, tel,
+      nivel:'BRONZE', pontos:0, cashback:0, gastoMes:0, mesesRec:0,
+      ref:gerarRefLocal()
+    };
+    CLIENTES.push(novoCliente);
+    renderAll();
+    document.getElementById('cad-form').style.display='none';
+    document.getElementById('cad-suc').style.display='block';
+    document.getElementById('cad-suc-nome').textContent=nome+' — '+email;
+    document.getElementById('cad-suc-ref').textContent=novoCliente.ref;
+    toast('✅ '+nome+' cadastrado! (salvo localmente — verifique conexão)','#EF9F27');
+    btn.disabled=false; btn.textContent='✅ Cadastrar';
+  }
+}
+function gerarRefLocal(){
+  return 'ALPHA'+Math.random().toString(36).substr(2,4).toUpperCase();
+}
+</script>
+</body>
+</html>
