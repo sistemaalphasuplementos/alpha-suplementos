@@ -1,0 +1,25 @@
+{
+  "name": "Alpha Suplementos — Fidelidade",
+  "short_name": "Alpha",
+  "description": "Programa de fidelidade Alpha Suplementos",
+  "start_url": "https://sistemaalphasuplementos.github.io/alpha-suplementos/cliente/",
+  "scope": "https://sistemaalphasuplementos.github.io/alpha-suplementos/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#CC0000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
