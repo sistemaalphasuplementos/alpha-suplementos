@@ -752,10 +752,11 @@ async function carregarClientes(){
     if(d.sucesso && d.dados && d.dados.length>0){
       CL=d.dados.map(function(c){
         return {
-          id:c[0]||'', nome:c[1]||'', email:c[2]||'', tel:(c[3]||'').replace(/[^0-9]/g,''),
-          nivel:c[7]||'BRONZE', pontos:Number(c[6])||0,
+          id:String(c[0]||''), nome:String(c[1]||''), email:String(c[2]||''),
+          tel:String(c[3]||'').replace(/[^0-9]/g,''),
+          nivel:String(c[7]||'BRONZE'), pontos:Number(c[6])||0,
           cashback:Number(c[10])||0, gastoMes:Number(c[8])||0,
-          mesesRec:Number(c[9])||0, ref:c[11]||''
+          mesesRec:Number(c[9])||0, ref:String(c[11]||'')
         };
       });
       console.log('Clientes da planilha:', CL.length);
