@@ -609,7 +609,7 @@ async function fazerLogin(){
 
   // Buscar cliente na planilha
   try {
-    var resp = await fetch(WEB_APP_URL+'?acao=login_cliente&nome='+encodeURIComponent(nome)+'&tel='+encodeURIComponent(tel)+'&token='+_API_TOKEN);
+    var resp = await fetch(WEB_APP_URL+'?acao=login_cliente&nome='+encodeURIComponent(nome)+'&tel='+encodeURIComponent(tel));
     var data = await resp.json();
     if(data.sucesso && data.dados){
       var c = data.dados;
