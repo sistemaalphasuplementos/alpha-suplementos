@@ -746,7 +746,7 @@ async function carregarClientes(){
   try{
     var controller=new AbortController();
     var timeout=setTimeout(function(){controller.abort();},5000);
-    var r=await fetch(WEB_APP_URL+'?acao=listar_clientes_todos',{signal:controller.signal}+'&token='+_API_TOKEN);
+    var r=await fetch(WEB_APP_URL+'?acao=listar_clientes_todos&token='+_API_TOKEN,{signal:controller.signal});
     clearTimeout(timeout);
     var d=await r.json();
     if(d.sucesso && d.dados && d.dados.length>0){
