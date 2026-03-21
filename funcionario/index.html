@@ -781,7 +781,8 @@ function renderCRM(){
   s.forEach(function(x){if(x.dias<=0)ct.a++;else if(x.dias<=2)ct.u++;else if(x.dias<=5)ct.p++;else ct.v++;});
   ['ca','cu','cp','cv'].forEach(function(id,i){var e=el(id);if(e)e.textContent=[ct.a,ct.u,ct.p,ct.v][i];});
   var e=el('crm-lista');if(!e)return;
-  e.innerHTML=s.map(function(a){
+  window._crmData=s;
+  e.innerHTML=s.map(function(a,idx){
     var c=CL.find(function(x){return x.id===a.cid;})||{nome:'?',nivel:'BRONZE',tel:'—'};
     var cor=a.dias<=0?'#E24B4A':a.dias<=2?'#EF9F27':a.dias<=5?'#FFD700':'#1D9E75';
     var u=a.dias<=0?'⛔ Acabou':a.dias<=2?'🚨 '+a.dias+'d':a.dias<=5?'⚠️ '+a.dias+'d':'📦 '+a.dias+'d';
@@ -791,8 +792,8 @@ function renderCRM(){
       '<div style="font-size:11px;color:var(--text3);margin-top:2px">'+a.nome+' · '+a.cat+'</div>'+
       '<div style="font-size:11px;color:var(--text3)">📱 '+c.tel+'</div></div>'+
       '<div style="display:flex;gap:7px;flex-shrink:0">'+
-      '<button class="bwa" data-cid="'+a.cid+'" data-prod="'+a.nome+'" onclick="var b=this;abrirWA(b.getAttribute('data-cid'),'reposicao',b.getAttribute('data-prod'))">📱 WA Reposição</button>'+
-      '<button class="bgh" data-cid="'+a.cid+'" onclick="var b=this;abrirWA(b.getAttribute('data-cid'),'custom','')">✏️ Custom</button>'+
+      '<button class="bwa" onclick="waCRM('+idx+',\'reposicao\')" style="background:#25D36622;color:#25D366;border:1px solid #25D36633;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:\"Barlow\",sans-serif">📱 WA</button>'+
+      '<button class="bgh" onclick="waCRM('+idx+',\'custom\')" style="background:var(--bg4);color:var(--text2);border:.5px solid var(--border);border-radius:8px;padding:5px 8px;font-size:12px;font-weight:600;cursor:pointer;font-family:\"Barlow\",sans-serif">✏️</button>'+
       '</div></div>';
   }).join('')||'<div style="color:var(--text3);font-size:13px;padding:20px;text-align:center">Nenhum alerta. 🎉</div>';
 }
