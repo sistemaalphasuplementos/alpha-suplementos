@@ -483,6 +483,80 @@ body{color:#FFFFFF;font-size:15px}
 
 <div class="toast" id="tst"></div>
 
+
+// ══ SEGURANÇA ══════════════════════════════════════
+var _SALT = 'alpha_salt_2026';
+var _API_TOKEN = 'd9O-8jZLUcPHX_YlWF_XEUTySCNa3EZlVmJPL9thg94';
+var _SESSION_KEY = 'alpha_func_session';
+var _MAX_ATTEMPTS = 3;
+var _BLOCK_TIME = 5 * 60 * 1000; // 5 minutos
+var _SESSION_EXPIRY = 12 * 60 * 60 * 1000; // 12 horas
+
+// Hashes das senhas (não armazena texto puro)
+var _USERS = {
+  'andre':   { nome:'André',   hash:'70ff798d8f2492481203476ecf67814c28c18cddf786031b5398f24eb6ae6970' },
+  'hesllen': { nome:'Hesllen', hash:'e5bba646579cd3a690f5d597309db731e4204cd356e9d11c917054aeeb3f39f1' },
+  'sabina':  { nome:'Sabina',  hash:'6db67afc515b3deeeb80a7a29bdc80ffd1868f5d0fe6ec127cdd7da0e8c5a73a' },
+  'erica':   { nome:'Érica',   hash:'1135965b644f6f589b7f1989d4f45e3f3a635a758fad5225a271ea2a2879e0c0' },
+};
+
+// SHA-256 simples em JS
+async function sha256(msg) {
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+}
+
+// Verificar sessão existente
+function verificarSessao() {
+  try {
+    var sess = JSON.parse(sessionStorage.getItem(_SESSION_KEY) || 'null');
+    if (sess && sess.expiry > Date.now()) {
+      window._funcNome = sess.nome;
+      return sess;
+    }
+    sessionStorage.removeItem(_SESSION_KEY);
+  } catch(e) {}
+  return null;
+}
+
+// Salvar sessão
+function salvarSessao(nome) {
+  var sess = { nome: nome, expiry: Date.now() + _SESSION_EXPIRY, token: _API_TOKEN };
+  sessionStorage.setItem(_SESSION_KEY, JSON.stringify(sess));
+  window._funcNome = nome;
+}
+
+// Verificar bloqueio por tentativas
+function verificarBloqueio() {
+  try {
+    var bl = JSON.parse(sessionStorage.getItem('alpha_block') || 'null');
+    if (bl && bl.until > Date.now()) {
+      var min = Math.ceil((bl.until - Date.now()) / 60000);
+      return 'Muitas tentativas. Aguarde ' + min + ' minuto(s).';
+    }
+    if (bl && bl.until <= Date.now()) {
+      sessionStorage.removeItem('alpha_block');
+    }
+  } catch(e) {}
+  return null;
+}
+
+function registrarTentativa() {
+  try {
+    var bl = JSON.parse(sessionStorage.getItem('alpha_block') || '{"count":0}');
+    bl.count = (bl.count || 0) + 1;
+    if (bl.count >= _MAX_ATTEMPTS) {
+      bl.until = Date.now() + _BLOCK_TIME;
+      bl.count = 0;
+    }
+    sessionStorage.setItem('alpha_block', JSON.stringify(bl));
+  } catch(e) {}
+}
+
+function limparTentativas() {
+  sessionStorage.removeItem('alpha_block');
+}
+// ══════════════════════════════════════════════════
 <script>
 var WEB_APP_URL='https://script.google.com/macros/s/AKfycbw7AIr8DrCMGFhpoaz6gE7_v0M4sElvNPZh7PaEpP4h_oX_vwfraiUAaGOQNMoQK_8WpQ/exec';
 var CL=[
@@ -525,21 +599,23 @@ el('lbtn').onclick=function(){
   var s=el('lsenha').value;
   var em=el('lemail').value;
   var err=el('lerro');
-  // Funcionários cadastrados
-  var FUNCS=[
-    {login:'andre',   nome:'André',   senha:'88994797523'},
-    {login:'hesllen', nome:'Hesllen', senha:'88992588710'},
-    {login:'sabina',  nome:'Sabina',  senha:'88992018484'},
-    {login:'erica',   nome:'Érica',   senha:'88994626659'},
-  ];
-  var loginDigitado=em.toLowerCase().trim().replace(/[^a-z]/g,'');
-  var funcOk=FUNCS.find(function(f){
-    return f.login===loginDigitado && f.senha===s;
-  });
-  // Fallback demo
-  if(!funcOk && s==='func2025') funcOk={nome:'Funcionário',senha:'func2025'};
+  // Verificar bloqueio
+  var bloqueio = verificarBloqueio();
+  if(bloqueio){ err.style.display='block'; err.textContent=bloqueio; return; }
 
-  if(funcOk){
+  // Login seguro com hash
+  var loginDigitado = em.toLowerCase().trim().replace(/[^a-z]/g,'');
+  var userDef = _USERS[loginDigitado];
+  
+  if(!userDef){ registrarTentativa(); err.style.display='block'; err.textContent='Login não encontrado.'; return; }
+
+  // Calcular hash da senha digitada
+  sha256(loginDigitado + ':' + s + ':' + _SALT).then(function(hashDigitado){
+    if(hashDigitado === userDef.hash){
+      // LOGIN CORRETO
+      limparTentativas();
+      salvarSessao(userDef.nome);
+      var funcOk = {nome: userDef.nome};
     err.style.display='none';
     window._funcNome=funcOk.nome;
     el('lwrap').style.display='none';
@@ -550,13 +626,27 @@ el('lbtn').onclick=function(){
     if(sel) for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===funcOk.nome){sel.selectedIndex=i;break;}}
     renderTudo();
     carregarClientes().then(function(){ renderTudo(); setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800); }).catch(function(e){ console.log('fetch err',e); setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800); })
-  } else {
-    err.style.display='block';
-    err.textContent='Login ou senha incorretos.';
-  }
+  // (erro tratado dentro da promise sha256)
 };
 el('lsenha').onkeydown=function(e){if(e.key==='Enter')el('lbtn').click();};
-el('sbtn').onclick=function(){el('app').style.display='none';el('lwrap').style.display='flex';el('lsenha').value='';};
+el('sbtn').onclick=function(){
+  el('app').style.display='none';
+  el('lwrap').style.display='flex';
+  el('lsenha').value='';
+  sessionStorage.removeItem(_SESSION_KEY);
+};
+
+// Verificar sessão ao carregar a página
+(function(){
+  var sess = verificarSessao();
+  if(sess){
+    el('lwrap').style.display='none';
+    el('app').style.display='block';
+    el('tnome').textContent=sess.nome;
+    renderTudo();
+    carregarClientes().then(function(){ renderTudo(); }).catch(function(){});
+  }
+})();
 
 // TABS
 function ir(n,b){
@@ -573,7 +663,7 @@ async function carregarClientes(){
   try{
     var controller=new AbortController();
     var timeout=setTimeout(function(){controller.abort();},5000);
-    var r=await fetch(WEB_APP_URL+'?acao=listar_clientes_todos',{signal:controller.signal});
+    var r=await fetch(WEB_APP_URL+'?acao=listar_clientes_todos',{signal:controller.signal}+'&token='+_API_TOKEN);
     clearTimeout(timeout);
     var d=await r.json();
     if(d.sucesso && d.dados && d.dados.length>0){

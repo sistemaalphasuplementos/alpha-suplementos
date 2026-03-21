@@ -384,6 +384,49 @@ body{color:#FFFFFF;font-size:15px}
 </div>
 
 <script>
+
+// ══ SEGURANÇA CEO ══════════════════════════════════
+var _SALT = 'alpha_salt_2026';
+var _API_TOKEN = 'd9O-8jZLUcPHX_YlWF_XEUTySCNa3EZlVmJPL9thg94';
+var _CEO_HASH = 'f7b331e102475c25639bf6038b8ca38f22e962756e25f27d3d8053a7afe23afa';
+var _CEO_EMAIL = 'alphasuplementostiangua@gmail.com';
+var _SESSION_KEY = 'alpha_ceo_session';
+var _MAX_ATTEMPTS = 3;
+var _BLOCK_TIME = 10 * 60 * 1000; // 10 minutos
+var _SESSION_EXPIRY = 8 * 60 * 60 * 1000; // 8 horas
+
+async function sha256js(msg) {
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+}
+function verificarSessaoCEO() {
+  try {
+    var sess = JSON.parse(sessionStorage.getItem(_SESSION_KEY) || 'null');
+    if(sess && sess.expiry > Date.now() && sess.role === 'CEO') return sess;
+    sessionStorage.removeItem(_SESSION_KEY);
+  } catch(e){}
+  return null;
+}
+function salvarSessaoCEO() {
+  sessionStorage.setItem(_SESSION_KEY, JSON.stringify({role:'CEO', expiry:Date.now()+_SESSION_EXPIRY, token:_API_TOKEN}));
+}
+function verificarBloqueioCEO() {
+  try {
+    var bl = JSON.parse(sessionStorage.getItem('alpha_ceo_block') || 'null');
+    if(bl && bl.until > Date.now()) return Math.ceil((bl.until-Date.now())/60000);
+    if(bl) sessionStorage.removeItem('alpha_ceo_block');
+  } catch(e) {}
+  return 0;
+}
+function registrarTentativaCEO() {
+  try {
+    var bl = JSON.parse(sessionStorage.getItem('alpha_ceo_block') || '{"count":0}');
+    bl.count = (bl.count||0)+1;
+    if(bl.count >= _MAX_ATTEMPTS){ bl.until=Date.now()+_BLOCK_TIME; bl.count=0; }
+    sessionStorage.setItem('alpha_ceo_block', JSON.stringify(bl));
+  } catch(e) {}
+}
+// ══════════════════════════════════════════════════
 var WEB_APP_URL='https://script.google.com/macros/s/AKfycbw7AIr8DrCMGFhpoaz6gE7_v0M4sElvNPZh7PaEpP4h_oX_vwfraiUAaGOQNMoQK_8WpQ/exec';
 var CL=[
   {id:'C01',nome:'João Silva',    email:'joao@email.com',  nivel:'OURO',  pontos:3420,cashback:241.40,gastoMes:380,mesesRec:3,ultimaCompra:'14/01/2025',indicacoes:3},
@@ -430,14 +473,23 @@ function set(id,v){var e=el(id);if(e)e.textContent=v;}
 function html(id,v){var e=el(id);if(e)e.innerHTML=v;}
 
 // LOGIN
-el('lbtn').onclick=function(){
+el('lbtn').onclick=async function(){
   var s=el('lsenha').value.trim();
   var em=el('lemail').value.trim().toLowerCase();
   var err=el('lerro');
-  // Login CEO: email + senha
-  var emailOk = (em === 'alphasuplementostiangua@gmail.com' || em === 'ceo@alphasuplementos.com.br');
-  var senhaOk = (s === 'Posto@@3' || s === 'alpha2025');
-  if(emailOk && senhaOk){
+  
+  // Verificar bloqueio
+  var mins = verificarBloqueioCEO();
+  if(mins > 0){ err.style.display='block'; err.textContent='Bloqueado. Tente em '+mins+' minuto(s).'; return; }
+  
+  // Verificar email
+  if(em !== _CEO_EMAIL){ registrarTentativaCEO(); err.style.display='block'; err.textContent='Email não autorizado.'; return; }
+  
+  // Verificar senha com hash
+  var hashDigitado = await sha256js(em + ':' + s + ':' + _SALT);
+  if(hashDigitado === _CEO_HASH){
+    sessionStorage.removeItem('alpha_ceo_block');
+    salvarSessaoCEO();
     err.style.display='none';
     el('lbtn').textContent='⏳ Carregando...';
     el('lbtn').disabled=true;
@@ -446,15 +498,18 @@ el('lbtn').onclick=function(){
     set('unome','André (CEO)');
     carregarDados().then(function(){ rTudo(); });
   } else {
+    registrarTentativaCEO();
     err.style.display='block';
-    err.textContent='Email ou senha incorretos.';
+    var bl = JSON.parse(sessionStorage.getItem('alpha_ceo_block')||'{"count":0}');
+    var rest = Math.max(0, _MAX_ATTEMPTS - (bl.count||0));
+    err.textContent='Senha incorreta. Tentativas restantes: '+rest;
   }
 };
 
 async function carregarDados(){
   try {
     // Carregar clientes reais
-    var r1 = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos');
+    var r1 = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos'+'&token='+_API_TOKEN);
     var d1 = await r1.json();
     if(d1.sucesso && d1.dados && d1.dados.length>0){
       CL = d1.dados.map(function(c){
@@ -480,7 +535,7 @@ async function carregarDados(){
   }
   try {
     // Carregar compras reais
-    var r2 = await fetch(WEB_APP_URL+'?acao=listar_historico');
+    var r2 = await fetch(WEB_APP_URL+'?acao=listar_historico'+'&token='+_API_TOKEN);
     var d2 = await r2.json();
     if(d2.sucesso && d2.dados && d2.dados.length>0){
       CP = d2.dados.map(function(c){
@@ -505,7 +560,21 @@ el('sbtn').onclick=function(){
   el('app').style.display='none';
   el('login-wrap').style.display='flex';
   el('lsenha').value='';
+  el('lbtn').textContent='ENTRAR →';
+  el('lbtn').disabled=false;
+  sessionStorage.removeItem(_SESSION_KEY);
 };
+
+// Auto-login se sessão válida
+(function(){
+  var sess = verificarSessaoCEO();
+  if(sess){
+    el('login-wrap').style.display='none';
+    el('app').style.display='block';
+    set('unome','André (CEO)');
+    carregarDados().then(function(){ rTudo(); });
+  }
+})();
 
 // TABS
 function ir(n,b){

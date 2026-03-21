@@ -371,6 +371,42 @@ body{color:#FFFFFF;font-size:15px}
 <div class="toast" id="toast-el"></div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+
+// ══ SEGURANÇA CLIENTE ═══════════════════════════════
+var _CLI_SESSION_KEY = 'alpha_cli_session';
+var _CLI_SESSION_EXPIRY = 24 * 60 * 60 * 1000; // 24 horas
+
+function salvarSessaoCli(userData) {
+  sessionStorage.setItem(_CLI_SESSION_KEY, JSON.stringify({user: userData, expiry: Date.now() + _CLI_SESSION_EXPIRY}));
+}
+
+function verificarSessaoCli() {
+  try {
+    var sess = JSON.parse(sessionStorage.getItem(_CLI_SESSION_KEY) || 'null');
+    if(sess && sess.expiry > Date.now()) return sess.user;
+    sessionStorage.removeItem(_CLI_SESSION_KEY);
+  } catch(e) {}
+  return null;
+}
+
+function verificarBloqueioCli() {
+  try {
+    var bl = JSON.parse(sessionStorage.getItem('alpha_cli_block') || 'null');
+    if(bl && bl.until > Date.now()) return Math.ceil((bl.until-Date.now())/60000);
+    if(bl) sessionStorage.removeItem('alpha_cli_block');
+  } catch(e) {}
+  return 0;
+}
+
+function registrarTentativaCli() {
+  try {
+    var bl = JSON.parse(sessionStorage.getItem('alpha_cli_block') || '{"count":0}');
+    bl.count = (bl.count||0)+1;
+    if(bl.count >= 5){ bl.until=Date.now()+(5*60*1000); bl.count=0; }
+    sessionStorage.setItem('alpha_cli_block', JSON.stringify(bl));
+  } catch(e) {}
+}
+// ════════════════════════════════════════════════════
 var WEB_APP_URL='https://script.google.com/macros/s/AKfycbw7AIr8DrCMGFhpoaz6gE7_v0M4sElvNPZh7PaEpP4h_oX_vwfraiUAaGOQNMoQK_8WpQ/exec';
 const DEMOS={
   ouro:  {id:'C01',nome:'João Silva',    email:'joao@email.com',  tel:'47991234567',nivel:'OURO',  pontos:3420,cashback:241.40,gastoMes:380,mesesRec:3,ref:'ALPHA01'},
@@ -412,6 +448,14 @@ let U=null;
 function toast(msg){const t=document.getElementById('toast-el');t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2800)}
 function loginDemo(k){U={...DEMOS[k]};iniciar()}
 async function fazerLogin(){
+  // Verificar bloqueio
+  var mins = verificarBloqueioCli();
+  if(mins > 0){
+    var err=document.getElementById('l-err');
+    err.style.display='block';
+    err.textContent='Muitas tentativas. Aguarde '+mins+' minuto(s).';
+    return;
+  }
   var nome = (document.getElementById('l-nome')||{value:''}).value.trim().toLowerCase();
   var tel  = (document.getElementById('l-tel') ||{value:''}).value.trim().replace(/[^0-9]/g,'');
   var err  = document.getElementById('l-err');
@@ -444,7 +488,7 @@ async function fazerLogin(){
 
   // Fallback: tentar carregar clientes da planilha e buscar localmente
   try {
-    var r2 = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos');
+    var r2 = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos'+'&token='+_API_TOKEN);
     var d2 = await r2.json();
     if(d2.sucesso && d2.dados && d2.dados.length>0){
       var encontrado = null;
@@ -482,9 +526,11 @@ async function fazerLogin(){
 
   if(found){
     U = {...found};
+    salvarSessaoCli(U);
     iniciar();
   } else {
     err.style.display='block';
+    registrarTentativaCli();
     err.textContent='Nome ou telefone nao encontrados. Verifique os dados ou cadastre-se na loja!';
   }
 }
