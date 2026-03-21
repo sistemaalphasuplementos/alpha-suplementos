@@ -508,7 +508,31 @@ id="sc-premios" class="screen">
 
 <div class="toast" id="toast-el"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">
+function iniciar(){
+  // Esconder tela de login
+  var ls = document.querySelector('.login-screen');
+  if(ls) ls.style.display = 'none';
+  
+  // Mostrar app
+  var app = document.getElementById('app');
+  if(app) app.style.display = 'flex';
+  
+  // Renderizar e ir para home
+  renderAll();
+  goScreen('home');
+  pedirPermissaoNotificacao();
+}
+
+function logout(){
+  U = null;
+  sessionStorage.removeItem(_CLI_SESSION_KEY);
+  var app = document.getElementById('app');
+  if(app) app.style.display = 'none';
+  var ls = document.querySelector('.login-screen');
+  if(ls) ls.style.display = '';
+}
+</script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 
 // ══ SEGURANÇA CLIENTE ═══════════════════════════════
 var _API_TOKEN = 'd9O-8jZLUcPHX_YlWF_XEUTySCNa3EZlVmJPL9thg94';
