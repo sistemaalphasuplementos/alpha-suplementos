@@ -791,8 +791,8 @@ function renderCRM(){
       '<div style="font-size:11px;color:var(--text3);margin-top:2px">'+a.nome+' · '+a.cat+'</div>'+
       '<div style="font-size:11px;color:var(--text3)">📱 '+c.tel+'</div></div>'+
       '<div style="display:flex;gap:7px;flex-shrink:0">'+
-      '<button class="bwa" onclick="abrirWA(\''+a.cid+'\',\'reposicao\',\''+a.nome+'\')">📱 WA Reposição</button>'+
-      '<button class="bgh" onclick="abrirWA(\''+a.cid+'\',\'custom\',\'\')">✏️ Custom</button>'+
+      '<button class="bwa" data-cid="'+a.cid+'" data-prod="'+a.nome+'" onclick="var b=this;abrirWA(b.getAttribute('data-cid'),'reposicao',b.getAttribute('data-prod'))">📱 WA Reposição</button>'+
+      '<button class="bgh" data-cid="'+a.cid+'" onclick="var b=this;abrirWA(b.getAttribute('data-cid'),'custom','')">✏️ Custom</button>'+
       '</div></div>';
   }).join('')||'<div style="color:var(--text3);font-size:13px;padding:20px;text-align:center">Nenhum alerta. 🎉</div>';
 }

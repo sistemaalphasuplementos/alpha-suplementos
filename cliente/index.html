@@ -595,237 +595,82 @@ async function fazerLogin(){
     err.textContent='Muitas tentativas. Aguarde '+mins+' minuto(s).';
     return;
   }
+  
   var nome = (document.getElementById('l-nome')||{value:''}).value.trim().toLowerCase();
   var tel  = (document.getElementById('l-tel') ||{value:''}).value.trim().replace(/[^0-9]/g,'');
   var err  = document.getElementById('l-err');
-
+  
   if(!nome || !tel){
     err.style.display='block';
     err.textContent='Informe seu primeiro nome e telefone';
     return;
   }
-
+  
   err.style.display='none';
-
-  // Buscar cliente na planilha
+  
+  // Mostrar loading no botão
+  var btn = document.getElementById('l-btn');
+  if(btn){ btn.textContent='Buscando...'; btn.disabled=true; }
+  
+  // Buscar lista de clientes (rota pública, sem token)
+  var encontrado = null;
+  
   try {
-    var resp = await fetch(WEB_APP_URL+'?acao=login_cliente&nome='+encodeURIComponent(nome)+'&tel='+encodeURIComponent(tel));
+    var resp = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos');
     var data = await resp.json();
-    if(data.sucesso && data.dados){
-      var c = data.dados;
-      U = {
-        id: c[0]||'', nome: c[1]||nome, email: c[2]||'',
-        tel: c[3]||tel, nivel: c[7]||'BRONZE',
-        pontos: Number(c[6])||0, cashback: Number(c[10])||0,
-        gastoMes: Number(c[8])||0, mesesRec: Number(c[9])||0,
-        ref: c[11]||gerarRefLocal()
-      };
-      salvarSessaoCli(U);
-      iniciar();
-      return;
-    }
-  } catch(e){ console.log('API offline, tentando local'); }
-
-  // Fallback: tentar carregar clientes da planilha e buscar localmente
-  try {
-    var r2 = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos'+'&token='+_API_TOKEN);
-    var d2 = await r2.json();
-    if(d2.sucesso && d2.dados && d2.dados.length>0){
-      var encontrado = null;
-      for(var i=0; i<d2.dados.length; i++){
-        var row = d2.dados[i];
-        var primNomeRow = String(row[1]||'').split(' ')[0].toLowerCase().trim();
-        var telRow = String(row[3]||'').replace(/[^0-9]/g,'');
-        var nomeOk = primNomeRow === nome;
-        var telOk  = telRow === tel || telRow.endsWith(tel) || tel.endsWith(telRow.slice(-8));
+    if(data.sucesso && data.dados && data.dados.length > 0){
+      for(var i=0; i<data.dados.length; i++){
+        var row = data.dados[i];
+        var primNome = String(row[1]||'').split(' ')[0].toLowerCase().trim();
+        var telRow   = String(row[3]||'').replace(/[^0-9]/g,'');
+        var nomeOk   = primNome === nome;
+        var telOk    = telRow === tel || telRow.endsWith(tel) || tel.endsWith(telRow.slice(-8));
         if(nomeOk && telOk){
-          encontrado = row;
+          encontrado = {
+            id:    String(row[0]||''),
+            nome:  String(row[1]||nome),
+            email: String(row[2]||''),
+            tel:   String(row[3]||tel),
+            nivel: String(row[7]||'BRONZE'),
+            pontos:   Number(row[6])||0,
+            cashback: Number(row[10])||0,
+            gastoMes: Number(row[8])||0,
+            mesesRec: Number(row[9])||0,
+            ref:   String(row[11]||gerarRefLocal())
+          };
           break;
         }
       }
-      if(encontrado){
-        U = {
-          id: encontrado[0]||'', nome: encontrado[1]||nome,
-          email: encontrado[2]||'', tel: encontrado[3]||tel,
-          nivel: encontrado[7]||'BRONZE', pontos: Number(encontrado[6])||0,
-          cashback: Number(encontrado[10])||0, gastoMes: Number(encontrado[8])||0,
-          mesesRec: Number(encontrado[9])||0, ref: encontrado[11]||gerarRefLocal()
-        };
-        iniciar();
-        return;
-      }
     }
-  } catch(e2){ console.log('Fallback lista erro:', e2); }
-
-  // Último fallback: dados demo
+  } catch(e){ console.log('API offline:', e.message); }
+  
+  if(btn){ btn.textContent='ENTRAR →'; btn.disabled=false; }
+  
+  if(encontrado){
+    U = encontrado;
+    salvarSessaoCli(U);
+    iniciar();
+    return;
+  }
+  
+  // Fallback: dados demo
   var found = Object.values(DEMOS).find(function(d){
     var dNome = d.nome.split(' ')[0].toLowerCase();
     var dTel  = (d.tel||'').replace(/[^0-9]/g,'');
     return dNome === nome && (dTel.endsWith(tel) || tel.endsWith(dTel.slice(-8)));
   });
-
+  
   if(found){
     U = {...found};
     salvarSessaoCli(U);
     iniciar();
   } else {
-    err.style.display='block';
     registrarTentativaCli();
-    err.textContent='Nome ou telefone nao encontrados. Verifique os dados ou cadastre-se na loja!';
+    err.style.display='block';
+    err.textContent='Nome ou telefone não encontrados. Cadastre-se na loja!';
   }
 }
 
-function gerarRefLocal(){
-  var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  var cod='';
-  for(var i=0;i<8;i++) cod+=chars.charAt(Math.floor(Math.random()*chars.length));
-  return 'ALPHA'+cod.slice(0,4);
-}
-function fazerLogout(){U=null;document.getElementById('app').style.display='none';document.getElementById('login-screen').style.display='flex';toast('Até logo! 🐺')}
-function pedirPermissaoNotificacao(){
-  if('Notification' in window){
-    if(Notification.permission === 'default'){
-      Notification.requestPermission().then(function(perm){
-        if(perm === 'granted'){
-          console.log('Notificações permitidas!');
-        }
-      });
-    }
-  }
-}
-function iniciar(){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('app').style.display='flex';
-  renderAll();goScreen('home');pedirPermissaoNotificacao();
-}
-
-function goScreen(name){
-  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');});
-  document.querySelectorAll('.bn').forEach(function(b){b.classList.remove('on');});
-  var sc = document.getElementById('sc-'+name);
-  if(!sc){ sc = document.getElementById('sc-home'); name='home'; }
-  if(sc) sc.classList.add('on');
-  var bn=document.getElementById('bn-'+name);
-  if(bn) bn.classList.add('on');
-  // Re-render ao trocar de tela
-  if(typeof renderAll === 'function') try{ renderAll(); }catch(e){}
-}
-
-function renderAll(){
-  if(!U)return;
-  const cfg=NCFG[U.nivel];
-  // Header
-  const av=document.getElementById('hdr-av');
-  av.textContent=ini(U.nome);
-  // Card
-  document.getElementById('lc-e').textContent=cfg.emoji;
-  const nt=document.getElementById('lc-nt');nt.textContent=U.nivel;nt.style.color=cfg.cor;
-  document.getElementById('lc-nm').textContent=U.nome.toUpperCase();
-  var emEl=document.getElementById('lc-em'); if(emEl) emEl.textContent=U.email||'';
-  document.getElementById('lc-pts').textContent=Number(U.pontos).toLocaleString('pt-BR');
-  document.getElementById('lc-cb').textContent=fR(U.cashback);
-  // Progress
-  ['b','p','o'].forEach((k,i)=>{
-    const el=document.getElementById('pl-'+k);
-    const nv=['BRONZE','PRATA','OURO'][i];
-    el.classList.remove('active','done');
-    if(nv===U.nivel)el.classList.add('active');
-    else if(niO(nv)<niO(U.nivel))el.classList.add('done');
-  });
-  if(U.nivel==='OURO'){
-    document.getElementById('prog-bar').style.width='100%';
-    document.getElementById('prog-msg').textContent='🏆 Nível máximo!';
-    document.getElementById('prog-gasto').textContent=fR(U.gastoMes)+' gastos';
-    document.getElementById('prog-meta').textContent='';
-  } else {
-    const prox=U.nivel==='BRONZE'?'PRATA':'OURO';
-    const meta=NCFG[prox].min;
-    const pct=Math.min(100,Math.round(U.gastoMes/meta*100));
-    document.getElementById('prog-bar').style.width=pct+'%';
-    document.getElementById('prog-msg').textContent='Falta '+fR(Math.max(0,meta-U.gastoMes))+' para '+prox;
-    document.getElementById('prog-gasto').textContent=fR(U.gastoMes)+' este mês';
-    document.getElementById('prog-meta').textContent=fR(meta);
-  }
-  // Ranking
-  const rk=[...TODOS].sort((a,b)=>b.pontos-a.pontos);
-  document.getElementById('rk-list').innerHTML=rk.slice(0,5).map((c,i)=>{
-    const rc=NCFG[c.nivel];
-    const isMe=c.id===U.id;
-    const posC=i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#555';
-    const posL=i===0?'🏆':i+1;
-    return `<div class="rk ${isMe?'rk-me':''}">
-      <div class="rk-pos" style="color:${posC}">${posL}</div>
-      <div class="rk-av">${ini(c.nome)}</div>
-      <div class="rk-info"><div class="rk-name" style="color:${isMe?'var(--red)':'var(--text)'}">${isMe?'VOCÊ':c.nome.split(' ')[0].toUpperCase()}</div><div class="rk-sub" style="color:${rc.cor}">${rc.emoji} ${c.nivel}</div></div>
-      <div class="rk-pts">${fP(c.pontos)}</div>
-    </div>`;
-  }).join('');
-  // Prêmios
-  document.getElementById('premios-sub').innerHTML=`Você tem <strong style="color:var(--gold)">${fP(U.pontos)}</strong>`;
-  document.getElementById('premios-grid').innerHTML=PREMIOS.map(p=>{
-    const niOk=niO(U.nivel)>=niO(p.nivel);
-    const ptOk=U.pontos>=p.pts;
-    const pode=niOk&&ptOk;
-    const pct=Math.min(100,Math.round(U.pontos/p.pts*100));
-    return `<div class="pc ${pode?'av':niOk?'':'lk'}">
-      ${pode?'<div class="pc-badge">DISPONÍVEL</div>':!niOk?`<div class="pc-lock">🔒 ${p.nivel}</div>`:''}
-      <div class="pc-cat">${p.emoji||'🎁'} ${p.cat||''}</div>
-      <div class="pc-nome">${p.nome}</div>
-      <div class="pc-pts">${fP(p.pts)}</div>
-      <div class="pc-bar-bg"><div class="pc-bar-fill" style="width:${pct}%;background:${pode?'var(--red)':'#444'}"></div></div>
-      <div class="pc-info">${pode?'✅ Solicite na loja!':!niOk?'Exige nível '+p.nivel:'Faltam '+fP(p.pts-U.pontos)}</div>
-    </div>`;
-  }).join('');
-  // Indicar
-  document.getElementById('ref-code').textContent=U.ref;
-  document.getElementById('ref-link').textContent='Compartilhe este codigo com seus amigos!';
-  var ri=document.getElementById('ref-inline');
-  if(ri)ri.textContent=U.ref;
-  document.getElementById('ind-lista').innerHTML=INDICACOES.map(i=>`
-    <div class="ind-item">
-      <div><div class="ind-nome">${i.nome}</div><div class="ind-date">${i.data}</div></div>
-      <div style="text-align:right">
-        <span style="background:${i.status==='CONFIRMADA'?'#1D9E7522':'#EF9F2722'};color:${i.status==='CONFIRMADA'?'#1D9E75':'#EF9F27'};border:.5px solid ${i.status==='CONFIRMADA'?'#1D9E7533':'#EF9F2733'};padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700">${i.status==='CONFIRMADA'?'✅ Confirmada':'⏳ Pendente'}</span>
-        ${i.pts>0?`<div style="font-size:10px;color:var(--gold);margin-top:3px">+${i.pts} pts</div>`:''}
-      </div>
-    </div>`).join('');
-  // Histórico
-  document.getElementById('hist-list').innerHTML=HIST.map(h=>{
-    const isC=h.tipo==='compra';
-    return `<div class="hi">
-      <div class="hi-ico" style="background:${isC?'#CC000022':'#FFD70022'}">${isC?'🛍️':'🎁'}</div>
-      <div class="hi-info"><div class="hi-desc">${h.desc}</div><div class="hi-date">${h.data} · ${isC?'compra':'resgate'}</div></div>
-      <div class="hi-val">
-        ${isC?`<div class="hi-main" style="color:var(--green)">${fR(h.valor)}</div>`:''}
-        <div class="hi-main" style="color:${h.pts>0?'var(--gold)':'#E24B4A'}">${h.pts>0?'+':''}${fP(h.pts)}</div>
-        ${h.cb>0?`<div style="font-size:10px;color:var(--green);margin-top:1px">+${fR(h.cb)} CB</div>`:''}
-      </div>
-    </div>`;
-  }).join('');
-  // Benefícios
-  document.getElementById('ben-sub').textContent=`Nível ${U.nivel} · ${cfg.pts}pt/R$ · ${(cfg.cb*100).toFixed(0)}% cashback`;
-  const bens=[
-    {i:'⭐',t:`<strong>${cfg.pts}pt</strong> por real gasto`},
-    {i:'💰',t:`<strong>${(cfg.cb*100).toFixed(0)}% cashback</strong> em toda compra`},
-    {i:'💳',t:'<strong>R$1</strong> cashback a cada <strong>R$4</strong> em compras'},
-    {i:'🎁',t:'Prêmios exclusivos na loja'},
-    U.nivel==='OURO'&&{i:'🔥',t:'<strong style="color:var(--red)">10% OFF</strong> exclusivo Ouro nos alertas de reposição'},
-    U.nivel==='PRATA'&&{i:'🔥',t:'<strong style="color:var(--red)">5% OFF</strong> exclusivo Prata nos alertas de reposição'},
-  ].filter(Boolean);
-  document.getElementById('ben-lista').innerHTML=bens.map(b=>`<div class="ben-item"><span style="font-size:18px;flex-shrink:0">${b.i}</span><span>${b.t}</span></div>`).join('');
-  document.getElementById('niveis-lista').innerHTML=Object.entries(NCFG).reverse().map(([k,n])=>`
-    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:.5px solid var(--border);${k===U.nivel?'background:#CC000008;border-radius:6px;padding:9px 8px;margin:0 -8px':''}">
-      <span style="font-size:22px">${n.emoji}</span>
-      <div style="flex:1">
-        <div style="font-weight:600;font-size:13px;color:${n.cor}">${k}</div>
-        <div style="font-size:11px;color:var(--text3)">${k==='OURO'?'≥ R$300/mês · 2+ meses':k==='PRATA'?'≥ R$150/mês':'Compras abaixo de R$150'}</div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-size:12px;font-weight:600">${n.pts}pt/R$</div>
-        <div style="font-size:11px;color:var(--green)">${(n.cb*100).toFixed(0)}% cashback</div>
-      </div>
-    </div>`).join('');
-}
 
 async function salvarTokenNaPlanilha(token){
   if(!window.U || !window.U.email) return;
