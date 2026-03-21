@@ -908,6 +908,12 @@ function resetV(){
 }
 
 // WHATSAPP
+function waCRM(idx, tipo){
+  var d = window._crmData && window._crmData[idx];
+  if(!d) return;
+  abrirWA(d.cid, tipo, tipo==='reposicao' ? d.nome : '');
+}
+
 function abrirWA(cid,tipo,prodNome){
   waAtual=CL.find(function(c){return c.id===cid;})||null;
   if(!waAtual)return;
