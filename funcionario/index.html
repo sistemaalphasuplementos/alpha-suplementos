@@ -615,18 +615,22 @@ el('lbtn').onclick=function(){
       // LOGIN CORRETO
       limparTentativas();
       salvarSessao(userDef.nome);
-      var funcOk = {nome: userDef.nome};
-    err.style.display='none';
-    window._funcNome=funcOk.nome;
-    el('lwrap').style.display='none';
-    el('app').style.display='block';
-    el('tnome').textContent=funcOk.nome;
-    // Pre-select funcionario no campo de cadastro
-    var sel=el('cad-func');
-    if(sel) for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===funcOk.nome){sel.selectedIndex=i;break;}}
-    renderTudo();
-    carregarClientes().then(function(){ renderTudo(); setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800); }).catch(function(e){ console.log('fetch err',e); setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800); })
-  // (erro tratado dentro da promise sha256)
+      err.style.display='none';
+      window._funcNome = userDef.nome;
+      el('lwrap').style.display='none';
+      el('app').style.display='block';
+      el('tnome').textContent = userDef.nome;
+      var sel=el('cad-func');
+      if(sel) for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===userDef.nome){sel.selectedIndex=i;break;}}
+      renderTudo();
+      carregarClientes().then(function(){ renderTudo(); setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800); }).catch(function(){ setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800); });
+    } else {
+      // SENHA ERRADA
+      registrarTentativa();
+      err.style.display='block';
+      try { var bl=JSON.parse(sessionStorage.getItem('alpha_block')||'{"count":0}'); var rest=Math.max(0,_MAX_ATTEMPTS-(bl.count||0)); err.textContent='Senha incorreta. Tentativas restantes: '+rest; } catch(e){ err.textContent='Senha incorreta.'; }
+    }
+  });
 };
 el('lsenha').onkeydown=function(e){if(e.key==='Enter')el('lbtn').click();};
 el('sbtn').onclick=function(){
