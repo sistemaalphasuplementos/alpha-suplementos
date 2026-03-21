@@ -560,12 +560,12 @@ const TODOS=[
   {id:'C03',nome:'Pedro Santos',  nivel:'BRONZE',pontos:310},
 ];
 const PREMIOS=[
-  {id:'PRM_001',nome:'Coqueteleira Alpha',         pts:100,  nivel:'BRONZE', desc:'Coqueteleira exclusiva Alpha Suplementos',    emoji:'🥤'},
-  {id:'PRM_002',nome:'Pré-Treino Olimpia',          pts:500,  nivel:'BRONZE', desc:'Pré-treino Olimpia — dose única',             emoji:'⚡'},
-  {id:'PRM_003',nome:'Pré-Treino Oxan Pump',        pts:500,  nivel:'BRONZE', desc:'Pré-treino Oxan Pump — dose única',           emoji:'💪'},
-  {id:'PRM_004',nome:'Creatina 300g Infinity Labs', pts:400,  nivel:'BRONZE', desc:'Creatina monohidratada 300g Infinity Labs',   emoji:'🔬'},
-  {id:'PRM_005',nome:'Wheyzinho',                   pts:800,  nivel:'PRATA',  desc:'Whey protein sabor especial — porção',        emoji:'🥛'},
-  {id:'PRM_006',nome:'Deca Whey',                   pts:1200, nivel:'PRATA',  desc:'Deca Whey protein premium — porção',          emoji:'🏆'},
+  {id:'PRM_001',nome:'Coqueteleira Alpha',         pts:100,  nivel:'BRONZE', cat:'Acessório',  desc:'Coqueteleira exclusiva Alpha Suplementos',    emoji:'🥤'},
+  {id:'PRM_002',nome:'Pré-Treino Olimpia',         pts:500,  nivel:'BRONZE', cat:'Pré-Treino', desc:'Pré-treino Olimpia — dose única',             emoji:'⚡'},
+  {id:'PRM_003',nome:'Pré-Treino Oxan Pump',       pts:500,  nivel:'BRONZE', cat:'Pré-Treino', desc:'Pré-treino Oxan Pump — dose única',           emoji:'💪'},
+  {id:'PRM_004',nome:'Creatina 300g Infinity Labs',pts:400,  nivel:'BRONZE', cat:'Creatina',   desc:'Creatina monohidratada 300g Infinity Labs',   emoji:'🔬'},
+  {id:'PRM_005',nome:'Wheyzinho',                  pts:800,  nivel:'PRATA',  cat:'Proteína',   desc:'Whey protein sabor especial — porção',        emoji:'🥛'},
+  {id:'PRM_006',nome:'Deca Whey',                  pts:1200, nivel:'PRATA',  cat:'Proteína',   desc:'Deca Whey protein premium — porção',          emoji:'🏆'},
 ];
 const HIST=[
   {tipo:'compra', desc:'Creatina + Whey Protein',valor:380,pts:760, cb:26.60,data:'14/01/2025'},
@@ -768,12 +768,12 @@ function renderAll(){
     const pode=niOk&&ptOk;
     const pct=Math.min(100,Math.round(U.pontos/p.pts*100));
     return `<div class="pc ${pode?'av':niOk?'':'lk'}">
-      ${pode?'<div class="pc-badge">DISPONÍVEL</div>':!niOk?`<div class="pc-lock">🔒${p.nivel}</div>`:''}
-      <div class="pc-cat">${p.cat}</div>
+      ${pode?'<div class="pc-badge">DISPONÍVEL</div>':!niOk?`<div class="pc-lock">🔒 ${p.nivel}</div>`:''}
+      <div class="pc-cat">${p.emoji||'🎁'} ${p.cat||''}</div>
       <div class="pc-nome">${p.nome}</div>
       <div class="pc-pts">${fP(p.pts)}</div>
       <div class="pc-bar-bg"><div class="pc-bar-fill" style="width:${pct}%;background:${pode?'var(--red)':'#444'}"></div></div>
-      <div class="pc-info">${pode?'Solicite na loja!':!niOk?'Exige '+p.nivel:'Faltam '+fP(p.pts-U.pontos)}</div>
+      <div class="pc-info">${pode?'✅ Solicite na loja!':!niOk?'Exige nível '+p.nivel:'Faltam '+fP(p.pts-U.pontos)}</div>
     </div>`;
   }).join('');
   // Indicar
