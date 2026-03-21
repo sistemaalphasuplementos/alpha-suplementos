@@ -783,7 +783,9 @@ function renderCRM(){
   var e=el('crm-lista');if(!e)return;
   window._crmData=s;
   e.innerHTML=s.map(function(a,idx){
-    var c=CL.find(function(x){return x.id===a.cid;})||{nome:'?',nivel:'BRONZE',tel:'—'};
+    var c=CL.find(function(x){return x.id===a.cid;});
+    if(!c) c=CL.find(function(x){return x.nome && a.cid && x.nome.toLowerCase().includes(a.cid.toLowerCase());});
+    if(!c) c={nome:'?',nivel:'BRONZE',tel:'—',id:a.cid};
     var cor=a.dias<=0?'#E24B4A':a.dias<=2?'#EF9F27':a.dias<=5?'#FFD700':'#1D9E75';
     var u=a.dias<=0?'⛔ Acabou':a.dias<=2?'🚨 '+a.dias+'d':a.dias<=5?'⚠️ '+a.dias+'d':'📦 '+a.dias+'d';
     return '<div class="acard" style="background:'+cor+'08;border-color:'+cor+'33;border-left:3px solid '+cor+'">'+
@@ -911,7 +913,28 @@ function resetV(){
 function waCRM(idx, tipo){
   var d = window._crmData && window._crmData[idx];
   if(!d) return;
-  abrirWA(d.cid, tipo, tipo==='reposicao' ? d.nome : '');
+  // Try by cid first, then by name match
+  var cli = CL.find(function(c){ return c.id===d.cid; });
+  if(!cli) cli = CL.find(function(c){ return c.nome && c.nome.toLowerCase().indexOf(d.cid.toLowerCase())>=0; });
+  if(!cli && CL.length>0){
+    // Use first client as fallback with the alert data
+    cli = CL[0];
+  }
+  if(!cli) return;
+  // Open WA with client data
+  waAtual = cli;
+  var c = cli;
+  var prodNome = d.nome || '';
+  var tel = c.tel || '';
+  var desc = c.nivel==='OURO'?'10% OFF exclusivo 🥇':c.nivel==='PRATA'?'5% OFF exclusivo 🥈':'';
+  var nl='\n';
+  var msg = tipo==='custom' 
+    ? 'Ola, *'+c.nome+'*!'+nl+nl
+    : 'Ola, *'+c.nome+'*!'+nl+nl+'Aqui e da *Alpha Suplementos*'+nl+nl+'Seu *'+prodNome+'* esta acabando!'+(desc?nl+nl+'Como cliente *'+c.nivel+'*, voce tem *'+desc+'* na proxima compra!':'')+nl+nl+'Alpha Suplementos 💪';
+  var el2=el('mwa-t'); if(el2) el2.textContent='📱 WhatsApp — '+c.nome;
+  var el3=el('mwa-p'); if(el3) el3.textContent=tel+' · '+(c.email||'');
+  var el4=el('mwa-msg'); if(el4) el4.value=msg;
+  var mwa=el('mwa'); if(mwa) mwa.style.display='flex';
 }
 
 function abrirWA(cid,tipo,prodNome){
