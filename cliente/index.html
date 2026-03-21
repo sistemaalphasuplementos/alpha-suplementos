@@ -434,7 +434,10 @@ body{color:#FFFFFF;font-size:15px}
       <div id="rk-list"></div>
     </div>
 
-id="sc-premios" class="screen">
+  </div><!-- end sc-home -->
+
+  <!-- PRÊMIOS -->
+  <div id="sc-premios" class="screen">
     <div class="pg-hdr"><div class="pg-title">LOJA DE PRÊMIOS</div><div class="pg-sub" id="premios-sub">Carregando...</div></div>
     <div class="premios-grid" id="premios-grid" style="padding-bottom:10px"></div>
     <div class="sec" style="padding-top:10px">
@@ -508,31 +511,7 @@ id="sc-premios" class="screen">
 
 <div class="toast" id="toast-el"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">
-function iniciar(){
-  // Esconder tela de login
-  var ls = document.querySelector('.login-screen');
-  if(ls) ls.style.display = 'none';
-  
-  // Mostrar app
-  var app = document.getElementById('app');
-  if(app) app.style.display = 'flex';
-  
-  // Renderizar e ir para home
-  renderAll();
-  goScreen('home');
-  pedirPermissaoNotificacao();
-}
-
-function logout(){
-  U = null;
-  sessionStorage.removeItem(_CLI_SESSION_KEY);
-  var app = document.getElementById('app');
-  if(app) app.style.display = 'none';
-  var ls = document.querySelector('.login-screen');
-  if(ls) ls.style.display = '';
-}
-</script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 
 // ══ SEGURANÇA CLIENTE ═══════════════════════════════
 var _API_TOKEN = 'd9O-8jZLUcPHX_YlWF_XEUTySCNa3EZlVmJPL9thg94';
@@ -727,6 +706,210 @@ function compartilharWA(){
     ' Use meu codigo *'+U.ref+'* ao se cadastrar e ganhe *+100 pontos* de boas-vindas!'+
     ' Acesse: sistemaalphasuplementos.github.io/alpha-suplementos/cliente/';
   window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+}
+
+function gerarRefLocal(){
+  var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var cod='ALPHA';
+  for(var i=0;i<4;i++) cod+=chars.charAt(Math.floor(Math.random()*chars.length));
+  return cod;
+}
+
+function iniciar(){
+  var ls = document.getElementById('login-screen');
+  if(ls) ls.style.display = 'none';
+  var app = document.getElementById('app');
+  if(app){ app.style.display='flex'; app.style.flexDirection='column'; }
+  if(typeof renderAll === 'function') renderAll();
+  if(typeof goScreen === 'function') goScreen('home');
+  if(typeof pedirPermissaoNotificacao === 'function') pedirPermissaoNotificacao();
+}
+
+function fazerLogout(){
+  U = null;
+  try{ sessionStorage.removeItem(_CLI_SESSION_KEY); }catch(e){}
+  var app = document.getElementById('app');
+  if(app) app.style.display = 'none';
+  var ls = document.getElementById('login-screen');
+  if(ls) ls.style.display = '';
+}
+
+// Verificar sessão salva ao carregar
+(function(){
+  try {
+    var sess = JSON.parse(sessionStorage.getItem(_CLI_SESSION_KEY)||'null');
+    if(sess && sess.expiry > Date.now() && sess.user){
+      U = sess.user;
+      document.addEventListener('DOMContentLoaded', function(){
+        iniciar();
+      });
+    }
+  } catch(e){}
+})();
+
+function goScreen(name){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');});
+  document.querySelectorAll('.bn').forEach(function(b){b.classList.remove('on');});
+  var sc = document.getElementById('sc-'+name);
+  if(!sc){ sc = document.getElementById('sc-home'); name='home'; }
+  if(sc) sc.classList.add('on');
+  var bn=document.getElementById('bn-'+name);
+  if(bn) bn.classList.add('on');
+  try{ renderAll(); }catch(e){}
+}
+
+function pedirPermissaoNotificacao(){
+  if('Notification' in window && Notification.permission === 'default'){
+    Notification.requestPermission();
+  }
+}
+
+function renderAll(){
+  if(!U) return;
+  try {
+    var cfg = NCFG[U.nivel] || NCFG.BRONZE;
+    
+    // Avatar
+    var av = document.getElementById('hdr-av');
+    if(av) av.textContent = ini(U.nome);
+    
+    // Card header
+    var e = document.getElementById('lc-e'); if(e) e.textContent = cfg.emoji;
+    var nt = document.getElementById('lc-nt'); if(nt){ nt.textContent=U.nivel; nt.style.color=cfg.cor; }
+    var nm = document.getElementById('lc-nm'); if(nm) nm.textContent = U.nome.toUpperCase();
+    var em = document.getElementById('lc-em'); if(em) em.textContent = U.email||'';
+    
+    // Big cards
+    var pts = document.getElementById('lc-pts'); if(pts) pts.textContent = Number(U.pontos).toLocaleString('pt-BR');
+    var cb  = document.getElementById('lc-cb');  if(cb)  cb.textContent  = fR(U.cashback);
+    var gs  = document.getElementById('lc-gasto'); if(gs) gs.textContent = fR(U.gastoMes||0);
+    var ind = document.getElementById('lc-ind'); if(ind) ind.textContent = String(U.indicacoes||0);
+    
+    // Nivel cards
+    ['b','p','o'].forEach(function(k,i){
+      var el = document.getElementById('pl-'+k);
+      var nv = ['BRONZE','PRATA','OURO'][i];
+      if(el){ el.classList.remove('ativo'); if(nv===U.nivel) el.classList.add('ativo'); }
+    });
+    
+    // Progress bar
+    var meta = U.nivel==='OURO' ? 300 : U.nivel==='PRATA' ? 300 : 150;
+    var gasto = U.gastoMes||0;
+    var pct = Math.min(100, Math.round(gasto/meta*100));
+    var bar = document.getElementById('prog-bar'); if(bar) bar.style.width = pct+'%';
+    var pmeta = document.getElementById('prog-meta'); if(pmeta) pmeta.textContent = 'Meta: R$'+meta;
+    var pgasto = document.getElementById('prog-gasto'); if(pgasto) pgasto.textContent = 'R$'+gasto.toFixed(2)+' gastos';
+    var pfalta = document.getElementById('prog-falta');
+    if(pfalta){
+      var falta = Math.max(0, meta-gasto);
+      pfalta.textContent = falta > 0 ? 'Faltam R$'+falta.toFixed(2) : '✅ Meta atingida!';
+    }
+    
+    // Indicador de nível no card dourado
+    var pmsg = document.getElementById('prog-msg');
+    if(pmsg){
+      if(U.nivel==='OURO') pmsg.textContent = '🥇 Você é OURO!';
+      else if(U.nivel==='PRATA') pmsg.textContent = '🥈 Você é PRATA!';
+      else pmsg.textContent = '🥉 Continue comprando para subir!';
+    }
+    
+    // Ranking
+    var rkList = document.getElementById('rk-list');
+    if(rkList){
+      var todos2 = TODOS.slice().sort(function(a,b){return b.pontos-a.pontos;});
+      rkList.innerHTML = todos2.map(function(c,i){
+        var isMe = c.id===U.id || c.nome.toLowerCase()===U.nome.toLowerCase();
+        var posL = i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
+        var posC = i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#888';
+        return '<div class="rk'+(isMe?' rk-me':'')+'">'+
+          '<div class="rk-pos" style="color:'+posC+'">'+posL+'</div>'+
+          '<div class="rk-av">'+ini(c.nome)+'</div>'+
+          '<div class="rk-info"><div class="rk-name">'+(isMe?'<strong>'+c.nome+' (Você)</strong>':c.nome)+'</div>'+
+          '<div class="rk-sub">'+NCFG[c.nivel].emoji+' '+c.nivel+'</div></div>'+
+          '<div class="rk-pts">'+fP(c.pontos)+'</div>'+
+          '</div>';
+      }).join('');
+    }
+    
+    // Referral
+    var rc = document.getElementById('ref-code'); if(rc) rc.textContent = U.ref||'ALPHA01';
+    var rl = document.getElementById('ref-link'); if(rl) rl.textContent = 'Compartilhe este código!';
+    var ri = document.getElementById('ref-inline'); if(ri) ri.textContent = U.ref||'ALPHA01';
+    
+    // Prêmios
+    var pg = document.getElementById('premios-grid');
+    if(pg){
+      var ps = document.getElementById('premios-sub');
+      if(ps) ps.textContent = 'Você tem '+fP(U.pontos);
+      pg.innerHTML = PREMIOS.map(function(p){
+        var niOk = niO(U.nivel)>=niO(p.nivel);
+        var ptOk = U.pontos>=p.pts;
+        var pode = niOk&&ptOk;
+        var pct2 = Math.min(100,Math.round(U.pontos/p.pts*100));
+        return '<div class="pc '+(pode?'av':niOk?'':'lk')+'">'+
+          (pode?'<div class="pc-badge">DISPONÍVEL</div>':!niOk?'<div class="pc-lock">🔒 '+p.nivel+'</div>':'')+
+          '<div class="pc-cat">'+(p.emoji||'🎁')+' '+(p.cat||'')+'</div>'+
+          '<div class="pc-nome">'+p.nome+'</div>'+
+          '<div class="pc-pts">'+fP(p.pts)+'</div>'+
+          '<div class="pc-bar-bg"><div class="pc-bar-fill" style="width:'+pct2+'%;background:'+(pode?'var(--red)':'#444')+'"></div></div>'+
+          '<div class="pc-info">'+(pode?'✅ Solicite na loja!':!niOk?'Exige nível '+p.nivel:'Faltam '+fP(p.pts-U.pontos))+'</div>'+
+          '</div>';
+      }).join('');
+    }
+    
+    // Histórico
+    var hl = document.getElementById('hist-list');
+    if(hl){
+      hl.innerHTML = HIST.map(function(h){
+        var isC = h.tipo==='compra';
+        return '<div class="hi">'+
+          '<div class="hi-ico" style="background:'+(isC?'#CC000022':'#FFD70022')+'">'+(isC?'🛍️':'🎁')+'</div>'+
+          '<div class="hi-info"><div class="hi-desc">'+h.desc+'</div><div class="hi-date">'+h.data+'</div></div>'+
+          '<div class="hi-val">'+
+            '<div class="hi-main" style="color:'+(h.pts>0?'var(--gold)':'var(--red)')+'">'+
+              (h.pts>0?'+':'')+fP(h.pts)+'</div>'+
+            (h.valor>0?'<div style="font-size:10px;color:var(--text3)">'+fR(h.valor)+'</div>':'')+
+          '</div></div>';
+      }).join('');
+    }
+    
+    // Indicações
+    var il = document.getElementById('ind-lista');
+    if(il){
+      il.innerHTML = INDICACOES.map(function(ind){
+        return '<div class="ind-item">'+
+          '<div><div class="ind-nome">'+ind.nome+'</div><div class="ind-date">'+ind.data+'</div></div>'+
+          '<div style="text-align:right"><div style="font-size:12px;color:'+(ind.status==='CONFIRMADA'?'var(--green)':'#888')+'">'+ind.status+'</div>'+
+            (ind.pts?'<div style="font-size:11px;color:var(--gold)">+'+fP(ind.pts)+'</div>':'')+
+          '</div></div>';
+      }).join('') || '<div style="color:var(--text3);font-size:13px;padding:16px 0">Nenhuma indicação ainda.</div>';
+    }
+    
+    // Benefícios
+    var bl = document.getElementById('ben-lista');
+    var bs = document.getElementById('ben-sub');
+    if(bl && bs){
+      bs.textContent = cfg.emoji+' Nível '+U.nivel;
+      bl.innerHTML = [
+        {ico:'⭐',txt:'Você ganha <strong>'+cfg.pts+'pt por R$1</strong> em cada compra'},
+        {ico:'💰',txt:'<strong>'+(cfg.cb*100).toFixed(0)+'% cashback</strong> em toda compra'},
+        {ico:'🎁',txt:'Acesso aos prêmios da loja de pontos'},
+        {ico:'🎯',txt:'Código de indicação exclusivo para ganhar mais pontos'},
+      ].map(function(b){ return '<div class="ben-item"><span class="ben-ico">'+b.ico+'</span><span>'+b.txt+'</span></div>'; }).join('');
+    }
+    
+    var nl = document.getElementById('niveis-lista');
+    if(nl){
+      nl.innerHTML = ['BRONZE','PRATA','OURO'].map(function(nv){
+        var nc = NCFG[nv];
+        return '<div class="ben-item">'+
+          '<span style="font-size:18px">'+nc.emoji+'</span>'+
+          '<span><strong>'+nv+'</strong> — '+nc.pts+'pt/R$ · '+(nc.cb*100).toFixed(0)+'% cashback'+
+            (nv==='PRATA'?' (≥R$150/mês)':nv==='OURO'?' (≥R$300/mês, 2+ meses)':'')+
+          '</span></div>';
+      }).join('');
+    }
+  } catch(err){ console.log('renderAll erro:', err); }
 }
 </script>
 
