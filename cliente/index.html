@@ -209,6 +209,87 @@ body{color:#FFFFFF;font-size:15px}
   .mov { padding:0 !important; align-items:flex-end !important; }
   .mbox { border-radius:16px 16px 0 0 !important; max-width:100% !important; width:100% !important; }
 }
+
+/* ═══ CARDS COLORIDOS MODELO ═══════════════════════ */
+.big-card {
+  border-radius: 16px;
+  padding: 20px 20px 16px 20px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
+.big-card::after {
+  content: '';
+  position: absolute;
+  right: -20px;
+  bottom: -20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+}
+.big-card::before {
+  content: '';
+  position: absolute;
+  right: 20px;
+  bottom: -30px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.05);
+}
+.bc-icon {
+  font-size: 36px;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.bc-body { flex: 1; z-index: 1; }
+.bc-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.8);
+  margin-bottom: 4px;
+}
+.bc-value {
+  font-size: 32px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  font-family: 'Barlow Condensed', sans-serif;
+}
+.bc-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,.7);
+  margin-top: 4px;
+}
+.bc-red    { background: linear-gradient(135deg, #CC0000, #FF3333); }
+.bc-gold   { background: linear-gradient(135deg, #B8860B, #FFD700); }
+.bc-green  { background: linear-gradient(135deg, #1D9E75, #00FF88); }
+.bc-blue   { background: linear-gradient(135deg, #0066CC, #00CCFF); }
+.bc-purple { background: linear-gradient(135deg, #6600CC, #CC88FF); }
+.bc-orange { background: linear-gradient(135deg, #CC6600, #FF9900); }
+
+/* Cards de nível menores */
+.nivel-cards { display: grid; grid-template-columns: repeat(3,1fr); gap:10px; margin-bottom:14px; }
+.nivel-card {
+  border-radius: 12px;
+  padding: 14px 10px;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all .2s;
+}
+.nivel-card.ativo { border-color: rgba(255,255,255,.4); transform: scale(1.03); }
+.nc-emoji { font-size: 24px; display: block; margin-bottom: 4px; }
+.nc-nome { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.9); }
+.nc-pts { font-size: 10px; color: rgba(255,255,255,.6); margin-top: 2px; }
+/* ═══════════════════════════════════════════════════ */
+
 </style>
 </head>
 <body>
@@ -255,6 +336,7 @@ body{color:#FFFFFF;font-size:15px}
 
   <!-- HOME -->
   <div id="sc-home" class="screen on">
+    <!-- HEADER CARD USUÁRIO -->
     <div class="lcard">
       <div class="lcard-stripe"></div>
       <div class="lcard-body">
@@ -263,40 +345,96 @@ body{color:#FFFFFF;font-size:15px}
           <div class="nivel-pill"><span class="np-e" id="lc-e">🥇</span><span class="np-t" id="lc-nt" style="color:#FFD700">OURO</span></div>
         </div>
         <div class="lcard-name" id="lc-nm">JOÃO SILVA</div>
-        <div class="lcard-email" id="lc-em"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3c56535d537c59515d5550125f5351">[email&#160;protected]</a></div>
-        <div class="lcard-stats">
-          <div class="ls"><div class="ls-v" id="lc-pts" style="color:var(--gold)">3.420</div><div class="ls-l">pontos</div></div>
-          <div class="ls"><div class="ls-v" id="lc-cb" style="color:var(--green)">R$241,40</div><div class="ls-l">cashback</div></div>
-        </div>
+        <div class="lcard-email" id="lc-em">joao@email.com</div>
       </div>
     </div>
-    <div class="readonly-banner">🔒 Somente visualização — compras e resgates são processados pelo funcionário na loja</div>
-    <div class="prog">
-      <div class="prog-hdr"><span class="prog-title">Progresso de nível</span><span class="prog-msg" id="prog-msg"></span></div>
-      <div class="prog-levels">
-        <div class="pl" id="pl-b"><span class="pl-e">🥉</span><span class="pl-n" style="color:#CD7F32">Bronze</span></div>
-        <div class="pl" id="pl-p"><span class="pl-e">🥈</span><span class="pl-n" style="color:#C8C8C8">Prata</span></div>
-        <div class="pl" id="pl-o"><span class="pl-e">🥇</span><span class="pl-n" style="color:#FFD700">Ouro</span></div>
+
+    <!-- CARDS COLORIDOS GRANDES -->
+    <div class="big-card bc-red">
+      <div class="bc-icon">⭐</div>
+      <div class="bc-body">
+        <div class="bc-label">Pontos Acumulados</div>
+        <div class="bc-value" id="lc-pts">3.420</div>
+        <div class="bc-sub">Use para resgatar prêmios</div>
+      </div>
+    </div>
+
+    <div class="big-card bc-green">
+      <div class="bc-icon">💰</div>
+      <div class="bc-body">
+        <div class="bc-label">Cashback Disponível</div>
+        <div class="bc-value" id="lc-cb">R$241,40</div>
+        <div class="bc-sub">Desconto na próxima compra</div>
+      </div>
+    </div>
+
+    <div class="big-card bc-gold">
+      <div class="bc-icon">🛍️</div>
+      <div class="bc-body">
+        <div class="bc-label">Gasto Este Mês</div>
+        <div class="bc-value" id="lc-gasto">R$380,00</div>
+        <div class="bc-sub" id="prog-msg">Continue comprando!</div>
+      </div>
+    </div>
+
+    <div class="big-card bc-purple">
+      <div class="bc-icon">🎯</div>
+      <div class="bc-body">
+        <div class="bc-label">Indicações Realizadas</div>
+        <div class="bc-value" id="lc-ind">0</div>
+        <div class="bc-sub">+200 pts por indicação confirmada</div>
+      </div>
+    </div>
+
+    <!-- CARDS DE NÍVEL -->
+    <div class="nivel-cards">
+      <div class="nivel-card" id="pl-b" style="background:linear-gradient(135deg,#3D2000,#8B4513)">
+        <span class="nc-emoji">🥉</span>
+        <div class="nc-nome" style="color:#CD7F32">Bronze</div>
+        <div class="nc-pts">1pt/R$ · 2%CB</div>
+      </div>
+      <div class="nivel-card" id="pl-p" style="background:linear-gradient(135deg,#1a1a2e,#333366)">
+        <span class="nc-emoji">🥈</span>
+        <div class="nc-nome" style="color:#C8C8C8">Prata</div>
+        <div class="nc-pts">1,5pt/R$ · 5%CB</div>
+      </div>
+      <div class="nivel-card" id="pl-o" style="background:linear-gradient(135deg,#2a1a00,#665500)">
+        <span class="nc-emoji">🥇</span>
+        <div class="nc-nome" style="color:#FFD700">Ouro</div>
+        <div class="nc-pts">2pt/R$ · 7%CB</div>
+      </div>
+    </div>
+
+    <!-- BARRA DE PROGRESSO -->
+    <div style="background:#1a1a1a;border-radius:12px;padding:14px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:12px;font-weight:700;color:#fff">Progresso de Nível</span>
+        <span style="font-size:11px;color:#aaa" id="prog-meta"></span>
       </div>
       <div class="bar-bg"><div class="bar-fill" id="prog-bar" style="width:100%"></div></div>
-      <div class="bar-info"><span id="prog-gasto"></span><span id="prog-meta"></span></div>
-    </div>
-    <div class="qa-row">
-      <button class="qa" onclick="goScreen('premios')"><div class="qa-ico" style="background:#FFD70022">🏆</div><div class="qa-lbl">Prêmios</div></button>
-      <button class="qa" onclick="goScreen('indicar')"><div class="qa-ico" style="background:#ffffff10">🐺</div><div class="qa-lbl">Indicar</div></button>
-      <button class="qa" onclick="goScreen('historico')"><div class="qa-ico" style="background:#CC000022">📋</div><div class="qa-lbl">Histórico</div></button>
-      <button class="qa" onclick="goScreen('beneficios')"><div class="qa-ico" style="background:#1D9E7522">⭐</div><div class="qa-lbl">Benefícios</div></button>
-    </div>
-    <div class="sec">
-      <div class="card">
-        <div class="card-title">Ranking — minha posição</div>
-        <div id="rk-list"></div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px">
+        <span style="font-size:10px;color:#888" id="prog-gasto"></span>
+        <span style="font-size:10px;color:#CC0000;font-weight:700" id="prog-falta"></span>
       </div>
     </div>
-  </div>
 
-  <!-- PRÊMIOS -->
-  <div id="sc-premios" class="screen">
+    <div class="readonly-banner">🔒 Compras e resgates são processados pelo funcionário na loja</div>
+
+    <!-- AÇÕES RÁPIDAS -->
+    <div class="qa-row">
+      <button class="qa" onclick="goScreen('premios')"><div class="qa-ico" style="background:#FFD70022">🏆</div><div class="qa-lbl">Prêmios</div></button>
+      <button class="qa" onclick="goScreen('indicar')"><div class="qa-ico" style="background:#CC000022">🎯</div><div class="qa-lbl">Indicar</div></button>
+      <button class="qa" onclick="goScreen('historico')"><div class="qa-ico" style="background:#00CC6622">📋</div><div class="qa-lbl">Histórico</div></button>
+      <button class="qa" onclick="goScreen('beneficios')"><div class="qa-ico" style="background:#00CCFF22">⭐</div><div class="qa-lbl">Benefícios</div></button>
+    </div>
+
+    <!-- RANKING -->
+    <div style="background:#1a1a1a;border-radius:12px;padding:14px;margin-bottom:14px">
+      <div style="font-size:12px;font-weight:700;color:#FFD700;margin-bottom:10px">🏆 RANKING — MINHA POSIÇÃO</div>
+      <div id="rk-list"></div>
+    </div>
+
+id="sc-premios" class="screen">
     <div class="pg-hdr"><div class="pg-title">LOJA DE PRÊMIOS</div><div class="pg-sub" id="premios-sub">Carregando...</div></div>
     <div class="premios-grid" id="premios-grid" style="padding-bottom:10px"></div>
     <div class="sec" style="padding-top:10px">
@@ -471,7 +609,7 @@ async function fazerLogin(){
 
   // Buscar cliente na planilha
   try {
-    var resp = await fetch(WEB_APP_URL+'?acao=login_cliente&nome='+encodeURIComponent(nome)+'&tel='+encodeURIComponent(tel));
+    var resp = await fetch(WEB_APP_URL+'?acao=login_cliente&nome='+encodeURIComponent(nome)+'&tel='+encodeURIComponent(tel)+'&token='+_API_TOKEN);
     var data = await resp.json();
     if(data.sucesso && data.dados){
       var c = data.dados;
@@ -482,6 +620,7 @@ async function fazerLogin(){
         gastoMes: Number(c[8])||0, mesesRec: Number(c[9])||0,
         ref: c[11]||gerarRefLocal()
       };
+      salvarSessaoCli(U);
       iniciar();
       return;
     }

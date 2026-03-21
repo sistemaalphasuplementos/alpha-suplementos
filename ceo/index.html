@@ -145,6 +145,61 @@ body{color:#FFFFFF;font-size:15px}
   .mov { padding:0 !important; align-items:flex-end !important; }
   .mbox { border-radius:16px 16px 0 0 !important; max-width:100% !important; width:100% !important; }
 }
+
+/* ═══ CARDS COLORIDOS ══════════════════════════════ */
+.big-card {
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+}
+.big-card::before {
+  content: '';
+  position: absolute;
+  right: -15px;
+  top: -15px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.07);
+}
+.big-card::after {
+  content: '';
+  position: absolute;
+  right: 30px;
+  bottom: -25px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.05);
+}
+.bc-ico  { font-size: 38px; flex-shrink: 0; z-index: 1; }
+.bc-body { flex: 1; z-index: 1; }
+.bc-lbl  { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,.75); margin-bottom: 2px; }
+.bc-val  { font-size: 30px; font-weight: 900; color: #fff; line-height: 1.1; font-family: 'Barlow Condensed', sans-serif; }
+.bc-sub  { font-size: 11px; color: rgba(255,255,255,.65); margin-top: 3px; }
+.bc-red    { background: linear-gradient(135deg, #CC0000, #FF2244); }
+.bc-gold   { background: linear-gradient(135deg, #996600, #FFD700); }
+.bc-green  { background: linear-gradient(135deg, #007744, #00CC66); }
+.bc-blue   { background: linear-gradient(135deg, #004499, #0099FF); }
+.bc-purple { background: linear-gradient(135deg, #550099, #AA44FF); }
+.bc-orange { background: linear-gradient(135deg, #994400, #FF8800); }
+.bc-teal   { background: linear-gradient(135deg, #006666, #00CCCC); }
+
+.cards-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.cards-grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 14px; }
+@media(max-width:768px) {
+  .cards-grid-2 { grid-template-columns: 1fr; }
+  .cards-grid-4 { grid-template-columns: 1fr 1fr; }
+  .bc-val { font-size: 24px; }
+}
+/* ═════════════════════════════════════════════════ */
+
 </style>
 </head>
 <body>
@@ -184,11 +239,55 @@ body{color:#FFFFFF;font-size:15px}
 
     <div id="p-dashboard" class="pnl on">
       <div style="margin-bottom:18px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Dashboard Geral</div><div style="font-size:12px;color:#666;margin-top:2px">Visão estratégica · Alpha Suplementos</div></div>
-      <div class="kg">
-        <div class="kp" style="background:#CC000010;border-color:#CC000022"><div class="kr">Clientes</div><div class="kv" id="kc" style="color:#CC0000">0</div><div class="ks">ativos</div></div>
-        <div class="kp" style="background:#1D9E7510;border-color:#1D9E7522"><div class="kr">Vendas</div><div class="kv" id="kv" style="color:#1D9E75">R$0</div><div class="ks">do mês</div></div>
-        <div class="kp" style="background:#FFD70010;border-color:#FFD70022"><div class="kr">Pontos</div><div class="kv" id="kp" style="color:#FFD700">0</div><div class="ks">emitidos</div></div>
-        <div class="kp" style="background:#4285F410;border-color:#4285F422"><div class="kr">Cashback</div><div class="kv" id="kcb" style="color:#4285F4">R$0</div><div class="ks">acumulado</div></div>
+      <div class="cards-grid-2">
+        <div class="big-card bc-red">
+          <div class="bc-ico">👥</div>
+          <div class="bc-body">
+            <div class="bc-lbl">Clientes Ativos</div>
+            <div class="bc-val" id="kc">0</div>
+            <div class="bc-sub">cadastrados no sistema</div>
+          </div>
+        </div>
+        <div class="big-card bc-green">
+          <div class="bc-ico">💰</div>
+          <div class="bc-body">
+            <div class="bc-lbl">Vendas do Mês</div>
+            <div class="bc-val" id="kv">R$0</div>
+            <div class="bc-sub">faturamento total</div>
+          </div>
+        </div>
+        <div class="big-card bc-gold">
+          <div class="bc-ico">⭐</div>
+          <div class="bc-body">
+            <div class="bc-lbl">Pontos Emitidos</div>
+            <div class="bc-val" id="kp">0</div>
+            <div class="bc-sub">total acumulado pelos clientes</div>
+          </div>
+        </div>
+        <div class="big-card bc-blue">
+          <div class="bc-ico">💸</div>
+          <div class="bc-body">
+            <div class="bc-lbl">Cashback Gerado</div>
+            <div class="bc-val" id="kcb">R$0</div>
+            <div class="bc-sub">retorno aos clientes</div>
+          </div>
+        </div>
+        <div class="big-card bc-purple">
+          <div class="bc-ico">🏆</div>
+          <div class="bc-body">
+            <div class="bc-lbl">Resgates Realizados</div>
+            <div class="bc-val" id="kr">0</div>
+            <div class="bc-sub">prêmios e cashback</div>
+          </div>
+        </div>
+        <div class="big-card bc-orange">
+          <div class="bc-ico">🎯</div>
+          <div class="bc-body">
+            <div class="bc-lbl">Indicações Confirmadas</div>
+            <div class="bc-val" id="ki">0</div>
+            <div class="bc-sub">clientes indicados</div>
+          </div>
+        </div>
       </div>
       <div class="g3">
         <div class="card"><div class="ct">Níveis</div><div id="niveis"></div><div style="border-top:.5px solid #2a2a2a;margin-top:12px;padding-top:10px;font-size:11px;color:#555;line-height:1.9">🥉 Bronze: &lt;R$150/mês<br>🥈 Prata: ≥R$150/mês<br>🥇 Ouro: ≥R$300 · 2+ meses<br>💰 R$1 cashback a cada R$4</div></div>
