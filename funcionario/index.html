@@ -525,7 +525,7 @@ body{color:#FFFFFF;font-size:15px}
     <div class="mh"><span class="mt" style="color:var(--green)">👤 Novo Cliente</span><button class="mc" onclick="fCad()">×</button></div>
     <div id="cad-form">
       <label class="lbl">Nome completo *</label><input type="text" class="inp" id="cad-nome" placeholder="João da Silva">
-      <label class="lbl">Email *</label><input type="email" class="inp" id="cad-email" placeholder="joao@email.com">
+      <label class="lbl">Email *</label><input type="email" class="inp" id="cad-email" placeholder="email@cliente.com">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
         <div><label class="lbl">Telefone</label><input type="tel" class="inp" id="cad-tel" placeholder="(47) 99999-9999"></div>
         <div><label class="lbl">CPF</label><input type="text" class="inp" id="cad-cpf" placeholder="000.000.000-00"></div>
@@ -638,20 +638,10 @@ function limparTentativas() {
 // ══════════════════════════════════════════════════
 
 var WEB_APP_URL='https://script.google.com/macros/s/AKfycbw7AIr8DrCMGFhpoaz6gE7_v0M4sElvNPZh7PaEpP4h_oX_vwfraiUAaGOQNMoQK_8WpQ/exec';
-var CL=[
-  {id:'C01',nome:'João Silva',    email:'joao@email.com',  tel:'47991234567',nivel:'OURO',  pontos:3420,cashback:241.40,gastoMes:380,mesesRec:3,ref:'ALPHA01'},
-  {id:'C02',nome:'Maria Oliveira',email:'maria@email.com', tel:'47987654321',nivel:'PRATA', pontos:920, cashback:46.00, gastoMes:210,mesesRec:2,ref:'ALPHA02'},
-  {id:'C03',nome:'Pedro Santos',  email:'pedro@email.com', tel:'47976543210',nivel:'BRONZE',pontos:310, cashback:6.20,  gastoMes:80, mesesRec:0,ref:'ALPHA03'},
-  {id:'C04',nome:'Ana Lima',      email:'ana@email.com',   tel:'47965432109',nivel:'PRATA', pontos:1850,cashback:92.50, gastoMes:190,mesesRec:2,ref:'ALPHA04'},
-  {id:'C05',nome:'Carlos Ramos',  email:'carlos@email.com',tel:'47954321098',nivel:'OURO',  pontos:4100,cashback:287.00,gastoMes:420,mesesRec:4,ref:'ALPHA05'},
-];
-var PRD=[
-  {cid:'C01',nome:'Creatina Mono 300g',   cat:'Creatina', dias:1},
-  {cid:'C02',nome:'Whey Protein 900g',    cat:'Proteína', dias:3},
-  {cid:'C04',nome:'Pré-Treino Black 300g',cat:'Pré-Treino',dias:5},
-  {cid:'C05',nome:'BCAA 250g',            cat:'Aminoác.', dias:0},
-  {cid:'C03',nome:'Vitamina C 1000mg',    cat:'Vitaminas',dias:7},
-];
+var CL=[];
+
+var PRD=[];
+
 var IND=[
   {indNome:'João Silva',  indado:'Maria Oliveira',status:'CONFIRMADA',data:'10/01'},
   {indNome:'Ana Lima',    indado:'Larissa Costa', status:'PENDENTE',  data:'12/01'},
@@ -761,7 +751,7 @@ async function carregarClientes(){
       });
       console.log('Clientes da planilha:', CL.length);
     }
-  }catch(e){ console.log('Usando dados demo:', e.message); }
+  }catch(e){ console.log('API offline:', e.message); }
   return true;
 }
 

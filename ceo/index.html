@@ -527,30 +527,11 @@ function registrarTentativaCEO() {
 }
 // ══════════════════════════════════════════════════
 var WEB_APP_URL='https://script.google.com/macros/s/AKfycbw7AIr8DrCMGFhpoaz6gE7_v0M4sElvNPZh7PaEpP4h_oX_vwfraiUAaGOQNMoQK_8WpQ/exec';
-var CL=[
-  {id:'C01',nome:'João Silva',    email:'joao@email.com',  nivel:'OURO',  pontos:3420,cashback:241.40,gastoMes:380,mesesRec:3,ultimaCompra:'14/01/2025',indicacoes:3},
-  {id:'C02',nome:'Maria Oliveira',email:'maria@email.com', nivel:'PRATA', pontos:920, cashback:46.00, gastoMes:210,mesesRec:2,ultimaCompra:'13/01/2025',indicacoes:1},
-  {id:'C03',nome:'Pedro Santos',  email:'pedro@email.com', nivel:'BRONZE',pontos:310, cashback:6.20,  gastoMes:80, mesesRec:0,ultimaCompra:'10/01/2025',indicacoes:0},
-  {id:'C04',nome:'Ana Lima',      email:'ana@email.com',   nivel:'PRATA', pontos:1850,cashback:92.50, gastoMes:190,mesesRec:2,ultimaCompra:'11/01/2025',indicacoes:2},
-  {id:'C05',nome:'Carlos Ramos',  email:'carlos@email.com',nivel:'OURO',  pontos:4100,cashback:287.00,gastoMes:420,mesesRec:4,ultimaCompra:'12/01/2025',indicacoes:5},
-  {id:'C06',nome:'Larissa Costa', email:'larissa@email.com',nivel:'BRONZE',pontos:140,cashback:2.80,  gastoMes:40, mesesRec:0,ultimaCompra:'08/01/2025',indicacoes:0},
-];
-var CP=[
-  {cid:'C01',valor:380,pts:760, cb:26.60,data:'14/01',nivel:'OURO',  desc:'Creatina + Whey'},
-  {cid:'C02',valor:210,pts:315, cb:10.50,data:'13/01',nivel:'PRATA', desc:'Pré-Treino + BCAA'},
-  {cid:'C05',valor:420,pts:840, cb:29.40,data:'12/01',nivel:'OURO',  desc:'Kit Mensal'},
-  {cid:'C04',valor:190,pts:285, cb:9.50, data:'11/01',nivel:'PRATA', desc:'Whey + Vitaminas'},
-  {cid:'C03',valor:80, pts:80,  cb:1.60, data:'10/01',nivel:'BRONZE',desc:'Creatina 150g'},
-  {cid:'C01',valor:350,pts:700, cb:24.50,data:'05/01',nivel:'OURO',  desc:'Hipercalórico + Whey'},
-];
-var PC=[
-  {cid:'C01',nome:'Creatina Mono 300g',   cat:'Creatina', dias:1},
-  {cid:'C02',nome:'Whey Protein 900g',    cat:'Proteína', dias:3},
-  {cid:'C04',nome:'Pré-Treino Black 300g',cat:'Pré-Treino',dias:5},
-  {cid:'C05',nome:'BCAA 250g',            cat:'Aminoác.', dias:0},
-  {cid:'C03',nome:'Vitamina C 1000mg',    cat:'Vitaminas',dias:7},
-  {cid:'C06',nome:'Albumina 500g',        cat:'Proteína', dias:2},
-];
+var CL=[];
+
+var CP=[];
+
+var PC=[];
 var IND=[
   {indNome:'João Silva',  indado:'Maria Oliveira',status:'CONFIRMADA',data:'10/01',pts:200},
   {indNome:'João Silva',  indado:'Carlos Ramos',  status:'CONFIRMADA',data:'15/12',pts:200},
@@ -630,7 +611,7 @@ async function carregarDados(){
       console.log('Clientes carregados da planilha:', CL.length);
     }
   } catch(e){
-    console.log('Usando dados demo:', e.message);
+    console.log('API offline:', e.message);
   }
   try {
     // Carregar compras reais

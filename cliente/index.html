@@ -27,11 +27,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .inp:focus{border-color:var(--red)}
 .btn-red{background:var(--red);color:#fff;border:none;border-radius:9px;padding:12px;font-size:14px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;width:100%;letter-spacing:.5px}
 .btn-red:active{background:#aa0000;transform:scale(.98)}
-.login-sep{display:flex;align-items:center;gap:8px;color:var(--text3);font-size:11px;margin:12px 0}
-.login-sep::before,.login-sep::after{content:'';flex:1;height:.5px;background:#333}
+
 .demo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-.demo-btn{background:var(--bg4);border:.5px solid #333;border-radius:8px;padding:10px 4px;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif;text-align:center}
-.demo-btn:active{background:var(--red);color:#fff;border-color:var(--red)}
+
 .login-links{text-align:center;margin-top:14px;font-size:12px;color:var(--text3)}
 .login-links a{color:var(--text3);text-decoration:none;margin:0 8px}
 /* APP */
@@ -309,12 +307,7 @@ body{color:#FFFFFF;font-size:15px}
     <div style="background:#CC000011;border:.5px solid #CC000022;border-radius:8px;padding:8px 12px;font-size:11px;color:#CC000088;margin-bottom:12px;text-align:center">
       🔑 Login: <strong style="color:#f0f0f0">primeiro nome</strong> + <strong style="color:#f0f0f0">telefone</strong>
     </div>
-    <div class="login-sep">ENTRAR COMO DEMO</div>
-    <div class="demo-grid">
-      <button class="demo-btn" onclick="loginDemo('ouro')">🥇 OURO<br><span style="color:var(--text3);font-weight:400">3.420 pts</span></button>
-      <button class="demo-btn" onclick="loginDemo('prata')">🥈 PRATA<br><span style="color:var(--text3);font-weight:400">920 pts</span></button>
-      <button class="demo-btn" onclick="loginDemo('bronze')">🥉 BRONZE<br><span style="color:var(--text3);font-weight:400">310 pts</span></button>
-    </div>
+
     <div class="login-links">
       <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/ceo/">Sou CEO</a> · <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/funcionario/">Sou Funcionário</a>
     </div>
@@ -550,18 +543,8 @@ function registrarTentativaCli() {
 }
 // ════════════════════════════════════════════════════
 var WEB_APP_URL='https://script.google.com/macros/s/AKfycbw7AIr8DrCMGFhpoaz6gE7_v0M4sElvNPZh7PaEpP4h_oX_vwfraiUAaGOQNMoQK_8WpQ/exec';
-const DEMOS={
-  ouro:  {id:'C01',nome:'João Silva',    email:'joao@email.com',  tel:'47991234567',nivel:'OURO',  pontos:3420,cashback:241.40,gastoMes:380,mesesRec:3,ref:'ALPHA01'},
-  prata: {id:'C02',nome:'Maria Oliveira',email:'maria@email.com', tel:'47987654321',nivel:'PRATA', pontos:920, cashback:46.00, gastoMes:210,mesesRec:2,ref:'ALPHA02'},
-  bronze:{id:'C03',nome:'Pedro Santos',  email:'pedro@email.com', tel:'47976543210',nivel:'BRONZE',pontos:310, cashback:6.20,  gastoMes:80, mesesRec:0,ref:'ALPHA03'},
-};
-const TODOS=[
-  {id:'C05',nome:'Carlos Ramos',  nivel:'OURO', pontos:4100},
-  {id:'C01',nome:'João Silva',    nivel:'OURO', pontos:3420},
-  {id:'C04',nome:'Ana Lima',      nivel:'PRATA',pontos:1850},
-  {id:'C02',nome:'Maria Oliveira',nivel:'PRATA',pontos:920},
-  {id:'C03',nome:'Pedro Santos',  nivel:'BRONZE',pontos:310},
-];
+const DEMOS={};
+const TODOS=[];
 const PREMIOS=[
   {id:'PRM_001',nome:'Coqueteleira Alpha',         pts:100,  nivel:'BRONZE', cat:'Acessório',  desc:'Coqueteleira exclusiva Alpha Suplementos',    emoji:'🥤'},
   {id:'PRM_002',nome:'Pré-Treino Olimpia',         pts:500,  nivel:'BRONZE', cat:'Pré-Treino', desc:'Pré-treino Olimpia — dose única',             emoji:'⚡'},
@@ -570,16 +553,8 @@ const PREMIOS=[
   {id:'PRM_005',nome:'Wheyzinho',                  pts:800,  nivel:'PRATA',  cat:'Proteína',   desc:'Whey protein sabor especial — porção',        emoji:'🥛'},
   {id:'PRM_006',nome:'Deca Whey',                  pts:1200, nivel:'PRATA',  cat:'Proteína',   desc:'Deca Whey protein premium — porção',          emoji:'🏆'},
 ];
-const HIST=[
-  {tipo:'compra', desc:'Creatina + Whey Protein',valor:380,pts:760, cb:26.60,data:'14/01/2025'},
-  {tipo:'compra', desc:'Pré-Treino + BCAA',       valor:350,pts:700, cb:24.50,data:'05/01/2025'},
-  {tipo:'resgate',desc:'Coqueteleira Alpha',        valor:0,  pts:-100,cb:0,   data:'02/01/2025'},
-  {tipo:'compra', desc:'Hipercalórico + Vitaminas', valor:290,pts:580, cb:20.30,data:'22/12/2024'},
-];
-const INDICACOES=[
-  {nome:'Maria Oliveira',status:'CONFIRMADA',data:'10/01/2025',pts:200},
-  {nome:'Carlos Ramos',  status:'CONFIRMADA',data:'15/12/2024',pts:200},
-];
+const HIST=[];
+const INDICACOES=[];
 const NCFG={OURO:{emoji:'🥇',cor:'#FFD700',pts:2.0,cb:0.07,min:300},PRATA:{emoji:'🥈',cor:'#C8C8C8',pts:1.5,cb:0.05,min:150},BRONZE:{emoji:'🥉',cor:'#CD7F32',pts:1.0,cb:0.02,min:0}};
 const fR=v=>'R$'+Number(v).toFixed(2).replace('.',',');
 const fP=v=>Number(v).toLocaleString('pt-BR')+' pts';
@@ -588,7 +563,7 @@ const niO=n=>['BRONZE','PRATA','OURO'].indexOf(n);
 
 let U=null;
 function toast(msg){const t=document.getElementById('toast-el');t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2800)}
-function loginDemo(k){U={...DEMOS[k]};iniciar()}
+
 async function fazerLogin(){
   // Verificar bloqueio
   var mins = verificarBloqueioCli();
@@ -656,22 +631,9 @@ async function fazerLogin(){
     return;
   }
   
-  // Fallback: dados demo
-  var found = Object.values(DEMOS).find(function(d){
-    var dNome = d.nome.split(' ')[0].toLowerCase();
-    var dTel  = (d.tel||'').replace(/[^0-9]/g,'');
-    return dNome === nome && (dTel.endsWith(tel) || tel.endsWith(dTel.slice(-8)));
-  });
-  
-  if(found){
-    U = {...found};
-    salvarSessaoCli(U);
-    iniciar();
-  } else {
-    registrarTentativaCli();
-    err.style.display='block';
-    err.textContent='Nome ou telefone não encontrados. Cadastre-se na loja!';
-  }
+  registrarTentativaCli();
+  err.style.display='block';
+  err.textContent='Nome ou telefone não encontrados. Cadastre-se na loja!';
 }
 
 
