@@ -875,7 +875,7 @@ async function registrarVenda(){
   var pts=Math.floor(v*nc.pts);var cb=parseFloat((v*nc.cb).toFixed(2));
   var btn=el('vbtn');if(btn){btn.disabled=true;btn.textContent='⏳ Enviando...';}
   try{
-    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({acao:'registrar_compra',dados:{email:cliSel.email,valorCompra:v,descricao:desc,loja:'Alpha Suplementos',produtos:prod?[{produtoId:'P'+prod.substr(0,4).toUpperCase(),nome:prod,quantidade:1,unidade:'un',diasConsumo:dias,categoria:'Produto'}]:[]}})});
+    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({token:_API_TOKEN,acao:'registrar_compra',dados:{email:cliSel.email,valorCompra:v,descricao:desc,loja:'Alpha Suplementos',produtos:prod?[{produtoId:'P'+prod.substr(0,4).toUpperCase(),nome:prod,quantidade:1,unidade:'un',diasConsumo:dias,categoria:'Produto'}]:[]}})});
     var data=await resp.json();
     if(data.sucesso){cliSel.pontos+=(data.dados.pontosGanhos||pts);cliSel.cashback=parseFloat((cliSel.cashback+(data.dados.cashbackGanhoNaCompra||cb)).toFixed(2));mostrarSucVenda(v,data.dados.pontosGanhos||pts,data.dados.cashbackGanhoNaCompra||cb,desc,true);}
     else{mostrarSucVenda(v,pts,cb,desc,false);}
@@ -1094,7 +1094,7 @@ async function cadastrar(){
   var btn=el('cad-form').querySelector('.bg');if(btn){btn.disabled=true;btn.textContent='⏳ Cadastrando...';}
   var novo={id:'C'+Date.now(),nome:nome,email:email,tel:tel,nivel:'BRONZE',pontos:0,cashback:0,gastoMes:0,mesesRec:0,ref:refCod};
   try{
-    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({acao:'cadastrar_cliente',dados:{nome:nome,email:email,telefone:tel,cpf:cpf,dataNascimento:nasc,codigoIndicacao:ref}})});
+    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({token:_API_TOKEN,acao:'cadastrar_cliente',dados:{nome:nome,email:email,telefone:tel,cpf:cpf,dataNascimento:nasc,codigoIndicacao:ref}})});
     var data=await resp.json();
     if(data.sucesso){novo.id=data.dados.id||novo.id;novo.ref=data.dados.codigoReferral||refCod;}
   }catch(e){console.log('API off, usando local');}
@@ -1128,7 +1128,7 @@ function mostrarAlertaCRM(nomeFunc) {
   });
 
   // Tentar buscar da API também
-  fetch(WEB_APP_URL + '?acao=listar_alertas_crm')
+  fetch(WEB_APP_URL + '?acao=listar_alertas_crm&token='+_API_TOKEN)
     .then(function(r){ return r.json(); })
     .then(function(d){
       if (d.sucesso && d.dados && d.dados.length > 0) {

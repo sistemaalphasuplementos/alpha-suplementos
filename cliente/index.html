@@ -345,7 +345,7 @@ body{color:#FFFFFF;font-size:15px}
           <div class="nivel-pill"><span class="np-e" id="lc-e">🥇</span><span class="np-t" id="lc-nt" style="color:#FFD700">OURO</span></div>
         </div>
         <div class="lcard-name" id="lc-nm">JOÃO SILVA</div>
-        <div class="lcard-email" id="lc-em"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fc96939d93bc99919d9590d29f9391">[email&#160;protected]</a></div>
+        <div class="lcard-email" id="lc-em"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="96fcf9f7f9d6f3fbf7fffab8f5f9fb">[email&#160;protected]</a></div>
       </div>
     </div>
 
@@ -702,9 +702,11 @@ function iniciar(){
 function goScreen(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
   document.querySelectorAll('.bn').forEach(b=>b.classList.remove('on'));
-  document.getElementById('sc-'+name).classList.add('on');
-  const bn=document.getElementById('bn-'+name);
-  if(bn)bn.classList.add('on');
+  var sc = document.getElementById('sc-'+name);
+  if(sc) sc.classList.add('on');
+  else { var sc2=document.getElementById('sc-home'); if(sc2) sc2.classList.add('on'); return; }
+  var bn=document.getElementById('bn-'+name);
+  if(bn) bn.classList.add('on');
 }
 
 function renderAll(){

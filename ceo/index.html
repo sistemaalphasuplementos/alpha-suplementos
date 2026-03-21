@@ -691,7 +691,7 @@ async function rDesemp(){
   ['ds-rank-vendas','ds-rank-cads','ds-tabela'].forEach(function(id){html(id,loadHtml);});
 
   try {
-    var resp = await fetch(WEB_APP_URL + '?acao=listar_desempenho');
+    var resp = await fetch(WEB_APP_URL + '?acao=listar_desempenho&token='+_API_TOKEN);
     var data = await resp.json();
 
     if (!data.sucesso) throw new Error(data.erro || 'Erro ao carregar');
