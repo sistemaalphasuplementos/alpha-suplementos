@@ -871,8 +871,14 @@ async function registrarVenda(){
   var nc=NC[cliSel.nivel];
   var pts=Math.floor(v*nc.pts);var cb=parseFloat((v*nc.cb).toFixed(2));
   var btn=el('vbtn');if(btn){btn.disabled=true;btn.textContent='⏳ Enviando...';}
+  // ← funcionario incluído para rastreamento no Desempenho CEO
+  var funcNome = window._funcNome || '';
   try{
-    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({token:_API_TOKEN,acao:'registrar_compra',dados:{email:cliSel.email,valorCompra:v,descricao:desc,loja:'Alpha Suplementos',produtos:prod?[{produtoId:'P'+prod.substr(0,4).toUpperCase(),nome:prod,quantidade:1,unidade:'un',diasConsumo:dias,categoria:'Produto'}]:[]}})});
+    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({token:_API_TOKEN,acao:'registrar_compra',dados:{
+      email:cliSel.email,valorCompra:v,descricao:desc,loja:'Alpha Suplementos',
+      funcionario:funcNome,
+      produtos:prod?[{produtoId:'P'+prod.substr(0,4).toUpperCase(),nome:prod,quantidade:1,unidade:'un',diasConsumo:dias,categoria:'Produto'}]:[]
+    }})});
     var data=await resp.json();
     if(data.sucesso){cliSel.pontos+=(data.dados.pontosGanhos||pts);cliSel.cashback=parseFloat((cliSel.cashback+(data.dados.cashbackGanhoNaCompra||cb)).toFixed(2));mostrarSucVenda(v,data.dados.pontosGanhos||pts,data.dados.cashbackGanhoNaCompra||cb,desc,true);}
     else{mostrarSucVenda(v,pts,cb,desc,false);}
@@ -983,15 +989,25 @@ function confirmarInd(){
 // CASHBACK RESGATE
 function selCliCB(){
   var id=(el('cbsel')||{value:''}).value;
+  // Recarregar cliente do array CL para ter saldo atualizado
   cbCli=CL.find(function(c){return c.id===id;})||null;
   var info=el('cbinfo');
-  if(cbCli&&info){info.style.display='flex';info.innerHTML='<span style="font-weight:600">'+cbCli.nome+'</span><span style="color:var(--green);font-weight:700">Saldo: '+fR(cbCli.cashback)+'</span>';}
-  else if(info)info.style.display='none';
+  if(cbCli&&info){
+    info.style.display='flex';
+    info.style.justifyContent='space-between';
+    info.style.alignItems='center';
+    info.innerHTML='<span style="font-weight:600">'+cbCli.nome+'</span>'+
+      '<span style="color:var(--green);font-weight:700">Saldo: '+fR(cbCli.cashback)+'</span>';
+  } else if(info){info.style.display='none';}
   var vf=el('cbval');if(vf)vf.value='';
   var r=el('cbrange');if(r)r.style.display='none';
   var p=el('cbprev');if(p)p.style.display='none';
-  var btn=el('cbbtn');if(btn)btn.disabled=true;
+  var btn=el('cbbtn');if(btn){btn.disabled=true;btn.textContent='💰 Aplicar Cashback';}
   var s=el('cbsuc');if(s)s.style.display='none';
+  // Resetar range
+  var sl=el('cbr');if(sl){sl.value=0;sl.max=0;}
+  var lbl=el('cbvlbl');if(lbl)lbl.textContent='R$0,00';
+  var ml=el('cbmaxlbl');if(ml)ml.textContent='R$0,00';
 }
 function calcCB(){
   if(!cbCli)return;
@@ -1036,7 +1052,7 @@ async function confirmarCB(){
   var nc=NC[cbCli.nivel];var fin=parseFloat((v-cb).toFixed(2));
   var cbG=parseFloat((fin*nc.cb).toFixed(2));var pts=Math.floor(fin*nc.pts);
   var btn=el('cbbtn');if(btn){btn.disabled=true;btn.textContent='⏳ Salvando...';}
-  
+
   // Salvar na planilha via API
   var salvoAPI=false;
   try{
@@ -1045,15 +1061,49 @@ async function confirmarCB(){
         email:cbCli.email,valorCompra:v,cashbackUsado:cb
       }})});
     var data=await resp.json();
-    if(data.sucesso){salvoAPI=true;}
+    if(data.sucesso){
+      salvoAPI=true;
+      // Usar valores reais retornados pela API
+      if(data.dados){
+        cbG=data.dados.cashbackGanhoNaCompra||cbG;
+        pts=data.dados.pontosGanhos||pts;
+        if(data.dados.novoCashback!==undefined) cbCli.cashback=data.dados.novoCashback;
+        else cbCli.cashback=parseFloat((cbCli.cashback-cb+cbG).toFixed(2));
+        if(data.dados.novosPontos!==undefined) cbCli.pontos=data.dados.novosPontos;
+        else cbCli.pontos+=pts;
+      }
+    }
   }catch(e){console.log('API off, salvando local');}
-  
-  // Atualizar local
-  cbCli.cashback=parseFloat((cbCli.cashback-cb+cbG).toFixed(2));cbCli.pontos+=pts;
+
+  // Atualizar local se API off
+  if(!salvoAPI){
+    cbCli.cashback=parseFloat((cbCli.cashback-cb+cbG).toFixed(2));
+    cbCli.pontos+=pts;
+  }
+
+  // Atualizar array CL
   CL=CL.map(function(c){return c.id===cbCli.id?cbCli:c;});
-  var s=el('cbsuc');if(s){s.style.display='block';s.innerHTML='✅ <strong>'+cbCli.nome+'</strong> — Cashback <span style="color:var(--green)">-'+fR(cb)+'</span> | Final: <strong>'+fR(fin)+'</strong> | Ganhou: +'+fR(cbG)+' CB · +'+fP(pts)+(salvoAPI?'<br><span style="font-size:11px;color:var(--green)">✅ Salvo na planilha!</span>':'<br><span style="font-size:11px;color:#EF9F27">⚠️ Salvo localmente</span>');}
-  if(btn){btn.disabled=true;btn.textContent='✅ Confirmar Cashback';}
-  toast('✅ Cashback de '+fR(cb)+' aplicado!');
+
+  // Atualizar cbinfo na tela com novo saldo
+  var info=el('cbinfo');
+  if(info){info.innerHTML='<span style="font-weight:600">'+cbCli.nome+'</span><span style="color:var(--green);font-weight:700">Saldo: '+fR(cbCli.cashback)+'</span>';}
+
+  // Atualizar selects de resgate
+  preencherResSelects();
+
+  var s=el('cbsuc');
+  if(s){
+    s.style.display='block';
+    s.innerHTML='✅ <strong>'+cbCli.nome+'</strong> — Cashback: <span style="color:var(--green)">-'+fR(cb)+'</span><br>'+
+      'Compra: '+fR(v)+' → Final: <strong>'+fR(fin)+'</strong><br>'+
+      '<span style="color:var(--green)">+'+fR(cbG)+' CB ganho</span> · <span style="color:var(--gold)">+'+fP(pts)+'</span><br>'+
+      '<span style="font-size:12px;color:var(--text3)">Novo saldo CB: <strong style="color:var(--green)">'+fR(cbCli.cashback)+'</strong></span>'+
+      (salvoAPI
+        ?'<br><span style="font-size:11px;color:var(--green)">✅ Salvo na planilha!</span>'
+        :'<br><span style="font-size:11px;color:#EF9F27">⚠️ Salvo localmente</span>');
+  }
+  if(btn){btn.disabled=true;btn.textContent='✅ Cashback Aplicado';}
+  toast('✅ Cashback -'+fR(cb)+' aplicado! Novo saldo: '+fR(cbCli.cashback));
 }
 
 // PONTOS RESGATE
