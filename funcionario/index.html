@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alpha Suplementos — Funcionário</title>
+<title>Alpha Suplementos — Funcionário v37</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -710,14 +710,17 @@ el('sbtn').onclick=function(){
 };
 
 // Verificar sessão ao carregar a página
-(function(){
+(async function(){
   var sess = verificarSessao();
   if(sess){
     el('lwrap').style.display='none';
     el('app').style.display='block';
     el('tnome').textContent=sess.nome;
+    window._funcNome = sess.nome;
+    // Aguarda clientes antes de renderizar (fix bug Érica)
+    try { await carregarClientes(); } catch(e) {}
     renderTudo();
-    carregarClientes().then(function(){ renderTudo(); }).catch(function(){});
+    setTimeout(function(){ mostrarAlertaCRM(window._funcNome); }, 800);
   }
 })();
 
@@ -1025,17 +1028,31 @@ function usarMaxCB(){
   var sl=el('cbr');if(sl)sl.value=Math.min(Math.floor(v/4*100)/100,cbCli.cashback);
   updCB();
 }
-function confirmarCB(){
+async function confirmarCB(){
   if(!cbCli)return;
   var v=parseFloat((el('cbval')||{value:''}).value)||0;
   var cb=parseFloat((el('cbr')||{value:'0'}).value)||0;
   if(v<=0||cb<=0)return;
   var nc=NC[cbCli.nivel];var fin=parseFloat((v-cb).toFixed(2));
   var cbG=parseFloat((fin*nc.cb).toFixed(2));var pts=Math.floor(fin*nc.pts);
+  var btn=el('cbbtn');if(btn){btn.disabled=true;btn.textContent='⏳ Salvando...';}
+  
+  // Salvar na planilha via API
+  var salvoAPI=false;
+  try{
+    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({token:_API_TOKEN,acao:'resgate_cashback',dados:{
+        email:cbCli.email,valorCompra:v,cashbackUsado:cb
+      }})});
+    var data=await resp.json();
+    if(data.sucesso){salvoAPI=true;}
+  }catch(e){console.log('API off, salvando local');}
+  
+  // Atualizar local
   cbCli.cashback=parseFloat((cbCli.cashback-cb+cbG).toFixed(2));cbCli.pontos+=pts;
   CL=CL.map(function(c){return c.id===cbCli.id?cbCli:c;});
-  var s=el('cbsuc');if(s){s.style.display='block';s.innerHTML='✅ <strong>'+cbCli.nome+'</strong> — Cashback <span style="color:var(--green)">-'+fR(cb)+'</span> | Final: <strong>'+fR(fin)+'</strong> | Ganhou: +'+fR(cbG)+' CB · +'+fP(pts);}
-  var btn=el('cbbtn');if(btn)btn.disabled=true;
+  var s=el('cbsuc');if(s){s.style.display='block';s.innerHTML='✅ <strong>'+cbCli.nome+'</strong> — Cashback <span style="color:var(--green)">-'+fR(cb)+'</span> | Final: <strong>'+fR(fin)+'</strong> | Ganhou: +'+fR(cbG)+' CB · +'+fP(pts)+(salvoAPI?'<br><span style="font-size:11px;color:var(--green)">✅ Salvo na planilha!</span>':'<br><span style="font-size:11px;color:#EF9F27">⚠️ Salvo localmente</span>');}
+  if(btn){btn.disabled=true;btn.textContent='✅ Confirmar Cashback';}
   toast('✅ Cashback de '+fR(cb)+' aplicado!');
 }
 
@@ -1073,12 +1090,32 @@ function selPremio(){
   var btn=el('ptsbtn');if(btn)btn.disabled=!ptsPremioSel;
 }
 function gerarCod(){var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',s='';for(var i=0;i<8;i++)s+=c[Math.floor(Math.random()*c.length)];return s;}
-function confirmarPts(){
+async function confirmarPts(){
   if(!ptsCli||!ptsPremioSel)return;
+  var btn=el('ptsbtn');if(btn){btn.disabled=true;btn.textContent='⏳ Salvando...';}
   var cod=gerarCod();
-  ptsCli.pontos-=ptsPremioSel.pts;CL=CL.map(function(c){return c.id===ptsCli.id?ptsCli:c;});
-  var s=el('ptssuc');if(s){s.style.display='block';s.innerHTML='✅ <strong>'+ptsPremioSel.nome+'</strong> para <strong>'+ptsCli.nome+'</strong><br><div style="font-family:monospace;font-size:18px;letter-spacing:4px;font-weight:700;color:var(--gold);margin:8px 0">'+cod+'</div><div style="font-size:11px;color:var(--text3)">Apresentar na retirada</div>';}
-  var btn=el('ptsbtn');if(btn)btn.disabled=true;
+  
+  // Salvar resgate na planilha via API
+  var salvoAPI=false;
+  try{
+    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({token:_API_TOKEN,acao:'resgatar_premio',dados:{
+        email:ptsCli.email,premioId:ptsPremioSel.id,codigoResgate:cod
+      }})});
+    var data=await resp.json();
+    if(data.sucesso){salvoAPI=true;}
+  }catch(e){console.log('API off, salvando local');}
+  
+  // Deduzir pontos local
+  ptsCli.pontos-=ptsPremioSel.pts;
+  CL=CL.map(function(c){return c.id===ptsCli.id?ptsCli:c;});
+  preencherResSelects();
+  
+  var s=el('ptssuc');if(s){s.style.display='block';s.innerHTML='✅ <strong>'+ptsPremioSel.nome+'</strong> para <strong>'+ptsCli.nome+'</strong><br>'+
+    '<div style="font-family:monospace;font-size:18px;letter-spacing:4px;font-weight:700;color:var(--gold);margin:8px 0">'+cod+'</div>'+
+    '<div style="font-size:11px;color:var(--text3)">Apresentar na retirada</div>'+
+    (salvoAPI?'<div style="font-size:11px;color:var(--green);margin-top:4px">✅ Salvo na planilha!</div>':'<div style="font-size:11px;color:#EF9F27;margin-top:4px">⚠️ Salvo localmente</div>');}
+  if(btn){btn.disabled=true;btn.textContent='✅ Resgatar Prêmio';}
   toast('🏆 Resgate de '+ptsPremioSel.nome+' confirmado!');
 }
 
