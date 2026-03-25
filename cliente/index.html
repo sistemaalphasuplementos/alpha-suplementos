@@ -375,7 +375,7 @@ body{color:#FFFFFF;font-size:15px}
       <div class="bc-body">
         <div class="bc-label">Indicações Realizadas</div>
         <div class="bc-value" id="lc-ind">0</div>
-        <div class="bc-sub">+200 pts por indicação confirmada</div>
+        <div class="bc-sub">+100 pts + R$10 cashback na 1ª compra do indicado</div>
       </div>
     </div>
 
@@ -456,10 +456,10 @@ body{color:#FFFFFF;font-size:15px}
       </div>
       <div style="background:#CC000011;border:.5px solid #CC000022;border-radius:10px;padding:12px;margin-bottom:12px;font-size:12px;color:var(--text3);text-align:center;line-height:1.8">
         📢 Diga ao seu amigo: <strong style="color:var(--text)">"Use meu código <span id="ref-inline">ALPHA01</span> ao se cadastrar na Alpha Suplementos!"</strong><br>
-        Ele ganha <strong style="color:var(--gold)">+100 pts</strong> e você ganha <strong style="color:var(--gold)">+200 pts</strong> na primeira compra dele!
+        Ele ganha <strong style="color:var(--gold)">+50 pts + R$5 cashback</strong> no cadastro e você ganha <strong style="color:var(--gold)">+100 pts + R$10 cashback</strong> na primeira compra dele!
       </div>
-      <div class="ben-row"><span class="ben-ico">🐺</span><div class="ben-txt">Você ganha <span class="ben-pts">+200 pontos</span> quando seu amigo fizer a 1ª compra</div></div>
-      <div class="ben-row"><span class="ben-ico">🎉</span><div class="ben-txt">Seu amigo ganha <span class="ben-pts">+100 pontos</span> no cadastro</div></div>
+      <div class="ben-row"><span class="ben-ico">🐺</span><div class="ben-txt">Você ganha <span class="ben-pts">+100 pts + R$10 cashback</span> quando seu amigo fizer a 1ª compra</div></div>
+      <div class="ben-row"><span class="ben-ico">🎉</span><div class="ben-txt">Seu amigo ganha <span class="ben-pts">+50 pts + R$5 cashback</span> ao se cadastrar com seu código</div></div>
       <div class="ben-row"><span class="ben-ico">♾️</span><div class="ben-txt">Sem limite — indique quantos quiser!</div></div>
       <div class="card" style="margin-top:12px">
         <div class="card-title">Minhas indicações</div>
@@ -488,7 +488,7 @@ body{color:#FFFFFF;font-size:15px}
       </div>
       <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:10px;padding:12px;font-size:12px;color:var(--text3);line-height:1.9">
         <div style="font-weight:600;color:var(--text);margin-bottom:6px">Como funciona o cashback?</div>
-        Você ganha cashback em toda compra. Para usar: a cada <strong style="color:var(--text)">R$4</strong> em compras você pode descontar <strong style="color:var(--text)">R$1</strong> do saldo acumulado. Solicite ao funcionário na hora da compra.
+        Você ganha cashback em toda compra. Para usar: a cada <strong style="color:var(--text)">R$7</strong> em compras você pode descontar <strong style="color:var(--text)">R$1</strong> do saldo acumulado. Solicite ao funcionário na hora da compra.
       </div>
     </div>
   </div>
@@ -665,7 +665,7 @@ function copiarCodigo(){
 function copiarLink(){copiarCodigo();}
 function compartilharWA(){
   var msg='Oi! Me cadastrei no programa de fidelidade da *Alpha Suplementos* e quero te indicar!'+
-    ' Use meu codigo *'+U.ref+'* ao se cadastrar e ganhe *+100 pontos* de boas-vindas!'+
+    ' Use meu codigo *'+U.ref+'* ao se cadastrar e ganhe *+50 pontos + R$5 cashback* de boas-vindas!'+
     ' Acesse: sistemaalphasuplementos.github.io/alpha-suplementos/cliente/';
   window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
 }
