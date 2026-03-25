@@ -715,8 +715,18 @@ el('lbtn').onclick=function(){
       el('tnome').textContent = userDef.nome;
       var sel=el('cad-func');
       if(sel) for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===userDef.nome){sel.selectedIndex=i;break;}}
+      var selLd=el('vsel');
+      if(selLd){selLd.innerHTML='<option>⏳ Carregando clientes...</option>';selLd.disabled=true;}
       renderTudo();
-      carregarClientes().then(function(){ renderTudo(); setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800); }).catch(function(){ setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800); });
+      carregarClientes().then(function(){
+        if(selLd){selLd.disabled=false;}
+        renderTudo();
+        setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800);
+      }).catch(function(){
+        if(selLd){selLd.disabled=false;}
+        renderTudo();
+        setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800);
+      });
     } else {
       // SENHA ERRADA
       registrarTentativa();
@@ -741,9 +751,12 @@ el('sbtn').onclick=function(){
     el('app').style.display='block';
     el('tnome').textContent=sess.nome;
     window._funcNome = sess.nome;
-    // Aguarda clientes antes de renderizar (fix bug Érica)
+    // Aguarda clientes antes de renderizar — mostra loading no dropdown
+    var selLoad=el('vsel');
+    if(selLoad){selLoad.innerHTML='<option>⏳ Carregando clientes...</option>';selLoad.disabled=true;}
     try { await carregarClientes(); } catch(e) {}
     renderTudo();
+    if(selLoad){selLoad.disabled=false;}
     setTimeout(function(){ mostrarAlertaCRM(window._funcNome); }, 800);
   }
 })();
@@ -760,25 +773,35 @@ function ir(n,b){
 
 // RENDER
 async function carregarClientes(){
-  try{
-    var controller=new AbortController();
-    var timeout=setTimeout(function(){controller.abort();},5000);
-    var r=await fetch(WEB_APP_URL+'?acao=listar_clientes_todos&token='+_API_TOKEN,{signal:controller.signal});
-    clearTimeout(timeout);
-    var d=await r.json();
-    if(d.sucesso && d.dados && d.dados.length>0){
-      CL=d.dados.map(function(c){
-        return {
-          id:String(c[0]||''), nome:String(c[1]||''), email:String(c[2]||''),
-          tel:String(c[3]||'').replace(/[^0-9]/g,''),
-          nivel:String(c[7]||'BRONZE'), pontos:Number(c[6])||0,
-          cashback:Number(c[10])||0, gastoMes:Number(c[8])||0,
-          mesesRec:Number(c[9])||0, ref:String(c[11]||'')
-        };
-      });
-      console.log('Clientes da planilha:', CL.length);
+  // GAS cold start pode demorar até 15s — tenta 2 vezes com timeout generoso
+  for(var tentativa=1; tentativa<=2; tentativa++){
+    try{
+      var controller=new AbortController();
+      var timeout=setTimeout(function(){controller.abort();},20000);
+      var r=await fetch(WEB_APP_URL+'?acao=listar_clientes_todos&token='+_API_TOKEN,{redirect:'follow',signal:controller.signal});
+      clearTimeout(timeout);
+      var txt=await r.text();
+      var d;
+      try{d=JSON.parse(txt);}catch(pe){throw new Error('parse-error');}
+      if(d.sucesso && d.dados && d.dados.length>0){
+        CL=d.dados.map(function(c){
+          return {
+            id:String(c[0]||''), nome:String(c[1]||''), email:String(c[2]||''),
+            tel:String(c[3]||'').replace(/[^0-9]/g,''),
+            nivel:String(c[7]||'BRONZE'), pontos:Number(c[6])||0,
+            cashback:Number(c[10])||0, gastoMes:Number(c[8])||0,
+            mesesRec:Number(c[9])||0, ref:String(c[11]||'')
+          };
+        });
+        console.log('Clientes carregados:', CL.length);
+        return true;
+      }
+    }catch(e){
+      console.log('carregarClientes tentativa '+tentativa+' falhou:', e.message);
+      if(tentativa<2) await new Promise(function(res){setTimeout(res,2000);});
     }
-  }catch(e){ console.log('API offline:', e.message); }
+  }
+  console.log('Usando lista local (GAS indisponível)');
   return true;
 }
 
@@ -983,8 +1006,17 @@ async function registrarVenda(){
             produtos:prod?[{produtoId:'P'+prod.substr(0,4).toUpperCase(),nome:prod,quantidade:1,unidade:'un',diasConsumo:dias,categoria:'Produto'}]:[]
           }};
 
-    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
-    var data=await resp.json();
+    var ctrl=new AbortController();
+    var tmr=setTimeout(function(){ctrl.abort();},15000);
+    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload),redirect:'follow',signal:ctrl.signal});
+    clearTimeout(tmr);
+    var txt=await resp.text();
+    var data;
+    try{data=JSON.parse(txt);}catch(pe){
+      // GAS retornou HTML de erro — mostrar o começo para diagnóstico
+      var preview=txt.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().substring(0,120);
+      throw new Error('Servidor retornou resposta inválida: '+preview);
+    }
     if(data.sucesso){
       var ptsFinal=data.dados.pontosGanhos||pts;
       var cbFinal=data.dados.cashbackGanhoNaCompra||cb;
@@ -993,13 +1025,26 @@ async function registrarVenda(){
       else cliSel.cashback=parseFloat((cliSel.cashback - cbUsado + cbFinal).toFixed(2));
       mostrarSucVenda(v,ptsFinal,cbFinal,desc,cbUsado,true);
     } else {
-      // Erro retornado pela API — não é fallback local, é erro real
       var btnE=el('vbtn');if(btnE){btnE.disabled=false;btnE.textContent='✅ REGISTRAR VENDA';}
       toast('❌ Erro: '+(data.erro||'Falha ao registrar. Tente novamente.'));
       return;
     }
   }catch(e){
-    // Erro de rede/CORS — salva localmente como fallback
+    var erroMsg = e.message || String(e);
+    console.error('registrarVenda ERRO (cbUsado='+cbUsado+'):', erroMsg);
+    if(cbUsado > 0){
+      // Com cashback: mostrar erro detalhado na tela de sucesso para diagnóstico
+      el('vprev-card').style.display='none';
+      el('vsuc-card').style.display='block';
+      el('vsuc-txt').innerHTML=
+        '<span style="color:#EF9F27;font-size:13px">⚠️ Erro ao comunicar com o servidor.<br>'+
+        '<strong>Detalhe:</strong> '+erroMsg+'<br><br>'+
+        'A venda <u>não foi salva</u> na planilha.<br>'+
+        'Tente novamente ou registre sem cashback.</span>';
+      var btnE2=el('vbtn');if(btnE2){btnE2.disabled=false;btnE2.textContent='✅ REGISTRAR VENDA';}
+      return;
+    }
+    // Sem cashback: fallback local é seguro
     cliSel.pontos+=pts;
     cliSel.cashback=parseFloat((cliSel.cashback - cbUsado + cb).toFixed(2));
     mostrarSucVenda(v,pts,cb,desc,cbUsado,false);
@@ -1185,11 +1230,16 @@ async function confirmarCB(){
   // Salvar na planilha via API
   var salvoAPI=false;
   try{
+    var ctrl2=new AbortController();
+    var tmr2=setTimeout(function(){ctrl2.abort();},15000);
     var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
       body:JSON.stringify({token:_API_TOKEN,acao:'resgate_cashback',dados:{
         email:cbCli.email,valorCompra:v,cashbackUsado:cb
-      }})});
-    var data=await resp.json();
+      }}),redirect:'follow',signal:ctrl2.signal});
+    clearTimeout(tmr2);
+    var txt2=await resp.text();
+    var data;
+    try{data=JSON.parse(txt2);}catch(pe){throw new Error('resp-invalida');}
     if(data.sucesso){
       salvoAPI=true;
       // Usar valores reais retornados pela API
@@ -1282,13 +1332,17 @@ async function confirmarPts(){
   // Salvar resgate na planilha via API
   var salvoAPI=false;
   try{
+    var ctrl3=new AbortController();
+    var tmr3=setTimeout(function(){ctrl3.abort();},15000);
     var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
       body:JSON.stringify({token:_API_TOKEN,acao:'resgatar_premio',dados:{
         email:ptsCli.email,premioId:ptsPremioSel.id,codigoResgate:cod
-      }})});
-    var data=await resp.json();
+      }}),redirect:'follow',signal:ctrl3.signal});
+    clearTimeout(tmr3);
+    var txt3=await resp.text();
+    var data;try{data=JSON.parse(txt3);}catch(pe){throw new Error('resp-invalida');}
     if(data.sucesso){salvoAPI=true;}
-  }catch(e){console.log('API off, salvando local');}
+  }catch(e){console.log('API off, salvando local:',e.message);}
   
   // Deduzir pontos local
   ptsCli.pontos-=ptsPremioSel.pts;
@@ -1336,10 +1390,14 @@ async function cadastrar(){
   var btn=el('cad-form').querySelector('.bg');if(btn){btn.disabled=true;btn.textContent='⏳ Cadastrando...';}
   var novo={id:'C'+Date.now(),nome:nome,email:email,tel:tel,nivel:'BRONZE',pontos:0,cashback:0,gastoMes:0,mesesRec:0,ref:refCod};
   try{
-    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({token:_API_TOKEN,acao:'cadastrar_cliente',dados:{nome:nome,email:email,telefone:tel,cpf:cpf,dataNascimento:nasc,codigoIndicacao:ref}})});
-    var data=await resp.json();
+    var ctrl4=new AbortController();
+    var tmr4=setTimeout(function(){ctrl4.abort();},15000);
+    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({token:_API_TOKEN,acao:'cadastrar_cliente',dados:{nome:nome,email:email,telefone:tel,cpf:cpf,dataNascimento:nasc,codigoIndicacao:ref}}),redirect:'follow',signal:ctrl4.signal});
+    clearTimeout(tmr4);
+    var txt4=await resp.text();
+    var data;try{data=JSON.parse(txt4);}catch(pe){throw new Error('resp-invalida');}
     if(data.sucesso){novo.id=data.dados.id||novo.id;novo.ref=data.dados.codigoReferral||refCod;}
-  }catch(e){console.log('API off, usando local');}
+  }catch(e){console.log('API off, usando local:',e.message);}
   CL.push(novo);renderTudo();
   el('cad-form').style.display='none';el('cad-suc').style.display='block';
   var nm=el('cad-suc-nm');if(nm)nm.textContent=nome+' — '+email;
