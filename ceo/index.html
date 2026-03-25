@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alpha Suplementos — CEO v37</title>
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Alpha CEO">
+<link rel="icon" type="image/png" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
+<link rel="shortcut icon" type="image/png" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
+<link rel="apple-touch-icon" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
+<link rel="manifest" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/manifest.json">
+<title>Alpha Suplementos — CEO v38</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -228,7 +236,7 @@ body{color:#FFFFFF;font-size:15px}
       <button class="tbt" onclick="ir('clientes',this)">👥 Clientes</button>
       <button class="tbt" onclick="ir('ranking',this)">🏆 Ranking</button>
       <button class="tbt" onclick="ir('crm',this)">📦 CRM</button>
-      <button class="tbt" onclick="ir('financeiro',this)">💰 Financeiro</button>
+      <button class="tbt" onclick="ir('financeiro',this);rFinAsync()">💰 Financeiro</button>
       <button class="tbt" onclick="ir('promocoes',this)">⚡ Promoções</button>
       <button class="tbt" onclick="ir('indicacoes',this)">🎯 Indicações</button>
       <button class="tbt" onclick="ir('desempenho',this);rDesemp()">📈 Desempenho</button>
@@ -503,29 +511,29 @@ async function sha256js(msg) {
 }
 function verificarSessaoCEO() {
   try {
-    var sess = JSON.parse(sessionStorage.getItem(_SESSION_KEY) || 'null');
+    var sess = JSON.parse(localStorage.getItem(_SESSION_KEY) || 'null');
     if(sess && sess.expiry > Date.now() && sess.role === 'CEO') return sess;
-    sessionStorage.removeItem(_SESSION_KEY);
+    localStorage.removeItem(_SESSION_KEY);
   } catch(e){}
   return null;
 }
 function salvarSessaoCEO() {
-  sessionStorage.setItem(_SESSION_KEY, JSON.stringify({role:'CEO', expiry:Date.now()+_SESSION_EXPIRY, token:_API_TOKEN}));
+  localStorage.setItem(_SESSION_KEY, JSON.stringify({role:'CEO', expiry:Date.now()+_SESSION_EXPIRY, token:_API_TOKEN}));
 }
 function verificarBloqueioCEO() {
   try {
-    var bl = JSON.parse(sessionStorage.getItem('alpha_ceo_block') || 'null');
+    var bl = JSON.parse(localStorage.getItem('alpha_ceo_block') || 'null');
     if(bl && bl.until > Date.now()) return Math.ceil((bl.until-Date.now())/60000);
-    if(bl) sessionStorage.removeItem('alpha_ceo_block');
+    if(bl) localStorage.removeItem('alpha_ceo_block');
   } catch(e) {}
   return 0;
 }
 function registrarTentativaCEO() {
   try {
-    var bl = JSON.parse(sessionStorage.getItem('alpha_ceo_block') || '{"count":0}');
+    var bl = JSON.parse(localStorage.getItem('alpha_ceo_block') || '{"count":0}');
     bl.count = (bl.count||0)+1;
     if(bl.count >= _MAX_ATTEMPTS){ bl.until=Date.now()+_BLOCK_TIME; bl.count=0; }
-    sessionStorage.setItem('alpha_ceo_block', JSON.stringify(bl));
+    localStorage.setItem('alpha_ceo_block', JSON.stringify(bl));
   } catch(e) {}
 }
 // ══════════════════════════════════════════════════
@@ -571,7 +579,7 @@ el('lbtn').onclick=async function(){
   // Verificar senha com hash
   var hashDigitado = await sha256js(em + ':' + s + ':' + _SALT);
   if(hashDigitado === _CEO_HASH){
-    sessionStorage.removeItem('alpha_ceo_block');
+    localStorage.removeItem('alpha_ceo_block');
     salvarSessaoCEO();
     err.style.display='none';
     el('lbtn').textContent='⏳ Carregando...';
@@ -583,7 +591,7 @@ el('lbtn').onclick=async function(){
   } else {
     registrarTentativaCEO();
     err.style.display='block';
-    var bl = JSON.parse(sessionStorage.getItem('alpha_ceo_block')||'{"count":0}');
+    var bl = JSON.parse(localStorage.getItem('alpha_ceo_block')||'{"count":0}');
     var rest = Math.max(0, _MAX_ATTEMPTS - (bl.count||0));
     err.textContent='Senha incorreta. Tentativas restantes: '+rest;
   }
@@ -645,7 +653,7 @@ el('sbtn').onclick=function(){
   el('lsenha').value='';
   el('lbtn').textContent='ENTRAR →';
   el('lbtn').disabled=false;
-  sessionStorage.removeItem(_SESSION_KEY);
+  localStorage.removeItem(_SESSION_KEY);
 };
 
 // Auto-login se sessão válida
@@ -668,7 +676,7 @@ function ir(n,b){
 }
 
 // RENDER
-function rTudo(){rDash();rClientes();rRank();rCRM();rFin();rInd();rPLog();upPv();}
+function rTudo(){rDash();rClientes();rRank();rCRM();rFinAsync();rInd();rPLog();upPv();}
 async function rDesemp(){
   // Mostrar loading
   var loadHtml = '<div style="text-align:center;padding:40px;color:#888"><div style="font-size:32px;margin-bottom:12px">⏳</div><div style="font-size:14px">Carregando dados reais...</div></div>';
@@ -816,7 +824,60 @@ function rFin(){
   set('fv',fR(CP.reduce(function(s,c){return s+c.valor;},0)));
   set('fc',fR(CP.reduce(function(s,c){return s+c.cb;},0)));
   set('fp',CL.reduce(function(s,c){return s+c.pontos;},0).toLocaleString('pt-BR'));
-  html('fcorp',CP.map(function(c){var cl=CL.find(function(x){return x.id===c.cid;})||{nome:'?',nivel:'BRONZE'};return '<tr><td style="color:#666">'+c.data+'</td><td>'+cl.nome+'</td><td>'+nt(cl.nivel)+'</td><td style="color:#1D9E75;font-weight:600">'+fR(c.valor)+'</td><td style="color:#FFD700">+'+fP(c.pts)+'</td><td style="color:#1D9E75">+'+fR(c.cb)+'</td><td style="color:#666">'+c.desc+'</td></tr>';}).join(''));
+  html('fcorp',CP.length===0
+    ? '<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhuma compra registrada ainda.</td></tr>'
+    : CP.slice().sort(function(a,b){return b.dataRaw-a.dataRaw;}).map(function(c){
+        var cl=CL.find(function(x){return x.id===c.cid;})||{nome:'?',nivel:'BRONZE'};
+        return '<tr><td style="color:#666">'+c.data+'</td><td>'+cl.nome+'</td><td>'+nt(cl.nivel)+'</td><td style="color:#1D9E75;font-weight:600">'+fR(c.valor)+'</td><td style="color:#FFD700">+'+fP(c.pts)+'</td><td style="color:#1D9E75">+'+fR(c.cb)+'</td><td style="color:#666">'+c.desc+'</td></tr>';
+      }).join(''));
+}
+async function rFinAsync(){
+  html('fcorp','<tr><td colspan="7" style="text-align:center;color:#555;padding:24px">⏳ Carregando...</td></tr>');
+  set('fv','R$…'); set('fc','R$…'); set('fp','…');
+  try {
+    var r1=await fetch(WEB_APP_URL+'?acao=listar_financeiro&token='+_API_TOKEN);
+    var d1=await r1.json();
+    if(d1.sucesso && d1.dados){
+      var fin=d1.dados;
+      set('fv',fR(fin.totalVendas));
+      set('fc',fR(fin.totalCbGerado));
+      set('fp',fin.totalPts.toLocaleString('pt-BR'));
+      // Atualizar CP para o dashboard também
+      if(fin.compras && fin.compras.length>0){
+        CP=fin.compras.map(function(c){
+          var dt=c.data?new Date(c.data):null;
+          return {cid:c.cid,valor:c.valor,pts:c.pts,cb:c.cb,
+                  data:dt?dt.toLocaleDateString('pt-BR'):'—',
+                  dataRaw:dt?dt.getTime():0,
+                  nivel:c.nivel,desc:c.desc};
+        });
+      }
+      html('fcorp', CP.length===0
+        ? '<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhuma compra registrada ainda.</td></tr>'
+        : CP.slice().sort(function(a,b){return b.dataRaw-a.dataRaw;}).map(function(c){
+            var cl=CL.find(function(x){return x.id===c.cid;})||{nome:'?',nivel:'BRONZE'};
+            return '<tr><td style="color:#666">'+c.data+'</td><td>'+cl.nome+'</td><td>'+nt(cl.nivel)+'</td><td style="color:#1D9E75;font-weight:600">'+fR(c.valor)+'</td><td style="color:#FFD700">+'+fP(c.pts)+'</td><td style="color:#1D9E75">+'+fR(c.cb)+'</td><td style="color:#666">'+c.desc+'</td></tr>';
+          }).join('')
+      );
+      return;
+    }
+  } catch(e){ console.log('rFinAsync listar_financeiro erro:',e.message); }
+  // Fallback: usar listar_historico
+  try {
+    var r2=await fetch(WEB_APP_URL+'?acao=listar_historico&token='+_API_TOKEN);
+    var d2=await r2.json();
+    if(d2.sucesso && d2.dados && d2.dados.length>0){
+      CP=d2.dados.map(function(c){
+        var dt=c[8]?new Date(c[8]):null;
+        return {cid:c[1]||'',valor:Number(c[3])||0,pts:Number(c[4])||0,
+                cb:Number(c[5])||0,
+                data:dt?dt.toLocaleDateString('pt-BR'):'—',
+                dataRaw:dt?dt.getTime():0,
+                nivel:c[9]||'BRONZE',desc:c[2]||''};
+      });
+    }
+  } catch(e2){ console.log('rFinAsync fallback erro:',e2.message); }
+  rFin();
 }
 
 function rInd(){

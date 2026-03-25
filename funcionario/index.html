@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alpha Suplementos — Funcionário v37</title>
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Alpha Func">
+<link rel="icon" type="image/png" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
+<link rel="shortcut icon" type="image/png" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
+<link rel="apple-touch-icon" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
+<link rel="manifest" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/manifest.json">
+<title>Alpha Suplementos — Funcionário v38</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -588,12 +596,12 @@ async function sha256(msg) {
 // Verificar sessão existente
 function verificarSessao() {
   try {
-    var sess = JSON.parse(sessionStorage.getItem(_SESSION_KEY) || 'null');
+    var sess = JSON.parse(localStorage.getItem(_SESSION_KEY) || 'null');
     if (sess && sess.expiry > Date.now()) {
       window._funcNome = sess.nome;
       return sess;
     }
-    sessionStorage.removeItem(_SESSION_KEY);
+    localStorage.removeItem(_SESSION_KEY);
   } catch(e) {}
   return null;
 }
@@ -601,20 +609,20 @@ function verificarSessao() {
 // Salvar sessão
 function salvarSessao(nome) {
   var sess = { nome: nome, expiry: Date.now() + _SESSION_EXPIRY, token: _API_TOKEN };
-  sessionStorage.setItem(_SESSION_KEY, JSON.stringify(sess));
+  localStorage.setItem(_SESSION_KEY, JSON.stringify(sess));
   window._funcNome = nome;
 }
 
 // Verificar bloqueio por tentativas
 function verificarBloqueio() {
   try {
-    var bl = JSON.parse(sessionStorage.getItem('alpha_block') || 'null');
+    var bl = JSON.parse(localStorage.getItem('alpha_block') || 'null');
     if (bl && bl.until > Date.now()) {
       var min = Math.ceil((bl.until - Date.now()) / 60000);
       return 'Muitas tentativas. Aguarde ' + min + ' minuto(s).';
     }
     if (bl && bl.until <= Date.now()) {
-      sessionStorage.removeItem('alpha_block');
+      localStorage.removeItem('alpha_block');
     }
   } catch(e) {}
   return null;
@@ -622,18 +630,18 @@ function verificarBloqueio() {
 
 function registrarTentativa() {
   try {
-    var bl = JSON.parse(sessionStorage.getItem('alpha_block') || '{"count":0}');
+    var bl = JSON.parse(localStorage.getItem('alpha_block') || '{"count":0}');
     bl.count = (bl.count || 0) + 1;
     if (bl.count >= _MAX_ATTEMPTS) {
       bl.until = Date.now() + _BLOCK_TIME;
       bl.count = 0;
     }
-    sessionStorage.setItem('alpha_block', JSON.stringify(bl));
+    localStorage.setItem('alpha_block', JSON.stringify(bl));
   } catch(e) {}
 }
 
 function limparTentativas() {
-  sessionStorage.removeItem('alpha_block');
+  localStorage.removeItem('alpha_block');
 }
 // ══════════════════════════════════════════════════
 
@@ -697,7 +705,7 @@ el('lbtn').onclick=function(){
       // SENHA ERRADA
       registrarTentativa();
       err.style.display='block';
-      try { var bl=JSON.parse(sessionStorage.getItem('alpha_block')||'{"count":0}'); var rest=Math.max(0,_MAX_ATTEMPTS-(bl.count||0)); err.textContent='Senha incorreta. Tentativas restantes: '+rest; } catch(e){ err.textContent='Senha incorreta.'; }
+      try { var bl=JSON.parse(localStorage.getItem('alpha_block')||'{"count":0}'); var rest=Math.max(0,_MAX_ATTEMPTS-(bl.count||0)); err.textContent='Senha incorreta. Tentativas restantes: '+rest; } catch(e){ err.textContent='Senha incorreta.'; }
     }
   });
 };
@@ -706,7 +714,7 @@ el('sbtn').onclick=function(){
   el('app').style.display='none';
   el('lwrap').style.display='flex';
   el('lsenha').value='';
-  sessionStorage.removeItem(_SESSION_KEY);
+  localStorage.removeItem(_SESSION_KEY);
 };
 
 // Verificar sessão ao carregar a página

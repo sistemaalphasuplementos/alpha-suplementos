@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Alpha Suplementos">
 <link rel="apple-touch-icon" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
-<title>Alpha Suplementos — Fidelidade</title>
+<title>Alpha Suplementos — Fidelidade v38</title>
 <link rel="manifest" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -512,33 +512,33 @@ var _CLI_SESSION_KEY = 'alpha_cli_session';
 var _CLI_SESSION_EXPIRY = 24 * 60 * 60 * 1000; // 24 horas
 
 function salvarSessaoCli(userData) {
-  sessionStorage.setItem(_CLI_SESSION_KEY, JSON.stringify({user: userData, expiry: Date.now() + _CLI_SESSION_EXPIRY}));
+  localStorage.setItem(_CLI_SESSION_KEY, JSON.stringify({user: userData, expiry: Date.now() + _CLI_SESSION_EXPIRY}));
 }
 
 function verificarSessaoCli() {
   try {
-    var sess = JSON.parse(sessionStorage.getItem(_CLI_SESSION_KEY) || 'null');
+    var sess = JSON.parse(localStorage.getItem(_CLI_SESSION_KEY) || 'null');
     if(sess && sess.expiry > Date.now()) return sess.user;
-    sessionStorage.removeItem(_CLI_SESSION_KEY);
+    localStorage.removeItem(_CLI_SESSION_KEY);
   } catch(e) {}
   return null;
 }
 
 function verificarBloqueioCli() {
   try {
-    var bl = JSON.parse(sessionStorage.getItem('alpha_cli_block') || 'null');
+    var bl = JSON.parse(localStorage.getItem('alpha_cli_block') || 'null');
     if(bl && bl.until > Date.now()) return Math.ceil((bl.until-Date.now())/60000);
-    if(bl) sessionStorage.removeItem('alpha_cli_block');
+    if(bl) localStorage.removeItem('alpha_cli_block');
   } catch(e) {}
   return 0;
 }
 
 function registrarTentativaCli() {
   try {
-    var bl = JSON.parse(sessionStorage.getItem('alpha_cli_block') || '{"count":0}');
+    var bl = JSON.parse(localStorage.getItem('alpha_cli_block') || '{"count":0}');
     bl.count = (bl.count||0)+1;
     if(bl.count >= 5){ bl.until=Date.now()+(5*60*1000); bl.count=0; }
-    sessionStorage.setItem('alpha_cli_block', JSON.stringify(bl));
+    localStorage.setItem('alpha_cli_block', JSON.stringify(bl));
   } catch(e) {}
 }
 // ════════════════════════════════════════════════════
@@ -689,7 +689,7 @@ function iniciar(){
 
 function fazerLogout(){
   U = null;
-  try{ sessionStorage.removeItem(_CLI_SESSION_KEY); }catch(e){}
+  try{ localStorage.removeItem(_CLI_SESSION_KEY); }catch(e){}
   var app = document.getElementById('app');
   if(app) app.style.display = 'none';
   var ls = document.getElementById('login-screen');
@@ -699,7 +699,7 @@ function fazerLogout(){
 // Verificar sessão salva ao carregar
 (function(){
   try {
-    var sess = JSON.parse(sessionStorage.getItem(_CLI_SESSION_KEY)||'null');
+    var sess = JSON.parse(localStorage.getItem(_CLI_SESSION_KEY)||'null');
     if(sess && sess.expiry > Date.now() && sess.user){
       U = sess.user;
       document.addEventListener('DOMContentLoaded', function(){
