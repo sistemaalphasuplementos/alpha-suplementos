@@ -1012,7 +1012,11 @@ async function registrarVenda(){
     clearTimeout(tmr);
     var txt=await resp.text();
     var data;
-    try{data=JSON.parse(txt);}catch(pe){throw new Error('resp-invalida:'+txt.substring(0,60));}
+    try{data=JSON.parse(txt);}catch(pe){
+      // GAS retornou HTML de erro — mostrar o começo para diagnóstico
+      var preview=txt.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().substring(0,120);
+      throw new Error('Servidor retornou resposta inválida: '+preview);
+    }
     if(data.sucesso){
       var ptsFinal=data.dados.pontosGanhos||pts;
       var cbFinal=data.dados.cashbackGanhoNaCompra||cb;
@@ -1026,7 +1030,21 @@ async function registrarVenda(){
       return;
     }
   }catch(e){
-    console.warn('registrarVenda catch:',e.message);
+    var erroMsg = e.message || String(e);
+    console.error('registrarVenda ERRO (cbUsado='+cbUsado+'):', erroMsg);
+    if(cbUsado > 0){
+      // Com cashback: mostrar erro detalhado na tela de sucesso para diagnóstico
+      el('vprev-card').style.display='none';
+      el('vsuc-card').style.display='block';
+      el('vsuc-txt').innerHTML=
+        '<span style="color:#EF9F27;font-size:13px">⚠️ Erro ao comunicar com o servidor.<br>'+
+        '<strong>Detalhe:</strong> '+erroMsg+'<br><br>'+
+        'A venda <u>não foi salva</u> na planilha.<br>'+
+        'Tente novamente ou registre sem cashback.</span>';
+      var btnE2=el('vbtn');if(btnE2){btnE2.disabled=false;btnE2.textContent='✅ REGISTRAR VENDA';}
+      return;
+    }
+    // Sem cashback: fallback local é seguro
     cliSel.pontos+=pts;
     cliSel.cashback=parseFloat((cliSel.cashback - cbUsado + cb).toFixed(2));
     mostrarSucVenda(v,pts,cb,desc,cbUsado,false);
