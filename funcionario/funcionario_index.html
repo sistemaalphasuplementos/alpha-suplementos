@@ -715,8 +715,18 @@ el('lbtn').onclick=function(){
       el('tnome').textContent = userDef.nome;
       var sel=el('cad-func');
       if(sel) for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===userDef.nome){sel.selectedIndex=i;break;}}
+      var selLd=el('vsel');
+      if(selLd){selLd.innerHTML='<option>⏳ Carregando clientes...</option>';selLd.disabled=true;}
       renderTudo();
-      carregarClientes().then(function(){ renderTudo(); setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800); }).catch(function(){ setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800); });
+      carregarClientes().then(function(){
+        if(selLd){selLd.disabled=false;}
+        renderTudo();
+        setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800);
+      }).catch(function(){
+        if(selLd){selLd.disabled=false;}
+        renderTudo();
+        setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800);
+      });
     } else {
       // SENHA ERRADA
       registrarTentativa();
@@ -741,9 +751,12 @@ el('sbtn').onclick=function(){
     el('app').style.display='block';
     el('tnome').textContent=sess.nome;
     window._funcNome = sess.nome;
-    // Aguarda clientes antes de renderizar (fix bug Érica)
+    // Aguarda clientes antes de renderizar — mostra loading no dropdown
+    var selLoad=el('vsel');
+    if(selLoad){selLoad.innerHTML='<option>⏳ Carregando clientes...</option>';selLoad.disabled=true;}
     try { await carregarClientes(); } catch(e) {}
     renderTudo();
+    if(selLoad){selLoad.disabled=false;}
     setTimeout(function(){ mostrarAlertaCRM(window._funcNome); }, 800);
   }
 })();
@@ -760,25 +773,35 @@ function ir(n,b){
 
 // RENDER
 async function carregarClientes(){
-  try{
-    var controller=new AbortController();
-    var timeout=setTimeout(function(){controller.abort();},5000);
-    var r=await fetch(WEB_APP_URL+'?acao=listar_clientes_todos&token='+_API_TOKEN,{signal:controller.signal});
-    clearTimeout(timeout);
-    var d=await r.json();
-    if(d.sucesso && d.dados && d.dados.length>0){
-      CL=d.dados.map(function(c){
-        return {
-          id:String(c[0]||''), nome:String(c[1]||''), email:String(c[2]||''),
-          tel:String(c[3]||'').replace(/[^0-9]/g,''),
-          nivel:String(c[7]||'BRONZE'), pontos:Number(c[6])||0,
-          cashback:Number(c[10])||0, gastoMes:Number(c[8])||0,
-          mesesRec:Number(c[9])||0, ref:String(c[11]||'')
-        };
-      });
-      console.log('Clientes da planilha:', CL.length);
+  // GAS cold start pode demorar até 15s — tenta 2 vezes com timeout generoso
+  for(var tentativa=1; tentativa<=2; tentativa++){
+    try{
+      var controller=new AbortController();
+      var timeout=setTimeout(function(){controller.abort();},20000);
+      var r=await fetch(WEB_APP_URL+'?acao=listar_clientes_todos&token='+_API_TOKEN,{redirect:'follow',signal:controller.signal});
+      clearTimeout(timeout);
+      var txt=await r.text();
+      var d;
+      try{d=JSON.parse(txt);}catch(pe){throw new Error('parse-error');}
+      if(d.sucesso && d.dados && d.dados.length>0){
+        CL=d.dados.map(function(c){
+          return {
+            id:String(c[0]||''), nome:String(c[1]||''), email:String(c[2]||''),
+            tel:String(c[3]||'').replace(/[^0-9]/g,''),
+            nivel:String(c[7]||'BRONZE'), pontos:Number(c[6])||0,
+            cashback:Number(c[10])||0, gastoMes:Number(c[8])||0,
+            mesesRec:Number(c[9])||0, ref:String(c[11]||'')
+          };
+        });
+        console.log('Clientes carregados:', CL.length);
+        return true;
+      }
+    }catch(e){
+      console.log('carregarClientes tentativa '+tentativa+' falhou:', e.message);
+      if(tentativa<2) await new Promise(function(res){setTimeout(res,2000);});
     }
-  }catch(e){ console.log('API offline:', e.message); }
+  }
+  console.log('Usando lista local (GAS indisponível)');
   return true;
 }
 
