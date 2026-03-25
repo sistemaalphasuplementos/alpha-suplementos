@@ -298,7 +298,7 @@ body{color:#FFFFFF;font-size:15px}
         </div>
       </div>
       <div class="g3">
-        <div class="card"><div class="ct">Níveis</div><div id="niveis"></div><div style="border-top:.5px solid #2a2a2a;margin-top:12px;padding-top:10px;font-size:11px;color:#555;line-height:1.9">🥉 Bronze: &lt;R$150/mês<br>🥈 Prata: ≥R$150/mês<br>🥇 Ouro: ≥R$300 · 2+ meses<br>💰 R$1 cashback a cada R$4</div></div>
+        <div class="card"><div class="ct">Níveis</div><div id="niveis"></div><div style="border-top:.5px solid #2a2a2a;margin-top:12px;padding-top:10px;font-size:11px;color:#555;line-height:1.9">🥉 Bronze: &lt;R$150/mês<br>🥈 Prata: ≥R$150/mês<br>🥇 Ouro: ≥R$300 · 2+ meses<br>💰 R$1 cashback a cada R$7</div></div>
         <div class="card"><div class="ct">Top ranking</div><div id="drk"></div></div>
         <div class="card"><div class="ct">Alertas CRM</div><div id="dal"></div><button class="bverm" style="margin-top:12px;font-size:12px;padding:8px" onclick="ir('crm',document.querySelectorAll('.tbt')[3])">Ver todos →</button></div>
       </div>
@@ -317,9 +317,25 @@ body{color:#FFFFFF;font-size:15px}
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
         <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Clientes</div></div>
         <div style="display:flex;gap:8px">
-          <select id="fnivel" onchange="rClientes()" class="campo" style="width:140px;margin:0"><option value="">Todos</option><option value="OURO">🥇 Ouro</option><option value="PRATA">🥈 Prata</option><option value="BRONZE">🥉 Bronze</option></select>
+          <select id="ffunc" onchange="rClientes()" class="campo" style="width:150px;margin:0"><option value="">Todos</option><option value="sabina">👁️ Sabina</option><option value="andre">André</option><option value="hesllen">Hesllen</option><option value="erica">Érica</option></select>
+          <select id="fnivel" onchange="rClientes()" class="campo" style="width:140px;margin:0"><option value="">Todos níveis</option><option value="OURO">🥇 Ouro</option><option value="PRATA">🥈 Prata</option><option value="BRONZE">🥉 Bronze</option></select>
           <input id="fbusca" placeholder="🔍 Buscar..." class="campo" style="width:160px;margin:0" oninput="rClientes()">
         </div>
+      </div>
+      <!-- Painel Sabina: reatribuição -->
+      <div id="sabina-panel" style="display:none;background:#EF9F2711;border:1px solid #EF9F2744;border-radius:12px;padding:16px;margin-bottom:14px">
+        <div style="font-size:13px;font-weight:700;color:#EF9F27;margin-bottom:10px">⚠️ Gestão de Clientes da Sabina</div>
+        <div style="font-size:12px;color:#aaa;margin-bottom:12px">Caso a Sabina saia da empresa, os clientes podem ser reatribuídos a outro vendedor. Esta ação atualiza o campo "Cadastrado por" na planilha.</div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <select id="sabina-novo-vendedor" class="campo" style="width:180px;margin:0">
+            <option value="">Escolha o novo vendedor...</option>
+            <option value="André">André</option>
+            <option value="Hesllen">Hesllen</option>
+            <option value="Érica">Érica</option>
+          </select>
+          <button onclick="reatribuirSabina()" style="background:#EF9F2722;color:#EF9F27;border:1px solid #EF9F2744;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">🔄 Reatribuir Clientes</button>
+        </div>
+        <div id="sabina-resultado" style="display:none;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:8px"></div>
       </div>
       <div class="card"><table class="tbl"><thead><tr><th>#</th><th>Cliente</th><th>Nível</th><th>Pontos</th><th>Cashback</th><th>Gasto/mês</th><th>Última compra</th></tr></thead><tbody id="tcorp"></tbody></table></div>
     </div>
@@ -397,7 +413,7 @@ body{color:#FFFFFF;font-size:15px}
     </div>
 
     <div id="p-indicacoes" class="pnl">
-      <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Indicações</div><div style="font-size:12px;color:#666">Indicador +200pts · Indicado +100pts</div></div>
+      <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Indicações</div><div style="font-size:12px;color:#666">Indicador +100pts +R$10 cashback · Indicado +50pts +R$5 desconto · 1 CPF por conta</div></div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px">
         <div class="kp" style="background:#CC000010;border-color:#CC000022"><div class="kr">Total</div><div class="kv" id="it" style="color:#CC0000">0</div></div>
         <div class="kp" style="background:#1D9E7510;border-color:#1D9E7522"><div class="kr">Confirmadas</div><div class="kv" id="ic" style="color:#1D9E75">0</div></div>
@@ -600,7 +616,7 @@ el('lbtn').onclick=async function(){
 async function carregarDados(){
   try {
     // Carregar clientes reais
-    var r1 = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos'+'&token='+_API_TOKEN);
+    var r1 = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos'+'&token='+_API_TOKEN+'&funcionario=ceo');
     var d1 = await r1.json();
     if(d1.sucesso && d1.dados && d1.dados.length>0){
       CL = d1.dados.map(function(c){
@@ -615,6 +631,7 @@ async function carregarDados(){
           gastoMes: Number(c[8])||0,
           mesesRec: Number(c[9])||0,
           ref:      c[11]||'',
+          cadastradoPor: String(c[12]||''),
           ultimaCompra: c[14]?new Date(c[14]).toLocaleDateString('pt-BR'):'—',
           indicacoes: 0
         };
@@ -801,8 +818,45 @@ function rDash(){
 function rClientes(){
   var b=(el('fbusca')||{value:''}).value.toLowerCase();
   var f=(el('fnivel')||{value:''}).value;
-  var l=CL.filter(function(c){return(!b||c.nome.toLowerCase().includes(b)||c.email.includes(b))&&(!f||c.nivel===f);}).sort(function(a,b){return b.pontos-a.pontos;});
-  html('tcorp',l.map(function(c,i){return '<tr><td style="color:#666">'+(i+1)+'</td><td><div style="font-weight:600">'+c.nome+'</div><div style="font-size:11px;color:#666">'+c.email+'</div></td><td>'+nt(c.nivel)+'</td><td style="color:#FFD700;font-weight:600">'+fP(c.pontos)+'</td><td style="color:#1D9E75">'+fR(c.cashback)+'</td><td>'+fR(c.gastoMes)+'</td><td style="color:#666">'+c.ultimaCompra+'</td></tr>';}).join(''));
+  var ff=(el('ffunc')||{value:''}).value.toLowerCase(); // filtro por funcionário v41
+  // Mostrar painel Sabina quando filtro = sabina
+  var painelSabina=el('sabina-panel');
+  if(painelSabina) painelSabina.style.display=(ff==='sabina'?'block':'none');
+  var l=CL.filter(function(c){
+    var matchBusca=(!b||c.nome.toLowerCase().includes(b)||c.email.includes(b));
+    var matchNivel=(!f||c.nivel===f);
+    var matchFunc=!ff||(c.cadastradoPor||'').toLowerCase().replace(/[áàãâä]/g,'a').replace(/[éêë]/g,'e').replace(/[íîï]/g,'i').replace(/[óôõö]/g,'o').replace(/[úûü]/g,'u').includes(ff);
+    return matchBusca&&matchNivel&&matchFunc;
+  }).sort(function(a,b){return b.pontos-a.pontos;});
+  html('tcorp',l.map(function(c,i){
+    var isSabina=(c.cadastradoPor||'').toLowerCase()==='sabina';
+    var badge=isSabina?'<span style="background:#EF9F2722;color:#EF9F27;border:.5px solid #EF9F2733;border-radius:12px;font-size:10px;font-weight:700;padding:1px 7px;margin-left:5px">👁️ Sabina</span>':'';
+    return '<tr><td style="color:#666">'+(i+1)+'</td><td><div style="font-weight:600">'+c.nome+badge+'</div><div style="font-size:11px;color:#666">'+c.email+'</div></td><td>'+nt(c.nivel)+'</td><td style="color:#FFD700;font-weight:600">'+fP(c.pontos)+'</td><td style="color:#1D9E75">'+fR(c.cashback)+'</td><td>'+fR(c.gastoMes)+'</td><td style="color:#666">'+c.ultimaCompra+'</td></tr>';
+  }).join(''));
+}
+
+// v41: reatribuir clientes da Sabina para outro vendedor
+async function reatribuirSabina(){
+  var novoVendedor=(el('sabina-novo-vendedor')||{value:''}).value;
+  var res=el('sabina-resultado');
+  if(!novoVendedor){if(res){res.style.display='block';res.style.background='#E24B4A22';res.style.color='#E24B4A';res.textContent='Selecione um vendedor para reatribuir.';}return;}
+  if(!confirm('Confirma reatribuir TODOS os clientes da Sabina para '+novoVendedor+'?\nEsta ação NÃO pode ser desfeita.')){return;}
+  if(res){res.style.display='block';res.style.background='#33333322';res.style.color='#aaa';res.textContent='⏳ Processando...';}
+  try{
+    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({token:_API_TOKEN,acao:'reatribuir_clientes_sabina',dados:{novoVendedor:novoVendedor}}),
+      redirect:'follow'});
+    var txt=await resp.text();
+    var data=JSON.parse(txt);
+    if(data.sucesso){
+      if(res){res.style.display='block';res.style.background='#1D9E7522';res.style.color='#1D9E75';res.textContent='✅ '+data.dados.mensagem;}
+      // Atualizar localmente
+      CL=CL.map(function(c){return (c.cadastradoPor||'').toLowerCase()==='sabina'?Object.assign({},c,{cadastradoPor:novoVendedor}):c;});
+      rClientes();
+    } else {
+      if(res){res.style.display='block';res.style.background='#E24B4A22';res.style.color='#E24B4A';res.textContent='❌ '+data.erro;}
+    }
+  }catch(e){if(res){res.style.display='block';res.style.background='#E24B4A22';res.style.color='#E24B4A';res.textContent='❌ Erro de conexão: '+e.message;}}
 }
 
 function rRank(){
@@ -890,8 +944,8 @@ async function rFinAsync(){
 function rInd(){
   var cf=IND.filter(function(i){return i.status==='CONFIRMADA';}).length;
   var pn=IND.filter(function(i){return i.status==='PENDENTE';}).length;
-  set('it',IND.length);set('ic',cf);set('ip',pn);set('ipt',(cf*200)+' pts');
-  html('icorp',IND.map(function(i){var ok=i.status==='CONFIRMADA';return '<tr><td><div style="font-weight:600">'+i.indNome+'</div></td><td>'+i.indado+'</td><td style="color:#666">'+i.data+'</td><td><span style="background:'+(ok?'#1D9E7522':'#EF9F2722')+';color:'+(ok?'#1D9E75':'#EF9F27')+';border:.5px solid '+(ok?'#1D9E7533':'#EF9F2733')+';padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700">'+(ok?'✅ Confirmada':'⏳ Pendente')+'</span></td><td style="color:#FFD700">'+(i.pts>0?'+'+i.pts+' pts':'—')+'</td></tr>';}).join(''));
+  set('it',IND.length);set('ic',cf);set('ip',pn);set('ipt',(cf*100)+' pts + R$'+(cf*10)+' CB');
+  html('icorp',IND.map(function(i){var ok=i.status==='CONFIRMADA';return '<tr><td><div style="font-weight:600">'+i.indNome+'</div></td><td>'+i.indado+'</td><td style="color:#666">'+i.data+'</td><td><span style="background:'+(ok?'#1D9E7522':'#EF9F2722')+';color:'+(ok?'#1D9E75':'#EF9F27')+';border:.5px solid '+(ok?'#1D9E7533':'#EF9F2733')+';padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700">'+(ok?'✅ Confirmada':'⏳ Pendente')+'</span></td><td style="color:#FFD700">'+(i.pts>0?'+'+i.pts+' pts + R$10 CB':'—')+'</td></tr>';}).join(''));
 }
 
 function rPLog(){
