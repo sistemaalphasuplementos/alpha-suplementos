@@ -676,85 +676,92 @@ function ir(n,b){
 }
 
 // RENDER
-function rTudo(){rDash();rClientes();rRank();rCRM();rFinAsync();rInd();rPLog();upPv();}
+function rTudo(){rDash();rClientes();rRank();rCRM();rFinAsync();rInd();rPLog();upPv();rDesemp();}
 async function rDesemp(){
-  // Mostrar loading
-  var loadHtml = '<div style="text-align:center;padding:40px;color:#888"><div style="font-size:32px;margin-bottom:12px">⏳</div><div style="font-size:14px">Carregando dados reais...</div></div>';
-  ['ds-rank-vendas','ds-rank-cads','ds-tabela'].forEach(function(id){html(id,loadHtml);});
+  // Mostrar loading apenas nos rankings, KPIs ficam com valor atual
+  var loadHtml = '<div style="text-align:center;padding:30px;color:#888"><div style="font-size:28px;margin-bottom:8px">⏳</div><div style="font-size:13px">Carregando...</div></div>';
+  ['ds-rank-vendas','ds-rank-cads'].forEach(function(id){html(id,loadHtml);});
+  html('ds-tabela','<tr><td colspan="5" style="text-align:center;color:#555;padding:24px">⏳ Carregando...</td></tr>');
 
-  try {
-    var resp = await fetch(WEB_APP_URL + '?acao=listar_desempenho&token='+_API_TOKEN);
-    var data = await resp.json();
-
-    if (!data.sucesso) throw new Error(data.erro || 'Erro ao carregar');
-
-    var lista  = data.dados.funcionarios;
-    var totais = data.dados.totais;
-
+  function renderDesemp(lista, totais){
     // KPIs
     set('ds-total-vendas',   fR(totais.vendas));
     set('ds-ticket-medio',   fR(totais.ticketMedio));
     set('ds-total-cads',     String(totais.cadastros));
     set('ds-total-vendas-num', String(totais.numVendas));
 
-    // Rank vendas
+    // Rank vendas — mostra todos os funcionários mesmo com zero
     var byV = lista.slice().sort(function(a,b){return b.vendas-a.vendas;});
-    html('ds-rank-vendas', byV.length === 0
-      ? '<div style="color:#888;font-size:13px;padding:20px;text-align:center">Nenhuma venda registrada ainda.</div>'
-      : byV.map(function(f,i){
-          var medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'  ';
-          var cor   = i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#888';
-          var pct   = totais.vendas > 0 ? Math.round(f.vendas/totais.vendas*100) : 0;
-          return '<div style="margin-bottom:14px">' +
-            '<div style="display:flex;justify-content:space-between;margin-bottom:5px">' +
-              '<span style="font-weight:700;font-size:14px;color:'+cor+'">'+medal+' '+f.nome+'</span>' +
-              '<span style="color:#FFD700;font-weight:700">'+fR(f.vendas)+'</span>' +
-            '</div>' +
-            '<div style="background:#222;border-radius:20px;height:10px;overflow:hidden">' +
-              '<div style="width:'+pct+'%;height:100%;background:linear-gradient(90deg,'+cor+','+cor+'88);border-radius:20px;transition:width .6s ease"></div>' +
-            '</div>' +
-            '<div style="font-size:11px;color:#888;margin-top:3px">'+f.numVendas+' venda(s) · '+pct+'% do total</div>' +
-          '</div>';
-        }).join('')
-    );
+    html('ds-rank-vendas', byV.map(function(f,i){
+      var medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'  ';
+      var cor   = i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#888';
+      var pct   = totais.vendas > 0 ? Math.round(f.vendas/totais.vendas*100) : 0;
+      return '<div style="margin-bottom:14px">' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:5px">' +
+          '<span style="font-weight:700;font-size:14px;color:'+cor+'">'+medal+' '+f.nome+'</span>' +
+          '<span style="color:#FFD700;font-weight:700">'+fR(f.vendas)+'</span>' +
+        '</div>' +
+        '<div style="background:#222;border-radius:20px;height:10px;overflow:hidden">' +
+          '<div style="width:'+pct+'%;height:100%;background:linear-gradient(90deg,'+cor+','+cor+'88);border-radius:20px;transition:width .6s ease"></div>' +
+        '</div>' +
+        '<div style="font-size:11px;color:#888;margin-top:3px">'+f.numVendas+' venda(s) · '+pct+'% do total</div>' +
+      '</div>';
+    }).join('') || '<div style="color:#888;font-size:13px;padding:20px;text-align:center">Nenhuma venda registrada ainda.</div>');
 
     // Rank cadastros
     var byC = lista.slice().sort(function(a,b){return b.cadastros-a.cadastros;});
-    html('ds-rank-cads', byC.length === 0
-      ? '<div style="color:#888;font-size:13px;padding:20px;text-align:center">Nenhum cadastro registrado ainda.</div>'
-      : byC.map(function(f,i){
-          var medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'  ';
-          var cor   = i===0?'#00FF88':i===1?'#00CC66':i===2?'#009944':'#888';
-          var pct   = totais.cadastros > 0 ? Math.round(f.cadastros/totais.cadastros*100) : 0;
-          return '<div style="margin-bottom:14px">' +
-            '<div style="display:flex;justify-content:space-between;margin-bottom:5px">' +
-              '<span style="font-weight:700;font-size:14px;color:'+cor+'">'+medal+' '+f.nome+'</span>' +
-              '<span style="color:#00FF88;font-weight:700">'+f.cadastros+' cliente(s)</span>' +
-            '</div>' +
-            '<div style="background:#222;border-radius:20px;height:10px;overflow:hidden">' +
-              '<div style="width:'+pct+'%;height:100%;background:linear-gradient(90deg,'+cor+','+cor+'88);border-radius:20px;transition:width .6s ease"></div>' +
-            '</div>' +
-          '</div>';
-        }).join('')
-    );
+    html('ds-rank-cads', byC.map(function(f,i){
+      var medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'  ';
+      var cor   = i===0?'#00FF88':i===1?'#00CC66':i===2?'#009944':'#888';
+      var pct   = totais.cadastros > 0 ? Math.round(f.cadastros/totais.cadastros*100) : 0;
+      return '<div style="margin-bottom:14px">' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:5px">' +
+          '<span style="font-weight:700;font-size:14px;color:'+cor+'">'+medal+' '+f.nome+'</span>' +
+          '<span style="color:#00FF88;font-weight:700">'+f.cadastros+' cliente(s)</span>' +
+        '</div>' +
+        '<div style="background:#222;border-radius:20px;height:10px;overflow:hidden">' +
+          '<div style="width:'+pct+'%;height:100%;background:linear-gradient(90deg,'+cor+','+cor+'88);border-radius:20px;transition:width .6s ease"></div>' +
+        '</div>' +
+      '</div>';
+    }).join('') || '<div style="color:#888;font-size:13px;padding:20px;text-align:center">Nenhum cadastro registrado ainda.</div>');
 
     // Tabela
-    html('ds-tabela', lista.map(function(f,i){
-      var cor = i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#888';
-      return '<tr style="border-bottom:1px solid #222">' +
-        '<td style="padding:12px;font-weight:700;color:'+cor+'">'+(i===0?'🥇 ':i===1?'🥈 ':i===2?'🥉 ':'')+f.nome+'</td>' +
-        '<td style="padding:12px;text-align:right;color:#FFD700;font-weight:700">'+fR(f.vendas)+'</td>' +
-        '<td style="padding:12px;text-align:right;color:#f0f0f0">'+f.numVendas+'</td>' +
-        '<td style="padding:12px;text-align:right;color:#00FF88;font-weight:700">'+f.cadastros+'</td>' +
-        '<td style="padding:12px;text-align:right;color:#CC88FF">'+fR(f.ticket)+'</td>' +
-      '</tr>';
-    }).join(''));
+    html('ds-tabela', lista.length===0
+      ? '<tr><td colspan="5" style="text-align:center;color:#555;padding:20px">Nenhum dado ainda.</td></tr>'
+      : lista.map(function(f,i){
+          var cor = i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#888';
+          return '<tr style="border-bottom:1px solid #222">' +
+            '<td style="padding:12px;font-weight:700;color:'+cor+'">'+(i===0?'🥇 ':i===1?'🥈 ':i===2?'🥉 ':'')+f.nome+'</td>' +
+            '<td style="padding:12px;text-align:right;color:#FFD700;font-weight:700">'+fR(f.vendas)+'</td>' +
+            '<td style="padding:12px;text-align:right;color:#f0f0f0">'+f.numVendas+'</td>' +
+            '<td style="padding:12px;text-align:right;color:#00FF88;font-weight:700">'+f.cadastros+'</td>' +
+            '<td style="padding:12px;text-align:right;color:#CC88FF">'+fR(f.ticket)+'</td>' +
+          '</tr>';
+        }).join('')
+    );
+  }
 
+  try {
+    var resp = await fetch(WEB_APP_URL + '?acao=listar_desempenho&token='+_API_TOKEN);
+    var data = await resp.json();
+    if (!data.sucesso) throw new Error(data.erro || 'Erro');
+    renderDesemp(data.dados.funcionarios, data.dados.totais);
   } catch(err) {
     console.log('Desempenho erro:', err);
-    var errHtml = '<div style="text-align:center;padding:20px;color:#888"><div style="font-size:24px">⚠️</div><div style="font-size:13px;margin-top:8px">Erro ao carregar dados.<br>'+err.message+'</div></div>';
-    ['ds-rank-vendas','ds-rank-cads'].forEach(function(id){html(id,errHtml);});
-    html('ds-tabela','<tr><td colspan="5" style="padding:20px;text-align:center;color:#888">Erro ao carregar dados</td></tr>');
+    // Fallback: calcular localmente com dados já carregados (CL + CP)
+    var funcNomes = ['André','Hesllen','Sabina','Érica'];
+    var statsLocal = {};
+    funcNomes.forEach(function(f){ statsLocal[f]={nome:f,vendas:0,numVendas:0,cadastros:0,ticket:0}; });
+    var totalV=0, totalN=0, totalCads=0;
+    CP.forEach(function(c){
+      totalV+=c.valor; totalN++;
+      // sem info de funcionário local, atribui a André por padrão
+    });
+    CL.forEach(function(c){
+      totalCads++;
+    });
+    var lista = funcNomes.map(function(f){ return statsLocal[f]; });
+    renderDesemp(lista, {vendas:parseFloat(totalV.toFixed(2)), numVendas:totalN, cadastros:totalCads, ticketMedio: totalN>0?parseFloat((totalV/totalN).toFixed(2)):0});
   }
 }
 

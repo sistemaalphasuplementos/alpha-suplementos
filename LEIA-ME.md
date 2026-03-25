@@ -1,5 +1,12 @@
-# Alpha Suplementos — Sistema de Fidelidade
+# Alpha Suplementos — Sistema de Fidelidade v39
 ## Guia de Acesso — 3 Perfis Separados
+
+### ✅ Novidades v39
+- **Cashback integrado no Registrar Venda**: ao selecionar um cliente com saldo de cashback, aparece automaticamente a opção de aplicar o cashback na hora da compra (limite de 25% do valor da venda). O preview mostra valor bruto, desconto, valor final, pontos e cashback gerado.
+- **Desempenho CEO corrigido**: dados carregam automaticamente ao entrar no painel (não precisa mais clicar na aba). Ranking e KPIs agora exibem todos os funcionários mesmo com vendas zeradas.
+- **Vendas com cashback contabilizadas no Desempenho**: ao usar `resgate_cashback`, a venda é registrada na aba Compras e aparece no ranking do CEO.
+
+---
 
 ---
 
