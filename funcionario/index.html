@@ -715,8 +715,18 @@ el('lbtn').onclick=function(){
       el('tnome').textContent = userDef.nome;
       var sel=el('cad-func');
       if(sel) for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===userDef.nome){sel.selectedIndex=i;break;}}
+      var selLd=el('vsel');
+      if(selLd){selLd.innerHTML='<option>⏳ Carregando clientes...</option>';selLd.disabled=true;}
       renderTudo();
-      carregarClientes().then(function(){ renderTudo(); setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800); }).catch(function(){ setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800); });
+      carregarClientes().then(function(){
+        if(selLd){selLd.disabled=false;}
+        renderTudo();
+        setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800);
+      }).catch(function(){
+        if(selLd){selLd.disabled=false;}
+        renderTudo();
+        setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800);
+      });
     } else {
       // SENHA ERRADA
       registrarTentativa();
@@ -741,9 +751,12 @@ el('sbtn').onclick=function(){
     el('app').style.display='block';
     el('tnome').textContent=sess.nome;
     window._funcNome = sess.nome;
-    // Aguarda clientes antes de renderizar (fix bug Érica)
+    // Aguarda clientes antes de renderizar — mostra loading no dropdown
+    var selLoad=el('vsel');
+    if(selLoad){selLoad.innerHTML='<option>⏳ Carregando clientes...</option>';selLoad.disabled=true;}
     try { await carregarClientes(); } catch(e) {}
     renderTudo();
+    if(selLoad){selLoad.disabled=false;}
     setTimeout(function(){ mostrarAlertaCRM(window._funcNome); }, 800);
   }
 })();
@@ -760,25 +773,35 @@ function ir(n,b){
 
 // RENDER
 async function carregarClientes(){
-  try{
-    var controller=new AbortController();
-    var timeout=setTimeout(function(){controller.abort();},5000);
-    var r=await fetch(WEB_APP_URL+'?acao=listar_clientes_todos&token='+_API_TOKEN,{signal:controller.signal});
-    clearTimeout(timeout);
-    var d=await r.json();
-    if(d.sucesso && d.dados && d.dados.length>0){
-      CL=d.dados.map(function(c){
-        return {
-          id:String(c[0]||''), nome:String(c[1]||''), email:String(c[2]||''),
-          tel:String(c[3]||'').replace(/[^0-9]/g,''),
-          nivel:String(c[7]||'BRONZE'), pontos:Number(c[6])||0,
-          cashback:Number(c[10])||0, gastoMes:Number(c[8])||0,
-          mesesRec:Number(c[9])||0, ref:String(c[11]||'')
-        };
-      });
-      console.log('Clientes da planilha:', CL.length);
+  // GAS cold start pode demorar até 15s — tenta 2 vezes com timeout generoso
+  for(var tentativa=1; tentativa<=2; tentativa++){
+    try{
+      var controller=new AbortController();
+      var timeout=setTimeout(function(){controller.abort();},20000);
+      var r=await fetch(WEB_APP_URL+'?acao=listar_clientes_todos&token='+_API_TOKEN,{redirect:'follow',signal:controller.signal});
+      clearTimeout(timeout);
+      var txt=await r.text();
+      var d;
+      try{d=JSON.parse(txt);}catch(pe){throw new Error('parse-error');}
+      if(d.sucesso && d.dados && d.dados.length>0){
+        CL=d.dados.map(function(c){
+          return {
+            id:String(c[0]||''), nome:String(c[1]||''), email:String(c[2]||''),
+            tel:String(c[3]||'').replace(/[^0-9]/g,''),
+            nivel:String(c[7]||'BRONZE'), pontos:Number(c[6])||0,
+            cashback:Number(c[10])||0, gastoMes:Number(c[8])||0,
+            mesesRec:Number(c[9])||0, ref:String(c[11]||'')
+          };
+        });
+        console.log('Clientes carregados:', CL.length);
+        return true;
+      }
+    }catch(e){
+      console.log('carregarClientes tentativa '+tentativa+' falhou:', e.message);
+      if(tentativa<2) await new Promise(function(res){setTimeout(res,2000);});
     }
-  }catch(e){ console.log('API offline:', e.message); }
+  }
+  console.log('Usando lista local (GAS indisponível)');
   return true;
 }
 
@@ -894,7 +917,7 @@ function toggleCB(){
     wrap.style.display='block';
     // Preencher com máximo permitido (25% do valor ou saldo, menor dos dois)
     var v=parseFloat((el('vval')||{value:''}).value)||0;
-    var maxCB=cliSel?Math.min(parseFloat((v*0.25).toFixed(2)),cliSel.cashback):0;
+    var maxCB=cliSel?Math.min(Math.floor(v/4*100)/100,cliSel.cashback):0;
     if(cbVal) cbVal.value=maxCB>0?maxCB:'';
   } else {
     wrap.style.display='none';
@@ -916,7 +939,7 @@ function calcV(){
   var cbAviso=el('vcb-aviso');
   if(cbUsar && cbUsar.checked && cbVal){
     cbUsado=parseFloat(cbVal.value)||0;
-    var maxCB=cliSel?Math.min(parseFloat((v*0.25).toFixed(2)),cliSel.cashback):0;
+    var maxCB=cliSel?Math.min(Math.floor(v/4*100)/100,cliSel.cashback):0;
     if(cbUsado>maxCB){
       cbUsado=maxCB;
       if(cbAviso)cbAviso.style.display='block';
@@ -958,7 +981,7 @@ async function registrarVenda(){
   var cbUsado=0;
   if(cbUsar && cbUsar.checked && cbValEl){
     cbUsado=parseFloat(cbValEl.value)||0;
-    var maxCB=Math.min(parseFloat((v*0.25).toFixed(2)),cliSel.cashback);
+    var maxCB=Math.min(Math.floor(v/4*100)/100,cliSel.cashback);
     if(cbUsado>maxCB) cbUsado=maxCB;
     cbUsado=parseFloat(cbUsado.toFixed(2));
   }
@@ -969,33 +992,72 @@ async function registrarVenda(){
 
   var btn=el('vbtn');if(btn){btn.disabled=true;btn.textContent='⏳ Enviando...';}
 
-  try{
-    var acao = cbUsado > 0 ? 'resgate_cashback' : 'registrar_compra';
-    var payload = cbUsado > 0
-      ? { token:_API_TOKEN, acao:'resgate_cashback', dados:{
-            email:cliSel.email, valorCompra:v, cashbackUsado:cbUsado,
-            descricao:desc, funcionario:funcNome,
-            produtos:prod?[{produtoId:'P'+prod.substr(0,4).toUpperCase(),nome:prod,quantidade:1,unidade:'un',diasConsumo:dias,categoria:'Produto'}]:[]
-          }}
-      : { token:_API_TOKEN, acao:'registrar_compra', dados:{
-            email:cliSel.email, valorCompra:v, descricao:desc, loja:'Alpha Suplementos',
-            funcionario:funcNome,
-            produtos:prod?[{produtoId:'P'+prod.substr(0,4).toUpperCase(),nome:prod,quantidade:1,unidade:'un',diasConsumo:dias,categoria:'Produto'}]:[]
-          }};
+  // ── REGISTRAR VENDA: envia ao GAS e trata resposta ──────────────
+  var acao = cbUsado > 0 ? 'resgate_cashback' : 'registrar_compra';
+  var payload = cbUsado > 0
+    ? { token:_API_TOKEN, acao:'resgate_cashback', dados:{
+          email:cliSel.email, valorCompra:v, cashbackUsado:cbUsado,
+          descricao:desc, funcionario:funcNome,
+          produtos:prod?[{produtoId:'P'+prod.substr(0,4).toUpperCase(),nome:prod,quantidade:1,unidade:'un',diasConsumo:dias,categoria:'Produto'}]:[]
+        }}
+    : { token:_API_TOKEN, acao:'registrar_compra', dados:{
+          email:cliSel.email, valorCompra:v, descricao:desc, loja:'Alpha Suplementos',
+          funcionario:funcNome,
+          produtos:prod?[{produtoId:'P'+prod.substr(0,4).toUpperCase(),nome:prod,quantidade:1,unidade:'un',diasConsumo:dias,categoria:'Produto'}]:[]
+        }};
 
-    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
-    var data=await resp.json();
+  var salvoAPI = false;
+  var erroDetalhe = '';
+  var ptsFinal = pts, cbFinal = cb;
+
+  try{
+    var ctrl=new AbortController();
+    var tmr=setTimeout(function(){ctrl.abort();},20000);
+    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload),redirect:'follow',signal:ctrl.signal});
+    clearTimeout(tmr);
+    var txt=await resp.text();
+    var data;
+    try{data=JSON.parse(txt);}catch(pe){
+      var preview=txt.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().substring(0,200);
+      erroDetalhe='Resposta não-JSON do servidor: '+preview;
+      data={sucesso:false,erro:erroDetalhe};
+    }
     if(data.sucesso){
-      var ptsFinal=data.dados.pontosGanhos||pts;
-      var cbFinal=data.dados.cashbackGanhoNaCompra||cb;
+      salvoAPI=true;
+      ptsFinal=data.dados.pontosGanhos||pts;
+      cbFinal=data.dados.cashbackGanhoNaCompra||cb;
       cliSel.pontos+=ptsFinal;
       if(data.dados.novoCashback!==undefined) cliSel.cashback=data.dados.novoCashback;
       else cliSel.cashback=parseFloat((cliSel.cashback - cbUsado + cbFinal).toFixed(2));
-      mostrarSucVenda(v,ptsFinal,cbFinal,desc,cbUsado,true);
     } else {
-      mostrarSucVenda(v,pts,cb,desc,cbUsado,false);
+      erroDetalhe=data.erro||'GAS retornou sucesso:false sem mensagem';
     }
-  }catch(e){mostrarSucVenda(v,pts,cb,desc,cbUsado,false);}
+  }catch(e){
+    erroDetalhe='Exceção de rede: '+e.message;
+    console.error('registrarVenda catch:',erroDetalhe);
+  }
+
+  // Resultado
+  if(salvoAPI){
+    mostrarSucVenda(v,ptsFinal,cbFinal,desc,cbUsado,true);
+  } else if(cbUsado > 0){
+    // Com cashback: NÃO fazer fallback local — mostrar erro real
+    el('vprev-card').style.display='none';
+    el('vsuc-card').style.display='block';
+    el('vsuc-txt').innerHTML=
+      '<div style="color:#EF9F27;font-size:13px;text-align:left;line-height:1.7">'+
+      '⚠️ <strong>Falha ao registrar com cashback</strong><br><br>'+
+      '<strong>Erro:</strong> '+erroDetalhe+'<br><br>'+
+      '<span style="color:var(--text3)">A venda NÃO foi salva. Você pode:<br>'+
+      '1. Tentar novamente<br>'+
+      '2. Registrar sem cashback (venda normal)</span></div>';
+    var btnE=el('vbtn');if(btnE){btnE.disabled=false;btnE.textContent='✅ REGISTRAR VENDA';}
+  } else {
+    // Sem cashback: fallback local aceitável
+    cliSel.pontos+=ptsFinal;
+    cliSel.cashback=parseFloat((cliSel.cashback+cbFinal).toFixed(2));
+    mostrarSucVenda(v,ptsFinal,cbFinal,desc,cbUsado,false);
+  }
 
   CL=CL.map(function(c){return c.id===cliSel.id?cliSel:c;});
   if(prod)PRD.push({cid:cliSel.id,nome:prod,cat:'Produto',dias:dias});
@@ -1177,11 +1239,16 @@ async function confirmarCB(){
   // Salvar na planilha via API
   var salvoAPI=false;
   try{
+    var ctrl2=new AbortController();
+    var tmr2=setTimeout(function(){ctrl2.abort();},15000);
     var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
       body:JSON.stringify({token:_API_TOKEN,acao:'resgate_cashback',dados:{
         email:cbCli.email,valorCompra:v,cashbackUsado:cb
-      }})});
-    var data=await resp.json();
+      }}),redirect:'follow',signal:ctrl2.signal});
+    clearTimeout(tmr2);
+    var txt2=await resp.text();
+    var data;
+    try{data=JSON.parse(txt2);}catch(pe){throw new Error('resp-invalida');}
     if(data.sucesso){
       salvoAPI=true;
       // Usar valores reais retornados pela API
@@ -1193,6 +1260,11 @@ async function confirmarCB(){
         if(data.dados.novosPontos!==undefined) cbCli.pontos=data.dados.novosPontos;
         else cbCli.pontos+=pts;
       }
+    } else {
+      // API retornou erro real — abortar
+      if(btn){btn.disabled=false;btn.textContent='💰 Aplicar Cashback';}
+      toast('❌ Erro: '+(data.erro||'Falha ao aplicar cashback. Tente novamente.'));
+      return;
     }
   }catch(e){console.log('API off, salvando local');}
 
@@ -1269,13 +1341,17 @@ async function confirmarPts(){
   // Salvar resgate na planilha via API
   var salvoAPI=false;
   try{
+    var ctrl3=new AbortController();
+    var tmr3=setTimeout(function(){ctrl3.abort();},15000);
     var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
       body:JSON.stringify({token:_API_TOKEN,acao:'resgatar_premio',dados:{
         email:ptsCli.email,premioId:ptsPremioSel.id,codigoResgate:cod
-      }})});
-    var data=await resp.json();
+      }}),redirect:'follow',signal:ctrl3.signal});
+    clearTimeout(tmr3);
+    var txt3=await resp.text();
+    var data;try{data=JSON.parse(txt3);}catch(pe){throw new Error('resp-invalida');}
     if(data.sucesso){salvoAPI=true;}
-  }catch(e){console.log('API off, salvando local');}
+  }catch(e){console.log('API off, salvando local:',e.message);}
   
   // Deduzir pontos local
   ptsCli.pontos-=ptsPremioSel.pts;
@@ -1323,10 +1399,14 @@ async function cadastrar(){
   var btn=el('cad-form').querySelector('.bg');if(btn){btn.disabled=true;btn.textContent='⏳ Cadastrando...';}
   var novo={id:'C'+Date.now(),nome:nome,email:email,tel:tel,nivel:'BRONZE',pontos:0,cashback:0,gastoMes:0,mesesRec:0,ref:refCod};
   try{
-    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({token:_API_TOKEN,acao:'cadastrar_cliente',dados:{nome:nome,email:email,telefone:tel,cpf:cpf,dataNascimento:nasc,codigoIndicacao:ref}})});
-    var data=await resp.json();
+    var ctrl4=new AbortController();
+    var tmr4=setTimeout(function(){ctrl4.abort();},15000);
+    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({token:_API_TOKEN,acao:'cadastrar_cliente',dados:{nome:nome,email:email,telefone:tel,cpf:cpf,dataNascimento:nasc,codigoIndicacao:ref}}),redirect:'follow',signal:ctrl4.signal});
+    clearTimeout(tmr4);
+    var txt4=await resp.text();
+    var data;try{data=JSON.parse(txt4);}catch(pe){throw new Error('resp-invalida');}
     if(data.sucesso){novo.id=data.dados.id||novo.id;novo.ref=data.dados.codigoReferral||refCod;}
-  }catch(e){console.log('API off, usando local');}
+  }catch(e){console.log('API off, usando local:',e.message);}
   CL.push(novo);renderTudo();
   el('cad-form').style.display='none';el('cad-suc').style.display='block';
   var nm=el('cad-suc-nm');if(nm)nm.textContent=nome+' — '+email;
