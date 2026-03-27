@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Alpha Suplementos">
+<link rel="apple-touch-icon" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
+<title>Alpha Suplementos — Fidelidade v41</title>
+<link rel="manifest" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--red:#CC0000;--red2:#FF2222;--gold:#FFD700;--green:#1D9E75;--bg:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;--bg4:#222;--border:#2a2a2a;--text:#fff;--text2:#ccc;--text3:#888;--safe:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:14px}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+/* LOGIN */
+.login-screen{min-height:100vh;display:flex;flex-direction:column;background:var(--bg)}
+.login-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 24px 16px;text-align:center}
+.login-hero img{width:160px;height:160px;object-fit:contain;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.login-tagline{font-size:12px;color:var(--text3);margin-top:6px;letter-spacing:.8px}
+.login-form{background:var(--bg2);border-top:2px solid var(--red);padding:24px}
+.login-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;text-align:center;margin-bottom:16px}
+.inp{width:100%;background:var(--bg4);border:.5px solid #333;border-radius:8px;padding:11px 13px;color:var(--text);font-size:15px;outline:none;font-family:'Barlow',sans-serif;margin-bottom:12px;-webkit-appearance:none}
+.inp:focus{border-color:var(--red)}
+.btn-red{background:var(--red);color:#fff;border:none;border-radius:9px;padding:12px;font-size:14px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;width:100%;letter-spacing:.5px}
+.btn-red:active{background:#aa0000;transform:scale(.98)}
+
+.demo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+
+.login-links{text-align:center;margin-top:14px;font-size:12px;color:var(--text3)}
+.login-links a{color:var(--text3);text-decoration:none;margin:0 8px}
+/* APP */
+.app{display:none;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+.header{background:rgba(10,10,10,.95);border-bottom:1px solid #CC000033;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:sticky;top:0;z-index:10}
+.hdr-logo{display:flex;align-items:center;gap:8px}
+.hdr-logo img{height:30px}
+.hdr-logo-txt{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;color:var(--red)}
+.hdr-logo-txt span{color:var(--text)}
+.hdr-right{display:flex;gap:8px;align-items:center}
+.hdr-av{width:30px;height:30px;border-radius:50%;background:#CC000022;color:var(--red);border:1.5px solid var(--red);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;cursor:pointer}
+.screen{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(68px + var(--safe));display:none;flex-direction:column}
+.screen.on{display:flex}
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,10,.97);border-top:1px solid var(--red);display:flex;justify-content:space-around;padding:7px 0 calc(8px + var(--safe));z-index:20}
+.bn{display:flex;flex-direction:column;align-items:center;gap:2px;border:none;background:none;cursor:pointer;padding:4px 14px;color:var(--text3);font-family:'Barlow',sans-serif}
+.bn.on{color:var(--red)}
+.bn-ico{font-size:20px;transition:transform .15s}
+.bn.on .bn-ico{transform:scale(1.12)}
+.bn-lbl{font-size:9px;font-weight:600;letter-spacing:.3px}
+/* CARDS */
+.lcard{margin:12px;border-radius:14px;background:var(--bg2);border:1px solid #CC000033;overflow:hidden}
+.lcard-stripe{height:3px;background:linear-gradient(90deg,#990000,#CC0000,#FF3333)}
+.lcard-body{padding:16px}
+.lcard-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.lcard-brand{display:flex;align-items:center;gap:7px}
+.lcard-brand img{height:22px}
+.nivel-pill{display:flex;align-items:center;gap:4px;background:var(--bg4);border:.5px solid #333;border-radius:20px;padding:3px 9px}
+.np-e{font-size:14px}.np-t{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:900}
+.lcard-name{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;margin-bottom:2px}
+.lcard-email{font-size:11px;color:var(--text3);margin-bottom:12px}
+.lcard-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ls{background:var(--bg4);border-radius:8px;padding:9px 11px}
+.ls-v{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;line-height:1}
+.ls-l{font-size:9px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+/* AVISO SOMENTE LEITURA */
+.readonly-banner{background:#CC000011;border:.5px solid #CC000022;margin:0 12px 12px;border-radius:8px;padding:8px 12px;font-size:11px;color:#CC000088;display:flex;align-items:center;gap:6px}
+/* PROGRESS */
+.prog{margin:0 12px 12px;background:var(--bg3);border:.5px solid var(--border);border-radius:10px;padding:12px}
+.prog-hdr{display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px}
+.prog-title{font-weight:600}
+.prog-msg{color:var(--text3);font-size:11px}
+.prog-levels{display:flex;justify-content:space-around;margin-bottom:8px}
+.pl{display:flex;flex-direction:column;align-items:center;gap:2px;opacity:.3}
+.pl.done{opacity:.6}.pl.active{opacity:1}
+.pl-e{font-size:18px}.pl-n{font-size:9px;font-weight:700}
+.bar-bg{background:var(--bg4);border-radius:20px;height:6px;overflow:hidden;margin-bottom:5px}
+.bar-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#990000,#CC0000);transition:width .6s}
+.bar-info{display:flex;justify-content:space-between;font-size:10px;color:var(--text3)}
+/* QA */
+.qa-row{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:0 12px 12px}
+.qa{display:flex;flex-direction:column;align-items:center;gap:5px;background:var(--bg3);border:.5px solid var(--border);border-radius:10px;padding:10px 4px;cursor:pointer;border:none;transition:all .15s}
+.qa:active{background:var(--bg4);transform:scale(.94)}
+.qa-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.qa-lbl{font-size:10px;color:var(--text2);font-weight:500;text-align:center;line-height:1.2}
+/* SECTION */
+.sec{padding:0 12px 12px}
+.card{background:var(--bg3);border:.5px solid var(--border);border-radius:10px;padding:13px}
+.card-title{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.card-title::before{content:'';width:2px;height:10px;background:var(--red);border-radius:2px}
+/* RANKING */
+.rk{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:.5px solid var(--border)}
+.rk:last-child{border-bottom:none}
+.rk-pos{width:20px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;text-align:center}
+.rk-av{width:32px;height:32px;border-radius:50%;background:#CC000022;color:var(--red);border:1px solid #CC000033;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.rk-info{flex:1;min-width:0}
+.rk-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rk-sub{font-size:10px;color:var(--text3);margin-top:1px}
+.rk-pts{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--gold)}
+.rk-me{background:linear-gradient(90deg,#CC000012,transparent);border-radius:6px;padding:9px 6px;margin:0 -6px}
+/* PAGE HEADER */
+.pg-hdr{padding:14px 12px 8px}
+.pg-title{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900}
+.pg-sub{font-size:12px;color:var(--text3);margin-top:1px}
+/* PREMIOS */
+.premios-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px}
+.pc{background:var(--bg3);border:.5px solid var(--border);border-radius:10px;padding:12px;position:relative;overflow:hidden}
+.pc.av{border-color:#CC000033}
+.pc.av::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#990000,#FF3333)}
+.pc.lk{opacity:.5}
+.pc-cat{font-size:9px;color:var(--text3);margin-bottom:3px}
+.pc-nome{font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)}
+.pc-pts{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--gold);margin-bottom:6px}
+.pc-bar-bg{height:3px;background:var(--bg4);border-radius:20px;margin-bottom:5px;overflow:hidden}
+.pc-bar-fill{height:100%;border-radius:20px}
+.pc-info{font-size:10px;color:var(--text3)}
+.pc-badge{position:absolute;top:6px;right:6px;background:var(--red);color:#fff;font-size:8px;font-weight:700;padding:2px 5px;border-radius:20px}
+.pc-lock{position:absolute;top:6px;right:6px;font-size:9px;color:var(--text3)}
+/* INDICAR */
+.ref-card{background:var(--bg3);border:1px solid #CC000033;border-radius:10px;padding:14px;text-align:center;position:relative;overflow:hidden;margin-bottom:12px}
+.ref-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#990000,#CC0000,#FF3333)}
+.ref-code{font-family:monospace;font-size:22px;letter-spacing:5px;font-weight:700;color:var(--text);margin:8px 0}
+.ref-link{font-size:10px;color:var(--text3)}
+.ben-row{display:flex;align-items:center;gap:10px;padding:9px 10px;background:var(--bg4);border-radius:7px;margin-bottom:6px}
+.ben-ico{font-size:20px;flex-shrink:0}
+.ben-txt{font-size:12px;color:var(--text2)}
+.ben-pts{font-weight:700;color:var(--red)}
+.btn-outline{background:transparent;color:var(--text);border:.5px solid #333;border-radius:8px;padding:8px 18px;font-size:12px;font-weight:600;font-family:'Barlow',sans-serif;cursor:pointer}
+/* HIST */
+.hi{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--border)}
+.hi:last-child{border-bottom:none}
+.hi-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.hi-info{flex:1;min-width:0}
+.hi-desc{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hi-date{font-size:10px;color:var(--text3);margin-top:1px}
+.hi-val{text-align:right;flex-shrink:0}
+.hi-main{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700}
+/* BENEFICIOS */
+.ben-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:.5px solid var(--border);font-size:12px;color:var(--text2)}
+.ben-item:last-child{border-bottom:none}
+/* INDIC */
+.ind-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid var(--border)}
+.ind-item:last-child{border-bottom:none}
+.ind-nome{font-size:12px;font-weight:600}
+.ind-date{font-size:10px;color:var(--text3);margin-top:1px}
+/* TOAST */
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-10px);background:var(--bg3);border:1px solid var(--red);border-radius:20px;padding:9px 18px;font-size:12px;font-weight:600;z-index:99;opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* NEON UPGRADES */
+:root{
+  --neon-red:#FF2244;
+  --neon-gold:#FFD700;
+  --neon-green:#00FF88;
+  --neon-blue:#00CCFF;
+  --neon-purple:#CC88FF;
+  --text:#FFFFFF;
+  --text2:#DDDDDD;
+  --text3:#AAAAAA;
+}
+/* Stronger text visibility */
+body{color:#FFFFFF;font-size:15px}
+.card{border:.5px solid #444;background:#1a1a1a}
+/* Bigger, bolder buttons */
+.bv,.bverm,.btn-red,.bgreen,.bg{
+  font-size:15px!important;padding:13px!important;
+  border-radius:10px!important;letter-spacing:.5px;
+}
+/* Neon borders on inputs */
+.inp,.li,.linp,.lcampo,.campo{
+  border:1px solid #555!important;
+  color:#FFF!important;font-size:15px!important;
+  background:#222!important;
+}
+.inp:focus,.li:focus,.lcampo:focus,.campo:focus{
+  border-color:#FF2244!important;
+  box-shadow:0 0 0 2px rgba(255,34,68,.2)!important;
+}
+/* Neon level badges */
+.nbo,.nb-o,.nt-o{background:#FFD70022!important;color:#FFD700!important;border:1px solid #FFD700!important;font-size:12px!important}
+.nbp,.nb-p,.nt-p{background:#00CCFF22!important;color:#00CCFF!important;border:1px solid #00CCFF!important;font-size:12px!important}
+.nbb,.nb-b,.nt-b{background:#FF884422!important;color:#FF8844!important;border:1px solid #FF8844!important;font-size:12px!important}
+/* Tab active neon */
+.tab.on,.tbt.on,.tb-tab.on{color:#FF2244!important;border-bottom-color:#FF2244!important;text-shadow:0 0 8px rgba(255,34,68,.5)}
+/* Card titles */
+.ct::before,.card-title::before{background:#FF2244!important}
+/* Table rows */
+.tbl tr:hover td,.tabela tr:hover td{background:#252525!important}
+/* Toast */
+.toast,.toast-el{font-size:14px!important}
+/* Better contrast for all text */
+.kv,.kpi-val,.smv,.stat2-v{text-shadow:0 0 10px currentColor}
+
+
+@media (max-width: 768px) {
+  .topbar, .tb { flex-wrap:wrap; height:auto; min-height:50px; padding:6px 10px; }
+  .tbtabs, .tabs { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .tbtabs::-webkit-scrollbar, .tabs::-webkit-scrollbar { display:none; }
+  .tbt, .tab { flex-shrink:0; font-size:11px; padding:7px 10px; }
+  .main { padding:10px; }
+  .g2, .g3 { grid-template-columns:1fr !important; }
+  .card { padding:12px; }
+  .bv, .bverm, .bg, .btn-red { padding:14px !important; font-size:15px !important; }
+  .inp, select { padding:12px !important; font-size:15px !important; }
+  .mov { padding:0 !important; align-items:flex-end !important; }
+  .mbox { border-radius:16px 16px 0 0 !important; max-width:100% !important; width:100% !important; }
+}
+
+/* ═══ CARDS COLORIDOS MODELO ═══════════════════════ */
+.big-card {
+  border-radius: 16px;
+  padding: 20px 20px 16px 20px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
+.big-card::after {
+  content: '';
+  position: absolute;
+  right: -20px;
+  bottom: -20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+}
+.big-card::before {
+  content: '';
+  position: absolute;
+  right: 20px;
+  bottom: -30px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.05);
+}
+.bc-icon {
+  font-size: 36px;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.bc-body { flex: 1; z-index: 1; }
+.bc-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.8);
+  margin-bottom: 4px;
+}
+.bc-value {
+  font-size: 32px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  font-family: 'Barlow Condensed', sans-serif;
+}
+.bc-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,.7);
+  margin-top: 4px;
+}
+.bc-red    { background: linear-gradient(135deg, #CC0000, #FF3333); }
+.bc-gold   { background: linear-gradient(135deg, #B8860B, #FFD700); }
+.bc-green  { background: linear-gradient(135deg, #1D9E75, #00FF88); }
+.bc-blue   { background: linear-gradient(135deg, #0066CC, #00CCFF); }
+.bc-purple { background: linear-gradient(135deg, #6600CC, #CC88FF); }
+.bc-orange { background: linear-gradient(135deg, #CC6600, #FF9900); }
+
+/* Cards de nível menores */
+.nivel-cards { display: grid; grid-template-columns: repeat(3,1fr); gap:10px; margin-bottom:14px; }
+.nivel-card {
+  border-radius: 12px;
+  padding: 14px 10px;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all .2s;
+}
+.nivel-card.ativo { border-color: rgba(255,255,255,.4); transform: scale(1.03); }
+.nc-emoji { font-size: 24px; display: block; margin-bottom: 4px; }
+.nc-nome { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.9); }
+.nc-pts { font-size: 10px; color: rgba(255,255,255,.6); margin-top: 2px; }
+/* ═══════════════════════════════════════════════════ */
+
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen" class="login-screen">
+  <div class="login-hero">
+    <img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha Suplementos">
+    <div class="login-tagline">ACUMULE PONTOS · SUBA DE NÍVEL · GANHE PRÊMIOS</div>
+  </div>
+  <div class="login-form">
+    <div class="login-title">ENTRAR NA MINHA CONTA</div>
+    <input type="text" class="inp" id="l-nome" placeholder="Seu primeiro nome" autocomplete="given-name" style="text-transform:capitalize" oninput="this.value=this.value.charAt(0).toUpperCase()+this.value.slice(1)">
+    <input type="tel" class="inp" id="l-tel" placeholder="Seu telefone (somente números)" autocomplete="tel" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+    <div id="l-err" style="color:#FF4444;font-size:12px;margin-bottom:8px;display:none">Nome ou telefone incorretos</div>
+    <button class="btn-red" id="l-btn" onclick="fazerLogin()">ENTRAR →</button>
+    <div style="background:#CC000011;border:.5px solid #CC000022;border-radius:8px;padding:8px 12px;font-size:11px;color:#CC000088;margin-bottom:12px;text-align:center">
+      🔑 Login: <strong style="color:#f0f0f0">primeiro nome</strong> + <strong style="color:#f0f0f0">telefone</strong>
+    </div>
+
+    <div class="login-links">
+      <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/ceo/">Sou CEO</a> · <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/funcionario/">Sou Funcionário</a>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="app">
+  <div class="header">
+    <div class="hdr-logo">
+      <img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha">
+      <span class="hdr-logo-txt">ALPHA <span>SUPLEMENTOS</span></span>
+    </div>
+    <div class="hdr-right">
+      <button style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3);position:relative" onclick="toast('🔔 Sem novas notificações')">🔔<span style="position:absolute;top:0;right:0;width:7px;height:7px;background:var(--red);border-radius:50%;border:1.5px solid var(--bg)"></span></button>
+      <div class="hdr-av" id="hdr-av" onclick="fazerLogout()"></div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div id="sc-home" class="screen on">
+    <!-- HEADER CARD USUÁRIO -->
+    <div class="lcard">
+      <div class="lcard-stripe"></div>
+      <div class="lcard-body">
+        <div class="lcard-top">
+          <div class="lcard-brand"><img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha"></div>
+          <div class="nivel-pill"><span class="np-e" id="lc-e">🥇</span><span class="np-t" id="lc-nt" style="color:#FFD700">OURO</span></div>
+        </div>
+        <div class="lcard-name" id="lc-nm">JOÃO SILVA</div>
+        <div class="lcard-email" id="lc-em">---</div>
+      </div>
+    </div>
+
+    <!-- CARDS COLORIDOS GRANDES -->
+    <div class="big-card bc-red">
+      <div class="bc-icon">⭐</div>
+      <div class="bc-body">
+        <div class="bc-label">Pontos Acumulados</div>
+        <div class="bc-value" id="lc-pts">3.420</div>
+        <div class="bc-sub">Use para resgatar prêmios</div>
+      </div>
+    </div>
+
+    <div class="big-card bc-green">
+      <div class="bc-icon">💰</div>
+      <div class="bc-body">
+        <div class="bc-label">Cashback Disponível</div>
+        <div class="bc-value" id="lc-cb">R$241,40</div>
+        <div class="bc-sub">Desconto na próxima compra</div>
+      </div>
+    </div>
+
+    <div class="big-card bc-gold">
+      <div class="bc-icon">🛍️</div>
+      <div class="bc-body">
+        <div class="bc-label">Gasto Este Mês</div>
+        <div class="bc-value" id="lc-gasto">R$380,00</div>
+        <div class="bc-sub" id="prog-msg">Continue comprando!</div>
+      </div>
+    </div>
+
+    <div class="big-card bc-purple">
+      <div class="bc-icon">🎯</div>
+      <div class="bc-body">
+        <div class="bc-label">Indicações Realizadas</div>
+        <div class="bc-value" id="lc-ind">0</div>
+        <div class="bc-sub">+100 pts + R$10 cashback na 1ª compra do indicado</div>
+      </div>
+    </div>
+
+    <!-- CARDS DE NÍVEL -->
+    <div class="nivel-cards">
+      <div class="nivel-card" id="pl-b" style="background:linear-gradient(135deg,#3D2000,#8B4513)">
+        <span class="nc-emoji">🥉</span>
+        <div class="nc-nome" style="color:#CD7F32">Bronze</div>
+        <div class="nc-pts">1pt/R$ · 2%CB · ≥R$200/2m</div>
+      </div>
+      <div class="nivel-card" id="pl-p" style="background:linear-gradient(135deg,#1a1a2e,#333366)">
+        <span class="nc-emoji">🥈</span>
+        <div class="nc-nome" style="color:#C8C8C8">Prata</div>
+        <div class="nc-pts">1,5pt/R$ · 5%CB · ≥R$200/2m</div>
+      </div>
+      <div class="nivel-card" id="pl-o" style="background:linear-gradient(135deg,#2a1a00,#665500)">
+        <span class="nc-emoji">🥇</span>
+        <div class="nc-nome" style="color:#FFD700">Ouro</div>
+        <div class="nc-pts">2pt/R$ · 7%CB · ≥R$250/2m</div>
+      </div>
+    </div>
+
+    <!-- BARRA DE PROGRESSO -->
+    <div style="background:#1a1a1a;border-radius:12px;padding:14px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:12px;font-weight:700;color:#fff">Progresso de Nível</span>
+        <span style="font-size:11px;color:#aaa" id="prog-meta"></span>
+      </div>
+      <div class="bar-bg"><div class="bar-fill" id="prog-bar" style="width:100%"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px">
+        <span style="font-size:10px;color:#888" id="prog-gasto"></span>
+        <span style="font-size:10px;color:#CC0000;font-weight:700" id="prog-falta"></span>
+      </div>
+    </div>
+
+    <div class="readonly-banner">🔒 Compras e resgates são processados pelo funcionário na loja</div>
+
+    <!-- AÇÕES RÁPIDAS -->
+    <div class="qa-row">
+      <button class="qa" onclick="goScreen('premios')"><div class="qa-ico" style="background:#FFD70022">🏆</div><div class="qa-lbl">Prêmios</div></button>
+      <button class="qa" onclick="goScreen('indicar')"><div class="qa-ico" style="background:#CC000022">🎯</div><div class="qa-lbl">Indicar</div></button>
+      <button class="qa" onclick="goScreen('historico')"><div class="qa-ico" style="background:#00CC6622">📋</div><div class="qa-lbl">Histórico</div></button>
+      <button class="qa" onclick="goScreen('beneficios')"><div class="qa-ico" style="background:#00CCFF22">⭐</div><div class="qa-lbl">Benefícios</div></button>
+    </div>
+
+    <!-- RANKING -->
+    <div style="background:#1a1a1a;border-radius:12px;padding:14px;margin-bottom:14px">
+      <div style="font-size:12px;font-weight:700;color:#FFD700;margin-bottom:10px">🏆 RANKING — MINHA POSIÇÃO</div>
+      <div id="rk-list"></div>
+    </div>
+
+  </div><!-- end sc-home -->
+
+  <!-- PRÊMIOS -->
+  <div id="sc-premios" class="screen">
+    <div class="pg-hdr"><div class="pg-title">LOJA DE PRÊMIOS</div><div class="pg-sub" id="premios-sub">Carregando...</div></div>
+    <div class="premios-grid" id="premios-grid" style="padding-bottom:10px"></div>
+    <div class="sec" style="padding-top:10px">
+      <div style="background:var(--bg3);border:.5px solid #CC000033;border-radius:10px;padding:12px;font-size:12px;color:var(--text3);line-height:1.8">
+        🔒 Para resgatar um prêmio, dirija-se à loja e solicite ao funcionário.<br>
+        O resgate é feito presencialmente e gera um código de retirada.
+      </div>
+    </div>
+  </div>
+
+  <!-- INDICAR -->
+  <div id="sc-indicar" class="screen">
+    <div class="pg-hdr"><div class="pg-title">INDICAR AMIGOS</div><div class="pg-sub">Ganhe pontos indicando!</div></div>
+    <div class="sec">
+      <div class="ref-card">
+        <div style="font-size:10px;color:var(--text3);margin-bottom:4px;letter-spacing:.5px">SEU CÓDIGO EXCLUSIVO DE INDICAÇÃO</div>
+        <div class="ref-code" id="ref-code">ALPHA01</div>
+        <div class="ref-link" id="ref-link">Compartilhe este código com seus amigos!</div>
+        <div style="display:flex;gap:8px;margin-top:12px;justify-content:center">
+          <button class="btn-outline" onclick="copiarCodigo()">📋 Copiar código</button>
+          <button class="btn-outline" onclick="compartilharWA()" style="background:#25D36622;border-color:#25D36644;color:#25D366">📱 Compartilhar WA</button>
+        </div>
+      </div>
+      <div style="background:#CC000011;border:.5px solid #CC000022;border-radius:10px;padding:12px;margin-bottom:12px;font-size:12px;color:var(--text3);text-align:center;line-height:1.8">
+        📢 Diga ao seu amigo: <strong style="color:var(--text)">"Use meu código <span id="ref-inline">ALPHA01</span> ao se cadastrar na Alpha Suplementos!"</strong><br>
+        Ele ganha <strong style="color:var(--gold)">+50 pts + R$5 cashback</strong> no cadastro e você ganha <strong style="color:var(--gold)">+100 pts + R$10 cashback</strong> na primeira compra dele!
+      </div>
+      <div class="ben-row"><span class="ben-ico">🐺</span><div class="ben-txt">Você ganha <span class="ben-pts">+100 pts + R$10 cashback</span> quando seu amigo fizer a 1ª compra</div></div>
+      <div class="ben-row"><span class="ben-ico">🎉</span><div class="ben-txt">Seu amigo ganha <span class="ben-pts">+50 pts + R$5 cashback</span> ao se cadastrar com seu código</div></div>
+      <div class="ben-row"><span class="ben-ico">♾️</span><div class="ben-txt">Sem limite — indique quantos quiser!</div></div>
+      <div class="card" style="margin-top:12px">
+        <div class="card-title">Minhas indicações</div>
+        <div id="ind-lista"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTÓRICO -->
+  <div id="sc-historico" class="screen">
+    <div class="pg-hdr"><div class="pg-title">HISTÓRICO</div><div class="pg-sub">Compras e resgates</div></div>
+    <div class="sec"><div class="card"><div id="hist-list"></div></div></div>
+  </div>
+
+  <!-- BENEFÍCIOS -->
+  <div id="sc-beneficios" class="screen">
+    <div class="pg-hdr"><div class="pg-title">MEUS BENEFÍCIOS</div><div class="pg-sub" id="ben-sub"></div></div>
+    <div class="sec">
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">Benefícios do meu nível</div>
+        <div id="ben-lista"></div>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">Todos os níveis</div>
+        <div id="niveis-lista"></div>
+      </div>
+      <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:10px;padding:12px;font-size:12px;color:var(--text3);line-height:1.9">
+        <div style="font-weight:600;color:var(--text);margin-bottom:6px">Como funciona o cashback?</div>
+        Você ganha cashback em toda compra. Para usar: a cada <strong style="color:var(--text)">R$7</strong> em compras você pode descontar <strong style="color:var(--text)">R$1</strong> do saldo acumulado. Solicite ao funcionário na hora da compra.
+      </div>
+    </div>
+  </div>
+
+  <div class="bnav">
+    <button class="bn on" id="bn-home" onclick="goScreen('home')"><span class="bn-ico">🏠</span><span class="bn-lbl">Início</span></button>
+    <button class="bn" id="bn-premios" onclick="goScreen('premios')"><span class="bn-ico">🏆</span><span class="bn-lbl">Prêmios</span></button>
+    <button class="bn" id="bn-indicar" onclick="goScreen('indicar')"><span class="bn-ico">🐺</span><span class="bn-lbl">Indicar</span></button>
+    <button class="bn" id="bn-historico" onclick="goScreen('historico')"><span class="bn-ico">📋</span><span class="bn-lbl">Histórico</span></button>
+    <button class="bn" id="bn-beneficios" onclick="goScreen('beneficios')"><span class="bn-ico">⭐</span><span class="bn-lbl">Benefícios</span></button>
+  </div>
+</div>
+
+<div class="toast" id="toast-el"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+
+<script>
+
+// ══ SEGURANÇA CLIENTE ═══════════════════════════════
+var _API_TOKEN = 'd9O-8jZLUcPHX_YlWF_XEUTySCNa3EZlVmJPL9thg94';
+var _CLI_SESSION_KEY = 'alpha_cli_session';
+var _CLI_SESSION_EXPIRY = 24 * 60 * 60 * 1000; // 24 horas
+
+function salvarSessaoCli(userData) {
+  localStorage.setItem(_CLI_SESSION_KEY, JSON.stringify({user: userData, expiry: Date.now() + _CLI_SESSION_EXPIRY}));
+}
+
+function verificarSessaoCli() {
+  try {
+    var sess = JSON.parse(localStorage.getItem(_CLI_SESSION_KEY) || 'null');
+    if(sess && sess.expiry > Date.now()) return sess.user;
+    localStorage.removeItem(_CLI_SESSION_KEY);
+  } catch(e) {}
+  return null;
+}
+
+function verificarBloqueioCli() {
+  try {
+    var bl = JSON.parse(localStorage.getItem('alpha_cli_block') || 'null');
+    if(bl && bl.until > Date.now()) return Math.ceil((bl.until-Date.now())/60000);
+    if(bl) localStorage.removeItem('alpha_cli_block');
+  } catch(e) {}
+  return 0;
+}
+
+function registrarTentativaCli() {
+  try {
+    var bl = JSON.parse(localStorage.getItem('alpha_cli_block') || '{"count":0}');
+    bl.count = (bl.count||0)+1;
+    if(bl.count >= 5){ bl.until=Date.now()+(5*60*1000); bl.count=0; }
+    localStorage.setItem('alpha_cli_block', JSON.stringify(bl));
+  } catch(e) {}
+}
+// ════════════════════════════════════════════════════
+
+var WEB_APP_URL='https://script.google.com/macros/s/AKfycbw7AIr8DrCMGFhpoaz6gE7_v0M4sElvNPZh7PaEpP4h_oX_vwfraiUAaGOQNMoQK_8WpQ/exec';
+const DEMOS={};
+// FIX: TODOS e HIST agora são arrays reativos carregados da API
+var TODOS=[];
+var HIST_DATA=[];
+const PREMIOS=[
+  {id:'PRM_001',nome:'Coqueteleira Alpha',         pts:300,  nivel:'BRONZE', cat:'Acessório',  desc:'Coqueteleira exclusiva Alpha Suplementos',    emoji:'🥤'},
+  {id:'PRM_002',nome:'Pré-Treino Olimpia',         pts:1100, nivel:'BRONZE', cat:'Pré-Treino', desc:'Pré-treino Olimpia — dose única',             emoji:'⚡'},
+  {id:'PRM_003',nome:'Pré-Treino Oxan Pump',       pts:1000, nivel:'BRONZE', cat:'Pré-Treino', desc:'Pré-treino Oxan Pump — dose única',           emoji:'💪'},
+  {id:'PRM_004',nome:'Creatina 300g Infinity Labs',pts:900,  nivel:'BRONZE', cat:'Creatina',   desc:'Creatina monohidratada 300g Infinity Labs',   emoji:'🔬'},
+  {id:'PRM_005',nome:'Wheyzinho',                  pts:1500, nivel:'PRATA',  cat:'Proteína',   desc:'Whey protein sabor especial — porção',        emoji:'🥛'},
+  {id:'PRM_006',nome:'Deca Whey',                  pts:1800, nivel:'PRATA',  cat:'Proteína',   desc:'Deca Whey protein premium — porção',          emoji:'🏆'},
+];
+// FIX: regras de nível corretas — Prata: R$200 x 2 meses, Ouro: R$250 x 2 meses
+const NCFG={
+  OURO:  {emoji:'🥇', cor:'#FFD700', pts:2.0, cb:0.07, metaGasto:250, metaMeses:2},
+  PRATA: {emoji:'🥈', cor:'#C8C8C8', pts:1.5, cb:0.05, metaGasto:200, metaMeses:2},
+  BRONZE:{emoji:'🥉', cor:'#CD7F32', pts:1.0, cb:0.02, metaGasto:0,   metaMeses:0}
+};
+const fR=v=>'R$'+Number(v).toFixed(2).replace('.',',');
+const fP=v=>Number(v).toLocaleString('pt-BR')+' pts';
+const ini=n=>n.split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
+const niO=n=>['BRONZE','PRATA','OURO'].indexOf(n);
+
+let U=null;
+function toast(msg){const t=document.getElementById('toast-el');t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2800)}
+
+async function fazerLogin(){
+  // Verificar bloqueio
+  var mins = verificarBloqueioCli();
+  if(mins > 0){
+    var err=document.getElementById('l-err');
+    err.style.display='block';
+    err.textContent='Muitas tentativas. Aguarde '+mins+' minuto(s).';
+    return;
+  }
+
+  var nome = (document.getElementById('l-nome')||{value:''}).value.trim().toLowerCase();
+  var tel  = (document.getElementById('l-tel') ||{value:''}).value.trim().replace(/[^0-9]/g,'');
+  var err  = document.getElementById('l-err');
+
+  if(!nome || !tel){
+    err.style.display='block';
+    err.textContent='Informe seu primeiro nome e telefone';
+    return;
+  }
+
+  err.style.display='none';
+
+  // FIX: botão de loading agora funciona (id="l-btn" adicionado no HTML)
+  var btn = document.getElementById('l-btn');
+  if(btn){ btn.textContent='Buscando...'; btn.disabled=true; }
+
+  var encontrado = null;
+
+  try {
+    var resp = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos');
+    var data = await resp.json();
+    if(data.sucesso && data.dados && data.dados.length > 0){
+      for(var i=0; i<data.dados.length; i++){
+        var row = data.dados[i];
+        var primNome = String(row[1]||'').split(' ')[0].toLowerCase().trim();
+        var telRow   = String(row[3]||'').replace(/[^0-9]/g,'');
+        var nomeOk   = primNome === nome;
+        var telOk    = telRow === tel || telRow.endsWith(tel) || tel.endsWith(telRow.slice(-8));
+        if(nomeOk && telOk){
+          encontrado = {
+            id:        String(row[0]||''),
+            nome:      String(row[1]||nome),
+            email:     String(row[2]||''),
+            tel:       String(row[3]||tel),
+            nivel:     String(row[7]||'BRONZE'),
+            pontos:    Number(row[6])||0,
+            cashback:  Number(row[10])||0,
+            gastoMes:  Number(row[8])||0,
+            mesesRec:  Number(row[9])||0,
+            // FIX: indicacoes carregado da coluna 13 da planilha (índice 12)
+            indicacoes: Number(row[13])||0,
+            ref:       String(row[11]||gerarRefLocal())
+          };
+          break;
+        }
+      }
+      // FIX: Popular ranking com todos os clientes carregados
+      TODOS.length = 0;
+      data.dados.forEach(function(r){
+        if(r[0] && r[1]){
+          TODOS.push({
+            id: String(r[0]),
+            nome: String(r[1]),
+            nivel: String(r[7]||'BRONZE'),
+            pontos: Number(r[6])||0
+          });
+        }
+      });
+    }
+  } catch(e){ console.log('API offline:', e.message); }
+
+  if(btn){ btn.textContent='ENTRAR →'; btn.disabled=false; }
+
+  if(encontrado){
+    U = encontrado;
+    salvarSessaoCli(U);
+    iniciar();
+    // FIX: Carregar histórico após login
+    carregarHistorico();
+    return;
+  }
+
+  registrarTentativaCli();
+  err.style.display='block';
+  err.textContent='Nome ou telefone não encontrados. Cadastre-se na loja!';
+}
+
+// FIX: Função para carregar histórico do cliente logado via API
+async function carregarHistorico(){
+  if(!U) return;
+  try {
+    var resp = await fetch(WEB_APP_URL+'?acao=listar_historico&token='+_API_TOKEN+'&email='+encodeURIComponent(U.email||''));
+    var data = await resp.json();
+    HIST_DATA.length = 0;
+    if(data.sucesso && data.dados){
+      // Filtrar apenas registros deste cliente (col[1] = clienteId)
+      data.dados.forEach(function(r){
+        if(String(r[1]) === String(U.id)){
+          HIST_DATA.push({
+            id:    r[0]||'',
+            tipo:  String(r[9]||'compra').toLowerCase().indexOf('prize')>=0||String(r[0]||'').startsWith('RPT')?'premio':'compra',
+            desc:  r[2]||r[6]||'Compra',
+            valor: Number(r[3])||0,
+            pts:   Number(r[4])||0,
+            data:  r[8] ? new Date(r[8]).toLocaleDateString('pt-BR') : ''
+          });
+        }
+      });
+      // Mais recente primeiro
+      HIST_DATA.reverse();
+    }
+    renderHistorico();
+  } catch(e){ console.log('Erro ao carregar histórico:', e.message); }
+}
+
+// FIX: Renderizar histórico separado para poder chamar após carregamento assíncrono
+function renderHistorico(){
+  var hl = document.getElementById('hist-list');
+  if(!hl) return;
+  if(HIST_DATA.length === 0){
+    hl.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:16px 0;text-align:center">Nenhuma movimentação ainda.</div>';
+    return;
+  }
+  hl.innerHTML = HIST_DATA.map(function(h){
+    var isC = h.tipo==='compra';
+    return '<div class="hi">'+
+      '<div class="hi-ico" style="background:'+(isC?'#CC000022':'#FFD70022')+'">'+(isC?'🛍️':'🎁')+'</div>'+
+      '<div class="hi-info"><div class="hi-desc">'+h.desc+'</div><div class="hi-date">'+h.data+'</div></div>'+
+      '<div class="hi-val">'+
+        '<div class="hi-main" style="color:'+(h.pts>0?'var(--gold)':'var(--red)')+'">'+(h.pts>0?'+':'')+fP(h.pts)+'</div>'+
+        (h.valor>0?'<div style="font-size:10px;color:var(--text3)">'+fR(h.valor)+'</div>':'')+
+      '</div></div>';
+  }).join('');
+}
+
+async function salvarTokenNaPlanilha(token){
+  if(!window.U || !window.U.email) return;
+  try {
+    await fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'text/plain'},
+      body: JSON.stringify({
+        acao: 'salvar_token_push',
+        dados: { email: window.U.email, token: token }
+      })
+    });
+    console.log('Token FCM salvo na planilha!');
+  } catch(e) {
+    console.log('Erro ao salvar token:', e);
+  }
+}
+
+function copiarCodigo(){
+  var cod=U.ref;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(cod).then(function(){toast('Código '+cod+' copiado!');});
+  } else {
+    toast('Código: '+cod);
+  }
+}
+function copiarLink(){copiarCodigo();}
+function compartilharWA(){
+  var msg='Oi! Me cadastrei no programa de fidelidade da *Alpha Suplementos* e quero te indicar!'+
+    ' Use meu código *'+U.ref+'* ao se cadastrar e ganhe *+50 pontos + R$5 cashback* de boas-vindas!'+
+    ' Acesse: sistemaalphasuplementos.github.io/alpha-suplementos/cliente/';
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+}
+
+function gerarRefLocal(){
+  var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var cod='ALPHA';
+  for(var i=0;i<4;i++) cod+=chars.charAt(Math.floor(Math.random()*chars.length));
+  return cod;
+}
+
+function iniciar(){
+  var ls = document.getElementById('login-screen');
+  if(ls) ls.style.display = 'none';
+  var app = document.getElementById('app');
+  if(app){ app.style.display='flex'; app.style.flexDirection='column'; }
+  if(typeof renderAll === 'function') renderAll();
+  if(typeof goScreen === 'function') goScreen('home');
+  if(typeof pedirPermissaoNotificacao === 'function') pedirPermissaoNotificacao();
+}
+
+function fazerLogout(){
+  U = null;
+  TODOS.length = 0;
+  HIST_DATA.length = 0;
+  try{ localStorage.removeItem(_CLI_SESSION_KEY); }catch(e){}
+  var app = document.getElementById('app');
+  if(app) app.style.display = 'none';
+  var ls = document.getElementById('login-screen');
+  if(ls) ls.style.display = '';
+}
+
+// Verificar sessão salva ao carregar
+(function(){
+  try {
+    var sess = JSON.parse(localStorage.getItem(_CLI_SESSION_KEY)||'null');
+    if(sess && sess.expiry > Date.now() && sess.user){
+      U = sess.user;
+      document.addEventListener('DOMContentLoaded', function(){
+        iniciar();
+        // FIX: recarregar dados ao restaurar sessão
+        fetch(WEB_APP_URL+'?acao=listar_clientes_todos').then(function(r){return r.json();}).then(function(data){
+          if(data.sucesso && data.dados){
+            TODOS.length = 0;
+            data.dados.forEach(function(r){
+              if(r[0]&&r[1]) TODOS.push({id:String(r[0]),nome:String(r[1]),nivel:String(r[7]||'BRONZE'),pontos:Number(r[6])||0});
+              // Atualiza dados do usuário logado com dados frescos
+              if(U && String(r[0])===String(U.id)){
+                U.nivel=String(r[7]||'BRONZE');
+                U.pontos=Number(r[6])||0;
+                U.cashback=Number(r[10])||0;
+                U.gastoMes=Number(r[8])||0;
+                U.mesesRec=Number(r[9])||0;
+                U.indicacoes=Number(r[13])||0;
+                salvarSessaoCli(U);
+              }
+            });
+            renderAll();
+          }
+        }).catch(function(){});
+        carregarHistorico();
+      });
+    }
+  } catch(e){}
+})();
+
+function goScreen(name){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');});
+  document.querySelectorAll('.bn').forEach(function(b){b.classList.remove('on');});
+  var sc = document.getElementById('sc-'+name);
+  if(!sc){ sc = document.getElementById('sc-home'); name='home'; }
+  if(sc) sc.classList.add('on');
+  var bn=document.getElementById('bn-'+name);
+  if(bn) bn.classList.add('on');
+  // FIX: recarregar histórico ao abrir a tela
+  if(name==='historico') carregarHistorico();
+  try{ renderAll(); }catch(e){}
+}
+
+function pedirPermissaoNotificacao(){
+  if('Notification' in window && Notification.permission === 'default'){
+    Notification.requestPermission();
+  }
+}
+
+function renderAll(){
+  if(!U) return;
+  try {
+    var cfg = NCFG[U.nivel] || NCFG.BRONZE;
+
+    // Avatar
+    var av = document.getElementById('hdr-av');
+    if(av) av.textContent = ini(U.nome);
+
+    // Card header
+    var e = document.getElementById('lc-e'); if(e) e.textContent = cfg.emoji;
+    var nt = document.getElementById('lc-nt'); if(nt){ nt.textContent=U.nivel; nt.style.color=cfg.cor; }
+    var nm = document.getElementById('lc-nm'); if(nm) nm.textContent = U.nome.toUpperCase();
+    var em = document.getElementById('lc-em'); if(em) em.textContent = U.email||'';
+
+    // Big cards
+    var pts = document.getElementById('lc-pts'); if(pts) pts.textContent = Number(U.pontos).toLocaleString('pt-BR');
+    var cb  = document.getElementById('lc-cb');  if(cb)  cb.textContent  = fR(U.cashback);
+    var gs  = document.getElementById('lc-gasto'); if(gs) gs.textContent = fR(U.gastoMes||0);
+    // FIX: indicacoes agora vem da planilha
+    var ind = document.getElementById('lc-ind'); if(ind) ind.textContent = String(U.indicacoes||0);
+
+    // Nivel cards
+    ['b','p','o'].forEach(function(k,i){
+      var el = document.getElementById('pl-'+k);
+      var nv = ['BRONZE','PRATA','OURO'][i];
+      if(el){ el.classList.remove('ativo'); if(nv===U.nivel) el.classList.add('ativo'); }
+    });
+
+    // FIX: Progress bar com metas corretas — Prata R$200/2m, Ouro R$250/2m
+    var metaGasto = U.nivel==='OURO' ? 250 : 200;
+    var gasto = U.gastoMes||0;
+    var meses = U.mesesRec||0;
+    var pct = Math.min(100, Math.round(gasto/metaGasto*100));
+    var bar = document.getElementById('prog-bar'); if(bar) bar.style.width = pct+'%';
+    var pmeta = document.getElementById('prog-meta');
+    if(pmeta){
+      if(U.nivel==='OURO') pmeta.textContent = '🥇 Nível máximo!';
+      else pmeta.textContent = 'Meta: R$'+(U.nivel==='PRATA'?'250 (Ouro)':'200 (Prata)')+' · '+meses+'/2 meses';
+    }
+    var pgasto = document.getElementById('prog-gasto'); if(pgasto) pgasto.textContent = 'R$'+gasto.toFixed(2)+' gastos este mês';
+    var pfalta = document.getElementById('prog-falta');
+    if(pfalta){
+      var falta = Math.max(0, metaGasto-gasto);
+      if(U.nivel==='OURO') pfalta.textContent = '✅ Nível máximo!';
+      else pfalta.textContent = falta > 0 ? 'Faltam R$'+falta.toFixed(2) : '✅ Meta do mês atingida! ('+meses+'/2 meses)';
+    }
+
+    // Indicador de nível no card dourado
+    var pmsg = document.getElementById('prog-msg');
+    if(pmsg){
+      if(U.nivel==='OURO') pmsg.textContent = '🥇 Você é OURO!';
+      else if(U.nivel==='PRATA') pmsg.textContent = '🥈 Você é PRATA! ('+meses+'/2 meses ≥R$200)';
+      else pmsg.textContent = '🥉 R$200/mês por 2 meses = Prata!';
+    }
+
+    // FIX: Ranking — carregado da API, ordenado por pontos, destaca o usuário logado
+    var rkList = document.getElementById('rk-list');
+    if(rkList){
+      if(TODOS.length === 0){
+        rkList.innerHTML = '<div style="color:var(--text3);font-size:12px;padding:10px 0">Carregando ranking...</div>';
+      } else {
+        var todos2 = TODOS.slice().sort(function(a,b){return b.pontos-a.pontos;});
+        // Mostrar top 10
+        var top = todos2.slice(0,10);
+        // Garantir que o usuário logado apareça
+        var meIdx = todos2.findIndex(function(c){ return String(c.id)===String(U.id); });
+        var meNaLista = top.findIndex(function(c){ return String(c.id)===String(U.id); }) >= 0;
+        var html = top.map(function(c,i){
+          var isMe = String(c.id)===String(U.id);
+          var posL = i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
+          var posC = i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#888';
+          var nc = NCFG[c.nivel]||NCFG.BRONZE;
+          return '<div class="rk'+(isMe?' rk-me':'')+'">' +
+            '<div class="rk-pos" style="color:'+posC+'">'+posL+'</div>'+
+            '<div class="rk-av" style="'+(isMe?'border-color:var(--gold);color:var(--gold)':'')+'">'+ini(c.nome)+'</div>'+
+            '<div class="rk-info"><div class="rk-name">'+(isMe?'<strong>'+c.nome+' (Você)</strong>':c.nome)+'</div>'+
+            '<div class="rk-sub">'+nc.emoji+' '+c.nivel+'</div></div>'+
+            '<div class="rk-pts">'+fP(c.pontos)+'</div>'+
+            '</div>';
+        }).join('');
+        // Se usuário não está no top 10, adiciona ao final
+        if(!meNaLista && meIdx >= 0){
+          var me = todos2[meIdx];
+          var nc2 = NCFG[me.nivel]||NCFG.BRONZE;
+          html += '<div style="border-top:1px dashed #333;margin-top:4px;padding-top:4px">'+
+            '<div class="rk rk-me">'+
+            '<div class="rk-pos" style="color:#888">#'+(meIdx+1)+'</div>'+
+            '<div class="rk-av" style="border-color:var(--gold);color:var(--gold)">'+ini(me.nome)+'</div>'+
+            '<div class="rk-info"><div class="rk-name"><strong>'+me.nome+' (Você)</strong></div>'+
+            '<div class="rk-sub">'+nc2.emoji+' '+me.nivel+'</div></div>'+
+            '<div class="rk-pts">'+fP(me.pontos)+'</div>'+
+            '</div></div>';
+        }
+        rkList.innerHTML = html;
+      }
+    }
+
+    // Referral
+    var rc = document.getElementById('ref-code'); if(rc) rc.textContent = U.ref||'ALPHA01';
+    var rl = document.getElementById('ref-link'); if(rl) rl.textContent = 'Compartilhe este código!';
+    var ri = document.getElementById('ref-inline'); if(ri) ri.textContent = U.ref||'ALPHA01';
+
+    // Prêmios
+    var pg = document.getElementById('premios-grid');
+    if(pg){
+      var ps = document.getElementById('premios-sub');
+      if(ps) ps.textContent = 'Você tem '+fP(U.pontos);
+      pg.innerHTML = PREMIOS.map(function(p){
+        var niOk = niO(U.nivel)>=niO(p.nivel);
+        var ptOk = U.pontos>=p.pts;
+        var pode = niOk&&ptOk;
+        var pct2 = Math.min(100,Math.round(U.pontos/p.pts*100));
+        return '<div class="pc '+(pode?'av':niOk?'':'lk')+'">' +
+          (pode?'<div class="pc-badge">DISPONÍVEL</div>':!niOk?'<div class="pc-lock">🔒 '+p.nivel+'</div>':'')+
+          '<div class="pc-cat">'+(p.emoji||'🎁')+' '+(p.cat||'')+'</div>'+
+          '<div class="pc-nome">'+p.nome+'</div>'+
+          '<div class="pc-pts">'+fP(p.pts)+'</div>'+
+          '<div class="pc-bar-bg"><div class="pc-bar-fill" style="width:'+pct2+'%;background:'+(pode?'var(--red)':'#444')+'"></div></div>'+
+          '<div class="pc-info">'+(pode?'✅ Solicite na loja!':!niOk?'Exige nível '+p.nivel:'Faltam '+fP(p.pts-U.pontos))+'</div>'+
+          '</div>';
+      }).join('');
+    }
+
+    // FIX: Histórico renderizado pela função dedicada
+    renderHistorico();
+
+    // Indicações
+    var il = document.getElementById('ind-lista');
+    if(il){
+      il.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:16px 0">'+
+        (U.indicacoes>0 ? '✅ Você indicou <strong style="color:var(--gold)">'+U.indicacoes+'</strong> amigo(s).' : 'Nenhuma indicação ainda.')+
+        '</div>';
+    }
+
+    // Benefícios
+    var bl = document.getElementById('ben-lista');
+    var bs = document.getElementById('ben-sub');
+    if(bl && bs){
+      bs.textContent = cfg.emoji+' Nível '+U.nivel;
+      bl.innerHTML = [
+        {ico:'⭐', txt:'Você ganha <strong>'+cfg.pts+'pt por R$1</strong> em cada compra'},
+        {ico:'💰', txt:'<strong>'+(cfg.cb*100).toFixed(0)+'% cashback</strong> em toda compra'},
+        {ico:'🎁', txt:'Acesso aos prêmios da loja de pontos'},
+        {ico:'🎯', txt:'Código de indicação exclusivo para ganhar mais pontos'},
+      ].map(function(b){ return '<div class="ben-item"><span class="ben-ico">'+b.ico+'</span><span>'+b.txt+'</span></div>'; }).join('');
+    }
+
+    // FIX: Regras de nível corretas na tela de benefícios
+    var nl = document.getElementById('niveis-lista');
+    if(nl){
+      nl.innerHTML = ['BRONZE','PRATA','OURO'].map(function(nv){
+        var nc = NCFG[nv];
+        var req = nv==='PRATA' ? ' (≥R$200/mês por 2 meses consecutivos)' :
+                  nv==='OURO'  ? ' (≥R$250/mês por 2 meses consecutivos)' : '';
+        return '<div class="ben-item">'+
+          '<span style="font-size:18px">'+nc.emoji+'</span>'+
+          '<span><strong>'+nv+'</strong> — '+nc.pts+'pt/R$ · '+(nc.cb*100).toFixed(0)+'% cashback'+req+'</span></div>';
+      }).join('');
+    }
+  } catch(err){ console.log('renderAll erro:', err); }
+}
+</script>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+  import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging.js';
+  import { getDatabase, ref, onValue, set } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBUZaER1-J4-sui90-lHW56P7JTBvfAQHE",
+    authDomain: "sistema-alpha-b12d0.firebaseapp.com",
+    projectId: "sistema-alpha-b12d0",
+    storageBucket: "sistema-alpha-b12d0.firebasestorage.app",
+    messagingSenderId: "714388410138",
+    appId: "1:714388410138:web:c42c2391931d25acc0e6a3",
+    measurementId: "G-M706VJSX9F",
+    databaseURL: "https://sistema-alpha-b12d0-default-rtdb.firebaseio.com"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  // Tornar auth global para o login
+  window.firebaseAuth = auth;
+  window.firebaseDB = db;
+  window.firebaseSignIn = signInWithEmailAndPassword;
+  window.firebaseCreateUser = createUserWithEmailAndPassword;
+  window.firebaseOnAuthStateChanged = onAuthStateChanged;
+  window.firebaseRef = ref;
+  window.firebaseSet = set;
+  window.firebaseOnValue = onValue;
+
+  // Push notifications
+  if ('serviceWorker' in navigator && 'Notification' in window) {
+    navigator.serviceWorker.register('https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/firebase-sw.js').then(function(reg) {
+      try {
+        const messaging = getMessaging(app);
+        getToken(messaging, {
+          vapidKey: 'BL2KdPeb1VExfCJ2cGHrhY4_dMoGBMHZZh08pl9HnsvRcSz3TRllo59EkgNOAex_4UzWCr4V4GRq4lY5qohER6M',
+          serviceWorkerRegistration: reg
+        }).then(function(token) {
+          if(token) {
+            window.fcmToken = token;
+            console.log('FCM Token:', token);
+            // Salvar token no Firebase
+            if(window.U && window.U.email) {
+              var safeEmail = window.U.email.replace(/\./g,'_').replace(/@/g,'_at_');
+              set(ref(db, 'tokens/' + safeEmail), {token: token, updated: Date.now()});
+            }
+            // Salvar token na planilha Google Sheets para push nativo
+            salvarTokenNaPlanilha(token);
+          }
+        }).catch(function(e){ console.log('FCM token error:', e); });
+
+        onMessage(messaging, function(payload) {
+          console.log('Push recebido:', payload);
+          var n = payload.notification;
+          if(n) {
+            // Mostrar notificação visual no app
+            var banner = document.createElement('div');
+            banner.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#CC0000;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:999;max-width:90vw;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.3)';
+            banner.innerHTML = '🔔 <strong>' + (n.title||'Alpha Suplementos') + '</strong><br><span style="font-weight:400">' + (n.body||'') + '</span>';
+            document.body.appendChild(banner);
+            setTimeout(function(){ banner.remove(); }, 5000);
+          }
+        });
+      } catch(e){ console.log('Messaging not supported:', e); }
+    }).catch(function(e){ console.log('SW error:', e); });
+  }
+
+  // Monitorar promoções relâmpago em tempo real
+  onValue(ref(db, 'promocoes/ativa'), function(snapshot) {
+    var promo = snapshot.val();
+    if(promo && promo.ativa && Date.now() - promo.timestamp < 7200000) {
+      var banner = document.createElement('div');
+      banner.style.cssText = 'position:fixed;bottom:80px;left:12px;right:12px;background:linear-gradient(135deg,#CC0000,#FF4500);color:#fff;padding:14px 16px;border-radius:12px;font-size:13px;font-weight:600;z-index:99;box-shadow:0 4px 20px rgba(204,0,0,.4);display:flex;align-items:center;justify-content:space-between';
+      banner.innerHTML = '<span>⚡ <strong>' + promo.titulo + '</strong><br><span style="font-weight:400;font-size:12px">' + promo.mensagem + '</span></span>' +
+        '<button onclick="this.parentElement.remove()" style="background:none;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 0 0 10px">×</button>';
+      document.body.appendChild(banner);
+      setTimeout(function(){ if(banner.parentElement) banner.remove(); }, 10000);
+    }
+  });
+</script>
+</body>
+</html>
