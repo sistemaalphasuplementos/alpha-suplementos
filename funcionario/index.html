@@ -394,6 +394,22 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font
 .vsug-empty{padding:20px;text-align:center;color:#555;font-size:13px}
 .vsug-header{padding:8px 14px 6px;font-size:10px;color:#444;text-transform:uppercase;letter-spacing:.6px;font-weight:700;border-bottom:1px solid #1a1a1a}
 #vbusca.selecionado{border-color:#1D9E7544 !important;background:#1D9E7508 !important}
+
+/* ── AUTOCOMPLETE CLIENTE ───────────────────────── */
+#vsug::-webkit-scrollbar{width:3px}
+#vsug::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:2px}
+.vsug-item{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;border-bottom:1px solid #1e1e1e;transition:background .15s}
+.vsug-item:last-child{border-bottom:none}
+.vsug-item:hover,.vsug-item.ativo{background:#1e1e1e}
+.vsug-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:#CC000020;color:#CC0000;border:1px solid #CC000030;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.vsug-info{flex:1;min-width:0}
+.vsug-nome{font-size:14px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vsug-nome mark{background:none;color:var(--red);font-weight:900}
+.vsug-sub{font-size:11px;color:#666;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vsug-pts{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--gold);flex-shrink:0}
+.vsug-empty{padding:20px;text-align:center;color:#555;font-size:13px}
+.vsug-header{padding:8px 14px 6px;font-size:10px;color:#444;text-transform:uppercase;letter-spacing:.6px;font-weight:700;border-bottom:1px solid #1a1a1a}
+#vbusca.selecionado{border-color:#1D9E7544 !important;background:#1D9E7508 !important}
 </style>
 </head>
 <body>
@@ -445,10 +461,10 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font
           <div style="display:flex;gap:8px;margin-bottom:12px">
             <div style="flex:1;position:relative" id="vsel-wrap">
               <input type="text" id="vbusca" class="inp" style="margin-bottom:0;padding-right:36px"
-                placeholder="🔍 Buscar cliente por nome ou telefone..."
+                placeholder="Buscar cliente por nome ou telefone..."
                 oninput="filtrarClientes()" onfocus="filtrarClientes()"
                 autocomplete="off" autocorrect="off" spellcheck="false">
-              <span id="vbusca-clear" onclick="limparBusca()" style="display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#666;font-size:18px;cursor:pointer;line-height:1">×</span>
+              <span id="vbusca-clear" onclick="limparBusca()" style="display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#666;font-size:18px;cursor:pointer;line-height:1">&#215;</span>
               <div id="vsug" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#161616;border:1px solid #2a2a2a;border-radius:10px;z-index:100;max-height:260px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.6)"></div>
             </div>
             <button onclick="abrirCad()" style="background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;white-space:nowrap;flex-shrink:0">+ Novo</button>
@@ -898,7 +914,7 @@ async function carregarClientes(){
 
 function renderTudo(){
   var sel=el('vsel');
-  // vsel agora é busca inteligente — não popular com options
+  // vsel agora é busca inteligente
   try{renderCRM();}catch(e){console.error('CRM',e);}
   try{renderClis();}catch(e){console.error('Clis',e);}
   try{renderInd();}catch(e){console.error('Ind',e);}
@@ -1515,8 +1531,8 @@ async function cadastrar(){
   var ref=(el('cad-ref')||{value:''}).value.trim();
   var err=el('cad-err');
   if(!nome){if(err){err.style.display='block';err.textContent='Nome é obrigatório';}return;}
-  if(email && !email.includes('@')){if(err){err.style.display='block';err.textContent='Email inválido (ou deixe em branco)';}return;}
-  if(!email) email = 'sem_email_'+Date.now()+'@alpha.local';
+  if(email && !email.includes('@')){if(err){err.style.display='block';err.textContent='Email inválido ou deixe em branco';}return;}
+  if(!email) email='sem_email_'+Date.now()+'@alpha.local';
   if(err)err.style.display='none';
   var refCod=ref||gerarCod();
   var btn=el('cad-form').querySelector('.bg');if(btn){btn.disabled=true;btn.textContent='⏳ Cadastrando...';}
@@ -1643,103 +1659,140 @@ function irParaCRM() {
 }
 
 
-// ── AUTOCOMPLETE BUSCA CLIENTE ──────────────────────────────────────
+// ── AUTOCOMPLETE CLIENTE ─────────────────────────────────────────
 var _cliSelecionado = null;
 var _sugIdx = -1;
 
-function ini2(n){return (n||'').split(' ').slice(0,2).map(function(p){return p[0]||'';}).join('').toUpperCase();}
+function ini2(n) {
+  return (n || '').split(' ').slice(0, 2).map(function(p) { return p[0] || ''; }).join('').toUpperCase();
+}
 
-function destacar(texto, query) {
-  if(!query) return texto;
-  var re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
-  return texto.replace(re, '<mark>$1</mark>');
+function destacarTexto(texto, q) {
+  if (!q) return texto;
+  var escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return texto.replace(new RegExp('(' + escaped + ')', 'gi'), '<mark>$1</mark>');
 }
 
 function filtrarClientes() {
-  var q = (el('vbusca')||{value:''}).value.trim();
+  var inp = el('vbusca');
+  var q = inp ? inp.value.trim() : '';
   var clr = el('vbusca-clear');
-  if(clr) clr.style.display = q ? 'block' : 'none';
+  if (clr) clr.style.display = q ? 'block' : 'none';
   var sug = el('vsug');
-  if(!sug) return;
-  if(!q) {
-    if(_cliSelecionado){ sug.style.display='none'; return; }
-    var top = CL.slice().sort(function(a,b){return (b.pontos||0)-(a.pontos||0);}).slice(0,8);
-    renderSugestoes(top, '');
+  if (!sug) return;
+
+  if (!q) {
+    if (_cliSelecionado) { sug.style.display = 'none'; return; }
+    var top = CL.slice().sort(function(a, b) { return (b.pontos || 0) - (a.pontos || 0); }).slice(0, 8);
+    montarSugestoes(top, '');
     sug.style.display = CL.length ? 'block' : 'none';
     return;
   }
-  var numQ = q.replace(/\D/g,'');
-  var resultados = CL.filter(function(c){
-    var nomeL = (c.nome||'').toLowerCase();
-    var tel = (c.tel||'').replace(/\D/g,'');
-    if(nomeL.includes(q.toLowerCase())) return true;
-    if(numQ.length >= 4 && tel.includes(numQ)) return true;
+
+  var ql = q.toLowerCase();
+  var numQ = q.replace(/\D/g, '');
+  var resultados = CL.filter(function(c) {
+    if ((c.nome || '').toLowerCase().includes(ql)) return true;
+    if (numQ.length >= 4 && (c.tel || '').replace(/\D/g, '').includes(numQ)) return true;
     return false;
-  }).sort(function(a,b){
-    var an=(a.nome||'').toLowerCase(), bn=(b.nome||'').toLowerCase(), ql=q.toLowerCase();
-    var aS=an.startsWith(ql)?0:1, bS=bn.startsWith(ql)?0:1;
-    if(aS!==bS) return aS-bS;
-    return (b.pontos||0)-(a.pontos||0);
-  }).slice(0,12);
-  if(!resultados.length){
-    sug.innerHTML='<div class="vsug-empty">😕 Nenhum cliente encontrado para "<strong>'+q+'</strong>"<br><span style="font-size:11px;color:#444">Tente pelo telefone ou cadastre um novo</span></div>';
-    sug.style.display='block'; return;
+  }).sort(function(a, b) {
+    var an = (a.nome || '').toLowerCase();
+    var bn = (b.nome || '').toLowerCase();
+    var aS = an.startsWith(ql) ? 0 : 1;
+    var bS = bn.startsWith(ql) ? 0 : 1;
+    if (aS !== bS) return aS - bS;
+    return (b.pontos || 0) - (a.pontos || 0);
+  }).slice(0, 12);
+
+  if (!resultados.length) {
+    sug.innerHTML = '<div class="vsug-empty">Nenhum cliente encontrado para <strong>' + q + '</strong></div>';
+    sug.style.display = 'block';
+    return;
   }
-  renderSugestoes(resultados, q);
-  sug.style.display='block';
-  _sugIdx=-1;
+  montarSugestoes(resultados, q);
+  sug.style.display = 'block';
+  _sugIdx = -1;
 }
 
-function renderSugestoes(lista, q) {
-  var sug = el('vsug'); if(!sug) return;
-  var nc={OURO:'🥇',PRATA:'🥈',BRONZE:'🥉'};
-  sug.innerHTML = (q ? '<div class="vsug-header">'+lista.length+' resultado(s) para "'+q+'"</div>' : '<div class="vsug-header">Clientes com mais pontos</div>') +
-    lista.map(function(c){
-      var nomeHL = q ? destacar(c.nome, q) : c.nome;
-      var sub = [];
-      if(c.tel) sub.push('📱 '+c.tel);
-      if(c.nivel) sub.push((nc[c.nivel]||'🥉')+' '+c.nivel);
-      return '<div class="vsug-item" data-id="'+c.id+'" onclick="escolherCliente(''+c.id+'')">'
-        +'<div class="vsug-av">'+ini2(c.nome)+'</div>'
-        +'<div class="vsug-info"><div class="vsug-nome">'+nomeHL+'</div>'
-        +'<div class="vsug-sub">'+sub.join(' · ')+'</div></div>'
-        +'<div class="vsug-pts">'+((c.pontos||0)).toLocaleString('pt-BR')+'pts</div>'
-        +'</div>';
-    }).join('');
+function montarSugestoes(lista, q) {
+  var sug = el('vsug');
+  if (!sug) return;
+  var nc = { OURO: '🥇', PRATA: '🥈', BRONZE: '🥉' };
+  var header = q
+    ? '<div class="vsug-header">' + lista.length + ' resultado(s) para "' + q + '"</div>'
+    : '<div class="vsug-header">Clientes com mais pontos</div>';
+
+  var itens = lista.map(function(c) {
+    var nomeHL = q ? destacarTexto(c.nome, q) : c.nome;
+    var sub = [];
+    if (c.tel) sub.push('📱 ' + c.tel);
+    if (c.nivel) sub.push((nc[c.nivel] || '🥉') + ' ' + c.nivel);
+    var subTxt = sub.join(' · ');
+
+    // Usar atributo data-id e event listener — SEM aspas aninhadas no onclick
+    return '<div class="vsug-item" data-cid="' + c.id + '">'
+      + '<div class="vsug-av">' + ini2(c.nome) + '</div>'
+      + '<div class="vsug-info">'
+      + '<div class="vsug-nome">' + nomeHL + '</div>'
+      + '<div class="vsug-sub">' + subTxt + '</div>'
+      + '</div>'
+      + '<div class="vsug-pts">' + (c.pontos || 0).toLocaleString('pt-BR') + ' pts</div>'
+      + '</div>';
+  });
+  sug.innerHTML = header + itens.join('');
+
+  // Event delegation — sem onclick inline
+  sug.querySelectorAll('.vsug-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+      escolherCliente(this.getAttribute('data-cid'));
+    });
+  });
 }
 
 function escolherCliente(id) {
-  var c = CL.find(function(x){return x.id===id;});
-  if(!c) return;
+  var c = CL.find(function(x) { return x.id === id; });
+  if (!c) return;
   _cliSelecionado = c;
   cliSel = c;
+
   var inp = el('vbusca');
-  if(inp){ inp.value=c.nome; inp.classList.add('selecionado'); }
-  var sug = el('vsug'); if(sug) sug.style.display='none';
-  var clr = el('vbusca-clear'); if(clr) clr.style.display='block';
+  if (inp) { inp.value = c.nome; inp.classList.add('selecionado'); }
+  var sug = el('vsug');
+  if (sug) sug.style.display = 'none';
+  var clr = el('vbusca-clear');
+  if (clr) clr.style.display = 'block';
+
+  // Info do cliente
   var vi = el('vinfo');
-  if(vi){
-    var nc2={OURO:'🥇',PRATA:'🥈',BRONZE:'🥉'};
-    vi.style.display='block';
-    vi.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center">'
-      +'<div><strong style="font-size:13px">'+c.nome+'</strong><br>'
-      +'<span style="color:#666;font-size:11px">'+c.email+'</span></div>'
-      +'<div style="text-align:right">'
-      +'<div style="color:var(--gold);font-weight:700;font-size:16px">'+(c.pontos||0).toLocaleString('pt-BR')+' pts</div>'
-      +'<div style="color:#1D9E75;font-size:11px">R$'+(c.cashback||0).toFixed(2)+' CB</div>'
-      +'</div></div>'
-      +'<div style="margin-top:6px;font-size:11px;color:#666">'
-      +(nc2[c.nivel]||'🥉')+' '+c.nivel+' · '+c.tel+'</div>';
+  if (vi) {
+    var nc2 = { OURO: '🥇', PRATA: '🥈', BRONZE: '🥉' };
+    vi.style.display = 'block';
+    vi.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">'
+      + '<div><strong>' + c.nome + '</strong><br>'
+      + '<span style="color:#666;font-size:11px">' + (c.email || '') + '</span></div>'
+      + '<div style="text-align:right">'
+      + '<div style="color:var(--gold);font-weight:700;font-size:16px">' + (c.pontos || 0).toLocaleString('pt-BR') + ' pts</div>'
+      + '<div style="color:#1D9E75;font-size:11px">R$' + (c.cashback || 0).toFixed(2) + ' CB</div>'
+      + '</div></div>'
+      + '<div style="margin-top:6px;font-size:11px;color:#666">'
+      + (nc2[c.nivel] || '🥉') + ' ' + c.nivel + ' · ' + (c.tel || '') + '</div>';
   }
-  var vcbw=el('vcb-wrap');
-  if(vcbw){
-    if((c.cashback||0)>0){
-      vcbw.style.display='block';
-      var vs=el('vcb-saldo');if(vs)vs.textContent='R$'+(c.cashback||0).toFixed(2).replace('.',',');
-    } else { vcbw.style.display='none'; }
+
+  // Cashback
+  var vcbw = el('vcb-wrap');
+  if (vcbw) {
+    if ((c.cashback || 0) > 0) {
+      vcbw.style.display = 'block';
+      var vs = el('vcb-saldo');
+      if (vs) vs.textContent = 'R$' + (c.cashback || 0).toFixed(2).replace('.', ',');
+    } else {
+      vcbw.style.display = 'none';
+    }
   }
-  var vb=el('vbtn'); if(vb) vb.disabled=false;
-  try{ calcV(); }catch(e){}
+
+  var vb = el('vbtn');
+  if (vb) vb.disabled = false;
+  try { calcV(); } catch(e) {}
 }
 
 function limparBusca() {
@@ -1747,37 +1800,56 @@ function limparBusca() {
   cliSel = null;
   _sugIdx = -1;
   var inp = el('vbusca');
-  if(inp){ inp.value=''; inp.classList.remove('selecionado'); inp.focus(); }
-  var sug = el('vsug'); if(sug) sug.style.display='none';
-  var clr = el('vbusca-clear'); if(clr) clr.style.display='none';
-  var vi = el('vinfo'); if(vi) vi.style.display='none';
-  var vb = el('vbtn'); if(vb) vb.disabled=true;
-  el('vprev').innerHTML='<span style="color:#555">Selecione o cliente e informe o valor.</span>';
-  var vcb=el('vcb-wrap'); if(vcb) vcb.style.display='none';
+  if (inp) { inp.value = ''; inp.classList.remove('selecionado'); inp.focus(); }
+  var sug = el('vsug');
+  if (sug) sug.style.display = 'none';
+  var clr = el('vbusca-clear');
+  if (clr) clr.style.display = 'none';
+  var vi = el('vinfo');
+  if (vi) vi.style.display = 'none';
+  var vb = el('vbtn');
+  if (vb) vb.disabled = true;
+  var prev = el('vprev');
+  if (prev) prev.innerHTML = '<span style="color:#555">Selecione o cliente e informe o valor.</span>';
+  var vcb = el('vcb-wrap');
+  if (vcb) vcb.style.display = 'none';
 }
 
 // Fechar ao clicar fora
-document.addEventListener('click', function(e){
+document.addEventListener('click', function(e) {
   var wrap = el('vsel-wrap');
-  if(wrap && !wrap.contains(e.target)){
-    var sug=el('vsug'); if(sug) sug.style.display='none';
+  if (wrap && !wrap.contains(e.target)) {
+    var sug = el('vsug');
+    if (sug) sug.style.display = 'none';
   }
 });
 
-// Navegar com teclado
-document.addEventListener('keydown', function(e){
+// Navegação por teclado
+document.addEventListener('keydown', function(e) {
   var sug = el('vsug');
-  if(!sug || sug.style.display==='none') return;
+  if (!sug || sug.style.display === 'none') return;
   var items = sug.querySelectorAll('.vsug-item');
-  if(!items.length) return;
-  if(e.key==='ArrowDown'){ e.preventDefault(); _sugIdx=Math.min(_sugIdx+1,items.length-1); }
-  else if(e.key==='ArrowUp'){ e.preventDefault(); _sugIdx=Math.max(_sugIdx-1,0); }
-  else if(e.key==='Enter' && _sugIdx>=0){ e.preventDefault(); var id=items[_sugIdx].getAttribute('data-id'); if(id) escolherCliente(id); return; }
-  else if(e.key==='Escape'){ sug.style.display='none'; return; }
-  items.forEach(function(x,i){x.style.background=i===_sugIdx?'#1e1e1e':'';});
-  if(items[_sugIdx]) items[_sugIdx].scrollIntoView({block:'nearest'});
+  if (!items.length) return;
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    _sugIdx = Math.min(_sugIdx + 1, items.length - 1);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    _sugIdx = Math.max(_sugIdx - 1, 0);
+  } else if (e.key === 'Enter' && _sugIdx >= 0) {
+    e.preventDefault();
+    escolherCliente(items[_sugIdx].getAttribute('data-cid'));
+    return;
+  } else if (e.key === 'Escape') {
+    sug.style.display = 'none';
+    return;
+  }
+  items.forEach(function(x, i) {
+    x.classList.toggle('ativo', i === _sugIdx);
+  });
+  if (items[_sugIdx]) items[_sugIdx].scrollIntoView({ block: 'nearest' });
 });
-// ── FIM AUTOCOMPLETE ─────────────────────────────────────────────────
+// ── FIM AUTOCOMPLETE ──────────────────────────────────────────────
 
 </script>
 
