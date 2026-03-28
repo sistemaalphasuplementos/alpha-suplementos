@@ -351,6 +351,33 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font
   .bc-val{font-size:22px}
   .bc-ico{font-size:24px}
 }
+
+/* ── AUTOCOMPLETE CLIENTE ───────────────────────────── */
+#vsug::-webkit-scrollbar{width:3px}
+#vsug::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:2px}
+.vsug-item{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;cursor:pointer;
+  border-bottom:1px solid #1e1e1e;transition:background .15s;
+}
+.vsug-item:last-child{border-bottom:none}
+.vsug-item:hover,.vsug-item.ativo{background:#1e1e1e}
+.vsug-item:active{background:#252525}
+.vsug-av{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  background:#CC000020;color:#CC0000;border:1px solid #CC000030;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;
+}
+.vsug-info{flex:1;min-width:0}
+.vsug-nome{font-size:14px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vsug-nome mark{background:none;color:var(--red);font-weight:900}
+.vsug-sub{font-size:11px;color:#666;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vsug-pts{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--gold);flex-shrink:0}
+.vsug-empty{padding:20px;text-align:center;color:#555;font-size:13px}
+.vsug-header{padding:8px 14px 6px;font-size:10px;color:#444;text-transform:uppercase;letter-spacing:.6px;font-weight:700;border-bottom:1px solid #1a1a1a}
+/* Cliente selecionado no campo */
+#vbusca.selecionado{border-color:#1D9E7544;background:#1D9E7508}
 </style>
 </head>
 <body>
@@ -400,10 +427,15 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font
           <div class="ct">Dados da venda</div>
           <label class="lbl">Cliente</label>
           <div style="display:flex;gap:8px;margin-bottom:12px">
-            <select id="vsel" onchange="selCli()" style="flex:1;background:var(--bg4);border:.5px solid #333;border-radius:8px;padding:10px 13px;color:var(--text);font-size:13px;outline:none;font-family:'Barlow',sans-serif">
-              <option value="">Selecione o cliente...</option>
-            </select>
-            <button onclick="abrirCad()" style="background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;white-space:nowrap">+ Novo</button>
+            <div style="flex:1;position:relative" id="vsel-wrap">
+              <input type="text" id="vbusca" class="inp" style="margin-bottom:0;padding-right:36px"
+                placeholder="🔍 Buscar cliente por nome ou telefone..."
+                oninput="filtrarClientes()" onfocus="filtrarClientes()"
+                autocomplete="off" autocorrect="off" spellcheck="false">
+              <span id="vbusca-clear" onclick="limparBusca()" style="display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#666;font-size:18px;cursor:pointer;line-height:1">×</span>
+              <div id="vsug" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:#161616;border:1px solid #2a2a2a;border-radius:10px;z-index:100;max-height:260px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.6)"></div>
+            </div>
+            <button onclick="abrirCad()" style="background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;white-space:nowrap;flex-shrink:0">+ Novo</button>
           </div>
           <div id="vinfo" style="display:none;background:var(--bg4);border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px"></div>
           <label class="lbl">Valor (R$)</label>
@@ -589,7 +621,7 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font
     <div class="mh"><span class="mt" style="color:var(--green)">👤 Novo Cliente</span><button class="mc" onclick="fCad()">×</button></div>
     <div id="cad-form">
       <label class="lbl">Nome completo *</label><input type="text" class="inp" id="cad-nome" placeholder="João da Silva">
-      <label class="lbl">Email *</label><input type="email" class="inp" id="cad-email" placeholder="email@cliente.com">
+      <label class="lbl">Email <span style="color:#555;font-weight:400;text-transform:none;letter-spacing:0">(opcional)</span></label><input type="email" class="inp" id="cad-email" placeholder="email@cliente.com (opcional)">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
         <div><label class="lbl">Telefone</label><input type="tel" class="inp" id="cad-tel" placeholder="(47) 99999-9999"></div>
         <div><label class="lbl">CPF</label><input type="text" class="inp" id="cad-cpf" placeholder="000.000.000-00"></div>
@@ -850,7 +882,7 @@ async function carregarClientes(){
 
 function renderTudo(){
   var sel=el('vsel');
-  if(sel)sel.innerHTML='<option value="">Selecione o cliente...</option>'+CL.map(function(c){return '<option value="'+c.id+'">'+c.nome+' — '+c.email+'</option>';}).join('');
+  // vsel agora é busca inteligente — não popular com options
   try{renderCRM();}catch(e){console.error('CRM',e);}
   try{renderClis();}catch(e){console.error('Clis',e);}
   try{renderInd();}catch(e){console.error('Ind',e);}
@@ -922,8 +954,192 @@ function preencherResSelects(){
 }
 
 // VENDA
+// ── AUTOCOMPLETE BUSCA CLIENTE ─────────────────────────
+var _cliSelecionado = null;
+var _sugIdx = -1;
+
+function ini2(n){return (n||'').split(' ').slice(0,2).map(function(p){return p[0]||'';}).join('').toUpperCase();}
+
+function destacar(texto, query) {
+  if(!query) return texto;
+  var re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+  return texto.replace(re, '<mark>$1</mark>');
+}
+
+function filtrarClientes() {
+  var q = (el('vbusca')||{value:''}).value.trim();
+  var clr = el('vbusca-clear');
+  if(clr) clr.style.display = q ? 'block' : 'none';
+  var sug = el('vsug');
+  if(!sug) return;
+
+  // Se campo vazio e cliente já selecionado, manter
+  if(!q) {
+    if(_cliSelecionado) { sug.style.display='none'; return; }
+    // Mostrar top 8 recentes
+    var top = CL.slice().sort(function(a,b){return (b.pontos||0)-(a.pontos||0);}).slice(0,8);
+    renderSugestoes(top, '');
+    sug.style.display = CL.length ? 'block' : 'none';
+    return;
+  }
+
+  // Busca: nome (começo tem prioridade), telefone, CPF
+  var ql = q.toLowerCase().replace(/\D/g,'') ? q.toLowerCase() : '';
+  var numQ = q.replace(/\D/g,'');
+
+  var resultados = CL.filter(function(c){
+    var nomeL = (c.nome||'').toLowerCase();
+    var tel = (c.tel||'').replace(/\D/g,'');
+    var cpf = (c.cpf||'').replace(/\D/g,'');
+    if(ql && nomeL.includes(ql)) return true;
+    if(numQ && tel.includes(numQ)) return true;
+    if(numQ && cpf.includes(numQ)) return true;
+    return false;
+  }).sort(function(a,b){
+    // Prioridade: começa com a query > contém a query
+    var an = (a.nome||'').toLowerCase();
+    var bn = (b.nome||'').toLowerCase();
+    var ql2 = q.toLowerCase();
+    var aStarts = an.startsWith(ql2) ? 0 : 1;
+    var bStarts = bn.startsWith(ql2) ? 0 : 1;
+    if(aStarts !== bStarts) return aStarts - bStarts;
+    // Desempate: mais pontos primeiro
+    return (b.pontos||0) - (a.pontos||0);
+  }).slice(0, 12);
+
+  if(!resultados.length) {
+    sug.innerHTML = '<div class="vsug-empty">😕 Nenhum cliente encontrado para "<strong>'+q+'</strong>"<br><span style="font-size:11px;color:#444">Tente pelo telefone ou cadastre um novo</span></div>';
+    sug.style.display = 'block';
+    return;
+  }
+
+  renderSugestoes(resultados, q);
+  sug.style.display = 'block';
+  _sugIdx = -1;
+}
+
+function renderSugestoes(lista, q) {
+  var sug = el('vsug');
+  if(!sug) return;
+  var nc = {OURO:'🥇',PRATA:'🥈',BRONZE:'🥉'};
+  sug.innerHTML = (q ? '<div class="vsug-header">'+lista.length+' resultado(s) para "'+q+'"</div>' : '<div class="vsug-header">Clientes recentes</div>') +
+    lista.map(function(c, i){
+      var nomeHL = q ? destacar(c.nome, q) : c.nome;
+      var sub = [];
+      if(c.tel) sub.push('📱 '+c.tel);
+      if(c.nivel) sub.push((nc[c.nivel]||'🥉')+' '+c.nivel);
+      return '<div class="vsug-item" data-id="'+c.id+'" onclick="escolherCliente(''+c.id+'')" onmouseenter="hoverSug(this)">'
+        +'<div class="vsug-av">'+ini2(c.nome)+'</div>'
+        +'<div class="vsug-info">'
+          +'<div class="vsug-nome">'+nomeHL+'</div>'
+          +'<div class="vsug-sub">'+sub.join(' · ')+'</div>'
+        +'</div>'
+        +'<div class="vsug-pts">'+(c.pontos||0).toLocaleString('pt-BR')+'pts</div>'
+        +'</div>';
+    }).join('');
+}
+
+function hoverSug(item) {
+  document.querySelectorAll('.vsug-item').forEach(function(x){x.classList.remove('ativo');});
+  item.classList.add('ativo');
+}
+
+function escolherCliente(id) {
+  var c = CL.find(function(x){return x.id===id;});
+  if(!c) return;
+  _cliSelecionado = c;
+  var inp = el('vbusca');
+  if(inp){
+    inp.value = c.nome;
+    inp.classList.add('selecionado');
+  }
+  var sug = el('vsug');
+  if(sug) sug.style.display = 'none';
+  var clr = el('vbusca-clear');
+  if(clr) clr.style.display = 'block';
+  // Mostrar info e calcular preview igual ao selCli antigo
+  mostrarInfoCli(c);
+}
+
+function limparBusca() {
+  _cliSelecionado = null;
+  _sugIdx = -1;
+  var inp = el('vbusca');
+  if(inp){ inp.value=''; inp.classList.remove('selecionado'); inp.focus(); }
+  var sug = el('vsug');
+  if(sug) sug.style.display = 'none';
+  var clr = el('vbusca-clear');
+  if(clr) clr.style.display = 'none';
+  var vi = el('vinfo'); if(vi) vi.style.display='none';
+  var vb = el('vbtn'); if(vb) vb.disabled=true;
+  cliSel=null;
+  el('vprev').innerHTML='<span style="color:#555">Selecione o cliente e informe o valor.</span>';
+  var vcb=el('vcb-wrap');if(vcb)vcb.style.display='none';
+}
+
+// Navegar com teclado nas sugestões
+document.addEventListener('keydown', function(e){
+  var sug = el('vsug');
+  if(!sug || sug.style.display==='none') return;
+  var items = sug.querySelectorAll('.vsug-item');
+  if(!items.length) return;
+  if(e.key==='ArrowDown'){
+    e.preventDefault();
+    _sugIdx = Math.min(_sugIdx+1, items.length-1);
+    items.forEach(function(x,i){x.classList.toggle('ativo',i===_sugIdx);});
+    if(items[_sugIdx]) items[_sugIdx].scrollIntoView({block:'nearest'});
+  } else if(e.key==='ArrowUp'){
+    e.preventDefault();
+    _sugIdx = Math.max(_sugIdx-1, 0);
+    items.forEach(function(x,i){x.classList.toggle('ativo',i===_sugIdx);});
+    if(items[_sugIdx]) items[_sugIdx].scrollIntoView({block:'nearest'});
+  } else if(e.key==='Enter' && _sugIdx>=0){
+    e.preventDefault();
+    var id = items[_sugIdx].getAttribute('data-id');
+    if(id) escolherCliente(id);
+  } else if(e.key==='Escape'){
+    sug.style.display='none';
+  }
+});
+
+// Fechar sugestões ao clicar fora
+document.addEventListener('click', function(e){
+  var wrap = el('vsel-wrap');
+  if(wrap && !wrap.contains(e.target)){
+    var sug=el('vsug'); if(sug) sug.style.display='none';
+  }
+});
+
+function mostrarInfoCli(c) {
+  cliSel = c;
+  var vi=el('vinfo');
+  if(vi){
+    var nc={OURO:'🥇',PRATA:'🥈',BRONZE:'🥉'};
+    vi.style.display='block';
+    vi.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center">'
+      +'<div><strong style="font-size:13px">'+c.nome+'</strong><br>'
+      +'<span style="color:#666;font-size:11px">'+c.email+'</span></div>'
+      +'<div style="text-align:right">'
+      +'<div style="color:var(--gold);font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:16px">'+(c.pontos||0).toLocaleString('pt-BR')+' pts</div>'
+      +'<div style="color:#1D9E75;font-size:11px">R$'+(c.cashback||0).toFixed(2)+' CB</div>'
+      +'</div></div>'
+      +'<div style="margin-top:6px;font-size:11px;color:#666">'
+      +(nc[c.nivel]||'🥉')+' '+c.nivel+' · '+c.tel+'</div>';
+  }
+  var vcbw=el('vcb-wrap');
+  if(vcbw){
+    if((c.cashback||0)>0){
+      vcbw.style.display='block';
+      var vs=el('vcb-saldo');if(vs)vs.textContent='R$'+(c.cashback||0).toFixed(2).replace('.',',');
+    } else { vcbw.style.display='none'; }
+  }
+  calcV();
+  var vb=el('vbtn');if(vb)vb.disabled=false;
+}
+
+// ── FIM AUTOCOMPLETE ────────────────────────────────
 function selCli(){
-  var id=(el('vsel')||{value:''}).value;
+  var id = _cliSelecionado ? _cliSelecionado.id : '';
   cliSel=CL.find(function(c){return c.id===id;})||null;
   var info=el('vinfo');
   if(cliSel&&info){
@@ -1149,7 +1365,8 @@ function mostrarSucVenda(v,pts,cb,desc,cbUsado,planilha){
 
 function resetV(){
   cliSel=null;
-  var ids=['vsel','vval','vdesc','vprod'];
+  limparBusca();
+  var ids=['vval','vdesc','vprod'];
   ids.forEach(function(id){var e=el(id);if(e)e.value='';});
   var dias=el('vdias');if(dias)dias.value='30';
   var info=el('vinfo');if(info)info.style.display='none';
@@ -1466,7 +1683,8 @@ async function cadastrar(){
   var ref=(el('cad-ref')||{value:''}).value.trim();
   var err=el('cad-err');
   if(!nome){if(err){err.style.display='block';err.textContent='Nome é obrigatório';}return;}
-  if(!email||!email.includes('@')){if(err){err.style.display='block';err.textContent='Email inválido';}return;}
+  if(email && !email.includes('@')){if(err){err.style.display='block';err.textContent='Email inválido (ou deixe em branco)';}return;}
+  if(!email) email = 'sem_email_'+Date.now()+'@alpha.local';
   if(err)err.style.display='none';
   var refCod=ref||gerarCod();
   var btn=el('cad-form').querySelector('.bg');if(btn){btn.disabled=true;btn.textContent='⏳ Cadastrando...';}
