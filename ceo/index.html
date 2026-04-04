@@ -373,13 +373,21 @@ body{color:#FFFFFF;font-size:15px}
     </div>
 
     <div id="p-financeiro" class="pnl">
-      <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Financeiro</div></div>
+      <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Financeiro</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <select id="fmes-sel" onchange="rFinFiltro()" style="background:#111;border:.5px solid #333;border-radius:8px;padding:8px 12px;color:#f0f0f0;font-size:13px;outline:none;font-family:'Barlow',sans-serif;cursor:pointer">
+            <option value="">📅 Todos os meses</option>
+          </select>
+          <button onclick="el('fmes-sel').value='';rFinFiltro()" style="background:#CC000022;color:#FF2244;border:1px solid #CC000044;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">✕ Limpar</button>
+        </div>
+      </div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px">
         <div class="kp" style="background:#1D9E7510;border-color:#1D9E7522"><div class="kr">Total vendas</div><div class="kv" id="fv" style="color:#1D9E75">R$0</div></div>
         <div class="kp" style="background:#4285F410;border-color:#4285F422"><div class="kr">Cashback gerado</div><div class="kv" id="fc" style="color:#4285F4">R$0</div></div>
         <div class="kp" style="background:#FFD70010;border-color:#FFD70022"><div class="kr">Pontos emitidos</div><div class="kv" id="fp" style="color:#FFD700">0</div></div>
       </div>
-      <div class="card"><div class="ct">Histórico de compras</div><table class="tbl"><thead><tr><th>Data</th><th>Cliente</th><th>Nível</th><th>Valor</th><th>Pontos</th><th>Cashback</th><th>Descrição</th></tr></thead><tbody id="fcorp"></tbody></table></div>
+      <div class="card"><div class="ct" id="fin-titulo">Histórico de compras</div><table class="tbl"><thead><tr><th>Data</th><th>Cliente</th><th>Nível</th><th>Valor</th><th>Pontos</th><th>Cashback</th><th>Descrição</th></tr></thead><tbody id="fcorp"></tbody></table></div>
     </div>
 
     <div id="p-promocoes" class="pnl">
@@ -647,14 +655,17 @@ async function carregarDados(){
     var d2 = await r2.json();
     if(d2.sucesso && d2.dados && d2.dados.length>0){
       CP = d2.dados.map(function(c){
+        var dt=c[8]?new Date(c[8]):null;
         return {
-          cid:   c[1]||'',
-          valor: Number(c[3])||0,
-          pts:   Number(c[4])||0,
-          cb:    Number(c[5])||0,
-          data:  c[8]?new Date(c[8]).toLocaleDateString('pt-BR'):'—',
-          nivel: c[9]||'BRONZE',
-          desc:  c[2]||''
+          cid:        c[1]||'',
+          valor:      Number(c[3])||0,
+          pts:        Number(c[4])||0,
+          cb:         Number(c[5])||0,
+          data:       dt?dt.toLocaleDateString('pt-BR'):'—',
+          dataRaw:    dt?dt.getTime():0,
+          nivel:      c[9]||'BRONZE',
+          desc:       c[2]||'',
+          funcionario: String(c[7]||'')
         };
       });
       console.log('Compras carregadas:', CP.length);
@@ -772,11 +783,18 @@ async function rDesemp(){
     var totalV=0, totalN=0, totalCads=0;
     CP.forEach(function(c){
       totalV+=c.valor; totalN++;
-      // sem info de funcionário local, atribui a André por padrão
+      // Atribuir venda ao funcionário correto pelo campo do histórico
+      var fn = funcNomes.find(function(n){ return n.toLowerCase() === (c.funcionario||'').toLowerCase(); });
+      if(fn){ statsLocal[fn].vendas+=c.valor; statsLocal[fn].numVendas++; }
     });
     CL.forEach(function(c){
       totalCads++;
+      // Contar cadastro pelo funcionário que registrou
+      var fn = funcNomes.find(function(n){ return n.toLowerCase() === (c.cadastradoPor||'').toLowerCase(); });
+      if(fn){ statsLocal[fn].cadastros++; }
     });
+    // Calcular ticket médio por funcionário
+    funcNomes.forEach(function(f){ statsLocal[f].ticket = statsLocal[f].numVendas > 0 ? parseFloat((statsLocal[f].vendas/statsLocal[f].numVendas).toFixed(2)) : 0; });
     var lista = funcNomes.map(function(f){ return statsLocal[f]; });
     renderDesemp(lista, {vendas:parseFloat(totalV.toFixed(2)), numVendas:totalN, cadastros:totalCads, ticketMedio: totalN>0?parseFloat((totalV/totalN).toFixed(2)):0});
   }
@@ -881,16 +899,51 @@ function rCRM(){
   }).join(''));
 }
 
-function rFin(){
-  set('fv',fR(CP.reduce(function(s,c){return s+c.valor;},0)));
-  set('fc',fR(CP.reduce(function(s,c){return s+c.cb;},0)));
-  set('fp',CL.reduce(function(s,c){return s+c.pontos;},0).toLocaleString('pt-BR'));
-  html('fcorp',CP.length===0
-    ? '<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhuma compra registrada ainda.</td></tr>'
-    : CP.slice().sort(function(a,b){return b.dataRaw-a.dataRaw;}).map(function(c){
+function populateMonthFilter(){
+  var sel = el('fmes-sel');
+  if(!sel || CP.length===0) return;
+  var meses = {};
+  CP.forEach(function(c){
+    if(!c.dataRaw) return;
+    var d = new Date(c.dataRaw);
+    var key = d.getFullYear()+'-'+(d.getMonth()+1<10?'0':'')+(d.getMonth()+1);
+    var label = d.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+    meses[key] = label;
+  });
+  var keys = Object.keys(meses).sort().reverse();
+  var currentVal = sel.value;
+  sel.innerHTML = '<option value="">📅 Todos os meses</option>';
+  keys.forEach(function(k){ sel.innerHTML += '<option value="'+k+'">'+meses[k].charAt(0).toUpperCase()+meses[k].slice(1)+'</option>'; });
+  if(currentVal) sel.value = currentVal;
+}
+function rFinFiltro(){
+  var mesSel = (el('fmes-sel')||{value:''}).value; // 'YYYY-MM' ou ''
+  var lista = mesSel
+    ? CP.filter(function(c){
+        if(!c.dataRaw) return false;
+        var d = new Date(c.dataRaw);
+        var k = d.getFullYear()+'-'+(d.getMonth()+1<10?'0':'')+(d.getMonth()+1);
+        return k === mesSel;
+      })
+    : CP;
+  // Atualizar KPIs com o filtro
+  set('fv', fR(lista.reduce(function(s,c){return s+c.valor;},0)));
+  set('fc', fR(lista.reduce(function(s,c){return s+c.cb;},0)));
+  if(!mesSel) set('fp', CL.reduce(function(s,c){return s+c.pontos;},0).toLocaleString('pt-BR'));
+  else set('fp', lista.reduce(function(s,c){return s+c.pts;},0).toLocaleString('pt-BR'));
+  // Título da tabela
+  var titulo = mesSel ? 'Compras de '+((el('fmes-sel').options[el('fmes-sel').selectedIndex]||{}).text||mesSel)+' ('+lista.length+')' : 'Histórico de compras ('+lista.length+')';
+  if(el('fin-titulo')) el('fin-titulo').textContent = titulo;
+  html('fcorp', lista.length===0
+    ? '<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhuma compra '+(mesSel?'neste mês':'registrada ainda.')+'</td></tr>'
+    : lista.slice().sort(function(a,b){return b.dataRaw-a.dataRaw;}).map(function(c){
         var cl=CL.find(function(x){return x.id===c.cid;})||{nome:'?',nivel:'BRONZE'};
         return '<tr><td style="color:#666">'+c.data+'</td><td>'+cl.nome+'</td><td>'+nt(cl.nivel)+'</td><td style="color:#1D9E75;font-weight:600">'+fR(c.valor)+'</td><td style="color:#FFD700">+'+fP(c.pts)+'</td><td style="color:#1D9E75">+'+fR(c.cb)+'</td><td style="color:#666">'+c.desc+'</td></tr>';
       }).join(''));
+}
+function rFin(){
+  populateMonthFilter();
+  rFinFiltro();
 }
 async function rFinAsync(){
   html('fcorp','<tr><td colspan="7" style="text-align:center;color:#555;padding:24px">⏳ Carregando...</td></tr>');
@@ -900,9 +953,6 @@ async function rFinAsync(){
     var d1=await r1.json();
     if(d1.sucesso && d1.dados){
       var fin=d1.dados;
-      set('fv',fR(fin.totalVendas));
-      set('fc',fR(fin.totalCbGerado));
-      set('fp',fin.totalPts.toLocaleString('pt-BR'));
       // Atualizar CP para o dashboard também
       if(fin.compras && fin.compras.length>0){
         CP=fin.compras.map(function(c){
@@ -910,16 +960,11 @@ async function rFinAsync(){
           return {cid:c.cid,valor:c.valor,pts:c.pts,cb:c.cb,
                   data:dt?dt.toLocaleDateString('pt-BR'):'—',
                   dataRaw:dt?dt.getTime():0,
-                  nivel:c.nivel,desc:c.desc};
+                  nivel:c.nivel,desc:c.desc,
+                  funcionario:String(c.funcionario||'')};
         });
       }
-      html('fcorp', CP.length===0
-        ? '<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhuma compra registrada ainda.</td></tr>'
-        : CP.slice().sort(function(a,b){return b.dataRaw-a.dataRaw;}).map(function(c){
-            var cl=CL.find(function(x){return x.id===c.cid;})||{nome:'?',nivel:'BRONZE'};
-            return '<tr><td style="color:#666">'+c.data+'</td><td>'+cl.nome+'</td><td>'+nt(cl.nivel)+'</td><td style="color:#1D9E75;font-weight:600">'+fR(c.valor)+'</td><td style="color:#FFD700">+'+fP(c.pts)+'</td><td style="color:#1D9E75">+'+fR(c.cb)+'</td><td style="color:#666">'+c.desc+'</td></tr>';
-          }).join('')
-      );
+      rFin();
       return;
     }
   } catch(e){ console.log('rFinAsync listar_financeiro erro:',e.message); }
