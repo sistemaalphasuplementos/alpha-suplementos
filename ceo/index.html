@@ -11,7 +11,7 @@
 <link rel="shortcut icon" type="image/png" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
 <link rel="apple-touch-icon" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
 <link rel="manifest" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/manifest.json">
-<title>Alpha Suplementos — CEO v38</title>
+<title>Alpha Suplementos — CEO v44</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -208,6 +208,19 @@ body{color:#FFFFFF;font-size:15px}
 }
 /* ═════════════════════════════════════════════════ */
 
+/* ══ AUDITORIA ══════════════════════════════════════ */
+.audit-row{border-radius:10px;padding:14px 16px;margin-bottom:10px;border:.5px solid;display:flex;align-items:flex-start;gap:14px;transition:filter .15s}
+.audit-row:hover{filter:brightness(1.12)}
+.audit-func-badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap;display:block;text-align:center;margin-top:4px}
+.audit-detail{flex:1;min-width:0}
+.audit-name{font-weight:700;font-size:14px}
+.audit-sub{font-size:11px;color:#aaa;margin-top:4px;line-height:1.8}
+.audit-date{font-size:11px;color:#666;white-space:nowrap;flex-shrink:0;text-align:right;padding-top:2px}
+.fraud-flag{background:#FF224422;border:1px solid #FF224866;border-radius:5px;padding:2px 7px;font-size:10px;color:#FF4466;font-weight:700;display:inline-block;margin:2px 2px 0 0}
+.search-inline{background:#222;border:1px solid #444;border-radius:8px;padding:9px 13px;color:#fff;font-size:13px;outline:none;font-family:'Barlow',sans-serif;transition:border-color .2s}
+.search-inline:focus{border-color:#CC0000}
+/* ═════════════════════════════════════════════════ */
+
 </style>
 </head>
 <body>
@@ -240,6 +253,7 @@ body{color:#FFFFFF;font-size:15px}
       <button class="tbt" onclick="ir('promocoes',this)">⚡ Promoções</button>
       <button class="tbt" onclick="ir('indicacoes',this)">🎯 Indicações</button>
       <button class="tbt" onclick="ir('desempenho',this);rDesemp()">📈 Desempenho</button>
+      <button class="tbt" onclick="ir('auditoria',this);rAuditoria()">🔍 Auditoria</button>
     </div>
     <div class="tbright"><span id="unome">CEO</span><button id="sbtn">Sair</button></div>
   </div>
@@ -308,7 +322,7 @@ body{color:#FFFFFF;font-size:15px}
           <button class="bverm" onclick="abrirPromo()">⚡ Promoção Relâmpago</button>
           <button class="bcinz" onclick="alert('Relatório em desenvolvimento')">📊 Exportar Relatório</button>
           <button class="bcinz" onclick="alert('Configure Firebase nas Script Properties')">☁️ Sincronizar Firebase</button>
-          <div style="background:#111;border-radius:9px;padding:12px;margin-top:4px;font-size:12px;color:#555;line-height:2">🥉 1pt/R$ · 2%CB&nbsp;&nbsp;🥈 1,5pt/R$ · 5%CB&nbsp;&nbsp;🥇 2pt/R$ · 7%CB</div>
+        <div style="background:#111;border-radius:9px;padding:12px;margin-top:4px;font-size:12px;color:#555;line-height:2">🥉 1pt/R$ · 2%CB&nbsp;&nbsp;🥈 1,5pt/R$ · 5%CB&nbsp;&nbsp;🥇 2pt/R$ · 7%CB</div>
         </div>
       </div>
     </div>
@@ -337,7 +351,7 @@ body{color:#FFFFFF;font-size:15px}
         </div>
         <div id="sabina-resultado" style="display:none;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:8px"></div>
       </div>
-      <div class="card"><table class="tbl"><thead><tr><th>#</th><th>Cliente</th><th>Nível</th><th>Pontos</th><th>Cashback</th><th>Gasto/mês</th><th>Última compra</th></tr></thead><tbody id="tcorp"></tbody></table></div>
+      <div class="card"><table class="tbl"><thead><tr><th>#</th><th>Cliente</th><th>Cadastrado por</th><th>Nível</th><th>Pontos</th><th>Cashback</th><th>Gasto/mês</th><th>Última compra</th></tr></thead><tbody id="tcorp"></tbody></table></div>
     </div>
 
     <div id="p-ranking" class="pnl">
@@ -503,6 +517,59 @@ body{color:#FFFFFF;font-size:15px}
   </div>
 </div>
 
+    <!-- AUDITORIA DE CADASTROS -->
+    <div id="p-auditoria" class="pnl">
+      <div style="margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#FF2244">🔍 Auditoria de Cadastros</div>
+          <div style="font-size:13px;color:#aaa;margin-top:4px">Quem cadastrou cada cliente · Dados completos · Detecção de anomalias</div>
+        </div>
+        <button onclick="rAuditoria()" style="background:#CC000022;color:#FF2244;border:1px solid #CC000044;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">🔄 Atualizar</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px">
+        <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#FF2244" id="aud-total">0</div><div style="font-size:11px;color:#888;margin-top:3px">👥 Total</div></div>
+        <div style="background:#1a1a1a;border:1px solid #FFD70033;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#FFD700" id="aud-andre">0</div><div style="font-size:11px;color:#888;margin-top:3px">📋 André</div></div>
+        <div style="background:#1a1a1a;border:1px solid #00CCFF33;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#00CCFF" id="aud-hesllen">0</div><div style="font-size:11px;color:#888;margin-top:3px">📋 Hesllen</div></div>
+        <div style="background:#1a1a1a;border:1px solid #EF9F2733;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#EF9F27" id="aud-sabina">0</div><div style="font-size:11px;color:#888;margin-top:3px">📋 Sabina</div></div>
+        <div style="background:#1a1a1a;border:1px solid #CC88FF33;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#CC88FF" id="aud-erica">0</div><div style="font-size:11px;color:#888;margin-top:3px">📋 Érica</div></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+        <input id="aud-busca" placeholder="🔍 Buscar cliente, email, telefone..." class="search-inline" style="flex:1;min-width:200px" oninput="renderAuditoria()">
+        <select id="aud-func" class="search-inline" onchange="renderAuditoria()" style="width:170px">
+          <option value="">Todos funcionários</option>
+          <option value="andr">André</option>
+          <option value="hesllen">Hesllen</option>
+          <option value="sabina">Sabina</option>
+          <option value="erica">Érica</option>
+          <option value="sem">Sem atribuição</option>
+        </select>
+        <select id="aud-nivel" class="search-inline" onchange="renderAuditoria()" style="width:140px">
+          <option value="">Todos níveis</option>
+          <option value="OURO">🥇 Ouro</option>
+          <option value="PRATA">🥈 Prata</option>
+          <option value="BRONZE">🥉 Bronze</option>
+        </select>
+        <select id="aud-ord" class="search-inline" onchange="renderAuditoria()" style="width:190px">
+          <option value="data-desc">Mais recentes primeiro</option>
+          <option value="data-asc">Mais antigos primeiro</option>
+          <option value="nome-asc">Nome A→Z</option>
+          <option value="pontos-desc">Mais pontos</option>
+          <option value="gasto-desc">Maior gasto</option>
+        </select>
+      </div>
+      <div id="aud-alerta-fraude" style="display:none;background:#FF224411;border:1px solid #FF224466;border-radius:12px;padding:14px;margin-bottom:16px">
+        <div style="color:#FF4466;font-weight:700;font-size:14px;margin-bottom:8px">⚠️ Anomalias detectadas — verifique esses clientes</div>
+        <div id="aud-fraudes-lista" style="font-size:13px;color:#ddd;line-height:2"></div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:14px 18px;border-bottom:.5px solid #333;display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.7px;font-weight:700;display:flex;align-items:center;gap:6px"><span style="width:3px;height:12px;background:#FF2244;border-radius:2px;display:inline-block"></span>Cadastros — Dados Completos</div>
+          <div id="aud-contador" style="font-size:12px;color:#666"></div>
+        </div>
+        <div id="aud-lista" style="padding:16px"></div>
+      </div>
+    </div>
+
 <div id="mpromo" class="mfundo">
   <div class="mcaixa">
     <div style="font-weight:700;font-size:16px;color:#CC0000;margin-bottom:12px">⚡ Confirmar disparo</div>
@@ -519,44 +586,78 @@ body{color:#FFFFFF;font-size:15px}
 
 <script>
 
-// ══ SEGURANÇA CEO ══════════════════════════════════
-var _SALT = 'alpha_salt_2026';
-var _API_TOKEN = 'd9O-8jZLUcPHX_YlWF_XEUTySCNa3EZlVmJPL9thg94';
-var _CEO_HASH = 'f7b331e102475c25639bf6038b8ca38f22e962756e25f27d3d8053a7afe23afa';
+// ══ SEGURANÇA CEO v44.1 ════════════════════════════
+//
+//  Como funciona:
+//  1. Você digita email + senha normalmente
+//  2. SHA-256(email:senha:salt) é comparado com _CEO_HASH
+//     para verificar se a senha está correta (igual antes)
+//  3. SHA-256(senha:api_salt) vira o _API_TOKEN em memória
+//     — sem precisar conhecer o token real
+//  4. O backend valida esse hash da senha como se fosse o token
+//     usando CEO_SENHA_HASH nas ScriptProperties
+//
+//  Resultado: só precisa da sua senha de sempre, em qualquer lugar.
+//
+var _SALT     = 'alpha_salt_2026';      // salt do login CEO
+var _API_SALT = 'alpha_api_token_2026'; // salt para derivar o token da senha
+
+// [SEC] Nenhum token hardcodado aqui — derivado da senha em runtime
+var _API_TOKEN = null;
+
+// Hash SHA-256 de (email:senha:_SALT) — para verificar login
+// Gerado uma vez: sha256("alphasuplementostiangua@gmail.com:SUASENHA:alpha_salt_2026")
+var _CEO_HASH  = 'f7b331e102475c25639bf6038b8ca38f22e962756e25f27d3d8053a7afe23afa';
 var _CEO_EMAIL = 'alphasuplementostiangua@gmail.com';
-var _SESSION_KEY = 'alpha_ceo_session';
-var _MAX_ATTEMPTS = 3;
-var _BLOCK_TIME = 10 * 60 * 1000; // 10 minutos
-var _SESSION_EXPIRY = 8 * 60 * 60 * 1000; // 8 horas
+var _SESSION_KEY   = 'alpha_ceo_v44_session';
+var _MAX_ATTEMPTS  = 3;
+var _BLOCK_TIME    = 10 * 60 * 1000; // 10 min
+var _SESSION_EXPIRY= 8  * 60 * 60 * 1000; // 8h
 
 async function sha256js(msg) {
   var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
   return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
 }
+
+// Deriva o token da API a partir da senha (sem armazenar o token real)
+async function derivarTokenDaSenha(senha) {
+  return await sha256js(senha + ':' + _API_SALT);
+}
+
 function verificarSessaoCEO() {
   try {
-    var sess = JSON.parse(localStorage.getItem(_SESSION_KEY) || 'null');
-    if(sess && sess.expiry > Date.now() && sess.role === 'CEO') return sess;
-    localStorage.removeItem(_SESSION_KEY);
-  } catch(e){}
+    // [SEC] sessionStorage: encerra ao fechar aba
+    var sess = JSON.parse(sessionStorage.getItem(_SESSION_KEY) || 'null');
+    if (sess && sess.expiry > Date.now() && sess.role === 'CEO') return sess;
+    sessionStorage.removeItem(_SESSION_KEY);
+  } catch(e) {}
   return null;
 }
-function salvarSessaoCEO() {
-  localStorage.setItem(_SESSION_KEY, JSON.stringify({role:'CEO', expiry:Date.now()+_SESSION_EXPIRY, token:_API_TOKEN}));
+
+// Salva sessão e carrega token derivado da senha em memória
+function salvarSessaoCEO(tokenDerivado) {
+  _API_TOKEN = tokenDerivado; // só em memória, nunca armazenado
+  sessionStorage.setItem(_SESSION_KEY, JSON.stringify({
+    role: 'CEO',
+    expiry: Date.now() + _SESSION_EXPIRY
+  }));
+  // [SEC] token NÃO vai para sessionStorage/localStorage
 }
+
 function verificarBloqueioCEO() {
   try {
     var bl = JSON.parse(localStorage.getItem('alpha_ceo_block') || 'null');
-    if(bl && bl.until > Date.now()) return Math.ceil((bl.until-Date.now())/60000);
-    if(bl) localStorage.removeItem('alpha_ceo_block');
+    if (bl && bl.until > Date.now()) return Math.ceil((bl.until - Date.now()) / 60000);
+    if (bl) localStorage.removeItem('alpha_ceo_block');
   } catch(e) {}
   return 0;
 }
+
 function registrarTentativaCEO() {
   try {
     var bl = JSON.parse(localStorage.getItem('alpha_ceo_block') || '{"count":0}');
-    bl.count = (bl.count||0)+1;
-    if(bl.count >= _MAX_ATTEMPTS){ bl.until=Date.now()+_BLOCK_TIME; bl.count=0; }
+    bl.count = (bl.count || 0) + 1;
+    if (bl.count >= _MAX_ATTEMPTS) { bl.until = Date.now() + _BLOCK_TIME; bl.count = 0; }
     localStorage.setItem('alpha_ceo_block', JSON.stringify(bl));
   } catch(e) {}
 }
@@ -589,22 +690,26 @@ function html(id,v){var e=el(id);if(e)e.innerHTML=v;}
 
 // LOGIN
 el('lbtn').onclick=async function(){
-  var s=el('lsenha').value.trim();
-  var em=el('lemail').value.trim().toLowerCase();
-  var err=el('lerro');
-  
+  var s  = el('lsenha').value.trim();
+  var em = el('lemail').value.trim().toLowerCase();
+  var err= el('lerro');
+
   // Verificar bloqueio
   var mins = verificarBloqueioCEO();
   if(mins > 0){ err.style.display='block'; err.textContent='Bloqueado. Tente em '+mins+' minuto(s).'; return; }
-  
+
   // Verificar email
   if(em !== _CEO_EMAIL){ registrarTentativaCEO(); err.style.display='block'; err.textContent='Email não autorizado.'; return; }
-  
-  // Verificar senha com hash
+
+  // Verificar senha com hash (mesmo mecanismo de antes)
   var hashDigitado = await sha256js(em + ':' + s + ':' + _SALT);
   if(hashDigitado === _CEO_HASH){
     localStorage.removeItem('alpha_ceo_block');
-    salvarSessaoCEO();
+
+    // Derivar o token da API a partir da senha — sem precisar saber o token real
+    var tokenDerivado = await derivarTokenDaSenha(s);
+    salvarSessaoCEO(tokenDerivado);
+
     err.style.display='none';
     el('lbtn').textContent='⏳ Carregando...';
     el('lbtn').disabled=true;
@@ -622,25 +727,30 @@ el('lbtn').onclick=async function(){
 };
 
 async function carregarDados(){
+  if(!_API_TOKEN) return;
   try {
-    // Carregar clientes reais
     var r1 = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos'+'&token='+_API_TOKEN+'&funcionario=ceo');
     var d1 = await r1.json();
     if(d1.sucesso && d1.dados && d1.dados.length>0){
       CL = d1.dados.map(function(c){
+        var cadRaw = String(c[12]||'');
+        var cadLimpo = cadRaw.indexOf('|IND:')>=0 ? cadRaw.substring(0,cadRaw.indexOf('|IND:')) : cadRaw;
         return {
-          id:       c[0]||'',
-          nome:     c[1]||'',
-          email:    c[2]||'',
-          tel:      c[3]||'',
-          nivel:    c[7]||'BRONZE',
-          pontos:   Number(c[6])||0,
-          cashback: Number(c[10])||0,
-          gastoMes: Number(c[8])||0,
-          mesesRec: Number(c[9])||0,
-          ref:      c[11]||'',
-          cadastradoPor: String(c[12]||''),
-          ultimaCompra: c[14]?new Date(c[14]).toLocaleDateString('pt-BR'):'—',
+          id:           c[0]||'',
+          nome:         c[1]||'',
+          email:        c[2]||'',
+          tel:          c[3]||'',
+          cpf:          c[4]||'',
+          nascimento:   c[5]||'',
+          pontos:       Number(c[6])||0,
+          nivel:        c[7]||'BRONZE',
+          gastoMes:     Number(c[8])||0,
+          mesesRec:     Number(c[9])||0,
+          cashback:     Number(c[10])||0,
+          ref:          c[11]||'',
+          cadastradoPor: cadLimpo || '(sem atribuição)',
+          cadastradoEm:  c[13]||'',
+          ultimaCompra:  c[14]?new Date(c[14]).toLocaleDateString('pt-BR'):'—',
           indicacoes: 0
         };
       });
@@ -676,22 +786,30 @@ async function carregarDados(){
 }
 el('lsenha').onkeydown=function(e){if(e.key==='Enter')el('lbtn').click();};
 el('sbtn').onclick=function(){
+  _API_TOKEN = null;
   el('app').style.display='none';
   el('login-wrap').style.display='flex';
   el('lsenha').value='';
   el('lbtn').textContent='ENTRAR →';
   el('lbtn').disabled=false;
-  localStorage.removeItem(_SESSION_KEY);
+  sessionStorage.removeItem(_SESSION_KEY);
 };
 
 // Auto-login se sessão válida
+// NOTA: token não é armazenado — se fechar e reabrir a aba, pede login novamente.
+// Isso é intencional: a senha vira o token, então sempre precisará redigitá-la.
+// A sessão (8h) só evita logout por inatividade dentro da mesma aba aberta.
 (function(){
   var sess = verificarSessaoCEO();
-  if(sess){
+  if(sess && _API_TOKEN) {
+    // Sessão válida E token ainda em memória (mesma aba, não recarregou)
     el('login-wrap').style.display='none';
     el('app').style.display='block';
     set('unome','André (CEO)');
     carregarDados().then(function(){ rTudo(); });
+  } else if(sess) {
+    // Sessão existe mas token saiu da memória (recarregou página) — pede senha novamente
+    sessionStorage.removeItem(_SESSION_KEY);
   }
 })();
 
@@ -704,7 +822,7 @@ function ir(n,b){
 }
 
 // RENDER
-function rTudo(){rDash();rClientes();rRank();rCRM();rFinAsync();rInd();rPLog();upPv();rDesemp();}
+function rTudo(){rDash();rClientes();rRank();rCRM();rFinAsync();rInd();rPLog();upPv();rDesemp();rAuditoria();}
 async function rDesemp(){
   // Mostrar loading apenas nos rankings, KPIs ficam com valor atual
   var loadHtml = '<div style="text-align:center;padding:30px;color:#888"><div style="font-size:28px;margin-bottom:8px">⏳</div><div style="font-size:13px">Carregando...</div></div>';
@@ -836,20 +954,38 @@ function rDash(){
 function rClientes(){
   var b=(el('fbusca')||{value:''}).value.toLowerCase();
   var f=(el('fnivel')||{value:''}).value;
-  var ff=(el('ffunc')||{value:''}).value.toLowerCase(); // filtro por funcionário v41
+  var ff=(el('ffunc')||{value:''}).value.toLowerCase();
   // Mostrar painel Sabina quando filtro = sabina
   var painelSabina=el('sabina-panel');
   if(painelSabina) painelSabina.style.display=(ff==='sabina'?'block':'none');
+
+  function normF(s){return String(s||'').toLowerCase().replace(/[áàãâä]/g,'a').replace(/[éêë]/g,'e').replace(/[íîï]/g,'i').replace(/[óôõö]/g,'o').replace(/[úûü]/g,'u').replace(/[ç]/g,'c');}
+  var funcCores={'andr':'#FFD700','hesllen':'#00CCFF','sabina':'#EF9F27','erica':'#CC88FF','ric':'#CC88FF'};
+  function funcBadge(raw){
+    var n=normF(raw);
+    var cor='#888';
+    Object.keys(funcCores).forEach(function(k){if(n.includes(k))cor=funcCores[k];});
+    return '<span style="background:'+cor+'22;color:'+cor+';border:.5px solid '+cor+'55;border-radius:12px;font-size:10px;font-weight:700;padding:2px 8px">'+raw+'</span>';
+  }
+
   var l=CL.filter(function(c){
-    var matchBusca=(!b||c.nome.toLowerCase().includes(b)||c.email.includes(b));
+    var matchBusca=(!b||c.nome.toLowerCase().includes(b)||c.email.includes(b)||c.tel.includes(b));
     var matchNivel=(!f||c.nivel===f);
-    var matchFunc=!ff||(c.cadastradoPor||'').toLowerCase().replace(/[áàãâä]/g,'a').replace(/[éêë]/g,'e').replace(/[íîï]/g,'i').replace(/[óôõö]/g,'o').replace(/[úûü]/g,'u').includes(ff);
+    var matchFunc=!ff||(normF(c.cadastradoPor||'')).includes(normF(ff));
     return matchBusca&&matchNivel&&matchFunc;
   }).sort(function(a,b){return b.pontos-a.pontos;});
+
   html('tcorp',l.map(function(c,i){
-    var isSabina=(c.cadastradoPor||'').toLowerCase()==='sabina';
-    var badge=isSabina?'<span style="background:#EF9F2722;color:#EF9F27;border:.5px solid #EF9F2733;border-radius:12px;font-size:10px;font-weight:700;padding:1px 7px;margin-left:5px">👁️ Sabina</span>':'';
-    return '<tr><td style="color:#666">'+(i+1)+'</td><td><div style="font-weight:600">'+c.nome+badge+'</div><div style="font-size:11px;color:#666">'+c.email+'</div></td><td>'+nt(c.nivel)+'</td><td style="color:#FFD700;font-weight:600">'+fP(c.pontos)+'</td><td style="color:#1D9E75">'+fR(c.cashback)+'</td><td>'+fR(c.gastoMes)+'</td><td style="color:#666">'+c.ultimaCompra+'</td></tr>';
+    return '<tr>' +
+      '<td style="color:#666">'+(i+1)+'</td>' +
+      '<td><div style="font-weight:600">'+c.nome+'</div><div style="font-size:11px;color:#666">'+c.email+'</div></td>' +
+      '<td>'+funcBadge(c.cadastradoPor)+'</td>' +
+      '<td>'+nt(c.nivel)+'</td>' +
+      '<td style="color:#FFD700;font-weight:600">'+fP(c.pontos)+'</td>' +
+      '<td style="color:#1D9E75">'+fR(c.cashback)+'</td>' +
+      '<td>'+fR(c.gastoMes)+'</td>' +
+      '<td style="color:#666">'+c.ultimaCompra+'</td>' +
+    '</tr>';
   }).join(''));
 }
 
@@ -862,19 +998,148 @@ async function reatribuirSabina(){
   if(res){res.style.display='block';res.style.background='#33333322';res.style.color='#aaa';res.textContent='⏳ Processando...';}
   try{
     var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
-      body:JSON.stringify({token:_API_TOKEN,acao:'reatribuir_clientes_sabina',dados:{novoVendedor:novoVendedor}}),
+      body:JSON.stringify({token:_API_TOKEN,acao:'reatribuir_clientes_sabina',dados:{novoVendedor:novoVendedor,operador:'CEO'}}),
       redirect:'follow'});
     var txt=await resp.text();
     var data=JSON.parse(txt);
     if(data.sucesso){
       if(res){res.style.display='block';res.style.background='#1D9E7522';res.style.color='#1D9E75';res.textContent='✅ '+data.dados.mensagem;}
-      // Atualizar localmente
-      CL=CL.map(function(c){return (c.cadastradoPor||'').toLowerCase()==='sabina'?Object.assign({},c,{cadastradoPor:novoVendedor}):c;});
-      rClientes();
+      CL=CL.map(function(c){return (normStr(c.cadastradoPor||'')).includes('sabina')?Object.assign({},c,{cadastradoPor:novoVendedor}):c;});
+      rClientes(); rAuditoria();
     } else {
       if(res){res.style.display='block';res.style.background='#E24B4A22';res.style.color='#E24B4A';res.textContent='❌ '+data.erro;}
     }
   }catch(e){if(res){res.style.display='block';res.style.background='#E24B4A22';res.style.color='#E24B4A';res.textContent='❌ Erro de conexão: '+e.message;}}
+}
+
+// ══════════════════════════════════════════════════════════════
+//  🔍 AUDITORIA DE CADASTROS
+// ══════════════════════════════════════════════════════════════
+function normStr(s){return String(s||'').toLowerCase().replace(/[áàãâä]/g,'a').replace(/[éêë]/g,'e').replace(/[íîï]/g,'i').replace(/[óôõö]/g,'o').replace(/[úûü]/g,'u').replace(/[ç]/g,'c');}
+
+var _audDados=[];
+
+function rAuditoria(){
+  set('aud-total',CL.length);
+  var ct={'andr':0,'hesllen':0,'sabina':0,'ric':0};
+  CL.forEach(function(c){
+    var n=normStr(c.cadastradoPor||'');
+    if(n.includes('andr')&&!n.includes('hesllen'))ct['andr']++;
+    else if(n.includes('hesllen'))ct['hesllen']++;
+    else if(n.includes('sabina'))ct['sabina']++;
+    else if(n.includes('ric'))ct['ric']++;
+  });
+  set('aud-andre',ct['andr']);
+  set('aud-hesllen',ct['hesllen']);
+  set('aud-sabina',ct['sabina']);
+  set('aud-erica',ct['ric']);
+
+  // Detectar anomalias
+  var anomalias=[];
+  CL.forEach(function(c){
+    var flags=[];
+    if(!c.tel||c.tel.replace(/\D/g,'').length<8) flags.push('📵 Sem tel válido');
+    if(!c.email||c.email.indexOf('@alpha.interno')>-1) flags.push('📧 Sem email real');
+    if(!c.cpf) flags.push('🪪 Sem CPF');
+    if(!c.nascimento) flags.push('📅 Sem nascimento');
+    if(!c.cadastradoPor||c.cadastradoPor==='(sem atribuição)') flags.push('👤 Sem responsável');
+    if(c.pontos>5000) flags.push('⚠️ Pontos altos ('+c.pontos+')');
+    if(c.cashback>200) flags.push('⚠️ Cashback alto ('+fR(c.cashback)+')');
+    if(flags.length>0) anomalias.push({nome:c.nome,flags:flags});
+  });
+  var alertEl=el('aud-alerta-fraude'),fraudeEl=el('aud-fraudes-lista');
+  if(anomalias.length>0&&alertEl&&fraudeEl){
+    alertEl.style.display='block';
+    fraudeEl.innerHTML=anomalias.map(function(a){
+      return '<div style="margin-bottom:6px"><strong style="color:#fff">'+a.nome+':</strong> '+a.flags.map(function(f){return '<span class="fraud-flag">'+f+'</span>';}).join(' ')+'</div>';
+    }).join('');
+  } else if(alertEl){alertEl.style.display='none';}
+
+  _audDados=CL.slice();
+  renderAuditoria();
+}
+
+function renderAuditoria(){
+  var busca=normStr((el('aud-busca')||{value:''}).value);
+  var func=normStr((el('aud-func')||{value:''}).value);
+  var nivel=(el('aud-nivel')||{value:''}).value;
+  var ord=(el('aud-ord')||{value:'data-desc'}).value;
+
+  var lista=_audDados.filter(function(c){
+    var mB=!busca||normStr(c.nome).includes(busca)||normStr(c.email).includes(busca)||c.tel.includes(busca);
+    var mF=!func||normStr(c.cadastradoPor).includes(func);
+    var mN=!nivel||c.nivel===nivel;
+    return mB&&mF&&mN;
+  });
+
+  lista.sort(function(a,b){
+    if(ord==='nome-asc') return normStr(a.nome).localeCompare(normStr(b.nome));
+    if(ord==='pontos-desc') return b.pontos-a.pontos;
+    if(ord==='gasto-desc') return b.gastoMes-a.gastoMes;
+    var da=a.cadastradoEm?new Date(a.cadastradoEm).getTime():0;
+    var db=b.cadastradoEm?new Date(b.cadastradoEm).getTime():0;
+    return ord==='data-asc'?da-db:db-da;
+  });
+
+  set('aud-contador',lista.length+' de '+CL.length+' clientes');
+
+  var funcCores={'andr':'#FFD700','hesllen':'#00CCFF','sabina':'#EF9F27','ric':'#CC88FF'};
+  function corFunc(raw){
+    var n=normStr(raw||'');
+    if(n.includes('andr')&&!n.includes('hesllen')) return '#FFD700';
+    if(n.includes('hesllen')) return '#00CCFF';
+    if(n.includes('sabina')) return '#EF9F27';
+    if(n.includes('ric')) return '#CC88FF';
+    return '#666';
+  }
+
+  if(lista.length===0){
+    html('aud-lista','<div style="text-align:center;padding:40px;color:#555">Nenhum cliente encontrado com esses filtros.</div>');
+    return;
+  }
+
+  html('aud-lista',lista.map(function(c){
+    var cor=corFunc(c.cadastradoPor);
+    var dataFmt=c.cadastradoEm?(function(){try{return new Date(c.cadastradoEm).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch(e){return c.cadastradoEm;}}()):'—';
+
+    var flagsR=[];
+    if(!c.tel||c.tel.replace(/\D/g,'').length<8) flagsR.push('📵');
+    if(!c.cpf) flagsR.push('🪪');
+    if(!c.nascimento) flagsR.push('📅');
+    if(c.email.indexOf('@alpha.interno')>-1) flagsR.push('📧');
+
+    var cpfMask=c.cpf?(c.cpf.length>=11?c.cpf.substring(0,3)+'.***.***-**':'parcial'):'—';
+    var telMask=c.tel?(c.tel.length>5?c.tel.substring(0,5)+'*****'+c.tel.slice(-2):'—'):'—';
+
+    return '<div class="audit-row" style="background:'+cor+'08;border-color:'+cor+'33">'+
+      '<div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;min-width:70px">'+
+        '<div style="width:44px;height:44px;border-radius:50%;background:'+cor+'22;border:2px solid '+cor+';color:'+cor+';display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900">'+ini(c.nome)+'</div>'+
+        '<span class="audit-func-badge" style="background:'+cor+'22;color:'+cor+';border:1px solid '+cor+'55">'+c.cadastradoPor+'</span>'+
+      '</div>'+
+      '<div class="audit-detail">'+
+        '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px">'+
+          '<span class="audit-name">'+c.nome+'</span>'+
+          nt(c.nivel)+
+          (flagsR.length>0?'<span style="color:#FF4466;font-size:13px;margin-left:4px" title="Dados incompletos">'+flagsR.join('')+'</span>':'✅')+
+        '</div>'+
+        '<div class="audit-sub">'+
+          '📧 '+c.email+'<br>'+
+          '📞 '+telMask+
+          '&nbsp;&nbsp;🪪 '+(c.cpf?cpfMask:'<span style="color:#FF4466">sem CPF</span>')+
+          (c.nascimento?'&nbsp;&nbsp;🎂 '+c.nascimento:'')+'<br>'+
+          '💰 Gasto: <strong style="color:#1D9E75">'+fR(c.gastoMes)+'</strong>'+
+          '&nbsp;&nbsp;⭐ <strong style="color:#FFD700">'+fP(c.pontos)+'</strong>'+
+          '&nbsp;&nbsp;💸 CB: <strong style="color:#4285F4">'+fR(c.cashback)+'</strong>'+
+          '&nbsp;&nbsp;🛍️ Última: <span style="color:#aaa">'+c.ultimaCompra+'</span><br>'+
+          '🔑 Ref: <span style="font-family:monospace;color:#666;font-size:11px">'+c.ref+'</span>'+
+        '</div>'+
+      '</div>'+
+      '<div class="audit-date">'+
+        '<div style="font-weight:600;color:#aaa;font-size:11px;margin-bottom:3px">Cadastrado em</div>'+
+        '<div style="color:#666;font-size:11px">'+dataFmt+'</div>'+
+      '</div>'+
+    '</div>';
+  }).join(''));
 }
 
 function rRank(){
