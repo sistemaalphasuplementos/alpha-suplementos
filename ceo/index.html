@@ -1,1 +1,1354 @@
-{"type":"error","error":{"type":"api_error","message":"Internal server error"},"request_id":"req_011CZnpgUS2zcK6MmvSXf941"}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Alpha CEO">
+<link rel="icon" type="image/png" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
+<link rel="shortcut icon" type="image/png" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
+<link rel="apple-touch-icon" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
+<link rel="manifest" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/manifest.json">
+<title>Alpha Suplementos — CEO v44</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#f0f0f0;font-family:'Barlow',sans-serif;font-size:14px;min-height:100vh}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+#login-wrap{position:fixed;inset:0;background:#0a0a0a;display:flex;align-items:center;justify-content:center;z-index:999}
+#login-box{background:#111;border:1px solid #CC000044;border-radius:16px;padding:36px;width:100%;max-width:380px;text-align:center}
+#login-box img{height:70px;margin-bottom:8px}
+.lmarca{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:#888;margin-bottom:4px}
+.lmarca span{color:#CC0000}
+.ltipo{background:#CC000022;border:1px solid #CC000044;border-radius:8px;padding:6px 16px;font-size:12px;color:#CC0000;font-weight:700;letter-spacing:1px;margin-bottom:20px;display:inline-block}
+.lcampo{width:100%;background:#222;border:1px solid #333;border-radius:8px;padding:11px 13px;color:#f0f0f0;font-size:14px;outline:none;font-family:'Barlow',sans-serif;margin-bottom:10px;display:block}
+.lcampo:focus{border-color:#CC0000}
+#lerro{color:#FF4444;font-size:12px;margin-bottom:10px;display:none;padding:6px;background:#FF444411;border-radius:6px}
+#lbtn{width:100%;background:#CC0000;color:#fff;border:none;border-radius:9px;padding:13px;font-size:14px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer}
+#lbtn:hover{background:#aa0000}
+.llinks{margin-top:14px;font-size:12px;color:#666}
+.llinks a{color:#666;text-decoration:none;margin:0 8px}
+#app{display:none}
+.topbar{background:#111;border-bottom:2px solid #CC0000;padding:8px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:50;min-height:56px}
+.tblogo{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.tblogo img{height:32px}
+.tbnome{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;color:#CC0000}
+.tbnome span{color:#f0f0f0}
+.tbbadge{background:#CC000022;border:1px solid #CC000044;border-radius:20px;padding:3px 12px;font-size:11px;color:#CC0000;font-weight:700}
+.tbtabs{display:flex;gap:2px;flex-wrap:wrap;justify-content:center;width:100%;padding:4px 0}
+.tbt{padding:5px 10px;background:none;border:none;color:#aaa;font-size:12px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif;border-bottom:2px solid transparent;white-space:nowrap}
+.tbt:hover{color:#f0f0f0}
+.tbt.on{color:#CC0000;border-bottom-color:#CC0000}
+.tbright{display:flex;align-items:center;gap:10px;flex-shrink:0;font-size:12px;color:#666}
+#sbtn{background:none;border:.5px solid #333;border-radius:6px;padding:5px 10px;color:#666;font-size:11px;cursor:pointer;font-family:'Barlow',sans-serif}
+#sbtn:hover{border-color:#CC0000;color:#CC0000}
+.main{padding:20px 24px}
+.pnl{display:none}.pnl.on{display:block}
+.card{background:#1a1a1a;border:.5px solid #2a2a2a;border-radius:12px;padding:16px;margin-bottom:14px}
+.ct{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:6px}
+.ct::before{content:'';width:3px;height:12px;background:#CC0000;border-radius:2px}
+.kg{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.kp{border-radius:12px;padding:16px;border:.5px solid}
+.kr{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;font-weight:600}
+.kv{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;line-height:1}
+.ks{font-size:11px;color:#555;margin-top:4px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.g2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-bottom:14px}
+.g2b{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.bbg{background:#222;border-radius:20px;height:8px;overflow:hidden;margin-bottom:5px}
+.bfl{height:100%;border-radius:20px;transition:width .6s}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;padding:8px 10px;font-size:10px;color:#666;border-bottom:.5px solid #2a2a2a;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.tbl td{padding:10px;border-bottom:.5px solid #1e1e1e;vertical-align:middle}
+.tbl tr:hover td{background:#1e1e1e}
+.tbl tr:last-child td{border-bottom:none}
+.nt{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.nto{background:#3D300015;color:#FFD700;border:.5px solid #FFD70033}
+.ntp{background:#28282815;color:#C8C8C8;border:.5px solid #C8C8C833}
+.ntb{background:#3D200015;color:#CD7F32;border:.5px solid #CD7F3233}
+.rk{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:.5px solid #1e1e1e}
+.rk:last-child{border-bottom:none}
+.rkpos{width:24px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;text-align:center;flex-shrink:0}
+.rkav{width:34px;height:34px;border-radius:50%;background:#CC000022;border:1px solid #CC000033;color:#CC0000;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.rkin{flex:1;min-width:0}
+.rknm{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rksb{font-size:11px;color:#666;margin-top:1px}
+.rkpt{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:#FFD700}
+.aln{border-radius:9px;padding:12px 14px;border:.5px solid;display:flex;align-items:center;gap:12px;margin-bottom:7px}
+.bverm{background:#CC0000;color:#fff;border:none;border-radius:9px;padding:11px 16px;font-size:13px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;width:100%;margin-bottom:8px}
+.bverm:hover{background:#aa0000}
+.bcinz{background:#222;color:#ccc;border:.5px solid #333;border-radius:9px;padding:11px 16px;font-size:13px;font-weight:600;font-family:'Barlow',sans-serif;cursor:pointer;width:100%;margin-bottom:8px}
+.campo{width:100%;background:#111;border:.5px solid #333;border-radius:8px;padding:10px 13px;color:#f0f0f0;font-size:13px;outline:none;font-family:'Barlow',sans-serif;margin-bottom:12px}
+.campo:focus{border-color:#CC0000}
+.rot{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;font-weight:600;display:block;margin-bottom:5px}
+.sg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:14px}
+.sgb{padding:9px;border-radius:8px;font-size:12px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;border:.5px solid #333;background:none;color:#666}
+.sgb.on{background:#CC000022;border-color:#CC0000;color:#CC0000}
+.pvw{background:#111;border-radius:10px;padding:14px;margin:12px 0;display:flex;gap:10px;align-items:flex-start}
+.pvi{width:36px;height:36px;background:#CC0000;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.mfundo{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.mfundo.on{display:flex}
+.mcaixa{background:#111;border:1px solid #CC0000;border-radius:14px;padding:24px;width:100%;max-width:440px}
+.sm{background:#1a1a1a;border-radius:8px;padding:11px 13px}
+.smv{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700}
+.sml{font-size:10px;color:#666;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+
+/* NEON UPGRADES */
+:root{
+  --neon-red:#FF2244;
+  --neon-gold:#FFD700;
+  --neon-green:#00FF88;
+  --neon-blue:#00CCFF;
+  --neon-purple:#CC88FF;
+  --text:#FFFFFF;
+  --text2:#DDDDDD;
+  --text3:#AAAAAA;
+}
+/* Stronger text visibility */
+body{color:#FFFFFF;font-size:15px}
+.card{border:.5px solid #444;background:#1a1a1a}
+/* Bigger, bolder buttons */
+.bv,.bverm,.btn-red,.bgreen,.bg{
+  font-size:15px!important;padding:13px!important;
+  border-radius:10px!important;letter-spacing:.5px;
+}
+/* Neon borders on inputs */
+.inp,.li,.linp,.lcampo,.campo{
+  border:1px solid #555!important;
+  color:#FFF!important;font-size:15px!important;
+  background:#222!important;
+}
+.inp:focus,.li:focus,.lcampo:focus,.campo:focus{
+  border-color:#FF2244!important;
+  box-shadow:0 0 0 2px rgba(255,34,68,.2)!important;
+}
+/* Neon level badges */
+.nbo,.nb-o,.nt-o{background:#FFD70022!important;color:#FFD700!important;border:1px solid #FFD700!important;font-size:12px!important}
+.nbp,.nb-p,.nt-p{background:#00CCFF22!important;color:#00CCFF!important;border:1px solid #00CCFF!important;font-size:12px!important}
+.nbb,.nb-b,.nt-b{background:#FF884422!important;color:#FF8844!important;border:1px solid #FF8844!important;font-size:12px!important}
+/* Tab active neon */
+.tab.on,.tbt.on,.tb-tab.on{color:#FF2244!important;border-bottom-color:#FF2244!important;text-shadow:0 0 8px rgba(255,34,68,.5)}
+/* Card titles */
+.ct::before,.card-title::before{background:#FF2244!important}
+/* Table rows */
+.tbl tr:hover td,.tabela tr:hover td{background:#252525!important}
+/* Toast */
+.toast,.toast-el{font-size:14px!important}
+/* Better contrast for all text */
+.kv,.kpi-val,.smv,.stat2-v{text-shadow:0 0 10px currentColor}
+
+
+@media (max-width: 768px) {
+  .topbar, .tb { flex-wrap:wrap; height:auto; min-height:50px; padding:6px 10px; }
+  .tbtabs, .tabs { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .tbtabs::-webkit-scrollbar, .tabs::-webkit-scrollbar { display:none; }
+  .tbt, .tab { flex-shrink:0; font-size:11px; padding:7px 10px; }
+  .main { padding:10px; }
+  .g2, .g3 { grid-template-columns:1fr !important; }
+  .card { padding:12px; }
+  .bv, .bverm, .bg, .btn-red { padding:14px !important; font-size:15px !important; }
+  .inp, select { padding:12px !important; font-size:15px !important; }
+  .mov { padding:0 !important; align-items:flex-end !important; }
+  .mbox { border-radius:16px 16px 0 0 !important; max-width:100% !important; width:100% !important; }
+}
+
+/* ═══ CARDS COLORIDOS ══════════════════════════════ */
+.big-card {
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+}
+.big-card::before {
+  content: '';
+  position: absolute;
+  right: -15px;
+  top: -15px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.07);
+}
+.big-card::after {
+  content: '';
+  position: absolute;
+  right: 30px;
+  bottom: -25px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.05);
+}
+.bc-ico  { font-size: 38px; flex-shrink: 0; z-index: 1; }
+.bc-body { flex: 1; z-index: 1; }
+.bc-lbl  { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,.75); margin-bottom: 2px; }
+.bc-val  { font-size: 30px; font-weight: 900; color: #fff; line-height: 1.1; font-family: 'Barlow Condensed', sans-serif; }
+.bc-sub  { font-size: 11px; color: rgba(255,255,255,.65); margin-top: 3px; }
+.bc-red    { background: linear-gradient(135deg, #CC0000, #FF2244); }
+.bc-gold   { background: linear-gradient(135deg, #996600, #FFD700); }
+.bc-green  { background: linear-gradient(135deg, #007744, #00CC66); }
+.bc-blue   { background: linear-gradient(135deg, #004499, #0099FF); }
+.bc-purple { background: linear-gradient(135deg, #550099, #AA44FF); }
+.bc-orange { background: linear-gradient(135deg, #994400, #FF8800); }
+.bc-teal   { background: linear-gradient(135deg, #006666, #00CCCC); }
+
+.cards-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.cards-grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 14px; }
+@media(max-width:768px) {
+  .cards-grid-2 { grid-template-columns: 1fr; }
+  .cards-grid-4 { grid-template-columns: 1fr 1fr; }
+  .bc-val { font-size: 24px; }
+}
+/* ═════════════════════════════════════════════════ */
+
+/* ══ AUDITORIA ══════════════════════════════════════ */
+.audit-row{border-radius:10px;padding:14px 16px;margin-bottom:10px;border:.5px solid;display:flex;align-items:flex-start;gap:14px;transition:filter .15s}
+.audit-row:hover{filter:brightness(1.12)}
+.audit-func-badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap;display:block;text-align:center;margin-top:4px}
+.audit-detail{flex:1;min-width:0}
+.audit-name{font-weight:700;font-size:14px}
+.audit-sub{font-size:11px;color:#aaa;margin-top:4px;line-height:1.8}
+.audit-date{font-size:11px;color:#666;white-space:nowrap;flex-shrink:0;text-align:right;padding-top:2px}
+.fraud-flag{background:#FF224422;border:1px solid #FF224866;border-radius:5px;padding:2px 7px;font-size:10px;color:#FF4466;font-weight:700;display:inline-block;margin:2px 2px 0 0}
+.search-inline{background:#222;border:1px solid #444;border-radius:8px;padding:9px 13px;color:#fff;font-size:13px;outline:none;font-family:'Barlow',sans-serif;transition:border-color .2s}
+.search-inline:focus{border-color:#CC0000}
+/* ═════════════════════════════════════════════════ */
+
+</style>
+</head>
+<body>
+
+<div id="login-wrap">
+  <div id="login-box">
+    <img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha">
+    <div class="lmarca">ALPHA <span>SUPLEMENTOS</span></div>
+    <div class="ltipo">👑 ACESSO CEO</div>
+    <div id="lerro"></div>
+    <input type="email" class="lcampo" id="lemail" placeholder="alphasuplementostiangua@gmail.com">
+    <input type="password" class="lcampo" id="lsenha" placeholder="Senha">
+    <button id="lbtn">ENTRAR →</button>
+    <div class="llinks"><a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/funcionario/">Sou Funcionário</a> · <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/cliente/">Sou Cliente</a></div>
+  </div>
+</div>
+
+<div id="app">
+  <div id="loading-bar" style="position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CC0000,#FF4500);z-index:999;display:none;animation:loadbar 1.5s ease-in-out infinite">
+  </div>
+  <style>@keyframes loadbar{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}</style>
+  <div class="topbar">
+    <div class="tblogo"><img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha"><span class="tbnome">ALPHA <span>SUPLEMENTOS</span></span><span class="tbbadge">👑 CEO</span></div>
+    <div class="tbtabs">
+      <button class="tbt on" onclick="ir('dashboard',this)">📊 Dashboard</button>
+      <button class="tbt" onclick="ir('clientes',this)">👥 Clientes</button>
+      <button class="tbt" onclick="ir('ranking',this)">🏆 Ranking</button>
+      <button class="tbt" onclick="ir('crm',this)">📦 CRM</button>
+      <button class="tbt" onclick="ir('financeiro',this);rFinAsync()">💰 Financeiro</button>
+      <button class="tbt" onclick="ir('promocoes',this)">⚡ Promoções</button>
+      <button class="tbt" onclick="ir('indicacoes',this)">🎯 Indicações</button>
+      <button class="tbt" onclick="ir('desempenho',this);rDesemp()">📈 Desempenho</button>
+      <button class="tbt" onclick="ir('auditoria',this);rAuditoria()">🔍 Auditoria</button>
+    </div>
+    <div class="tbright"><span id="unome">CEO</span><button id="sbtn">Sair</button></div>
+  </div>
+  <div class="main">
+
+    <div id="p-dashboard" class="pnl on">
+      <div style="margin-bottom:18px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Dashboard Geral</div><div style="font-size:12px;color:#666;margin-top:2px">Visão estratégica · Alpha Suplementos</div></div>
+      <div class="cards-grid-2">
+        <div class="big-card bc-red">
+          <div class="bc-ico">👥</div>
+          <div class="bc-body">
+            <div class="bc-lbl">Clientes Ativos</div>
+            <div class="bc-val" id="kc">0</div>
+            <div class="bc-sub">cadastrados no sistema</div>
+          </div>
+        </div>
+        <div class="big-card bc-green">
+          <div class="bc-ico">💰</div>
+          <div class="bc-body">
+            <div class="bc-lbl">Vendas do Mês</div>
+            <div class="bc-val" id="kv">R$0</div>
+            <div class="bc-sub">faturamento total</div>
+          </div>
+        </div>
+        <div class="big-card bc-gold">
+          <div class="bc-ico">⭐</div>
+          <div class="bc-body">
+            <div class="bc-lbl">Pontos Emitidos</div>
+            <div class="bc-val" id="kp">0</div>
+            <div class="bc-sub">total acumulado pelos clientes</div>
+          </div>
+        </div>
+        <div class="big-card bc-blue">
+          <div class="bc-ico">💸</div>
+          <div class="bc-body">
+            <div class="bc-lbl">Cashback Gerado</div>
+            <div class="bc-val" id="kcb">R$0</div>
+            <div class="bc-sub">retorno aos clientes</div>
+          </div>
+        </div>
+        <div class="big-card bc-purple">
+          <div class="bc-ico">🏆</div>
+          <div class="bc-body">
+            <div class="bc-lbl">Resgates Realizados</div>
+            <div class="bc-val" id="kr">0</div>
+            <div class="bc-sub">prêmios e cashback</div>
+          </div>
+        </div>
+        <div class="big-card bc-orange">
+          <div class="bc-ico">🎯</div>
+          <div class="bc-body">
+            <div class="bc-lbl">Indicações Confirmadas</div>
+            <div class="bc-val" id="ki">0</div>
+            <div class="bc-sub">clientes indicados</div>
+          </div>
+        </div>
+      </div>
+      <div class="g3">
+        <div class="card"><div class="ct">Níveis</div><div id="niveis"></div><div style="border-top:.5px solid #2a2a2a;margin-top:12px;padding-top:10px;font-size:11px;color:#555;line-height:1.9">🥉 Bronze: &lt;R$150/mês<br>🥈 Prata: ≥R$150/mês<br>🥇 Ouro: ≥R$300 · 2+ meses<br>💰 R$1 cashback a cada R$7</div></div>
+        <div class="card"><div class="ct">Top ranking</div><div id="drk"></div></div>
+        <div class="card"><div class="ct">Alertas CRM</div><div id="dal"></div><button class="bverm" style="margin-top:12px;font-size:12px;padding:8px" onclick="ir('crm',document.querySelectorAll('.tbt')[3])">Ver todos →</button></div>
+      </div>
+      <div class="g2">
+        <div class="card"><div class="ct">Últimas compras</div><table class="tbl" id="dcp"></table></div>
+        <div class="card"><div class="ct">Ações rápidas</div>
+          <button class="bverm" onclick="abrirPromo()">⚡ Promoção Relâmpago</button>
+          <button class="bcinz" onclick="alert('Relatório em desenvolvimento')">📊 Exportar Relatório</button>
+          <button class="bcinz" onclick="alert('Configure Firebase nas Script Properties')">☁️ Sincronizar Firebase</button>
+        <div style="background:#111;border-radius:9px;padding:12px;margin-top:4px;font-size:12px;color:#555;line-height:2">🥉 1pt/R$ · 2%CB&nbsp;&nbsp;🥈 1,5pt/R$ · 5%CB&nbsp;&nbsp;🥇 2pt/R$ · 7%CB</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="p-clientes" class="pnl">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Clientes</div></div>
+        <div style="display:flex;gap:8px">
+          <select id="ffunc" onchange="rClientes()" class="campo" style="width:150px;margin:0"><option value="">Todos</option><option value="sabina">👁️ Sabina</option><option value="andre">André</option><option value="hesllen">Hesllen</option><option value="erica">Érica</option></select>
+          <select id="fnivel" onchange="rClientes()" class="campo" style="width:140px;margin:0"><option value="">Todos níveis</option><option value="OURO">🥇 Ouro</option><option value="PRATA">🥈 Prata</option><option value="BRONZE">🥉 Bronze</option></select>
+          <input id="fbusca" placeholder="🔍 Buscar..." class="campo" style="width:160px;margin:0" oninput="rClientes()">
+        </div>
+      </div>
+      <!-- Painel Sabina: reatribuição -->
+      <div id="sabina-panel" style="display:none;background:#EF9F2711;border:1px solid #EF9F2744;border-radius:12px;padding:16px;margin-bottom:14px">
+        <div style="font-size:13px;font-weight:700;color:#EF9F27;margin-bottom:10px">⚠️ Gestão de Clientes da Sabina</div>
+        <div style="font-size:12px;color:#aaa;margin-bottom:12px">Caso a Sabina saia da empresa, os clientes podem ser reatribuídos a outro vendedor. Esta ação atualiza o campo "Cadastrado por" na planilha.</div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <select id="sabina-novo-vendedor" class="campo" style="width:180px;margin:0">
+            <option value="">Escolha o novo vendedor...</option>
+            <option value="André">André</option>
+            <option value="Hesllen">Hesllen</option>
+            <option value="Érica">Érica</option>
+          </select>
+          <button onclick="reatribuirSabina()" style="background:#EF9F2722;color:#EF9F27;border:1px solid #EF9F2744;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">🔄 Reatribuir Clientes</button>
+        </div>
+        <div id="sabina-resultado" style="display:none;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:8px"></div>
+      </div>
+      <div class="card"><table class="tbl"><thead><tr><th>#</th><th>Cliente</th><th>Cadastrado por</th><th>Nível</th><th>Pontos</th><th>Cashback</th><th>Gasto/mês</th><th>Última compra</th></tr></thead><tbody id="tcorp"></tbody></table></div>
+    </div>
+
+    <div id="p-ranking" class="pnl">
+      <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Ranking</div></div>
+      <div class="g2b">
+        <div class="card"><div class="ct">Ranking por pontos</div><div id="rfull"></div></div>
+        <div>
+          <div class="card" style="margin-bottom:14px"><div class="ct">Estatísticas</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+              <div class="sm"><div class="smv" id="so" style="color:#FFD700">0</div><div class="sml">🥇 Ouro</div></div>
+              <div class="sm"><div class="smv" id="sp" style="color:#C8C8C8">0</div><div class="sml">🥈 Prata</div></div>
+              <div class="sm"><div class="smv" id="sb" style="color:#CD7F32">0</div><div class="sml">🥉 Bronze</div></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div class="sm"><div class="smv" id="sm" style="color:#FFD700">0</div><div class="sml">Média pts</div></div>
+              <div class="sm"><div class="smv" id="scb" style="color:#1D9E75">R$0</div><div class="sml">Total CB</div></div>
+            </div>
+          </div>
+          <div class="card"><div class="ct">Top indicadores</div><div id="tind"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="p-crm" class="pnl">
+      <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">CRM — Alertas</div></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+        <div style="background:#E24B4A11;border:.5px solid #E24B4A22;border-radius:10px;padding:13px"><div class="smv" id="ca" style="color:#E24B4A">0</div><div style="font-size:10px;color:#666;margin-top:2px">⛔ Acabou</div></div>
+        <div style="background:#EF9F2711;border:.5px solid #EF9F2722;border-radius:10px;padding:13px"><div class="smv" id="cu" style="color:#EF9F27">0</div><div style="font-size:10px;color:#666;margin-top:2px">🚨 Urgente</div></div>
+        <div style="background:#FFD70011;border:.5px solid #FFD70022;border-radius:10px;padding:13px"><div class="smv" id="cp" style="color:#FFD700">0</div><div style="font-size:10px;color:#666;margin-top:2px">⚠️ Próximo</div></div>
+        <div style="background:#1D9E7511;border:.5px solid #1D9E7522;border-radius:10px;padding:13px"><div class="smv" id="cv" style="color:#1D9E75">0</div><div style="font-size:10px;color:#666;margin-top:2px">📦 Aviso</div></div>
+      </div>
+      <div class="card"><div class="ct">Todos os alertas</div><div id="clista"></div></div>
+    </div>
+
+    <div id="p-financeiro" class="pnl">
+      <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Financeiro</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <select id="fmes-sel" onchange="rFinFiltro()" style="background:#111;border:.5px solid #333;border-radius:8px;padding:8px 12px;color:#f0f0f0;font-size:13px;outline:none;font-family:'Barlow',sans-serif;cursor:pointer">
+            <option value="">📅 Todos os meses</option>
+          </select>
+          <button onclick="el('fmes-sel').value='';rFinFiltro()" style="background:#CC000022;color:#FF2244;border:1px solid #CC000044;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">✕ Limpar</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px">
+        <div class="kp" style="background:#1D9E7510;border-color:#1D9E7522"><div class="kr">Total vendas</div><div class="kv" id="fv" style="color:#1D9E75">R$0</div></div>
+        <div class="kp" style="background:#4285F410;border-color:#4285F422"><div class="kr">Cashback gerado</div><div class="kv" id="fc" style="color:#4285F4">R$0</div></div>
+        <div class="kp" style="background:#FFD70010;border-color:#FFD70022"><div class="kr">Pontos emitidos</div><div class="kv" id="fp" style="color:#FFD700">0</div></div>
+      </div>
+      <div class="card"><div class="ct" id="fin-titulo">Histórico de compras</div><table class="tbl"><thead><tr><th>Data</th><th>Cliente</th><th>Nível</th><th>Valor</th><th>Pontos</th><th>Cashback</th><th>Descrição</th></tr></thead><tbody id="fcorp"></tbody></table></div>
+    </div>
+
+    <div id="p-promocoes" class="pnl">
+      <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Promoções Relâmpago</div></div>
+      <div class="g2b">
+        <div class="card">
+          <div class="ct">Nova promoção</div>
+          <label class="rot">Título</label><input type="text" id="ptit" class="campo" value="⚡ OFERTA FLASH!" oninput="upPv()">
+          <label class="rot">Mensagem</label><textarea id="pmsg" class="campo" style="min-height:70px;resize:vertical" oninput="upPv()">Creatina com 30% OFF nas próximas 2 horas!</textarea>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div><label class="rot">Desconto %</label><input type="number" id="pdesc" class="campo" value="30" oninput="upPv()"></div>
+            <div><label class="rot">Válido até</label><input type="text" id="pval" class="campo" value="hoje 23:59" oninput="upPv()"></div>
+          </div>
+          <label class="rot">Segmento</label>
+          <div class="sg">
+            <button class="sgb on" onclick="selSeg(this,'todos')">Todos</button>
+            <button class="sgb" onclick="selSeg(this,'PRATA')">Prata+</button>
+            <button class="sgb" onclick="selSeg(this,'OURO')">Só Ouro</button>
+          </div>
+          <button class="bverm" onclick="abrirPromo()">🚀 DISPARAR — Push + WhatsApp</button>
+          <div id="psuc" style="display:none;background:#1D9E7522;border:.5px solid #1D9E7533;border-radius:9px;padding:12px;font-size:13px;color:#1D9E75;text-align:center"></div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:14px"><div class="ct">Preview</div>
+            <div class="pvw"><div class="pvi">🐺</div><div><div id="pvt" style="font-weight:700;font-size:13px"></div><div id="pvc" style="font-size:12px;color:#666;margin-top:2px"></div></div></div>
+            <div id="pva" style="font-size:12px;color:#666;margin-top:8px"></div>
+          </div>
+          <div class="card"><div class="ct">Histórico</div><div id="phist"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="p-indicacoes" class="pnl">
+      <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Indicações</div><div style="font-size:12px;color:#666">Indicador +100pts +R$10 cashback · Indicado +50pts +R$5 desconto · 1 CPF por conta</div></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px">
+        <div class="kp" style="background:#CC000010;border-color:#CC000022"><div class="kr">Total</div><div class="kv" id="it" style="color:#CC0000">0</div></div>
+        <div class="kp" style="background:#1D9E7510;border-color:#1D9E7522"><div class="kr">Confirmadas</div><div class="kv" id="ic" style="color:#1D9E75">0</div></div>
+        <div class="kp" style="background:#EF9F2710;border-color:#EF9F2722"><div class="kr">Pendentes</div><div class="kv" id="ip" style="color:#EF9F27">0</div></div>
+        <div class="kp" style="background:#FFD70010;border-color:#FFD70022"><div class="kr">Pts gerados</div><div class="kv" id="ipt" style="color:#FFD700">0</div></div>
+      </div>
+      <div class="card"><div class="ct">Todas as indicações</div><table class="tbl"><thead><tr><th>Indicador</th><th>Indicado</th><th>Data</th><th>Status</th><th>Pontos</th></tr></thead><tbody id="icorp"></tbody></table></div>
+    </div>
+
+  
+
+
+    <!-- DESEMPENHO -->
+    <div id="p-desempenho" class="pnl">
+      <div style="margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#FF2244">📈 Desempenho da Equipe</div>
+          <div style="font-size:13px;color:#aaa;margin-top:4px">Ranking de funcionários · Vendas · Cadastros · Ticket médio</div>
+        </div>
+        <button onclick="rDesemp()" style="background:#CC000022;color:#FF2244;border:1px solid #CC000044;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">🔄 Atualizar</button>
+      </div>
+
+      <!-- KPIs gerais -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+        <div style="background:#CC000022;border:1px solid #CC0000;border-radius:12px;padding:16px;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#FF4444" id="ds-total-vendas">R$0</div>
+          <div style="font-size:12px;color:#aaa;margin-top:4px">💰 Total Vendas</div>
+        </div>
+        <div style="background:#FFD70022;border:1px solid #FFD700;border-radius:12px;padding:16px;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#FFD700" id="ds-ticket-medio">R$0</div>
+          <div style="font-size:12px;color:#aaa;margin-top:4px">🎯 Ticket Médio</div>
+        </div>
+        <div style="background:#00FF8822;border:1px solid #00FF88;border-radius:12px;padding:16px;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#00FF88" id="ds-total-cads">0</div>
+          <div style="font-size:12px;color:#aaa;margin-top:4px">👥 Clientes Cadastrados</div>
+        </div>
+        <div style="background:#AA00FF22;border:1px solid #AA00FF;border-radius:12px;padding:16px;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#CC88FF" id="ds-total-vendas-num">0</div>
+          <div style="font-size:12px;color:#aaa;margin-top:4px">🛍️ Total de Vendas</div>
+        </div>
+      </div>
+
+      <!-- Ranking funcionários -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:16px">
+          <div style="font-size:11px;color:#FFD700;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px">
+            <span style="width:3px;height:14px;background:#FFD700;border-radius:2px;display:inline-block"></span>
+            🏆 Ranking — Mais Vendas (R$)
+          </div>
+          <div id="ds-rank-vendas"></div>
+        </div>
+        <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:16px">
+          <div style="font-size:11px;color:#00FF88;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px">
+            <span style="width:3px;height:14px;background:#00FF88;border-radius:2px;display:inline-block"></span>
+            👥 Ranking — Mais Cadastros
+          </div>
+          <div id="ds-rank-cads"></div>
+        </div>
+      </div>
+
+      <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:16px;margin-top:16px">
+        <div style="font-size:11px;color:#CC88FF;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px">
+          <span style="width:3px;height:14px;background:#CC88FF;border-radius:2px;display:inline-block"></span>
+          📊 Detalhamento por Funcionário
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead><tr>
+            <th style="text-align:left;padding:10px;font-size:11px;color:#888;border-bottom:1px solid #333;text-transform:uppercase">Funcionário</th>
+            <th style="text-align:right;padding:10px;font-size:11px;color:#888;border-bottom:1px solid #333;text-transform:uppercase">Vendas (R$)</th>
+            <th style="text-align:right;padding:10px;font-size:11px;color:#888;border-bottom:1px solid #333;text-transform:uppercase">Nº Vendas</th>
+            <th style="text-align:right;padding:10px;font-size:11px;color:#888;border-bottom:1px solid #333;text-transform:uppercase">Cadastros</th>
+            <th style="text-align:right;padding:10px;font-size:11px;color:#888;border-bottom:1px solid #333;text-transform:uppercase">Ticket Médio</th>
+          </tr></thead>
+          <tbody id="ds-tabela"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+    <!-- AUDITORIA DE CADASTROS -->
+    <div id="p-auditoria" class="pnl">
+      <div style="margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#FF2244">🔍 Auditoria de Cadastros</div>
+          <div style="font-size:13px;color:#aaa;margin-top:4px">Quem cadastrou cada cliente · Dados completos · Detecção de anomalias</div>
+        </div>
+        <button onclick="rAuditoria()" style="background:#CC000022;color:#FF2244;border:1px solid #CC000044;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">🔄 Atualizar</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px">
+        <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#FF2244" id="aud-total">0</div><div style="font-size:11px;color:#888;margin-top:3px">👥 Total</div></div>
+        <div style="background:#1a1a1a;border:1px solid #FFD70033;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#FFD700" id="aud-andre">0</div><div style="font-size:11px;color:#888;margin-top:3px">📋 André</div></div>
+        <div style="background:#1a1a1a;border:1px solid #00CCFF33;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#00CCFF" id="aud-hesllen">0</div><div style="font-size:11px;color:#888;margin-top:3px">📋 Hesllen</div></div>
+        <div style="background:#1a1a1a;border:1px solid #EF9F2733;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#EF9F27" id="aud-sabina">0</div><div style="font-size:11px;color:#888;margin-top:3px">📋 Sabina</div></div>
+        <div style="background:#1a1a1a;border:1px solid #CC88FF33;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#CC88FF" id="aud-erica">0</div><div style="font-size:11px;color:#888;margin-top:3px">📋 Érica</div></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+        <input id="aud-busca" placeholder="🔍 Buscar cliente, email, telefone..." class="search-inline" style="flex:1;min-width:200px" oninput="renderAuditoria()">
+        <select id="aud-func" class="search-inline" onchange="renderAuditoria()" style="width:170px">
+          <option value="">Todos funcionários</option>
+          <option value="andré">André</option>
+          <option value="hesllen">Hesllen</option>
+          <option value="sabina">Sabina</option>
+          <option value="érica">Érica</option>
+          <option value="(sem">Sem atribuição</option>
+        </select>
+        <select id="aud-nivel" class="search-inline" onchange="renderAuditoria()" style="width:140px">
+          <option value="">Todos níveis</option>
+          <option value="OURO">🥇 Ouro</option>
+          <option value="PRATA">🥈 Prata</option>
+          <option value="BRONZE">🥉 Bronze</option>
+        </select>
+        <select id="aud-ord" class="search-inline" onchange="renderAuditoria()" style="width:190px">
+          <option value="data-desc">Mais recentes primeiro</option>
+          <option value="data-asc">Mais antigos primeiro</option>
+          <option value="nome-asc">Nome A→Z</option>
+          <option value="pontos-desc">Mais pontos</option>
+          <option value="gasto-desc">Maior gasto</option>
+        </select>
+      </div>
+      <div id="aud-alerta-fraude" style="display:none;background:#FF224411;border:1px solid #FF224466;border-radius:12px;padding:14px;margin-bottom:16px">
+        <div style="color:#FF4466;font-weight:700;font-size:14px;margin-bottom:8px">⚠️ Anomalias detectadas — verifique esses clientes</div>
+        <div id="aud-fraudes-lista" style="font-size:13px;color:#ddd;line-height:2"></div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:14px 18px;border-bottom:.5px solid #333;display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.7px;font-weight:700;display:flex;align-items:center;gap:6px"><span style="width:3px;height:12px;background:#FF2244;border-radius:2px;display:inline-block"></span>Cadastros — Dados Completos</div>
+          <div id="aud-contador" style="font-size:12px;color:#666"></div>
+        </div>
+        <div id="aud-lista" style="padding:16px"></div>
+      </div>
+    </div>
+
+<div id="mpromo" class="mfundo">
+  <div class="mcaixa">
+    <div style="font-weight:700;font-size:16px;color:#CC0000;margin-bottom:12px">⚡ Confirmar disparo</div>
+    <p style="font-size:13px;color:#aaa;margin-bottom:16px" id="mtxt"></p>
+    <div style="display:flex;gap:8px">
+      <button class="bverm" onclick="confirmar()">Confirmar</button>
+      <button class="bcinz" onclick="fechar()">Cancelar</button>
+    </div>
+
+
+
+  </div>
+</div>
+
+<script>
+
+// ══ SEGURANÇA CEO v44.1 ════════════════════════════
+//
+//  Como funciona:
+//  1. Você digita email + senha normalmente
+//  2. SHA-256(email:senha:salt) é comparado com _CEO_HASH
+//     para verificar se a senha está correta (igual antes)
+//  3. SHA-256(senha:api_salt) vira o _API_TOKEN em memória
+//     — sem precisar conhecer o token real
+//  4. O backend valida esse hash da senha como se fosse o token
+//     usando CEO_SENHA_HASH nas ScriptProperties
+//
+//  Resultado: só precisa da sua senha de sempre, em qualquer lugar.
+//
+var _SALT     = 'alpha_salt_2026';      // salt do login CEO
+var _API_SALT = 'alpha_api_token_2026'; // salt para derivar o token da senha
+
+// [SEC] Nenhum token hardcodado aqui — derivado da senha em runtime
+var _API_TOKEN = null;
+
+// Hash SHA-256 de (email:senha:_SALT) — para verificar login
+// Gerado uma vez: sha256("alphasuplementostiangua@gmail.com:SUASENHA:alpha_salt_2026")
+var _CEO_HASH  = 'f7b331e102475c25639bf6038b8ca38f22e962756e25f27d3d8053a7afe23afa';
+var _CEO_EMAIL = 'alphasuplementostiangua@gmail.com';
+var _SESSION_KEY   = 'alpha_ceo_v44_session';
+var _MAX_ATTEMPTS  = 3;
+var _BLOCK_TIME    = 10 * 60 * 1000; // 10 min
+var _SESSION_EXPIRY= 8  * 60 * 60 * 1000; // 8h
+
+async function sha256js(msg) {
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+}
+
+// Deriva o token da API a partir da senha (sem armazenar o token real)
+async function derivarTokenDaSenha(senha) {
+  return await sha256js(senha + ':' + _API_SALT);
+}
+
+function verificarSessaoCEO() {
+  try {
+    // [SEC] sessionStorage: encerra ao fechar aba
+    var sess = JSON.parse(sessionStorage.getItem(_SESSION_KEY) || 'null');
+    if (sess && sess.expiry > Date.now() && sess.role === 'CEO') return sess;
+    sessionStorage.removeItem(_SESSION_KEY);
+  } catch(e) {}
+  return null;
+}
+
+// Salva sessão e carrega token derivado da senha em memória
+function salvarSessaoCEO(tokenDerivado) {
+  _API_TOKEN = tokenDerivado; // só em memória, nunca armazenado
+  sessionStorage.setItem(_SESSION_KEY, JSON.stringify({
+    role: 'CEO',
+    expiry: Date.now() + _SESSION_EXPIRY
+  }));
+  // [SEC] token NÃO vai para sessionStorage/localStorage
+}
+
+function verificarBloqueioCEO() {
+  try {
+    var bl = JSON.parse(localStorage.getItem('alpha_ceo_block') || 'null');
+    if (bl && bl.until > Date.now()) return Math.ceil((bl.until - Date.now()) / 60000);
+    if (bl) localStorage.removeItem('alpha_ceo_block');
+  } catch(e) {}
+  return 0;
+}
+
+function registrarTentativaCEO() {
+  try {
+    var bl = JSON.parse(localStorage.getItem('alpha_ceo_block') || '{"count":0}');
+    bl.count = (bl.count || 0) + 1;
+    if (bl.count >= _MAX_ATTEMPTS) { bl.until = Date.now() + _BLOCK_TIME; bl.count = 0; }
+    localStorage.setItem('alpha_ceo_block', JSON.stringify(bl));
+  } catch(e) {}
+}
+// ══════════════════════════════════════════════════
+var WEB_APP_URL='https://script.google.com/macros/s/AKfycbw7AIr8DrCMGFhpoaz6gE7_v0M4sElvNPZh7PaEpP4h_oX_vwfraiUAaGOQNMoQK_8WpQ/exec';
+var CL=[];
+
+var CP=[];
+
+var PC=[];
+var IND=[
+  {indNome:'João Silva',  indado:'Maria Oliveira',status:'CONFIRMADA',data:'10/01',pts:200},
+  {indNome:'João Silva',  indado:'Carlos Ramos',  status:'CONFIRMADA',data:'15/12',pts:200},
+  {indNome:'Ana Lima',    indado:'Larissa Costa', status:'PENDENTE',  data:'12/01',pts:0},
+  {indNome:'Carlos Ramos',indado:'Fernanda Souza',status:'CONFIRMADA',data:'05/01',pts:200},
+];
+var PL=[
+  {titulo:'⚡ Whey 25% OFF',enviados:6,data:'10/01',seg:'Todos'},
+  {titulo:'🥇 Exclusivo Ouro',enviados:2,data:'05/01',seg:'Ouro'},
+];
+var NC={OURO:{e:'🥇',c:'#FFD700'},PRATA:{e:'🥈',c:'#C8C8C8'},BRONZE:{e:'🥉',c:'#CD7F32'}};
+var seg='todos';
+function fR(v){return 'R$'+Number(v).toFixed(2).replace('.',',');}
+function fP(v){return Number(v).toLocaleString('pt-BR')+' pts';}
+function ini(n){return n.split(' ').slice(0,2).map(function(p){return p[0];}).join('');}
+function nt(n){return '<span class="nt '+(n==='OURO'?'nto':n==='PRATA'?'ntp':'ntb')+'">'+NC[n].e+' '+n+'</span>';}
+function el(id){return document.getElementById(id);}
+function set(id,v){var e=el(id);if(e)e.textContent=v;}
+function html(id,v){var e=el(id);if(e)e.innerHTML=v;}
+
+// LOGIN
+el('lbtn').onclick=async function(){
+  var s  = el('lsenha').value.trim();
+  var em = el('lemail').value.trim().toLowerCase();
+  var err= el('lerro');
+
+  // Verificar bloqueio
+  var mins = verificarBloqueioCEO();
+  if(mins > 0){ err.style.display='block'; err.textContent='Bloqueado. Tente em '+mins+' minuto(s).'; return; }
+
+  // Verificar email
+  if(em !== _CEO_EMAIL){ registrarTentativaCEO(); err.style.display='block'; err.textContent='Email não autorizado.'; return; }
+
+  // Verificar senha com hash (mesmo mecanismo de antes)
+  var hashDigitado = await sha256js(em + ':' + s + ':' + _SALT);
+  if(hashDigitado === _CEO_HASH){
+    localStorage.removeItem('alpha_ceo_block');
+
+    // Derivar o token da API a partir da senha — sem precisar saber o token real
+    var tokenDerivado = await derivarTokenDaSenha(s);
+    salvarSessaoCEO(tokenDerivado);
+
+    err.style.display='none';
+    el('lbtn').textContent='⏳ Carregando...';
+    el('lbtn').disabled=true;
+    el('login-wrap').style.display='none';
+    el('app').style.display='block';
+    set('unome','André (CEO)');
+    carregarDados().then(function(){ rTudo(); });
+  } else {
+    registrarTentativaCEO();
+    err.style.display='block';
+    var bl = JSON.parse(localStorage.getItem('alpha_ceo_block')||'{"count":0}');
+    var rest = Math.max(0, _MAX_ATTEMPTS - (bl.count||0));
+    err.textContent='Senha incorreta. Tentativas restantes: '+rest;
+  }
+};
+
+async function carregarDados(){
+  if(!_API_TOKEN) return;
+  try {
+    var r1 = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos'+'&token='+_API_TOKEN+'&funcionario=ceo');
+    var d1 = await r1.json();
+    if(d1.sucesso && d1.dados && d1.dados.length>0){
+      CL = d1.dados.map(function(c){
+        var cadRaw = String(c[12]||'');
+        var cadLimpo = cadRaw.indexOf('|IND:')>=0 ? cadRaw.substring(0,cadRaw.indexOf('|IND:')) : cadRaw;
+        return {
+          id:           c[0]||'',
+          nome:         c[1]||'',
+          email:        c[2]||'',
+          tel:          String(c[3]||''),
+          cpf:          c[4]||'',
+          nascimento:   c[5]||'',
+          pontos:       Number(c[6])||0,
+          nivel:        c[7]||'BRONZE',
+          gastoMes:     Number(c[8])||0,
+          mesesRec:     Number(c[9])||0,
+          cashback:     Number(c[10])||0,
+          ref:          c[11]||'',
+          cadastradoPor: cadLimpo || '(sem atribuição)',
+          cadastradoEm:  c[13]||'',
+          ultimaCompra:  c[14]?new Date(c[14]).toLocaleDateString('pt-BR'):'—',
+          indicacoes: 0
+        };
+      });
+      console.log('Clientes carregados da planilha:', CL.length);
+    }
+  } catch(e){
+    console.log('API offline:', e.message);
+  }
+  try {
+    // Carregar compras reais
+    var r2 = await fetch(WEB_APP_URL+'?acao=listar_historico'+'&token='+_API_TOKEN);
+    var d2 = await r2.json();
+    if(d2.sucesso && d2.dados && d2.dados.length>0){
+      CP = d2.dados.map(function(c){
+        var dt=c[8]?new Date(c[8]):null;
+        return {
+          cid:        c[1]||'',
+          valor:      Number(c[3])||0,
+          pts:        Number(c[4])||0,
+          cb:         Number(c[5])||0,
+          data:       dt?dt.toLocaleDateString('pt-BR'):'—',
+          dataRaw:    dt?dt.getTime():0,
+          nivel:      c[9]||'BRONZE',
+          desc:       c[2]||'',
+          funcionario: String(c[7]||'')
+        };
+      });
+      console.log('Compras carregadas:', CP.length);
+    }
+  } catch(e){
+    console.log('Usando compras demo:', e.message);
+  }
+}
+el('lsenha').onkeydown=function(e){if(e.key==='Enter')el('lbtn').click();};
+el('sbtn').onclick=function(){
+  _API_TOKEN = null;
+  el('app').style.display='none';
+  el('login-wrap').style.display='flex';
+  el('lsenha').value='';
+  el('lbtn').textContent='ENTRAR →';
+  el('lbtn').disabled=false;
+  sessionStorage.removeItem(_SESSION_KEY);
+};
+
+// Auto-login se sessão válida
+// NOTA: token não é armazenado — se fechar e reabrir a aba, pede login novamente.
+// Isso é intencional: a senha vira o token, então sempre precisará redigitá-la.
+// A sessão (8h) só evita logout por inatividade dentro da mesma aba aberta.
+(function(){
+  var sess = verificarSessaoCEO();
+  if(sess && _API_TOKEN) {
+    // Sessão válida E token ainda em memória (mesma aba, não recarregou)
+    el('login-wrap').style.display='none';
+    el('app').style.display='block';
+    set('unome','André (CEO)');
+    carregarDados().then(function(){ rTudo(); });
+  } else if(sess) {
+    // Sessão existe mas token saiu da memória (recarregou página) — pede senha novamente
+    sessionStorage.removeItem(_SESSION_KEY);
+  }
+})();
+
+// TABS
+function ir(n,b){
+  document.querySelectorAll('.pnl').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.tbt').forEach(function(x){x.classList.remove('on');});
+  var e=el('p-'+n); if(e)e.classList.add('on');
+  if(b)b.classList.add('on');
+}
+
+// RENDER
+function rTudo(){rDash();rClientes();rRank();rCRM();rFinAsync();rInd();rPLog();upPv();rDesemp();rAuditoria();}
+async function rDesemp(){
+  // Mostrar loading apenas nos rankings, KPIs ficam com valor atual
+  var loadHtml = '<div style="text-align:center;padding:30px;color:#888"><div style="font-size:28px;margin-bottom:8px">⏳</div><div style="font-size:13px">Carregando...</div></div>';
+  ['ds-rank-vendas','ds-rank-cads'].forEach(function(id){html(id,loadHtml);});
+  html('ds-tabela','<tr><td colspan="5" style="text-align:center;color:#555;padding:24px">⏳ Carregando...</td></tr>');
+
+  function renderDesemp(lista, totais){
+    // KPIs
+    set('ds-total-vendas',   fR(totais.vendas));
+    set('ds-ticket-medio',   fR(totais.ticketMedio));
+    set('ds-total-cads',     String(totais.cadastros));
+    set('ds-total-vendas-num', String(totais.numVendas));
+
+    // Rank vendas — mostra todos os funcionários mesmo com zero
+    var byV = lista.slice().sort(function(a,b){return b.vendas-a.vendas;});
+    html('ds-rank-vendas', byV.map(function(f,i){
+      var medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'  ';
+      var cor   = i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#888';
+      var pct   = totais.vendas > 0 ? Math.round(f.vendas/totais.vendas*100) : 0;
+      return '<div style="margin-bottom:14px">' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:5px">' +
+          '<span style="font-weight:700;font-size:14px;color:'+cor+'">'+medal+' '+f.nome+'</span>' +
+          '<span style="color:#FFD700;font-weight:700">'+fR(f.vendas)+'</span>' +
+        '</div>' +
+        '<div style="background:#222;border-radius:20px;height:10px;overflow:hidden">' +
+          '<div style="width:'+pct+'%;height:100%;background:linear-gradient(90deg,'+cor+','+cor+'88);border-radius:20px;transition:width .6s ease"></div>' +
+        '</div>' +
+        '<div style="font-size:11px;color:#888;margin-top:3px">'+f.numVendas+' venda(s) · '+pct+'% do total</div>' +
+      '</div>';
+    }).join('') || '<div style="color:#888;font-size:13px;padding:20px;text-align:center">Nenhuma venda registrada ainda.</div>');
+
+    // Rank cadastros
+    var byC = lista.slice().sort(function(a,b){return b.cadastros-a.cadastros;});
+    html('ds-rank-cads', byC.map(function(f,i){
+      var medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'  ';
+      var cor   = i===0?'#00FF88':i===1?'#00CC66':i===2?'#009944':'#888';
+      var pct   = totais.cadastros > 0 ? Math.round(f.cadastros/totais.cadastros*100) : 0;
+      return '<div style="margin-bottom:14px">' +
+        '<div style="display:flex;justify-content:space-between;margin-bottom:5px">' +
+          '<span style="font-weight:700;font-size:14px;color:'+cor+'">'+medal+' '+f.nome+'</span>' +
+          '<span style="color:#00FF88;font-weight:700">'+f.cadastros+' cliente(s)</span>' +
+        '</div>' +
+        '<div style="background:#222;border-radius:20px;height:10px;overflow:hidden">' +
+          '<div style="width:'+pct+'%;height:100%;background:linear-gradient(90deg,'+cor+','+cor+'88);border-radius:20px;transition:width .6s ease"></div>' +
+        '</div>' +
+      '</div>';
+    }).join('') || '<div style="color:#888;font-size:13px;padding:20px;text-align:center">Nenhum cadastro registrado ainda.</div>');
+
+    // Tabela
+    html('ds-tabela', lista.length===0
+      ? '<tr><td colspan="5" style="text-align:center;color:#555;padding:20px">Nenhum dado ainda.</td></tr>'
+      : lista.map(function(f,i){
+          var cor = i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#888';
+          return '<tr style="border-bottom:1px solid #222">' +
+            '<td style="padding:12px;font-weight:700;color:'+cor+'">'+(i===0?'🥇 ':i===1?'🥈 ':i===2?'🥉 ':'')+f.nome+'</td>' +
+            '<td style="padding:12px;text-align:right;color:#FFD700;font-weight:700">'+fR(f.vendas)+'</td>' +
+            '<td style="padding:12px;text-align:right;color:#f0f0f0">'+f.numVendas+'</td>' +
+            '<td style="padding:12px;text-align:right;color:#00FF88;font-weight:700">'+f.cadastros+'</td>' +
+            '<td style="padding:12px;text-align:right;color:#CC88FF">'+fR(f.ticket)+'</td>' +
+          '</tr>';
+        }).join('')
+    );
+  }
+
+  try {
+    var resp = await fetch(WEB_APP_URL + '?acao=listar_desempenho&token='+_API_TOKEN);
+    var data = await resp.json();
+    if (!data.sucesso) throw new Error(data.erro || 'Erro');
+    renderDesemp(data.dados.funcionarios, data.dados.totais);
+  } catch(err) {
+    console.log('Desempenho erro:', err);
+    // Fallback: calcular localmente com dados já carregados (CL + CP)
+    var funcNomes = ['André','Hesllen','Sabina','Érica'];
+    var statsLocal = {};
+    funcNomes.forEach(function(f){ statsLocal[f]={nome:f,vendas:0,numVendas:0,cadastros:0,ticket:0}; });
+    var totalV=0, totalN=0, totalCads=0;
+    CP.forEach(function(c){
+      totalV+=c.valor; totalN++;
+      // Atribuir venda ao funcionário correto pelo campo do histórico
+      var fn = funcNomes.find(function(n){ return n.toLowerCase() === (c.funcionario||'').toLowerCase(); });
+      if(fn){ statsLocal[fn].vendas+=c.valor; statsLocal[fn].numVendas++; }
+    });
+    CL.forEach(function(c){
+      totalCads++;
+      // Contar cadastro pelo funcionário que registrou
+      var fn = funcNomes.find(function(n){ return n.toLowerCase() === (c.cadastradoPor||'').toLowerCase(); });
+      if(fn){ statsLocal[fn].cadastros++; }
+    });
+    // Calcular ticket médio por funcionário
+    funcNomes.forEach(function(f){ statsLocal[f].ticket = statsLocal[f].numVendas > 0 ? parseFloat((statsLocal[f].vendas/statsLocal[f].numVendas).toFixed(2)) : 0; });
+    var lista = funcNomes.map(function(f){ return statsLocal[f]; });
+    renderDesemp(lista, {vendas:parseFloat(totalV.toFixed(2)), numVendas:totalN, cadastros:totalCads, ticketMedio: totalN>0?parseFloat((totalV/totalN).toFixed(2)):0});
+  }
+}
+
+
+function rDash(){
+  var tv=CP.reduce(function(s,c){return s+c.valor;},0);
+  var tp=CL.reduce(function(s,c){return s+c.pontos;},0);
+  var tc=CL.reduce(function(s,c){return s+c.cashback;},0);
+  set('kc',CL.length); set('kv',fR(tv));
+  set('kp',tp.toLocaleString('pt-BR')); set('kcb',fR(tc));
+  var byN={BRONZE:0,PRATA:0,OURO:0};
+  CL.forEach(function(c){byN[c.nivel]++;});
+  html('niveis',Object.entries(byN).map(function(e){
+    var n=e[0],q=e[1],cfg=NC[n],pct=Math.round(q/CL.length*100);
+    return '<div style="margin-bottom:13px"><div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="color:'+cfg.c+';font-weight:600;font-size:13px">'+cfg.e+' '+n+'</span><span style="color:#666;font-size:12px">'+q+' · '+pct+'%</span></div><div class="bbg"><div class="bfl" style="width:'+pct+'%;background:'+cfg.c+'"></div></div></div>';
+  }).join(''));
+  var rk=CL.slice().sort(function(a,b){return b.pontos-a.pontos;});
+  html('drk',rk.slice(0,5).map(function(c,i){
+    var pc=i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#555';
+    var pl=i===0?'🏆':i+1;
+    return '<div class="rk"><div class="rkpos" style="color:'+pc+'">'+pl+'</div><div class="rkav">'+ini(c.nome)+'</div><div class="rkin"><div class="rknm">'+c.nome+'</div><div class="rksb" style="color:'+NC[c.nivel].c+'">'+NC[c.nivel].e+' '+c.nivel+'</div></div><div class="rkpt">'+fP(c.pontos)+'</div></div>';
+  }).join(''));
+  var al=PC.slice().sort(function(a,b){return a.dias-b.dias;}).slice(0,4);
+  html('dal',al.map(function(a){
+    var cl=CL.find(function(c){return c.id===a.cid;})||{nome:'?'};
+    var cor=a.dias<=0?'#E24B4A':a.dias<=2?'#EF9F27':a.dias<=5?'#FFD700':'#1D9E75';
+    var u=a.dias<=0?'⛔':a.dias<=2?'🚨 '+a.dias+'d':a.dias<=5?'⚠️ '+a.dias+'d':'📦 '+a.dias+'d';
+    return '<div style="display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:.5px solid #1e1e1e"><span style="color:'+cor+';font-size:12px;font-weight:700;min-width:40px">'+u+'</span><div><div style="font-size:12px;font-weight:500">'+cl.nome+'</div><div style="font-size:10px;color:#666">'+a.nome+'</div></div></div>';
+  }).join(''));
+  var cpRows = CP.length>0 ? CP.slice(0,6).map(function(c){
+    var cl=CL.find(function(x){return x.id===c.cid||x.email===c.cid;})||{nome:c.cid||'?'};
+    return '<tr><td style="color:#666">'+c.data+'</td><td>'+cl.nome+'</td><td style="color:#1D9E75;font-weight:600">'+fR(c.valor)+'</td><td style="color:#FFD700">+'+fP(c.pts)+'</td><td style="color:#1D9E75">+'+fR(c.cb)+'</td></tr>';
+  }).join('') : '<tr><td colspan="5" style="color:#666;text-align:center;padding:20px">Nenhuma compra registrada ainda</td></tr>';
+  el('dcp').innerHTML='<thead><tr><th>Data</th><th>Cliente</th><th>Valor</th><th>Pontos</th><th>CB</th></tr></thead><tbody>'+cpRows+'</tbody>';
+}
+
+function rClientes(){
+  var b=(el('fbusca')||{value:''}).value.toLowerCase();
+  var f=(el('fnivel')||{value:''}).value;
+  var ff=(el('ffunc')||{value:''}).value.toLowerCase();
+  // Mostrar painel Sabina quando filtro = sabina
+  var painelSabina=el('sabina-panel');
+  if(painelSabina) painelSabina.style.display=(ff==='sabina'?'block':'none');
+
+  function normF(s){return String(s||'').toLowerCase().replace(/[áàãâä]/g,'a').replace(/[éêë]/g,'e').replace(/[íîï]/g,'i').replace(/[óôõö]/g,'o').replace(/[úûü]/g,'u').replace(/[ç]/g,'c');}
+  var funcCores={'andre':'#FFD700','hesllen':'#00CCFF','sabina':'#EF9F27','erica':'#CC88FF'};
+  function funcBadge(raw){
+    var n=normF(raw||'');
+    var cor=funcCores[n]||'#888';
+    return '<span style="background:'+cor+'22;color:'+cor+';border:.5px solid '+cor+'55;border-radius:12px;font-size:10px;font-weight:700;padding:2px 8px">'+(raw||'—')+'</span>';
+  }
+
+  var l=CL.filter(function(c){
+    var matchBusca=(!b||c.nome.toLowerCase().includes(b)||c.email.includes(b)||String(c.tel||'').includes(b));
+    var matchNivel=(!f||c.nivel===f);
+    var matchFunc=!ff||(normF(c.cadastradoPor||'')).includes(normF(ff));
+    return matchBusca&&matchNivel&&matchFunc;
+  }).sort(function(a,b){return b.pontos-a.pontos;});
+
+  html('tcorp',l.map(function(c,i){
+    return '<tr>' +
+      '<td style="color:#666">'+(i+1)+'</td>' +
+      '<td><div style="font-weight:600">'+c.nome+'</div><div style="font-size:11px;color:#666">'+c.email+'</div></td>' +
+      '<td>'+funcBadge(c.cadastradoPor)+'</td>' +
+      '<td>'+nt(c.nivel)+'</td>' +
+      '<td style="color:#FFD700;font-weight:600">'+fP(c.pontos)+'</td>' +
+      '<td style="color:#1D9E75">'+fR(c.cashback)+'</td>' +
+      '<td>'+fR(c.gastoMes)+'</td>' +
+      '<td style="color:#666">'+c.ultimaCompra+'</td>' +
+    '</tr>';
+  }).join(''));
+}
+
+// v41: reatribuir clientes da Sabina para outro vendedor
+async function reatribuirSabina(){
+  var novoVendedor=(el('sabina-novo-vendedor')||{value:''}).value;
+  var res=el('sabina-resultado');
+  if(!novoVendedor){if(res){res.style.display='block';res.style.background='#E24B4A22';res.style.color='#E24B4A';res.textContent='Selecione um vendedor para reatribuir.';}return;}
+  if(!confirm('Confirma reatribuir TODOS os clientes da Sabina para '+novoVendedor+'?\nEsta ação NÃO pode ser desfeita.')){return;}
+  if(res){res.style.display='block';res.style.background='#33333322';res.style.color='#aaa';res.textContent='⏳ Processando...';}
+  try{
+    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({token:_API_TOKEN,acao:'reatribuir_clientes_sabina',dados:{novoVendedor:novoVendedor,operador:'CEO'}}),
+      redirect:'follow'});
+    var txt=await resp.text();
+    var data=JSON.parse(txt);
+    if(data.sucesso){
+      if(res){res.style.display='block';res.style.background='#1D9E7522';res.style.color='#1D9E75';res.textContent='✅ '+data.dados.mensagem;}
+      CL=CL.map(function(c){return (normStr(c.cadastradoPor||'')).includes('sabina')?Object.assign({},c,{cadastradoPor:novoVendedor}):c;});
+      rClientes(); rAuditoria();
+    } else {
+      if(res){res.style.display='block';res.style.background='#E24B4A22';res.style.color='#E24B4A';res.textContent='❌ '+data.erro;}
+    }
+  }catch(e){if(res){res.style.display='block';res.style.background='#E24B4A22';res.style.color='#E24B4A';res.textContent='❌ Erro de conexão: '+e.message;}}
+}
+
+// ══════════════════════════════════════════════════════════════
+//  🔍 AUDITORIA DE CADASTROS
+// ══════════════════════════════════════════════════════════════
+function normStr(s){return String(s||'').toLowerCase().replace(/[áàãâä]/g,'a').replace(/[éêë]/g,'e').replace(/[íîï]/g,'i').replace(/[óôõö]/g,'o').replace(/[úûü]/g,'u').replace(/[ç]/g,'c');}
+
+var _audDados=[];
+
+function rAuditoria(){
+  set('aud-total',CL.length);
+  var ct={andre:0,hesllen:0,sabina:0,erica:0,outros:0};
+  CL.forEach(function(c){
+    var n=normStr(c.cadastradoPor||'');
+    if(n==='andré'||n==='andre') ct.andre++;
+    else if(n==='hesllen') ct.hesllen++;
+    else if(n==='sabina') ct.sabina++;
+    else if(n==='érica'||n==='erica') ct.erica++;
+    else ct.outros++;
+  });
+  set('aud-andre',ct.andre);
+  set('aud-hesllen',ct.hesllen);
+  set('aud-sabina',ct.sabina);
+  set('aud-erica',ct.erica);
+
+  // Detectar anomalias
+  var anomalias=[];
+  CL.forEach(function(c){
+    var flags=[];
+    if(!c.tel||String(c.tel).replace(/\D/g,'').length<8) flags.push('📵 Sem tel válido');
+    if(!c.email||c.email.indexOf('@alpha.interno')>-1) flags.push('📧 Sem email real');
+    if(!c.cpf) flags.push('🪪 Sem CPF');
+    if(!c.nascimento) flags.push('📅 Sem nascimento');
+    if(!c.cadastradoPor||c.cadastradoPor==='(sem atribuição)') flags.push('👤 Sem responsável');
+    if(c.pontos>5000) flags.push('⚠️ Pontos altos ('+c.pontos+')');
+    if(c.cashback>200) flags.push('⚠️ Cashback alto ('+fR(c.cashback)+')');
+    if(flags.length>0) anomalias.push({nome:c.nome,flags:flags});
+  });
+  var alertEl=el('aud-alerta-fraude'),fraudeEl=el('aud-fraudes-lista');
+  if(anomalias.length>0&&alertEl&&fraudeEl){
+    alertEl.style.display='block';
+    fraudeEl.innerHTML=anomalias.map(function(a){
+      return '<div style="margin-bottom:6px"><strong style="color:#fff">'+a.nome+':</strong> '+a.flags.map(function(f){return '<span class="fraud-flag">'+f+'</span>';}).join(' ')+'</div>';
+    }).join('');
+  } else if(alertEl){alertEl.style.display='none';}
+
+  _audDados=CL.slice();
+  renderAuditoria();
+}
+
+function renderAuditoria(){
+  var busca=normStr((el('aud-busca')||{value:''}).value.trim());
+  var func=normStr((el('aud-func')||{value:''}).value.trim());
+  var nivel=(el('aud-nivel')||{value:''}).value;
+  var ord=(el('aud-ord')||{value:'data-desc'}).value;
+
+  var lista=_audDados.filter(function(c){
+    // busca: só filtra se tiver algo digitado
+    var mB = !busca ||
+      normStr(c.nome).includes(busca) ||
+      normStr(c.email).includes(busca) ||
+      String(c.tel||'').replace(/\D/g,'').includes(busca.replace(/\D/g,''));
+    // funcionário: só filtra se selecionou algum
+    var mF = !func || normStr(c.cadastradoPor||'').includes(func);
+    // nível: só filtra se selecionou algum
+    var mN = !nivel || c.nivel === nivel;
+    return mB && mF && mN;
+  });
+
+  lista.sort(function(a,b){
+    if(ord==='nome-asc') return normStr(a.nome).localeCompare(normStr(b.nome));
+    if(ord==='pontos-desc') return b.pontos-a.pontos;
+    if(ord==='gasto-desc') return b.gastoMes-a.gastoMes;
+    var da=a.cadastradoEm?new Date(a.cadastradoEm).getTime():0;
+    var db=b.cadastradoEm?new Date(b.cadastradoEm).getTime():0;
+    return ord==='data-asc'?da-db:db-da;
+  });
+
+  set('aud-contador',lista.length+' de '+CL.length+' clientes');
+
+  function corFunc(raw){
+    var n=normStr(raw||'');
+    if(n==='andré'||n==='andre') return '#FFD700';
+    if(n==='hesllen') return '#00CCFF';
+    if(n==='sabina') return '#EF9F27';
+    if(n==='érica'||n==='erica') return '#CC88FF';
+    return '#666';
+  }
+
+  if(lista.length===0){
+    html('aud-lista','<div style="text-align:center;padding:40px;color:#555">Nenhum cliente encontrado com esses filtros.</div>');
+    return;
+  }
+
+  html('aud-lista',lista.map(function(c){
+    var cor=corFunc(c.cadastradoPor);
+    var dataFmt=c.cadastradoEm?(function(){try{return new Date(c.cadastradoEm).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch(e){return c.cadastradoEm;}}()):'—';
+
+    var flagsR=[];
+    if(!c.tel||String(c.tel).replace(/\D/g,'').length<8) flagsR.push('📵');
+    if(!c.cpf) flagsR.push('🪪');
+    if(!c.nascimento) flagsR.push('📅');
+    if(c.email.indexOf('@alpha.interno')>-1) flagsR.push('📧');
+
+    var cpfMask=c.cpf?(c.cpf.length>=11?c.cpf.substring(0,3)+'.***.***-**':'parcial'):'—';
+    var telStr=String(c.tel||'');
+    var telMask=telStr?(telStr.length>5?telStr.substring(0,5)+'*****'+telStr.slice(-2):'—'):'—';
+
+    return '<div class="audit-row" style="background:'+cor+'08;border-color:'+cor+'33">'+
+      '<div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;min-width:70px">'+
+        '<div style="width:44px;height:44px;border-radius:50%;background:'+cor+'22;border:2px solid '+cor+';color:'+cor+';display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900">'+ini(c.nome)+'</div>'+
+        '<span class="audit-func-badge" style="background:'+cor+'22;color:'+cor+';border:1px solid '+cor+'55">'+c.cadastradoPor+'</span>'+
+      '</div>'+
+      '<div class="audit-detail">'+
+        '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px">'+
+          '<span class="audit-name">'+c.nome+'</span>'+
+          nt(c.nivel)+
+          (flagsR.length>0?'<span style="color:#FF4466;font-size:13px;margin-left:4px" title="Dados incompletos">'+flagsR.join('')+'</span>':'✅')+
+        '</div>'+
+        '<div class="audit-sub">'+
+          '📧 '+c.email+'<br>'+
+          '📞 '+telMask+
+          '&nbsp;&nbsp;🪪 '+(c.cpf?cpfMask:'<span style="color:#FF4466">sem CPF</span>')+
+          (c.nascimento?'&nbsp;&nbsp;🎂 '+c.nascimento:'')+'<br>'+
+          '💰 Gasto: <strong style="color:#1D9E75">'+fR(c.gastoMes)+'</strong>'+
+          '&nbsp;&nbsp;⭐ <strong style="color:#FFD700">'+fP(c.pontos)+'</strong>'+
+          '&nbsp;&nbsp;💸 CB: <strong style="color:#4285F4">'+fR(c.cashback)+'</strong>'+
+          '&nbsp;&nbsp;🛍️ Última: <span style="color:#aaa">'+c.ultimaCompra+'</span><br>'+
+          '🔑 Ref: <span style="font-family:monospace;color:#666;font-size:11px">'+c.ref+'</span>'+
+        '</div>'+
+      '</div>'+
+      '<div class="audit-date">'+
+        '<div style="font-weight:600;color:#aaa;font-size:11px;margin-bottom:3px">Cadastrado em</div>'+
+        '<div style="color:#666;font-size:11px">'+dataFmt+'</div>'+
+      '</div>'+
+    '</div>';
+  }).join(''));
+}
+
+function rRank(){
+  var rk=CL.slice().sort(function(a,b){return b.pontos-a.pontos;});
+  html('rfull',rk.map(function(c,i){var pc=i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#555';var pl=i===0?'🏆':i===1?'🥈':i===2?'🥉':i+1;return '<div class="rk"><div class="rkpos" style="color:'+pc+'">'+pl+'</div><div class="rkav">'+ini(c.nome)+'</div><div class="rkin"><div class="rknm">'+c.nome+'</div><div class="rksb" style="color:'+NC[c.nivel].c+'">'+NC[c.nivel].e+' '+c.nivel+' · '+c.email+'</div></div><div class="rkpt">'+fP(c.pontos)+'</div></div>';}).join(''));
+  var byN={BRONZE:0,PRATA:0,OURO:0};CL.forEach(function(c){byN[c.nivel]++;});
+  set('so',byN.OURO);set('sp',byN.PRATA);set('sb',byN.BRONZE);
+  set('sm',Math.round(CL.reduce(function(s,c){return s+c.pontos;},0)/CL.length).toLocaleString('pt-BR'));
+  set('scb',fR(CL.reduce(function(s,c){return s+c.cashback;},0)));
+  html('tind',CL.slice().sort(function(a,b){return b.indicacoes-a.indicacoes;}).filter(function(c){return c.indicacoes>0;}).map(function(c,i){return '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:.5px solid #1e1e1e;font-size:13px"><span>'+(i+1)+'. '+c.nome+'</span><span style="color:#CC0000;font-weight:600">'+c.indicacoes+' indicações</span></div>';}).join(''));
+}
+
+function rCRM(){
+  var ct={a:0,u:0,p:0,v:0};
+  PC.forEach(function(x){if(x.dias<=0)ct.a++;else if(x.dias<=2)ct.u++;else if(x.dias<=5)ct.p++;else ct.v++;});
+  set('ca',ct.a);set('cu',ct.u);set('cp',ct.p);set('cv',ct.v);
+  html('clista',PC.slice().sort(function(a,b){return a.dias-b.dias;}).map(function(a){
+    var cl=CL.find(function(c){return c.id===a.cid;})||{nome:'?',nivel:'BRONZE',email:'—'};
+    var cor=a.dias<=0?'#E24B4A':a.dias<=2?'#EF9F27':a.dias<=5?'#FFD700':'#1D9E75';
+    var u=a.dias<=0?'⛔ Acabou':a.dias<=2?'🚨 '+a.dias+'d':a.dias<=5?'⚠️ '+a.dias+'d':'📦 '+a.dias+'d';
+    return '<div class="aln" style="background:'+cor+'08;border-color:'+cor+'33;border-left:3px solid '+cor+'"><div style="background:'+cor+'22;color:'+cor+';border-radius:6px;padding:5px 8px;font-size:11px;font-weight:700;min-width:52px;text-align:center">'+u+'</div><div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px">'+cl.nome+' '+nt(cl.nivel)+'</div><div style="font-size:11px;color:#666;margin-top:2px">'+a.nome+' · '+a.cat+'</div><div style="font-size:10px;color:#555">'+cl.email+'</div></div><div style="font-size:11px;color:#555">Ações pelo<br>Funcionário</div></div>';
+  }).join(''));
+}
+
+function populateMonthFilter(){
+  var sel = el('fmes-sel');
+  if(!sel || CP.length===0) return;
+  var meses = {};
+  CP.forEach(function(c){
+    if(!c.dataRaw) return;
+    var d = new Date(c.dataRaw);
+    var key = d.getFullYear()+'-'+(d.getMonth()+1<10?'0':'')+(d.getMonth()+1);
+    var label = d.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+    meses[key] = label;
+  });
+  var keys = Object.keys(meses).sort().reverse();
+  var currentVal = sel.value;
+  sel.innerHTML = '<option value="">📅 Todos os meses</option>';
+  keys.forEach(function(k){ sel.innerHTML += '<option value="'+k+'">'+meses[k].charAt(0).toUpperCase()+meses[k].slice(1)+'</option>'; });
+  if(currentVal) sel.value = currentVal;
+}
+function rFinFiltro(){
+  var mesSel = (el('fmes-sel')||{value:''}).value; // 'YYYY-MM' ou ''
+  var lista = mesSel
+    ? CP.filter(function(c){
+        if(!c.dataRaw) return false;
+        var d = new Date(c.dataRaw);
+        var k = d.getFullYear()+'-'+(d.getMonth()+1<10?'0':'')+(d.getMonth()+1);
+        return k === mesSel;
+      })
+    : CP;
+  // Atualizar KPIs com o filtro
+  set('fv', fR(lista.reduce(function(s,c){return s+c.valor;},0)));
+  set('fc', fR(lista.reduce(function(s,c){return s+c.cb;},0)));
+  if(!mesSel) set('fp', CL.reduce(function(s,c){return s+c.pontos;},0).toLocaleString('pt-BR'));
+  else set('fp', lista.reduce(function(s,c){return s+c.pts;},0).toLocaleString('pt-BR'));
+  // Título da tabela
+  var titulo = mesSel ? 'Compras de '+((el('fmes-sel').options[el('fmes-sel').selectedIndex]||{}).text||mesSel)+' ('+lista.length+')' : 'Histórico de compras ('+lista.length+')';
+  if(el('fin-titulo')) el('fin-titulo').textContent = titulo;
+  html('fcorp', lista.length===0
+    ? '<tr><td colspan="7" style="text-align:center;color:#555;padding:20px">Nenhuma compra '+(mesSel?'neste mês':'registrada ainda.')+'</td></tr>'
+    : lista.slice().sort(function(a,b){return b.dataRaw-a.dataRaw;}).map(function(c){
+        var cl=CL.find(function(x){return x.id===c.cid;})||{nome:'?',nivel:'BRONZE'};
+        return '<tr><td style="color:#666">'+c.data+'</td><td>'+cl.nome+'</td><td>'+nt(cl.nivel)+'</td><td style="color:#1D9E75;font-weight:600">'+fR(c.valor)+'</td><td style="color:#FFD700">+'+fP(c.pts)+'</td><td style="color:#1D9E75">+'+fR(c.cb)+'</td><td style="color:#666">'+c.desc+'</td></tr>';
+      }).join(''));
+}
+function rFin(){
+  populateMonthFilter();
+  rFinFiltro();
+}
+async function rFinAsync(){
+  html('fcorp','<tr><td colspan="7" style="text-align:center;color:#555;padding:24px">⏳ Carregando...</td></tr>');
+  set('fv','R$…'); set('fc','R$…'); set('fp','…');
+  try {
+    var r1=await fetch(WEB_APP_URL+'?acao=listar_financeiro&token='+_API_TOKEN);
+    var d1=await r1.json();
+    if(d1.sucesso && d1.dados){
+      var fin=d1.dados;
+      // Atualizar CP para o dashboard também
+      if(fin.compras && fin.compras.length>0){
+        CP=fin.compras.map(function(c){
+          var dt=c.data?new Date(c.data):null;
+          return {cid:c.cid,valor:c.valor,pts:c.pts,cb:c.cb,
+                  data:dt?dt.toLocaleDateString('pt-BR'):'—',
+                  dataRaw:dt?dt.getTime():0,
+                  nivel:c.nivel,desc:c.desc,
+                  funcionario:String(c.funcionario||'')};
+        });
+      }
+      rFin();
+      return;
+    }
+  } catch(e){ console.log('rFinAsync listar_financeiro erro:',e.message); }
+  // Fallback: usar listar_historico
+  try {
+    var r2=await fetch(WEB_APP_URL+'?acao=listar_historico&token='+_API_TOKEN);
+    var d2=await r2.json();
+    if(d2.sucesso && d2.dados && d2.dados.length>0){
+      CP=d2.dados.map(function(c){
+        var dt=c[8]?new Date(c[8]):null;
+        return {cid:c[1]||'',valor:Number(c[3])||0,pts:Number(c[4])||0,
+                cb:Number(c[5])||0,
+                data:dt?dt.toLocaleDateString('pt-BR'):'—',
+                dataRaw:dt?dt.getTime():0,
+                nivel:c[9]||'BRONZE',desc:c[2]||''};
+      });
+    }
+  } catch(e2){ console.log('rFinAsync fallback erro:',e2.message); }
+  rFin();
+}
+
+function rInd(){
+  var cf=IND.filter(function(i){return i.status==='CONFIRMADA';}).length;
+  var pn=IND.filter(function(i){return i.status==='PENDENTE';}).length;
+  set('it',IND.length);set('ic',cf);set('ip',pn);set('ipt',(cf*100)+' pts + R$'+(cf*10)+' CB');
+  html('icorp',IND.map(function(i){var ok=i.status==='CONFIRMADA';return '<tr><td><div style="font-weight:600">'+i.indNome+'</div></td><td>'+i.indado+'</td><td style="color:#666">'+i.data+'</td><td><span style="background:'+(ok?'#1D9E7522':'#EF9F2722')+';color:'+(ok?'#1D9E75':'#EF9F27')+';border:.5px solid '+(ok?'#1D9E7533':'#EF9F2733')+';padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700">'+(ok?'✅ Confirmada':'⏳ Pendente')+'</span></td><td style="color:#FFD700">'+(i.pts>0?'+'+i.pts+' pts + R$10 CB':'—')+'</td></tr>';}).join(''));
+}
+
+function rPLog(){
+  html('phist',PL.map(function(p){return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid #1e1e1e;font-size:13px"><div><div style="font-weight:600">'+p.titulo+'</div><div style="font-size:11px;color:#666;margin-top:2px">'+p.data+' · '+p.seg+'</div></div><div style="text-align:right"><div style="color:#CC0000;font-weight:700;font-size:14px">'+p.enviados+'</div><div style="font-size:10px;color:#666">enviados</div></div></div>';}).join(''));
+}
+
+function selSeg(b,v){
+  seg=v;
+  document.querySelectorAll('.sgb').forEach(function(x){x.classList.remove('on');});
+  b.classList.add('on');upPv();
+}
+function alvo(){return seg==='OURO'?CL.filter(function(c){return c.nivel==='OURO';}).length:seg==='PRATA'?CL.filter(function(c){return c.nivel!=='BRONZE';}).length:CL.length;}
+function upPv(){
+  var t=(el('ptit')||{value:''}).value;
+  var m=(el('pmsg')||{value:''}).value;
+  var d=(el('pdesc')||{value:''}).value;
+  var v=(el('pval')||{value:''}).value;
+  if(el('pvt'))el('pvt').textContent=t;
+  if(el('pvc'))el('pvc').textContent=m+(d?' — '+d+'% OFF':'')+(v?' | Até '+v:'');
+  if(el('pva'))el('pva').innerHTML='Será enviado para <strong style="color:#CC0000">'+alvo()+' clientes</strong>';
+}
+function abrirPromo(){
+  el('mtxt').textContent='Disparar push + WhatsApp para '+alvo()+' clientes?';
+  el('mpromo').classList.add('on');
+}
+function fechar(){el('mpromo').classList.remove('on');}
+function confirmar(){
+  var t=el('ptit').value;
+  var m=el('pmsg').value;
+  var d=el('pdesc').value;
+  var v=el('pval').value;
+  var a=alvo();
+  var s=seg==='todos'?'Todos':seg==='PRATA'?'Prata+':'Ouro';
+  fechar();
+
+  // Salvar no Firebase para notificar clientes em tempo real
+  if(window.fbDB && window.fbRef && window.fbSet){
+    var promoData={
+      ativa:true,
+      titulo:t,
+      mensagem:m+(d?' — '+d+'% OFF':'')+(v?' | Até '+v:''),
+      desconto:d,
+      validade:v,
+      segmento:seg,
+      timestamp:Date.now(),
+      enviados:a
+    };
+    window.fbSet(window.fbRef(window.fbDB,'promocoes/ativa'),promoData)
+      .then(function(){console.log('Promo no Firebase!');})
+      .catch(function(e){console.log('Erro Firebase:',e);});
+    window.fbSet(window.fbRef(window.fbDB,'promocoes/historico/'+Date.now()),promoData);
+  }
+
+  PL.unshift({titulo:t,enviados:a,data:new Date().toLocaleDateString('pt-BR'),seg:s});
+  rPLog();
+  var ps=el('psuc');
+  ps.style.display='block';
+  ps.textContent='✅ "'+t+'" disparado! Banner aparecerá no app dos clientes em tempo real.';
+  ir('promocoes',document.querySelectorAll('.tbt')[5]);
+}
+</script>
+
+<!-- Firebase CEO -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+  import { getDatabase, ref, set, push } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBUZaER1-J4-sui90-lHW56P7JTBvfAQHE",
+    authDomain: "sistema-alpha-b12d0.firebaseapp.com",
+    projectId: "sistema-alpha-b12d0",
+    storageBucket: "sistema-alpha-b12d0.firebasestorage.app",
+    messagingSenderId: "714388410138",
+    appId: "1:714388410138:web:c42c2391931d25acc0e6a3",
+    databaseURL: "https://sistema-alpha-b12d0-default-rtdb.firebaseio.com"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Tornar funções disponíveis globalmente
+  window.fbDB = db;
+  window.fbRef = ref;
+  window.fbSet = set;
+  window.fbPush = push;
+
+  console.log('Firebase CEO conectado!');
+</script>
+</body>
+</html>
