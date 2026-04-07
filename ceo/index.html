@@ -11,7 +11,7 @@
 <link rel="shortcut icon" type="image/png" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
 <link rel="apple-touch-icon" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
 <link rel="manifest" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/manifest.json">
-<title>Alpha Suplementos — CEO v44</title>
+<title>Alpha Suplementos — CEO v45</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1440,26 +1440,52 @@ async function salvarEdicaoCEO() {
   var btn = el('mceo-edit').querySelector('.bverm');
   if(btn){btn.disabled=true;btn.textContent='⏳ Salvando...';}
 
+  var salvoAPI = false;
+  var erroMsg = '';
+
   try {
+    var ctrl = new AbortController();
+    var tmr = setTimeout(function(){ ctrl.abort(); }, 15000);
     var resp = await fetch(WEB_APP_URL, {
       method:'POST', headers:{'Content-Type':'text/plain'},
       body: JSON.stringify({ token:_API_TOKEN, acao:'editar_cliente',
         dados:{ clienteId:id, nome:nome, email:email, telefone:tel, cpf:cpf, dataNascimento:nasc, operador:'CEO' }
-      }), redirect:'follow'
+      }), redirect:'follow', signal: ctrl.signal
     });
+    clearTimeout(tmr);
     var data = JSON.parse(await resp.text());
-    if (!data.sucesso) {
-      if(err){err.style.display='block';err.textContent=data.erro||'Erro ao salvar';}
-      if(btn){btn.disabled=false;btn.textContent='💾 Salvar';}
-      return;
+    if (data.sucesso) {
+      salvoAPI = true;
+    } else {
+      erroMsg = data.erro || 'O servidor retornou erro. Alteração não salva.';
     }
-  } catch(e) { console.log('edit err:', e.message); }
+  } catch(e) {
+    if (e.name === 'AbortError') {
+      erroMsg = 'Tempo esgotado (15s). Verifique a conexão e tente novamente.';
+    } else {
+      erroMsg = 'Falha de rede: ' + e.message + '. Alteração não salva.';
+    }
+    console.error('salvarEdicaoCEO:', e.message);
+  }
 
-  // Atualiza lista local
+  if (!salvoAPI) {
+    // NÃO atualiza local — exibe o erro para o CEO saber que não foi salvo
+    if(err){ err.style.display='block'; err.textContent='❌ ' + erroMsg; }
+    if(btn){ btn.disabled=false; btn.textContent='💾 Salvar'; }
+    return;
+  }
+
+  // Só atualiza a lista local se a API confirmou o salvamento
   var idx = CL.findIndex(function(x){return x.id===id;});
   if (idx>=0) { CL[idx].nome=nome; CL[idx].email=email||CL[idx].email; CL[idx].tel=tel; CL[idx].cpf=cpf; CL[idx].nascimento=nasc; }
   rClientes(); rAuditoria();
   fecharEdicaoCEO();
+  // Feedback visual de sucesso
+  var sucDiv = document.createElement('div');
+  sucDiv.textContent = '✅ ' + nome + ' atualizado com sucesso!';
+  sucDiv.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#1a1a1a;border:1px solid #1D9E75;border-radius:10px;padding:14px 20px;font-size:13px;font-weight:600;color:#1D9E75;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.5)';
+  document.body.appendChild(sucDiv);
+  setTimeout(function(){ sucDiv.remove(); }, 3000);
   if(btn){btn.disabled=false;btn.textContent='💾 Salvar';}
 }
 
