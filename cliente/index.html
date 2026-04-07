@@ -619,45 +619,27 @@ async function fazerLogin(){
   var encontrado = null;
 
   try {
-    var resp = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos');
+    // v45: usa endpoint login_cliente (rota pública — não precisa de token)
+    // Muito mais seguro: não expõe a lista completa de clientes
+    var resp = await fetch(WEB_APP_URL+'?acao=login_cliente&nome='+encodeURIComponent(nome)+'&telefone='+encodeURIComponent(tel));
     var data = await resp.json();
-    if(data.sucesso && data.dados && data.dados.length > 0){
-      for(var i=0; i<data.dados.length; i++){
-        var row = data.dados[i];
-        var primNome = String(row[1]||'').split(' ')[0].toLowerCase().trim();
-        var telRow   = String(row[3]||'').replace(/[^0-9]/g,'');
-        var nomeOk   = primNome === nome;
-        var telOk    = telRow === tel || telRow.endsWith(tel) || tel.endsWith(telRow.slice(-8));
-        if(nomeOk && telOk){
-          encontrado = {
-            id:        String(row[0]||''),
-            nome:      String(row[1]||nome),
-            email:     String(row[2]||''),
-            tel:       String(row[3]||tel),
-            nivel:     String(row[7]||'BRONZE'),
-            pontos:    Number(row[6])||0,
-            cashback:  Number(row[10])||0,
-            gastoMes:  Number(row[8])||0,
-            mesesRec:  Number(row[9])||0,
-            // FIX: indicacoes carregado da coluna 13 da planilha (índice 12)
-            indicacoes: Number(row[13])||0,
-            ref:       String(row[11]||gerarRefLocal())
-          };
-          break;
-        }
-      }
-      // FIX: Popular ranking com todos os clientes carregados
-      TODOS.length = 0;
-      data.dados.forEach(function(r){
-        if(r[0] && r[1]){
-          TODOS.push({
-            id: String(r[0]),
-            nome: String(r[1]),
-            nivel: String(r[7]||'BRONZE'),
-            pontos: Number(r[6])||0
-          });
-        }
-      });
+    if(data.sucesso && data.dados){
+      var d = data.dados;
+      encontrado = {
+        id:         String(d.id||''),
+        nome:       String(d.nome||nome),
+        email:      String(d.email||''),
+        tel:        tel,
+        nivel:      String(d.nivel||'BRONZE'),
+        pontos:     Number(d.pontos)||0,
+        cashback:   Number(d.cashback)||0,
+        gastoMes:   Number(d.gastoMes)||0,
+        mesesRec:   Number(d.mesesRec)||0,
+        indicacoes: Number(d.indicacoes)||0,
+        ref:        String(d.codigoReferral||gerarRefLocal())
+      };
+      // Carregar ranking em background com token (não bloqueia o login)
+      carregarRanking();
     }
   } catch(e){ console.log('API offline:', e.message); }
 
@@ -677,11 +659,29 @@ async function fazerLogin(){
   err.textContent='Nome ou telefone não encontrados. Cadastre-se na loja!';
 }
 
+// v45: Carregar ranking em background com token (separado do login)
+async function carregarRanking(){
+  try {
+    var r = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos&token='+_API_TOKEN+'&funcionario=cliente');
+    var d = await r.json();
+    if(d.sucesso && d.dados){
+      TODOS.length = 0;
+      d.dados.forEach(function(row){
+        if(row[0] && row[1]) TODOS.push({
+          id: String(row[0]), nome: String(row[1]),
+          nivel: String(row[7]||'BRONZE'), pontos: Number(row[6])||0
+        });
+      });
+    }
+  } catch(e){ console.log('Ranking offline:', e.message); }
+}
+
 // FIX: Função para carregar histórico do cliente logado via API
 async function carregarHistorico(){
   if(!U) return;
   try {
-    var resp = await fetch(WEB_APP_URL+'?acao=listar_historico&token='+_API_TOKEN+'&email='+encodeURIComponent(U.email||''));
+    // v45: filtra por clienteId (mais preciso que email)
+    var resp = await fetch(WEB_APP_URL+'?acao=listar_historico&token='+_API_TOKEN+'&clienteId='+encodeURIComponent(U.id||''));
     var data = await resp.json();
     HIST_DATA.length = 0;
     if(data.sucesso && data.dados){
@@ -795,7 +795,7 @@ function fazerLogout(){
       document.addEventListener('DOMContentLoaded', function(){
         iniciar();
         // FIX: recarregar dados ao restaurar sessão
-        fetch(WEB_APP_URL+'?acao=listar_clientes_todos').then(function(r){return r.json();}).then(function(data){
+        fetch(WEB_APP_URL+'?acao=listar_clientes_todos&token='+_API_TOKEN+'&funcionario=cliente').then(function(r){return r.json();}).then(function(data){
           if(data.sucesso && data.dados){
             TODOS.length = 0;
             data.dados.forEach(function(r){
