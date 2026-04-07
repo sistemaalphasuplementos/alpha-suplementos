@@ -254,6 +254,7 @@ body{color:#FFFFFF;font-size:15px}
       <button class="tbt" onclick="ir('indicacoes',this)">🎯 Indicações</button>
       <button class="tbt" onclick="ir('desempenho',this);rDesemp()">📈 Desempenho</button>
       <button class="tbt" onclick="ir('auditoria',this);rAuditoria()">🔍 Auditoria</button>
+      <button class="tbt" onclick="ir('colaboradores',this);rColab()">🧑‍💼 Colaboradores</button>
     </div>
     <div class="tbright"><span id="unome">CEO</span><button id="sbtn">Sair</button></div>
   </div>
@@ -569,6 +570,88 @@ body{color:#FFFFFF;font-size:15px}
         <div id="aud-lista" style="padding:16px"></div>
       </div>
     </div>
+
+    <!-- ══ COLABORADORES ══════════════════════════════════════════ -->
+    <div id="p-colaboradores" class="pnl">
+      <div style="margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#00CCFF">🧑‍💼 Gestão de Colaboradores</div>
+          <div style="font-size:13px;color:#aaa;margin-top:4px">Adicione, edite ou desative membros da equipe</div>
+        </div>
+        <button onclick="abrirNovoColab()" style="background:#00CCFF22;color:#00CCFF;border:1px solid #00CCFF44;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">+ Novo Colaborador</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+        <div style="background:#00CCFF11;border:1px solid #00CCFF33;border-radius:12px;padding:16px;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:#00CCFF" id="colab-total">0</div>
+          <div style="font-size:12px;color:#aaa;margin-top:4px">👥 Total</div>
+        </div>
+        <div style="background:#00FF8811;border:1px solid #00FF8833;border-radius:12px;padding:16px;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:#00FF88" id="colab-ativos">0</div>
+          <div style="font-size:12px;color:#aaa;margin-top:4px">✅ Ativos</div>
+        </div>
+        <div style="background:#FF224411;border:1px solid #FF224433;border-radius:12px;padding:16px;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:#FF4466" id="colab-inativos">0</div>
+          <div style="font-size:12px;color:#aaa;margin-top:4px">🚫 Inativos</div>
+        </div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:14px 18px;border-bottom:.5px solid #333;display:flex;align-items:center;gap:6px">
+          <span style="width:3px;height:12px;background:#00CCFF;border-radius:2px;display:inline-block"></span>
+          <span style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.7px;font-weight:700">Equipe Alpha Suplementos</span>
+        </div>
+        <div id="colab-lista" style="padding:16px"></div>
+      </div>
+      <div style="background:#FFD70011;border:1px solid #FFD70033;border-radius:10px;padding:14px;margin-top:16px;font-size:12px;color:#aaa;line-height:1.9">
+        <strong style="color:#FFD700">⚠️ Como funciona:</strong> A senha de cada funcionário é o telefone dele (só números).<br>
+        Após <strong>adicionar ou remover</strong> um colaborador, baixe o novo pacote e faça upload do <code>funcionario/index.html</code> atualizado no GitHub.
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ══ MODAL EDITAR CLIENTE (CEO) ════════════════════════════════ -->
+<div id="mceo-edit" class="mfundo">
+  <div class="mcaixa" style="border-color:#FFD70066;max-width:480px">
+    <div style="font-weight:700;font-size:16px;color:#FFD700;margin-bottom:16px">✏️ Editar Cliente</div>
+    <input type="hidden" id="cedit-id">
+    <label class="rot">Nome completo *</label>
+    <input type="text" class="campo" id="cedit-nome" placeholder="Nome do cliente" style="margin-bottom:10px">
+    <label class="rot">Email</label>
+    <input type="email" class="campo" id="cedit-email" placeholder="email@cliente.com" style="margin-bottom:10px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div><label class="rot">Telefone</label><input type="tel" class="campo" id="cedit-tel" placeholder="(88) 99999-9999" style="margin-bottom:0"></div>
+      <div><label class="rot">CPF</label><input type="text" class="campo" id="cedit-cpf" placeholder="000.000.000-00" style="margin-bottom:0"></div>
+    </div>
+    <label class="rot">Nascimento</label>
+    <input type="date" class="campo" id="cedit-nasc" style="margin-bottom:12px">
+    <div id="cedit-err" style="display:none;background:#E24B4A22;border:.5px solid #E24B4A44;border-radius:8px;padding:10px;font-size:12px;color:#E24B4A;margin-bottom:10px"></div>
+    <div style="display:flex;gap:8px">
+      <button class="bverm" style="background:#FFD70022;color:#FFD700;border:1px solid #FFD70044;flex:1" onclick="salvarEdicaoCEO()">💾 Salvar</button>
+      <button class="bcinz" onclick="fecharEdicaoCEO()" style="width:auto;padding:11px 20px">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL COLABORADOR ═════════════════════════════════════════ -->
+<div id="mcolab" class="mfundo">
+  <div class="mcaixa" style="border-color:#00CCFF66;max-width:460px">
+    <div style="font-weight:700;font-size:16px;color:#00CCFF;margin-bottom:16px" id="mcolab-titulo">+ Novo Colaborador</div>
+    <input type="hidden" id="mcolab-id">
+    <label class="rot">Nome completo *</label>
+    <input type="text" class="campo" id="mcolab-nome" placeholder="Ex: João Silva" style="margin-bottom:10px">
+    <label class="rot">Usuário (login no app) *</label>
+    <input type="text" class="campo" id="mcolab-user" placeholder="Ex: joao (minúsculo, sem espaços)" style="margin-bottom:10px" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')">
+    <label class="rot">Senha — telefone só números *</label>
+    <input type="tel" class="campo" id="mcolab-senha" placeholder="Ex: 88999990000 (deixe vazio para manter na edição)" style="margin-bottom:4px">
+    <div style="font-size:11px;color:#555;margin-bottom:12px">Na edição: deixe em branco para não alterar a senha.</div>
+    <div id="mcolab-err" style="display:none;background:#E24B4A22;border:.5px solid #E24B4A44;border-radius:8px;padding:10px;font-size:12px;color:#E24B4A;margin-bottom:10px"></div>
+    <div style="display:flex;gap:8px">
+      <button class="bverm" style="background:#00CCFF22;color:#00CCFF;border:1px solid #00CCFF44;flex:1" onclick="salvarColab()">💾 Salvar colaborador</button>
+      <button class="bcinz" onclick="fecharColab()" style="width:auto;padding:11px 20px">Cancelar</button>
+    </div>
+  </div>
+</div>
 
 <div id="mpromo" class="mfundo">
   <div class="mcaixa">
@@ -1321,6 +1404,240 @@ function confirmar(){
   ps.style.display='block';
   ps.textContent='✅ "'+t+'" disparado! Banner aparecerá no app dos clientes em tempo real.';
   ir('promocoes',document.querySelectorAll('.tbt')[5]);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  ✏️ EDIÇÃO DE CLIENTE — CEO
+// ══════════════════════════════════════════════════════════════
+
+function abrirEdicaoCEO(clienteId) {
+  var c = CL.find(function(x){ return x.id === clienteId; });
+  if (!c) return;
+  el('cedit-id').value = c.id;
+  el('cedit-nome').value = c.nome || '';
+  el('cedit-email').value = (c.email||'').includes('@alpha.') ? '' : (c.email||'');
+  el('cedit-tel').value = String(c.tel||'');
+  el('cedit-cpf').value = c.cpf || '';
+  el('cedit-nasc').value = c.nascimento || '';
+  var err = el('cedit-err'); if(err) err.style.display='none';
+  el('mceo-edit').classList.add('on');
+}
+
+function fecharEdicaoCEO() { el('mceo-edit').classList.remove('on'); }
+
+async function salvarEdicaoCEO() {
+  var id    = (el('cedit-id')||{value:''}).value;
+  var nome  = (el('cedit-nome')||{value:''}).value.trim();
+  var email = (el('cedit-email')||{value:''}).value.trim();
+  var tel   = (el('cedit-tel')||{value:''}).value.trim();
+  var cpf   = (el('cedit-cpf')||{value:''}).value.trim();
+  var nasc  = (el('cedit-nasc')||{value:''}).value;
+  var err   = el('cedit-err');
+
+  if (!nome) { if(err){err.style.display='block';err.textContent='Nome obrigatório';} return; }
+  if (err) err.style.display='none';
+
+  var btn = el('mceo-edit').querySelector('.bverm');
+  if(btn){btn.disabled=true;btn.textContent='⏳ Salvando...';}
+
+  try {
+    var resp = await fetch(WEB_APP_URL, {
+      method:'POST', headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({ token:_API_TOKEN, acao:'editar_cliente',
+        dados:{ clienteId:id, nome:nome, email:email, telefone:tel, cpf:cpf, dataNascimento:nasc, operador:'CEO' }
+      }), redirect:'follow'
+    });
+    var data = JSON.parse(await resp.text());
+    if (!data.sucesso) {
+      if(err){err.style.display='block';err.textContent=data.erro||'Erro ao salvar';}
+      if(btn){btn.disabled=false;btn.textContent='💾 Salvar';}
+      return;
+    }
+  } catch(e) { console.log('edit err:', e.message); }
+
+  // Atualiza lista local
+  var idx = CL.findIndex(function(x){return x.id===id;});
+  if (idx>=0) { CL[idx].nome=nome; CL[idx].email=email||CL[idx].email; CL[idx].tel=tel; CL[idx].cpf=cpf; CL[idx].nascimento=nasc; }
+  rClientes(); rAuditoria();
+  fecharEdicaoCEO();
+  if(btn){btn.disabled=false;btn.textContent='💾 Salvar';}
+}
+
+// Adicionar botão editar na lista de clientes do CEO
+// (sobrescreve o trecho de tcorp para incluir o botão)
+var _rClientesOrig = rClientes;
+rClientes = function() {
+  _rClientesOrig();
+  // Adicionar botão ✏️ em cada linha após o render
+  var rows = document.querySelectorAll('#tcorp tr');
+  rows.forEach(function(tr) {
+    var tds = tr.querySelectorAll('td');
+    if (tds.length < 2) return;
+    var nomeTd = tds[1];
+    var nomeDiv = nomeTd.querySelector('div');
+    if (!nomeDiv) return;
+    var nome = nomeDiv.textContent.trim();
+    var c = CL.find(function(x){ return x.nome === nome; });
+    if (!c) return;
+    var lastTd = tds[tds.length-1];
+    var btnEdit = document.createElement('button');
+    btnEdit.innerHTML = '✏️';
+    btnEdit.title = 'Editar cliente';
+    btnEdit.style.cssText = 'background:#FFD70022;color:#FFD700;border:1px solid #FFD70044;border-radius:6px;padding:4px 8px;font-size:12px;cursor:pointer;margin-left:6px;';
+    btnEdit.onclick = function(){ abrirEdicaoCEO(c.id); };
+    lastTd.appendChild(btnEdit);
+  });
+};
+
+// ══════════════════════════════════════════════════════════════
+//  🧑‍💼 COLABORADORES — CEO
+// ══════════════════════════════════════════════════════════════
+
+var _COLABS = []; // cache local
+
+async function rColab() {
+  html('colab-lista','<div style="text-align:center;padding:30px;color:#888">⏳ Carregando...</div>');
+  try {
+    var r = await fetch(WEB_APP_URL+'?acao=listar_colaboradores&token='+_API_TOKEN);
+    var d = await r.json();
+    if (d.sucesso && d.dados) { _COLABS = d.dados; renderColab(); return; }
+  } catch(e) { console.log('colab err:', e.message); }
+  // Fallback com dados padrão se API offline
+  _COLABS = [
+    {id:'COLAB_001',nome:'André',  usuario:'andre',  ativo:true},
+    {id:'COLAB_002',nome:'Hesllen',usuario:'hesllen',ativo:true},
+    {id:'COLAB_003',nome:'Sabina', usuario:'sabina', ativo:true},
+    {id:'COLAB_004',nome:'Érica',  usuario:'erica',  ativo:true},
+  ];
+  renderColab();
+}
+
+function renderColab() {
+  var ativos   = _COLABS.filter(function(c){return c.ativo;});
+  var inativos = _COLABS.filter(function(c){return !c.ativo;});
+  set('colab-total',   _COLABS.length);
+  set('colab-ativos',  ativos.length);
+  set('colab-inativos',inativos.length);
+
+  if (_COLABS.length === 0) {
+    html('colab-lista','<div style="text-align:center;padding:30px;color:#555">Nenhum colaborador cadastrado.</div>');
+    return;
+  }
+
+  html('colab-lista', _COLABS.map(function(c){
+    var ativo = c.ativo !== false;
+    var cor   = ativo ? '#00CCFF' : '#555';
+    var bgCor = ativo ? '#00CCFF11' : '#33333311';
+    return '<div style="background:'+bgCor+';border:.5px solid '+cor+'33;border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px">'+
+      '<div style="width:44px;height:44px;border-radius:50%;background:'+cor+'22;border:2px solid '+cor+';color:'+cor+';display:flex;align-items:center;justify-content:center;font-family:\'Barlow Condensed\',sans-serif;font-size:18px;font-weight:900;flex-shrink:0">'+
+        c.nome.charAt(0).toUpperCase()+
+      '</div>'+
+      '<div style="flex:1;min-width:0">'+
+        '<div style="font-weight:700;font-size:15px;color:#fff">'+c.nome+'</div>'+
+        '<div style="font-size:12px;color:#888;margin-top:2px">Login: <span style="color:'+cor+';font-family:monospace">'+c.usuario+'</span>'+
+          (c.criadoEm?' · Desde: '+(function(){try{return new Date(c.criadoEm).toLocaleDateString('pt-BR');}catch(e){return '';}})():'')+'</div>'+
+      '</div>'+
+      '<div style="display:flex;align-items:center;gap:8px;flex-shrink:0">'+
+        '<span style="background:'+(ativo?'#00FF8822':'#FF224422')+';color:'+(ativo?'#00FF88':'#FF4466')+';border:1px solid '+(ativo?'#00FF8844':'#FF224444')+';border-radius:20px;font-size:11px;font-weight:700;padding:3px 10px">'+(ativo?'✅ Ativo':'🚫 Inativo')+'</span>'+
+        '<button onclick="abrirEditColab(\''+c.id+'\')" style="background:#FFD70022;color:#FFD700;border:1px solid #FFD70044;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:\'Barlow\',sans-serif">✏️</button>'+
+        (ativo?'<button onclick="desativarColab(\''+c.id+'\',\''+c.nome+'\')" style="background:#FF224422;color:#FF4466;border:1px solid #FF224444;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:\'Barlow\',sans-serif">🚫 Desativar</button>':'<button onclick="reativarColab(\''+c.id+'\')" style="background:#00FF8822;color:#00FF88;border:1px solid #00FF8844;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:\'Barlow\',sans-serif">✅ Reativar</button>')+
+      '</div>'+
+    '</div>';
+  }).join(''));
+}
+
+function abrirNovoColab() {
+  el('mcolab-titulo').textContent = '+ Novo Colaborador';
+  el('mcolab-id').value = '';
+  el('mcolab-nome').value = '';
+  el('mcolab-user').value = '';
+  el('mcolab-senha').value = '';
+  var err = el('mcolab-err'); if(err) err.style.display='none';
+  el('mcolab').classList.add('on');
+}
+
+function abrirEditColab(id) {
+  var c = _COLABS.find(function(x){return x.id===id;});
+  if (!c) return;
+  el('mcolab-titulo').textContent = '✏️ Editar — '+c.nome;
+  el('mcolab-id').value = c.id;
+  el('mcolab-nome').value = c.nome;
+  el('mcolab-user').value = c.usuario;
+  el('mcolab-senha').value = '';
+  var err = el('mcolab-err'); if(err) err.style.display='none';
+  el('mcolab').classList.add('on');
+}
+
+function fecharColab() { el('mcolab').classList.remove('on'); }
+
+async function salvarColab() {
+  var id    = (el('mcolab-id')||{value:''}).value.trim();
+  var nome  = (el('mcolab-nome')||{value:''}).value.trim();
+  var user  = (el('mcolab-user')||{value:''}).value.trim().toLowerCase();
+  var senha = (el('mcolab-senha')||{value:''}).value.trim();
+  var err   = el('mcolab-err');
+
+  if (!nome || !user) { if(err){err.style.display='block';err.textContent='Nome e usuário são obrigatórios';} return; }
+  if (!id && !senha)  { if(err){err.style.display='block';err.textContent='Senha obrigatória para novo colaborador';} return; }
+  if (err) err.style.display='none';
+
+  var btn = el('mcolab').querySelector('.bverm');
+  if(btn){btn.disabled=true;btn.textContent='⏳ Salvando...';}
+
+  // Gerar hash da senha se informada
+  var senhaHash = '';
+  if (senha) {
+    // hash = SHA-256(usuario:telefone) — mesmo padrão do app funcionário
+    var hashInput = user + ':' + senha;
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(hashInput));
+    senhaHash = Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+  }
+
+  try {
+    var resp = await fetch(WEB_APP_URL, {
+      method:'POST', headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({ token:_API_TOKEN, acao:'salvar_colaborador',
+        dados:{ id:id, nome:nome, usuario:user, senhaHash:senhaHash, operador:'CEO' }
+      }), redirect:'follow'
+    });
+    var data = JSON.parse(await resp.text());
+    if (!data.sucesso) {
+      if(err){err.style.display='block';err.textContent=data.erro||'Erro ao salvar';}
+      if(btn){btn.disabled=false;btn.textContent='💾 Salvar colaborador';}
+      return;
+    }
+    fecharColab();
+    rColab();
+  } catch(e) {
+    if(err){err.style.display='block';err.textContent='Erro de conexão: '+e.message;}
+  }
+  if(btn){btn.disabled=false;btn.textContent='💾 Salvar colaborador';}
+}
+
+async function desativarColab(id, nome) {
+  if (!confirm('Desativar '+nome+'? Ela/ele não conseguirá mais fazer login no app.')) return;
+  try {
+    var resp = await fetch(WEB_APP_URL, {
+      method:'POST', headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({ token:_API_TOKEN, acao:'remover_colaborador', dados:{ id:id, operador:'CEO' } }),
+      redirect:'follow'
+    });
+    var data = JSON.parse(await resp.text());
+    if (data.sucesso) { rColab(); }
+    else alert('Erro: '+(data.erro||'desconhecido'));
+  } catch(e) { alert('Erro de conexão'); }
+}
+
+async function reativarColab(id) {
+  try {
+    var resp = await fetch(WEB_APP_URL, {
+      method:'POST', headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({ token:_API_TOKEN, acao:'salvar_colaborador', dados:{ id:id, ativo:true, operador:'CEO' } }),
+      redirect:'follow'
+    });
+    var data = JSON.parse(await resp.text());
+    if (data.sucesso) rColab();
+  } catch(e) { alert('Erro de conexão'); }
 }
 </script>
 

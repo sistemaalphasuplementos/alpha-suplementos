@@ -949,7 +949,7 @@ function renderCRM(){
 
 function renderClis(){
   var b=(el('cbusca')||{value:''}).value.toLowerCase();
-  var lista=CL.filter(function(c){return !b||c.nome.toLowerCase().includes(b)||c.email.includes(b);}).sort(function(a,b2){return b2.pontos-a.pontos;});
+  var lista=CL.filter(function(c){return !b||c.nome.toLowerCase().includes(b)||String(c.tel||'').includes(b)||c.email.includes(b);}).sort(function(a,b2){return b2.pontos-a.pontos;});
   var e=el('clis-tb');if(!e)return;
   e.innerHTML=lista.map(function(c){
     var p=PRD.filter(function(x){return x.cid===c.id&&x.dias<=7;}).sort(function(a,b2){return a.dias-b2.dias;})[0];
@@ -960,6 +960,7 @@ function renderClis(){
       '<td>'+(p?'<span style="color:'+cor+';font-weight:700;font-size:12px">'+(p.dias<=0?'⛔':p.dias<=2?'🚨':p.dias<=5?'⚠️':'📦')+' '+p.nome+'</span>':'—')+'</td>'+
       '<td style="display:flex;gap:5px">'+
       '<button class="bwa" style="font-size:11px;padding:5px 9px" onclick="abrirWA(\''+c.id+'\',\'custom\',\'\')">📱 WA</button>'+
+      '<button style="font-size:11px;padding:5px 9px;background:#FFD70022;color:#FFD700;border:1px solid #FFD70044;border-radius:6px;cursor:pointer;font-family:\'Barlow\',sans-serif;font-weight:700" onclick="abrirEdit(\''+c.id+'\')">✏️</button>'+
       (p?'<button class="bwa" style="font-size:11px;padding:5px 9px" onclick="abrirWA(\''+c.id+'\',\'reposicao\',\''+p.nome+'\')">📦</button>':'')+
       '</td></tr>';
   }).join('');
@@ -1529,9 +1530,11 @@ async function cadastrar(){
   var cpf=(el('cad-cpf')||{value:''}).value.trim();
   var nasc=(el('cad-nasc')||{value:''}).value;
   var ref=(el('cad-ref')||{value:''}).value.trim();
+  var funcSel=(el('cad-func')||{value:''}).value.trim();
   var err=el('cad-err');
   if(!nome){if(err){err.style.display='block';err.textContent='Nome é obrigatório';}return;}
   if(email && !email.includes('@')){if(err){err.style.display='block';err.textContent='Email inválido ou deixe em branco';}return;}
+  if(!funcSel){if(err){err.style.display='block';err.textContent='Selecione o funcionário responsável pelo cadastro';}return;}
   if(!email) email='sem_email_'+Date.now()+'@alpha.local';
   if(err)err.style.display='none';
   var refCod=ref||gerarCod();
@@ -1540,17 +1543,18 @@ async function cadastrar(){
   try{
     var ctrl4=new AbortController();
     var tmr4=setTimeout(function(){ctrl4.abort();},15000);
-    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({token:_API_TOKEN,acao:'cadastrar_cliente',dados:{nome:nome,email:email,telefone:tel,cpf:cpf,dataNascimento:nasc,codigoIndicacao:ref}}),redirect:'follow',signal:ctrl4.signal});
+    var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({token:_API_TOKEN,acao:'cadastrar_cliente',dados:{nome:nome,email:email,telefone:tel,cpf:cpf,dataNascimento:nasc,codigoIndicacao:ref,cadastradoPor:funcSel}}),redirect:'follow',signal:ctrl4.signal});
     clearTimeout(tmr4);
     var txt4=await resp.text();
     var data;try{data=JSON.parse(txt4);}catch(pe){throw new Error('resp-invalida');}
     if(data.sucesso){novo.id=data.dados.id||novo.id;novo.ref=data.dados.codigoReferral||refCod;}
+    else if(data.erro){if(err){err.style.display='block';err.textContent=data.erro;}if(btn){btn.disabled=false;btn.textContent='✅ Cadastrar';}return;}
   }catch(e){console.log('API off, usando local:',e.message);}
   CL.push(novo);renderTudo();
   el('cad-form').style.display='none';el('cad-suc').style.display='block';
   var nm=el('cad-suc-nm');if(nm)nm.textContent=nome+' — '+email;
   var rf=el('cad-suc-ref');if(rf)rf.textContent=novo.ref;
-  toast('✅ '+nome+' cadastrado!');
+  toast('✅ '+nome+' cadastrado por '+funcSel+'!');
   if(btn){btn.disabled=false;btn.textContent='✅ Cadastrar';}
 }
 
@@ -1874,6 +1878,115 @@ document.addEventListener('keydown', function(e) {
     </div>
   </div>
 </div>
+
+<!-- ══ MODAL EDITAR CLIENTE ══════════════════════════════════════ -->
+<div id="medit" class="mov" onclick="if(event.target===this)fEdit()">
+  <div class="mbox" style="border-color:#FFD70044">
+    <div class="mh"><span class="mt" style="color:#FFD700">✏️ Editar Cliente</span><button class="mc" onclick="fEdit()">×</button></div>
+    <div id="edit-form">
+      <input type="hidden" id="edit-id">
+      <label class="lbl">Nome completo *</label>
+      <input type="text" class="inp" id="edit-nome" placeholder="João da Silva">
+      <label class="lbl">Email <span style="color:#555;font-weight:400;text-transform:none;font-size:11px">(opcional)</span></label>
+      <input type="email" class="inp" id="edit-email" placeholder="email@cliente.com">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><label class="lbl">Telefone</label><input type="tel" class="inp" id="edit-tel" placeholder="(88) 99999-9999"></div>
+        <div><label class="lbl">CPF</label><input type="text" class="inp" id="edit-cpf" placeholder="000.000.000-00"></div>
+      </div>
+      <label class="lbl">Nascimento</label>
+      <input type="date" class="inp" id="edit-nasc">
+      <div id="edit-err" style="display:none;background:#E24B4A22;border:.5px solid #E24B4A33;border-radius:8px;padding:10px;font-size:12px;color:#E24B4A;margin-bottom:10px"></div>
+      <div style="display:flex;gap:8px">
+        <button class="bv" style="flex:1;background:#FFD70022;color:#FFD700;border:1px solid #FFD70044" onclick="salvarEdicao()">💾 Salvar alterações</button>
+        <button onclick="fEdit()" class="bgh">Cancelar</button>
+      </div>
+    </div>
+    <div id="edit-suc" style="display:none;text-align:center;padding:24px">
+      <div style="font-size:40px;margin-bottom:10px">✅</div>
+      <div style="font-weight:700;font-size:16px;color:#FFD700;margin-bottom:6px">Dados atualizados!</div>
+      <div style="font-size:13px;color:#aaa" id="edit-suc-nm"></div>
+      <button onclick="fEdit()" class="bv" style="margin-top:16px">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══ EDIÇÃO DE CLIENTE (Funcionário) ═════════════════════════
+
+function abrirEdit(clienteId) {
+  var c = CL.find(function(x){ return x.id === clienteId; });
+  if (!c) { toast('❌ Cliente não encontrado'); return; }
+  el('edit-id').value = c.id;
+  el('edit-nome').value = c.nome || '';
+  el('edit-email').value = (c.email||'').includes('@alpha.local') ? '' : (c.email||'');
+  el('edit-tel').value = String(c.tel||'');
+  el('edit-cpf').value = c.cpf || '';
+  el('edit-nasc').value = c.nascimento || '';
+  var err = el('edit-err'); if(err) err.style.display='none';
+  el('edit-form').style.display='block';
+  el('edit-suc').style.display='none';
+  el('medit').style.display='flex';
+}
+
+function fEdit() {
+  el('medit').style.display='none';
+}
+
+async function salvarEdicao() {
+  var id    = (el('edit-id')||{value:''}).value;
+  var nome  = (el('edit-nome')||{value:''}).value.trim();
+  var email = (el('edit-email')||{value:''}).value.trim();
+  var tel   = (el('edit-tel')||{value:''}).value.trim();
+  var cpf   = (el('edit-cpf')||{value:''}).value.trim();
+  var nasc  = (el('edit-nasc')||{value:''}).value;
+  var err   = el('edit-err');
+
+  if (!nome) { if(err){err.style.display='block';err.textContent='Nome é obrigatório';} return; }
+  if (email && !email.includes('@')) { if(err){err.style.display='block';err.textContent='Email inválido';} return; }
+  if (err) err.style.display='none';
+
+  var btn = el('edit-form').querySelector('.bv');
+  if(btn){btn.disabled=true;btn.textContent='⏳ Salvando...';}
+
+  try {
+    var ctrl = new AbortController();
+    setTimeout(function(){ctrl.abort();}, 15000);
+    var resp = await fetch(WEB_APP_URL, {
+      method:'POST', headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({
+        token: _API_TOKEN,
+        acao: 'editar_cliente',
+        dados: { clienteId:id, nome:nome, email:email, telefone:tel, cpf:cpf, dataNascimento:nasc, funcionario: window._funcNome||'' }
+      }),
+      redirect:'follow', signal:ctrl.signal
+    });
+    var data = JSON.parse(await resp.text());
+    if (!data.sucesso) {
+      if(err){err.style.display='block';err.textContent=data.erro||'Erro ao salvar';}
+      if(btn){btn.disabled=false;btn.textContent='💾 Salvar alterações';}
+      return;
+    }
+  } catch(e) {
+    console.log('API edit offline:', e.message);
+  }
+
+  // Atualizar localmente
+  var idx = CL.findIndex(function(x){ return x.id===id; });
+  if (idx >= 0) {
+    CL[idx].nome = nome;
+    CL[idx].email = email || CL[idx].email;
+    CL[idx].tel = tel;
+    CL[idx].cpf = cpf;
+    CL[idx].nascimento = nasc;
+  }
+  renderTudo();
+  el('edit-form').style.display='none';
+  el('edit-suc').style.display='block';
+  var nm = el('edit-suc-nm'); if(nm) nm.textContent = nome;
+  toast('✅ '+nome+' atualizado!');
+  if(btn){btn.disabled=false;btn.textContent='💾 Salvar alterações';}
+}
+</script>
 
 </body>
 </html>
