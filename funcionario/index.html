@@ -11,7 +11,7 @@
 <link rel="shortcut icon" type="image/png" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
 <link rel="apple-touch-icon" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
 <link rel="manifest" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/manifest.json">
-<title>Alpha Suplementos — Funcionário v38</title>
+<title>Alpha Suplementos — Funcionário v45</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -696,16 +696,51 @@ var _SALT = 'alpha_salt_2026';
 var _API_TOKEN = 'd9O-8jZLUcPHX_YlWF_XEUTySCNa3EZlVmJPL9thg94';
 var _SESSION_KEY = 'alpha_func_session';
 var _MAX_ATTEMPTS = 3;
-var _BLOCK_TIME = 5 * 60 * 1000; // 5 minutos
+var _BLOCK_TIME = 10 * 60 * 1000; // 10 minutos
 var _SESSION_EXPIRY = 12 * 60 * 60 * 1000; // 12 horas
 
-// Hashes das senhas (não armazena texto puro)
+// Colaboradores — carregados dinamicamente da API (fallback hardcoded)
 var _USERS = {
   'andre':   { nome:'André',   hash:'70ff798d8f2492481203476ecf67814c28c18cddf786031b5398f24eb6ae6970' },
   'hesllen': { nome:'Hesllen', hash:'e5bba646579cd3a690f5d597309db731e4204cd356e9d11c917054aeeb3f39f1' },
   'sabina':  { nome:'Sabina',  hash:'6db67afc515b3deeeb80a7a29bdc80ffd1868f5d0fe6ec127cdd7da0e8c5a73a' },
   'erica':   { nome:'Érica',   hash:'1135965b644f6f589b7f1989d4f45e3f3a635a758fad5225a271ea2a2879e0c0' },
 };
+
+// Carregar colaboradores ativos da API e mesclar com _USERS
+async function carregarColaboradores() {
+  try {
+    var ctrl = new AbortController();
+    setTimeout(function(){ ctrl.abort(); }, 8000);
+    var r = await fetch(WEB_APP_URL + '?acao=listar_colaboradores&token=' + _API_TOKEN, { redirect:'follow', signal: ctrl.signal });
+    var d = JSON.parse(await r.text());
+    if (d.sucesso && d.dados && d.dados.length) {
+      d.dados.forEach(function(c) {
+        // c: [id, nome, usuario, senhaHash, ativo, criadoEm]
+        if (c[4] === true || c[4] === 'TRUE' || c[4] === 1) {
+          var login = String(c[2]||'').toLowerCase().trim();
+          if (login) _USERS[login] = { nome: String(c[1]||login), hash: String(c[3]||'') };
+        }
+      });
+      // Atualizar select de "Cadastrado por" com colaboradores ativos
+      preencherSelectFuncionarios();
+    }
+  } catch(e) { console.log('Colaboradores: usando fallback local.', e.message); }
+}
+
+function preencherSelectFuncionarios() {
+  var sel = el('cad-func');
+  if (!sel) return;
+  var nomes = Object.values(_USERS).map(function(u){ return u.nome; }).sort();
+  sel.innerHTML = '<option value="">Selecione o funcionário...</option>' +
+    nomes.map(function(n){ return '<option value="' + n + '">' + n + '</option>'; }).join('');
+  // Re-selecionar o funcionário logado, se aplicável
+  if (window._funcNome) {
+    for (var i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].value === window._funcNome) { sel.selectedIndex = i; break; }
+    }
+  }
+}
 
 // SHA-256 simples em JS
 async function sha256(msg) {
@@ -822,9 +857,12 @@ el('lbtn').onclick=function(){
       var selLd=el('vsel');
       if(selLd){selLd.innerHTML='<option>⏳ Carregando clientes...</option>';selLd.disabled=true;}
       renderTudo();
+      // v45: carrega colaboradores e histórico da API em paralelo
+      carregarColaboradores();
       carregarClientes().then(function(){
         if(selLd){selLd.disabled=false;}
         renderTudo();
+        carregarHistorico(); // não bloqueia o render
         setTimeout(function(){ mostrarAlertaCRM(window._funcNome); },800);
       }).catch(function(){
         if(selLd){selLd.disabled=false;}
@@ -858,7 +896,9 @@ el('sbtn').onclick=function(){
     // Aguarda clientes antes de renderizar — mostra loading no dropdown
     var selLoad=el('vsel');
     if(selLoad){selLoad.innerHTML='<option>⏳ Carregando clientes...</option>';selLoad.disabled=true;}
+    try { await carregarColaboradores(); } catch(e) {}
     try { await carregarClientes(); } catch(e) {}
+    carregarHistorico(); // não bloqueia o restore
     renderTudo();
     if(selLoad){selLoad.disabled=false;}
     setTimeout(function(){ mostrarAlertaCRM(window._funcNome); }, 800);
@@ -912,6 +952,33 @@ async function carregarClientes(){
   return true;
 }
 
+// ── Carregar histórico de compras para o modal 📋 (v45)
+async function carregarHistorico() {
+  try {
+    var ctrl = new AbortController();
+    setTimeout(function(){ ctrl.abort(); }, 15000);
+    var r = await fetch(WEB_APP_URL + '?acao=listar_historico&token=' + _API_TOKEN, { redirect:'follow', signal: ctrl.signal });
+    var d = JSON.parse(await r.text());
+    if (d.sucesso && d.dados && d.dados.length > 0) {
+      window._HIST = d.dados.map(function(c){
+        var dt = c[8] ? new Date(c[8]) : null;
+        return {
+          cid:   String(c[1]||''),
+          desc:  String(c[2]||''),
+          valor: Number(c[3])||0,
+          pts:   Number(c[4])||0,
+          data:  dt ? dt.toLocaleDateString('pt-BR') : '—',
+          dataRaw: dt ? dt.getTime() : 0
+        };
+      });
+      console.log('Histórico carregado:', window._HIST.length, 'registros');
+    }
+  } catch(e) {
+    console.log('Histórico indisponível:', e.message);
+    window._HIST = window._HIST || [];
+  }
+}
+
 function renderTudo(){
   var sel=el('vsel');
   // vsel agora é busca inteligente
@@ -958,8 +1025,9 @@ function renderClis(){
       '<td>'+nb(c.nivel)+'</td><td style="color:var(--gold);font-weight:600">'+fP(c.pontos)+'</td>'+
       '<td style="color:var(--green)">'+fR(c.cashback)+'</td><td>'+fR(c.gastoMes)+'</td>'+
       '<td>'+(p?'<span style="color:'+cor+';font-weight:700;font-size:12px">'+(p.dias<=0?'⛔':p.dias<=2?'🚨':p.dias<=5?'⚠️':'📦')+' '+p.nome+'</span>':'—')+'</td>'+
-      '<td style="display:flex;gap:5px">'+
+      '<td style="display:flex;gap:5px;flex-wrap:wrap">'+
       '<button class="bwa" style="font-size:11px;padding:5px 9px" onclick="abrirWA(\''+c.id+'\',\'custom\',\'\')">📱 WA</button>'+
+      '<button style="font-size:11px;padding:5px 9px;background:#00CCFF22;color:#00CCFF;border:1px solid #00CCFF44;border-radius:6px;cursor:pointer;font-family:\'Barlow\',sans-serif;font-weight:700" onclick="abrirHistorico(\''+c.id+'\')">📋</button>'+
       '<button style="font-size:11px;padding:5px 9px;background:#FFD70022;color:#FFD700;border:1px solid #FFD70044;border-radius:6px;cursor:pointer;font-family:\'Barlow\',sans-serif;font-weight:700" onclick="abrirEdit(\''+c.id+'\')">✏️</button>'+
       (p?'<button class="bwa" style="font-size:11px;padding:5px 9px" onclick="abrirWA(\''+c.id+'\',\'reposicao\',\''+p.nome+'\')">📦</button>':'')+
       '</td></tr>';
@@ -1880,6 +1948,7 @@ document.addEventListener('keydown', function(e) {
 </div>
 
 <!-- ══ MODAL EDITAR CLIENTE ══════════════════════════════════════ -->
+<!-- ══ MODAL EDITAR CLIENTE (Funcionário — só nome e telefone) ══ -->
 <div id="medit" class="mov" onclick="if(event.target===this)fEdit()">
   <div class="mbox" style="border-color:#FFD70044">
     <div class="mh"><span class="mt" style="color:#FFD700">✏️ Editar Cliente</span><button class="mc" onclick="fEdit()">×</button></div>
@@ -1887,14 +1956,11 @@ document.addEventListener('keydown', function(e) {
       <input type="hidden" id="edit-id">
       <label class="lbl">Nome completo *</label>
       <input type="text" class="inp" id="edit-nome" placeholder="João da Silva">
-      <label class="lbl">Email <span style="color:#555;font-weight:400;text-transform:none;font-size:11px">(opcional)</span></label>
-      <input type="email" class="inp" id="edit-email" placeholder="email@cliente.com">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div><label class="lbl">Telefone</label><input type="tel" class="inp" id="edit-tel" placeholder="(88) 99999-9999"></div>
-        <div><label class="lbl">CPF</label><input type="text" class="inp" id="edit-cpf" placeholder="000.000.000-00"></div>
+      <label class="lbl">Telefone</label>
+      <input type="tel" class="inp" id="edit-tel" placeholder="(88) 99999-9999">
+      <div style="background:#FFD70011;border:.5px solid #FFD70033;border-radius:8px;padding:10px;font-size:11px;color:#888;margin-bottom:12px">
+        ℹ️ Outros dados (email, CPF, nascimento) só podem ser alterados pelo CEO.
       </div>
-      <label class="lbl">Nascimento</label>
-      <input type="date" class="inp" id="edit-nasc">
       <div id="edit-err" style="display:none;background:#E24B4A22;border:.5px solid #E24B4A33;border-radius:8px;padding:10px;font-size:12px;color:#E24B4A;margin-bottom:10px"></div>
       <div style="display:flex;gap:8px">
         <button class="bv" style="flex:1;background:#FFD70022;color:#FFD700;border:1px solid #FFD70044" onclick="salvarEdicao()">💾 Salvar alterações</button>
@@ -1910,82 +1976,178 @@ document.addEventListener('keydown', function(e) {
   </div>
 </div>
 
+<!-- ══ MODAL HISTÓRICO DE COMPRAS (Funcionário) ══════════════════ -->
+<div id="mhist" class="mov" onclick="if(event.target===this)fecharHistorico()">
+  <div class="mbox" style="border-color:#00CCFF44;max-height:92vh;overflow-y:auto">
+    <div class="mh">
+      <span class="mt" style="color:#00CCFF">📋 <span id="mhist-nome">Cliente</span></span>
+      <button class="mc" onclick="fecharHistorico()">×</button>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:-10px;margin-bottom:16px">Últimos 90 dias</div>
+    <div id="mhist-body"></div>
+  </div>
+</div>
+
 <script>
-// ══ EDIÇÃO DE CLIENTE (Funcionário) ═════════════════════════
+// ══ EDIÇÃO DE CLIENTE (Funcionário — v45: só nome e telefone) ════
 
 function abrirEdit(clienteId) {
   var c = CL.find(function(x){ return x.id === clienteId; });
   if (!c) { toast('❌ Cliente não encontrado'); return; }
   el('edit-id').value = c.id;
   el('edit-nome').value = c.nome || '';
-  el('edit-email').value = (c.email||'').includes('@alpha.local') ? '' : (c.email||'');
   el('edit-tel').value = String(c.tel||'');
-  el('edit-cpf').value = c.cpf || '';
-  el('edit-nasc').value = c.nascimento || '';
   var err = el('edit-err'); if(err) err.style.display='none';
   el('edit-form').style.display='block';
   el('edit-suc').style.display='none';
   el('medit').style.display='flex';
 }
 
-function fEdit() {
-  el('medit').style.display='none';
-}
+function fEdit() { el('medit').style.display='none'; }
 
 async function salvarEdicao() {
-  var id    = (el('edit-id')||{value:''}).value;
-  var nome  = (el('edit-nome')||{value:''}).value.trim();
-  var email = (el('edit-email')||{value:''}).value.trim();
-  var tel   = (el('edit-tel')||{value:''}).value.trim();
-  var cpf   = (el('edit-cpf')||{value:''}).value.trim();
-  var nasc  = (el('edit-nasc')||{value:''}).value;
-  var err   = el('edit-err');
+  var id   = (el('edit-id')||{value:''}).value;
+  var nome = (el('edit-nome')||{value:''}).value.trim();
+  var tel  = (el('edit-tel')||{value:''}).value.trim();
+  var err  = el('edit-err');
 
   if (!nome) { if(err){err.style.display='block';err.textContent='Nome é obrigatório';} return; }
-  if (email && !email.includes('@')) { if(err){err.style.display='block';err.textContent='Email inválido';} return; }
   if (err) err.style.display='none';
 
   var btn = el('edit-form').querySelector('.bv');
   if(btn){btn.disabled=true;btn.textContent='⏳ Salvando...';}
 
+  var salvoAPI = false;
+  var erroMsg = '';
   try {
     var ctrl = new AbortController();
-    setTimeout(function(){ctrl.abort();}, 15000);
+    var tmr = setTimeout(function(){ ctrl.abort(); }, 15000);
     var resp = await fetch(WEB_APP_URL, {
       method:'POST', headers:{'Content-Type':'text/plain'},
       body: JSON.stringify({
-        token: _API_TOKEN,
-        acao: 'editar_cliente',
-        dados: { clienteId:id, nome:nome, email:email, telefone:tel, cpf:cpf, dataNascimento:nasc, funcionario: window._funcNome||'' }
+        token: _API_TOKEN, acao: 'editar_cliente',
+        dados: { clienteId:id, nome:nome, telefone:tel, funcionario: window._funcNome||'' }
       }),
       redirect:'follow', signal:ctrl.signal
     });
+    clearTimeout(tmr);
     var data = JSON.parse(await resp.text());
-    if (!data.sucesso) {
-      if(err){err.style.display='block';err.textContent=data.erro||'Erro ao salvar';}
-      if(btn){btn.disabled=false;btn.textContent='💾 Salvar alterações';}
-      return;
-    }
+    if (data.sucesso) { salvoAPI = true; }
+    else { erroMsg = data.erro || 'Erro ao salvar. Tente novamente.'; }
   } catch(e) {
-    console.log('API edit offline:', e.message);
+    erroMsg = e.name === 'AbortError'
+      ? 'Tempo esgotado. Verifique a conexão.'
+      : 'Falha de rede: ' + e.message;
   }
 
-  // Atualizar localmente
-  var idx = CL.findIndex(function(x){ return x.id===id; });
-  if (idx >= 0) {
-    CL[idx].nome = nome;
-    CL[idx].email = email || CL[idx].email;
-    CL[idx].tel = tel;
-    CL[idx].cpf = cpf;
-    CL[idx].nascimento = nasc;
+  if (!salvoAPI) {
+    if(err){ err.style.display='block'; err.textContent='❌ ' + erroMsg; }
+    if(btn){ btn.disabled=false; btn.textContent='💾 Salvar alterações'; }
+    return;
   }
+
+  // Só atualiza local após confirmação da API
+  var idx = CL.findIndex(function(x){ return x.id===id; });
+  if (idx >= 0) { CL[idx].nome = nome; CL[idx].tel = tel; }
   renderTudo();
   el('edit-form').style.display='none';
   el('edit-suc').style.display='block';
   var nm = el('edit-suc-nm'); if(nm) nm.textContent = nome;
-  toast('✅ '+nome+' atualizado!');
+  toast('✅ ' + nome + ' atualizado!');
   if(btn){btn.disabled=false;btn.textContent='💾 Salvar alterações';}
 }
+
+// ══ HISTÓRICO DE COMPRAS (Funcionário — v45) ════════════════════
+
+function abrirHistorico(clienteId) {
+  var c = CL.find(function(x){ return x.id === clienteId; });
+  if (!c) { toast('❌ Cliente não encontrado'); return; }
+
+  var corte = Date.now() - (90 * 24 * 60 * 60 * 1000);
+
+  // PRD contém produtos/alertas CRM; para compras usamos o histórico carregado
+  // Filtra compras dos últimos 90 dias para este cliente
+  var compras = (window._HIST || []).filter(function(p){
+    return (p.cid === clienteId || p.cid === c.email) && p.dataRaw >= corte;
+  }).sort(function(a, b){ return b.dataRaw - a.dataRaw; });
+
+  var nomEl = el('mhist-nome'); if(nomEl) nomEl.textContent = c.nome;
+
+  var body = el('mhist-body');
+  if (!body) { el('mhist').style.display='flex'; return; }
+
+  if (!compras.length) {
+    body.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3);font-size:13px">Nenhuma compra registrada nos últimos 90 dias.</div>';
+    el('mhist').style.display='flex';
+    return;
+  }
+
+  var totalGasto = compras.reduce(function(s,p){ return s + p.valor; }, 0);
+  var totalPts   = compras.reduce(function(s,p){ return s + (p.pts||0); }, 0);
+
+  // Top produtos
+  var prodMap = {};
+  compras.forEach(function(p) {
+    var key = (p.desc || 'Compra').split('+')[0].trim().split('·')[0].trim();
+    if (!key || key.length < 3) key = 'Compra';
+    if (!prodMap[key]) prodMap[key] = { qtd:0, total:0 };
+    prodMap[key].qtd++;
+    prodMap[key].total += p.valor;
+  });
+  var topProds = Object.keys(prodMap).map(function(k){
+    return { nome:k, qtd:prodMap[k].qtd, total:prodMap[k].total };
+  }).sort(function(a,b){ return b.qtd - a.qtd; }).slice(0,5);
+
+  var maxQtd = topProds[0] ? topProds[0].qtd : 1;
+  var cores = ['#CC0000','#EF9F27','#1D9E75','#00CCFF','#CC88FF'];
+
+  var topHtml = topProds.map(function(p, i){
+    var pct = Math.round((p.qtd / maxQtd) * 100);
+    var cor = cores[i] || '#666';
+    return '<div style="margin-bottom:10px">' +
+      '<div style="display:flex;justify-content:space-between;margin-bottom:4px">' +
+        '<span style="font-size:13px;font-weight:600;color:var(--text)">' + p.nome + '</span>' +
+        '<span style="font-size:12px;color:var(--text3)">' + p.qtd + 'x · ' + fR(p.total) + '</span>' +
+      '</div>' +
+      '<div style="background:#222;border-radius:4px;height:6px;overflow:hidden">' +
+        '<div style="background:' + cor + ';width:' + pct + '%;height:100%;border-radius:4px"></div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  var linhaHtml = compras.slice(0, 10).map(function(p){
+    var cor = p.valor >= 200 ? '#FFD700' : p.valor >= 100 ? '#1D9E75' : 'var(--text3)';
+    return '<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:.5px solid #1e1e1e">' +
+      '<div style="width:70px;font-size:11px;color:var(--text3);flex-shrink:0">' + p.data + '</div>' +
+      '<div style="flex:1;font-size:12px;color:var(--text2);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + (p.desc||'Compra') + '</div>' +
+      '<div style="font-size:13px;font-weight:700;color:' + cor + ';flex-shrink:0">' + fR(p.valor) + '</div>' +
+    '</div>';
+  }).join('');
+
+  body.innerHTML =
+    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">' +
+      '<div style="background:#CC000018;border:.5px solid #CC000033;border-radius:9px;padding:11px;text-align:center">' +
+        '<div style="font-size:22px;font-weight:900;color:#CC0000;font-family:'Barlow Condensed',sans-serif">' + compras.length + '</div>' +
+        '<div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Compras</div>' +
+      '</div>' +
+      '<div style="background:#1D9E7518;border:.5px solid #1D9E7533;border-radius:9px;padding:11px;text-align:center">' +
+        '<div style="font-size:22px;font-weight:900;color:#1D9E75;font-family:'Barlow Condensed',sans-serif">' + fR(totalGasto) + '</div>' +
+        '<div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Total gasto</div>' +
+      '</div>' +
+      '<div style="background:#FFD70018;border:.5px solid #FFD70033;border-radius:9px;padding:11px;text-align:center">' +
+        '<div style="font-size:22px;font-weight:900;color:#FFD700;font-family:'Barlow Condensed',sans-serif">' + fP(totalPts) + '</div>' +
+        '<div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Pts ganhos</div>' +
+      '</div>' +
+    '</div>' +
+    '<div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin-bottom:10px">🏆 Produtos mais comprados</div>' +
+    topHtml +
+    '<div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin:16px 0 8px">🕐 Últimas compras</div>' +
+    linhaHtml;
+
+  el('mhist').style.display='flex';
+}
+
+function fecharHistorico() { el('mhist').style.display='none'; }
 </script>
 
 </body>
