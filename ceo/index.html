@@ -352,7 +352,7 @@ body{color:#FFFFFF;font-size:15px}
         </div>
         <div id="sabina-resultado" style="display:none;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:8px"></div>
       </div>
-      <div class="card"><table class="tbl"><thead><tr><th>#</th><th>Cliente</th><th>Cadastrado por</th><th>Nível</th><th>Pontos</th><th>Cashback</th><th>Gasto/mês</th><th>Última compra</th></tr></thead><tbody id="tcorp"></tbody></table></div>
+      <div class="card"><table class="tbl"><thead><tr><th>#</th><th>Cliente</th><th>Cadastrado por</th><th>Nível</th><th>Pontos</th><th>Cashback</th><th>Gasto/mês</th><th>Última compra</th><th>Ações</th></tr></thead><tbody id="tcorp"></tbody></table></div>
     </div>
 
     <div id="p-ranking" class="pnl">
@@ -609,6 +609,19 @@ body{color:#FFFFFF;font-size:15px}
 
   </div><!-- /main -->
 </div><!-- /app -->
+
+
+<!-- ══ MODAL HISTÓRICO DE COMPRAS (CEO) ══════════════════════════ -->
+<div id="mhist" class="mfundo" onclick="if(event.target===this)fecharHistorico()">
+  <div class="mcaixa" style="border-color:#00CCFF66;max-width:560px;max-height:85vh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <div style="font-weight:700;font-size:16px;color:#00CCFF">📋 Histórico — <span id="mhist-nome">Cliente</span></div>
+      <button onclick="fecharHistorico()" style="background:none;border:none;color:#555;font-size:22px;cursor:pointer;line-height:1">×</button>
+    </div>
+    <div style="font-size:11px;color:#555;margin-bottom:16px">Últimos 90 dias</div>
+    <div id="mhist-body"></div>
+  </div>
+</div>
 
 <!-- ══ MODAL EDITAR CLIENTE (CEO) ════════════════════════════════ -->
 <div id="mceo-edit" class="mfundo">
@@ -1038,7 +1051,6 @@ function rClientes(){
   var b=(el('fbusca')||{value:''}).value.toLowerCase();
   var f=(el('fnivel')||{value:''}).value;
   var ff=(el('ffunc')||{value:''}).value.toLowerCase();
-  // Mostrar painel Sabina quando filtro = sabina
   var painelSabina=el('sabina-panel');
   if(painelSabina) painelSabina.style.display=(ff==='sabina'?'block':'none');
 
@@ -1055,7 +1067,7 @@ function rClientes(){
     var matchNivel=(!f||c.nivel===f);
     var matchFunc=!ff||(normF(c.cadastradoPor||'')).includes(normF(ff));
     return matchBusca&&matchNivel&&matchFunc;
-  }).sort(function(a,b){return b.pontos-a.pontos;});
+  }).sort(function(a,b2){return b2.pontos-a.pontos;});
 
   html('tcorp',l.map(function(c,i){
     return '<tr>' +
@@ -1067,6 +1079,10 @@ function rClientes(){
       '<td style="color:#1D9E75">'+fR(c.cashback)+'</td>' +
       '<td>'+fR(c.gastoMes)+'</td>' +
       '<td style="color:#666">'+c.ultimaCompra+'</td>' +
+      '<td style="white-space:nowrap">' +
+        '<button onclick="abrirHistorico(\''  +c.id+ '\')" title="Histórico 90 dias" style="background:#00CCFF22;color:#00CCFF;border:1px solid #00CCFF44;border-radius:6px;padding:4px 8px;font-size:12px;cursor:pointer;margin-right:4px">📋</button>' +
+        '<button onclick="abrirEdicaoCEO(\''  +c.id+ '\')" title="Editar cliente" style="background:#FFD70022;color:#FFD700;border:1px solid #FFD70044;border-radius:6px;padding:4px 8px;font-size:12px;cursor:pointer">✏️</button>' +
+      '</td>' +
     '</tr>';
   }).join(''));
 }
@@ -1406,6 +1422,106 @@ function confirmar(){
   ir('promocoes',document.querySelectorAll('.tbt')[5]);
 }
 
+
+// ══════════════════════════════════════════════════════════════
+//  📋 HISTÓRICO DE COMPRAS — CEO (v45)
+// ══════════════════════════════════════════════════════════════
+
+function abrirHistorico(clienteId) {
+  var c = CL.find(function(x){ return x.id === clienteId; });
+  if (!c) return;
+
+  var corte = Date.now() - (90 * 24 * 60 * 60 * 1000);
+  var compras = CP.filter(function(p){
+    return (p.cid === clienteId || p.cid === c.email) && p.dataRaw >= corte;
+  }).sort(function(a, b){ return b.dataRaw - a.dataRaw; });
+
+  el('mhist-nome').textContent = c.nome;
+
+  if (!compras.length) {
+    html('mhist-body',
+      '<div style="text-align:center;padding:30px;color:#555">Nenhuma compra nos últimos 90 dias.</div>'
+    );
+    el('mhist').classList.add('on');
+    return;
+  }
+
+  // ── Totais
+  var totalGasto = compras.reduce(function(s,p){ return s + p.valor; }, 0);
+  var totalPts   = compras.reduce(function(s,p){ return s + p.pts; }, 0);
+
+  // ── Top produtos (agrupa por desc/produto)
+  var prodMap = {};
+  compras.forEach(function(p) {
+    var key = (p.desc || 'Compra').split('+')[0].trim().split('·')[0].trim();
+    if (!key || key.length < 3) key = 'Compra';
+    if (!prodMap[key]) prodMap[key] = { qtd: 0, total: 0 };
+    prodMap[key].qtd++;
+    prodMap[key].total += p.valor;
+  });
+  var topProds = Object.keys(prodMap).map(function(k){
+    return { nome: k, qtd: prodMap[k].qtd, total: prodMap[k].total };
+  }).sort(function(a, b){ return b.qtd - a.qtd; }).slice(0, 5);
+
+  var maxQtd = topProds[0] ? topProds[0].qtd : 1;
+  var cores = ['#CC0000','#EF9F27','#1D9E75','#00CCFF','#CC88FF'];
+
+  var topHtml = topProds.map(function(p, i) {
+    var pct = Math.round((p.qtd / maxQtd) * 100);
+    var cor = cores[i] || '#666';
+    return '<div style="margin-bottom:10px">' +
+      '<div style="display:flex;justify-content:space-between;margin-bottom:4px">' +
+        '<span style="font-size:13px;font-weight:600;color:#fff">' + p.nome + '</span>' +
+        '<span style="font-size:12px;color:#888">' + p.qtd + 'x · ' + fR(p.total) + '</span>' +
+      '</div>' +
+      '<div style="background:#222;border-radius:4px;height:6px;overflow:hidden">' +
+        '<div style="background:' + cor + ';width:' + pct + '%;height:100%;border-radius:4px;transition:width .4s"></div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  // ── Linha do tempo (últimas 10 compras)
+  var linhaHtml = compras.slice(0, 10).map(function(p) {
+    var cor = p.valor >= 200 ? '#FFD700' : p.valor >= 100 ? '#1D9E75' : '#555';
+    return '<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:.5px solid #1e1e1e">' +
+      '<div style="width:70px;font-size:11px;color:#555;flex-shrink:0">' + p.data + '</div>' +
+      '<div style="flex:1;font-size:12px;color:#ccc;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + (p.desc || 'Compra') + '</div>' +
+      (p.funcionario ? '<div style="font-size:11px;color:#666;flex-shrink:0">' + p.funcionario + '</div>' : '') +
+      '<div style="font-size:13px;font-weight:700;color:' + cor + ';flex-shrink:0">' + fR(p.valor) + '</div>' +
+    '</div>';
+  }).join('');
+
+  html('mhist-body',
+    // KPIs
+    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px">' +
+      '<div style="background:#CC000018;border:.5px solid #CC000033;border-radius:9px;padding:12px;text-align:center">' +
+        '<div style="font-size:20px;font-weight:900;color:#CC0000;font-family:'Barlow Condensed',sans-serif">' + compras.length + '</div>' +
+        '<div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Compras</div>' +
+      '</div>' +
+      '<div style="background:#1D9E7518;border:.5px solid #1D9E7533;border-radius:9px;padding:12px;text-align:center">' +
+        '<div style="font-size:20px;font-weight:900;color:#1D9E75;font-family:'Barlow Condensed',sans-serif">' + fR(totalGasto) + '</div>' +
+        '<div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Total gasto</div>' +
+      '</div>' +
+      '<div style="background:#FFD70018;border:.5px solid #FFD70033;border-radius:9px;padding:12px;text-align:center">' +
+        '<div style="font-size:20px;font-weight:900;color:#FFD700;font-family:'Barlow Condensed',sans-serif">' + fP(totalPts) + '</div>' +
+        '<div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Pts ganhos</div>' +
+      '</div>' +
+    '</div>' +
+    // Top produtos
+    '<div style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin-bottom:10px">🏆 Produtos mais comprados</div>' +
+    topHtml +
+    // Linha do tempo
+    '<div style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin:16px 0 8px">🕐 Últimas compras</div>' +
+    linhaHtml
+  );
+
+  el('mhist').classList.add('on');
+}
+
+function fecharHistorico() {
+  el('mhist').classList.remove('on');
+}
+
 // ══════════════════════════════════════════════════════════════
 //  ✏️ EDIÇÃO DE CLIENTE — CEO
 // ══════════════════════════════════════════════════════════════
@@ -1489,31 +1605,7 @@ async function salvarEdicaoCEO() {
   if(btn){btn.disabled=false;btn.textContent='💾 Salvar';}
 }
 
-// Adicionar botão editar na lista de clientes do CEO
-// (sobrescreve o trecho de tcorp para incluir o botão)
-var _rClientesOrig = rClientes;
-rClientes = function() {
-  _rClientesOrig();
-  // Adicionar botão ✏️ em cada linha após o render
-  var rows = document.querySelectorAll('#tcorp tr');
-  rows.forEach(function(tr) {
-    var tds = tr.querySelectorAll('td');
-    if (tds.length < 2) return;
-    var nomeTd = tds[1];
-    var nomeDiv = nomeTd.querySelector('div');
-    if (!nomeDiv) return;
-    var nome = nomeDiv.textContent.trim();
-    var c = CL.find(function(x){ return x.nome === nome; });
-    if (!c) return;
-    var lastTd = tds[tds.length-1];
-    var btnEdit = document.createElement('button');
-    btnEdit.innerHTML = '✏️';
-    btnEdit.title = 'Editar cliente';
-    btnEdit.style.cssText = 'background:#FFD70022;color:#FFD700;border:1px solid #FFD70044;border-radius:6px;padding:4px 8px;font-size:12px;cursor:pointer;margin-left:6px;';
-    btnEdit.onclick = function(){ abrirEdicaoCEO(c.id); };
-    lastTd.appendChild(btnEdit);
-  });
-};
+// Botões ✏️ e 📋 agora gerados diretamente em rClientes() — v45
 
 // ══════════════════════════════════════════════════════════════
 //  🧑‍💼 COLABORADORES — CEO
