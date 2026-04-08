@@ -7,13 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Alpha Suplementos">
 <link rel="apple-touch-icon" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
-<title>Alpha Suplementos — Fidelidade v41</title>
+<title>Alpha Suplementos — Fidelidade v46</title>
 <link rel="manifest" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-
-/* ── DESIGN TOKENS ─────────────────────────────────── */
 :root{
   --red:#CC0000;--red2:#FF2222;--gold:#FFD700;--green:#1D9E75;
   --bg:#080808;--bg2:#0f0f0f;--bg3:#161616;--bg4:#1e1e1e;
@@ -23,84 +21,47 @@
   --shadow:0 4px 24px rgba(0,0,0,.5);
   --shadow-red:0 4px 20px rgba(204,0,0,.2);
 }
-
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:14px;-webkit-font-smoothing:antialiased}
 ::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:2px}
 
-/* ── LOGIN ──────────────────────────────────────────── */
+/* LOGIN */
 .login-screen{min-height:100vh;display:flex;flex-direction:column;background:var(--bg)}
 .login-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px 20px;text-align:center}
 .login-hero img{width:150px;height:150px;object-fit:contain;animation:float 4s ease-in-out infinite;filter:drop-shadow(0 8px 24px rgba(204,0,0,.3))}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 .login-tagline{font-size:11px;color:var(--text3);margin-top:8px;letter-spacing:1.5px;text-transform:uppercase}
-.login-form{background:var(--bg2);border-top:2px solid var(--red);padding:28px 24px 32px;border-radius:0}
+.login-form{background:var(--bg2);border-top:2px solid var(--red);padding:28px 24px 32px}
 .login-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;text-align:center;margin-bottom:20px;letter-spacing:.5px}
-.inp{
-  width:100%;background:var(--bg4);
-  border:1px solid #2a2a2a;border-radius:var(--radius-xs);
-  padding:13px 15px;color:var(--text);font-size:15px;
-  outline:none;font-family:'Barlow',sans-serif;margin-bottom:12px;
-  -webkit-appearance:none;transition:border-color .2s,box-shadow .2s;
-}
+.inp{width:100%;background:var(--bg4);border:1px solid #252525;border-radius:var(--radius-xs);padding:13px 15px;color:var(--text);font-size:15px;outline:none;font-family:'Barlow',sans-serif;margin-bottom:12px;-webkit-appearance:none;transition:border-color .2s,box-shadow .2s}
 .inp:focus{border-color:#CC000066;box-shadow:0 0 0 3px rgba(204,0,0,.1)}
-.btn-red{
-  background:linear-gradient(135deg,#CC0000,#EE1111);
-  color:#fff;border:none;border-radius:var(--radius-xs);
-  padding:14px;font-size:15px;font-weight:700;
-  font-family:'Barlow',sans-serif;cursor:pointer;width:100%;
-  letter-spacing:.5px;transition:all .2s;
-  box-shadow:0 4px 16px rgba(204,0,0,.35);
-}
+.btn-red{background:linear-gradient(135deg,#CC0000,#EE1111);color:#fff;border:none;border-radius:var(--radius-xs);padding:14px;font-size:15px;font-weight:700;font-family:'Barlow',sans-serif;cursor:pointer;width:100%;letter-spacing:.5px;transition:all .2s;box-shadow:0 4px 16px rgba(204,0,0,.35)}
 .btn-red:active{background:linear-gradient(135deg,#aa0000,#cc0000);transform:scale(.98);box-shadow:none}
 .login-links{text-align:center;margin-top:16px;font-size:12px;color:var(--text3)}
 .login-links a{color:#666;text-decoration:none;margin:0 8px;transition:color .2s}
-.login-links a:hover{color:var(--text3)}
 
-/* ── APP SHELL ──────────────────────────────────────── */
+/* APP SHELL */
 .app{display:none;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
-.header{
-  background:rgba(8,8,8,.98);
-  border-bottom:1px solid #1e1e1e;
-  padding:11px 16px;display:flex;align-items:center;
-  justify-content:space-between;flex-shrink:0;
-  position:sticky;top:0;z-index:10;
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-}
+.header{background:rgba(8,8,8,.98);border-bottom:1px solid #1e1e1e;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:sticky;top:0;z-index:10;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .hdr-logo{display:flex;align-items:center;gap:9px}
 .hdr-logo img{height:28px}
 .hdr-logo-txt{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;color:var(--red);letter-spacing:.3px}
 .hdr-logo-txt span{color:var(--text)}
 .hdr-right{display:flex;gap:10px;align-items:center}
-.hdr-av{
-  width:32px;height:32px;border-radius:50%;
-  background:linear-gradient(135deg,#CC000022,#CC000044);
-  color:var(--red);border:1.5px solid #CC000055;
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;cursor:pointer;
-  transition:border-color .2s;
-}
+.hdr-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#CC000022,#CC000044);color:var(--red);border:1.5px solid #CC000055;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;cursor:pointer;transition:border-color .2s}
 .hdr-av:active{border-color:var(--red)}
 .screen{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(72px + var(--safe));display:none;flex-direction:column}
 .screen.on{display:flex}
 
-/* ── BOTTOM NAV ─────────────────────────────────────── */
-.bnav{
-  position:fixed;bottom:0;left:0;right:0;
-  background:rgba(8,8,8,.98);
-  border-top:1px solid #1e1e1e;
-  display:flex;justify-content:space-around;
-  padding:8px 0 calc(10px + var(--safe));z-index:20;
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-}
-.bn{display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:none;cursor:pointer;padding:4px 10px;color:#555;font-family:'Barlow',sans-serif;transition:color .2s;position:relative}
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(8,8,8,.98);border-top:1px solid #1e1e1e;display:flex;justify-content:space-around;padding:8px 0 calc(10px + var(--safe));z-index:20;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.bn{display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:none;cursor:pointer;padding:4px 8px;color:#555;font-family:'Barlow',sans-serif;transition:color .2s;position:relative}
 .bn.on{color:var(--red)}
-.bn-ico{font-size:21px;transition:transform .2s}
+.bn-ico{font-size:20px;transition:transform .2s}
 .bn.on .bn-ico{transform:scale(1.15)}
 .bn-lbl{font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase}
-/* Indicador ativo no nav */
 .bn.on::after{content:'';position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:20px;height:2px;background:var(--red);border-radius:0 0 2px 2px}
 
-/* ── CARD DO USUÁRIO ────────────────────────────────── */
+/* CARD USUÁRIO */
 .lcard{margin:12px 12px 0;border-radius:var(--radius);background:linear-gradient(135deg,#0f0f0f,#141414);border:1px solid #CC000022;overflow:hidden;box-shadow:var(--shadow)}
 .lcard-stripe{height:2px;background:linear-gradient(90deg,#660000,#CC0000,#FF4444,#CC0000,#660000)}
 .lcard-body{padding:14px 16px}
@@ -110,36 +71,37 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .nivel-pill{display:flex;align-items:center;gap:5px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:20px;padding:4px 10px}
 .np-e{font-size:13px}.np-t{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:900;letter-spacing:.5px}
 .lcard-name{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;margin-bottom:1px;letter-spacing:.3px}
-.lcard-email{font-size:10px;color:var(--text3);margin-bottom:0}
+.lcard-email{font-size:10px;color:var(--text3)}
 
-/* ── BANNER LEITURA ─────────────────────────────────── */
+/* BANNER PROMO */
+.promo-banner-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.88);z-index:200;align-items:center;justify-content:center;padding:20px}
+.promo-banner-modal.on{display:flex}
+.promo-banner-inner{position:relative;width:100%;max-width:420px;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.7)}
+.promo-banner-inner img{width:100%;display:block;max-height:70vh;object-fit:contain;background:#111}
+.promo-banner-close{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.7);border:none;color:#fff;font-size:22px;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.promo-banner-title{background:linear-gradient(135deg,#CC0000,#EE2200);color:#fff;text-align:center;padding:12px 16px;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;letter-spacing:.5px}
+
+/* READONLY */
 .readonly-banner{background:#CC000008;border:.5px solid #CC000018;margin:10px 12px;border-radius:var(--radius-xs);padding:8px 12px;font-size:11px;color:#CC000066;display:flex;align-items:center;gap:6px}
 
-/* ── BARRA DE PROGRESSO ─────────────────────────────── */
+/* BARRAS */
 .bar-bg{background:#1a1a1a;border-radius:20px;height:6px;overflow:hidden;margin-bottom:5px}
 .bar-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#880000,#CC0000,#FF3333);transition:width .8s cubic-bezier(.4,0,.2,1)}
-.bar-info{display:flex;justify-content:space-between;font-size:10px;color:var(--text3)}
 
-/* ── AÇÕES RÁPIDAS ──────────────────────────────────── */
+/* AÇÕES RÁPIDAS */
 .qa-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px}
-.qa{
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  background:var(--bg3);border:1px solid var(--border);
-  border-radius:var(--radius-sm);padding:12px 4px;
-  cursor:pointer;border:none;transition:all .2s;
-  box-shadow:0 2px 8px rgba(0,0,0,.3);
-}
+.qa{display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 4px;cursor:pointer;border:none;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.3)}
 .qa:active{background:var(--bg4);transform:scale(.93);box-shadow:none}
 .qa-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px}
 .qa-lbl{font-size:10px;color:var(--text2);font-weight:600;text-align:center;line-height:1.2;letter-spacing:.2px}
 
-/* ── SECTION / CARD GENÉRICO ────────────────────────── */
+/* SECTION */
 .sec{padding:0 12px 12px}
 .card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;box-shadow:0 2px 12px rgba(0,0,0,.2)}
 .card-title{font-size:9px;color:#666;text-transform:uppercase;letter-spacing:.8px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.card-title::before{content:'';width:2px;height:10px;background:var(--red);border-radius:2px;box-shadow:0 0 6px rgba(204,0,0,.5)}
+.card-title::before{content:'';width:2px;height:10px;background:var(--red);border-radius:2px;box-shadow:0 0 8px rgba(204,0,0,.4)}
 
-/* ── RANKING ────────────────────────────────────────── */
+/* RANKING */
 .rk{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #1a1a1a}
 .rk:last-child{border-bottom:none}
 .rk-pos{width:22px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;text-align:center}
@@ -150,19 +112,14 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .rk-pts{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--gold)}
 .rk-me{background:linear-gradient(90deg,rgba(204,0,0,.07),transparent);border-radius:8px;padding:10px 8px;margin:0 -8px}
 
-/* ── PAGE HEADER ────────────────────────────────────── */
+/* PAGE HEADER */
 .pg-hdr{padding:16px 12px 10px}
 .pg-title{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;letter-spacing:.3px}
 .pg-sub{font-size:12px;color:var(--text3);margin-top:2px}
 
-/* ── PRÊMIOS ────────────────────────────────────────── */
+/* PRÊMIOS */
 .premios-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px}
-.pc{
-  background:var(--bg3);border:1px solid var(--border);
-  border-radius:var(--radius-sm);padding:13px;
-  position:relative;overflow:hidden;
-  transition:transform .15s;box-shadow:0 2px 10px rgba(0,0,0,.2);
-}
+.pc{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px;position:relative;overflow:hidden;transition:transform .15s;box-shadow:0 2px 10px rgba(0,0,0,.2)}
 .pc:active{transform:scale(.97)}
 .pc.av{border-color:#CC000033;box-shadow:0 2px 12px rgba(204,0,0,.12)}
 .pc.av::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#880000,#FF3333)}
@@ -176,17 +133,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .pc-badge{position:absolute;top:7px;right:7px;background:var(--red);color:#fff;font-size:8px;font-weight:700;padding:2px 6px;border-radius:20px;letter-spacing:.3px}
 .pc-lock{position:absolute;top:7px;right:7px;font-size:10px;color:#444}
 
-/* ── INDICAR ────────────────────────────────────────── */
-.ref-card{
-  background:linear-gradient(135deg,#0f0f0f,#141414);
-  border:1px solid #CC000025;border-radius:var(--radius-sm);
-  padding:18px;text-align:center;position:relative;
-  overflow:hidden;margin-bottom:12px;
-  box-shadow:0 4px 20px rgba(204,0,0,.08);
-}
+/* INDICAR */
+.ref-card{background:linear-gradient(135deg,#0f0f0f,#141414);border:1px solid #CC000025;border-radius:var(--radius-sm);padding:18px;text-align:center;position:relative;overflow:hidden;margin-bottom:12px;box-shadow:0 4px 20px rgba(204,0,0,.08)}
 .ref-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#660000,#CC0000,#FF4444)}
-.ref-code{font-family:monospace;font-size:24px;letter-spacing:6px;font-weight:700;color:var(--text);margin:10px 0;text-shadow:0 0 20px rgba(255,255,255,.1)}
-.ref-link{font-size:10px;color:var(--text3)}
+.ref-code{font-family:monospace;font-size:24px;letter-spacing:6px;font-weight:700;color:var(--text);margin:10px 0}
 .ben-row{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-xs);margin-bottom:8px}
 .ben-ico{font-size:22px;flex-shrink:0}
 .ben-txt{font-size:12px;color:var(--text2);line-height:1.4}
@@ -194,7 +144,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .btn-outline{background:transparent;color:var(--text2);border:1px solid #2a2a2a;border-radius:var(--radius-xs);padding:9px 18px;font-size:12px;font-weight:600;font-family:'Barlow',sans-serif;cursor:pointer;transition:all .2s}
 .btn-outline:active{background:#1e1e1e;border-color:#333}
 
-/* ── HISTÓRICO ──────────────────────────────────────── */
+/* HISTÓRICO */
 .hi{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #161616}
 .hi:last-child{border-bottom:none}
 .hi-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
@@ -204,36 +154,16 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .hi-val{text-align:right;flex-shrink:0}
 .hi-main{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700}
 
-/* ── BENEFÍCIOS ─────────────────────────────────────── */
+/* BENEFÍCIOS */
 .ben-item{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid #161616;font-size:12px;color:var(--text2);line-height:1.4}
 .ben-item:last-child{border-bottom:none}
 
-/* ── INDICAÇÕES ─────────────────────────────────────── */
-.ind-item{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid #161616}
-.ind-item:last-child{border-bottom:none}
-.ind-nome{font-size:12px;font-weight:600}
-.ind-date{font-size:10px;color:var(--text3);margin-top:2px}
-
-/* ── TOAST ──────────────────────────────────────────── */
-.toast{
-  position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-10px);
-  background:#1a1a1a;border:1px solid #CC000044;border-radius:20px;
-  padding:10px 20px;font-size:12px;font-weight:600;z-index:99;
-  opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1);
-  white-space:nowrap;pointer-events:none;max-width:90vw;text-align:center;
-  box-shadow:0 4px 20px rgba(0,0,0,.5);
-}
+/* TOAST */
+.toast{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-10px);background:#1a1a1a;border:1px solid #CC000044;border-radius:20px;padding:10px 20px;font-size:12px;font-weight:600;z-index:99;opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1);white-space:nowrap;pointer-events:none;max-width:90vw;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.5)}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ── BIG CARDS COLORIDOS ────────────────────────────── */
-.big-card{
-  border-radius:var(--radius);
-  padding:18px 18px 16px;
-  margin-bottom:10px;
-  display:flex;align-items:center;gap:14px;
-  position:relative;overflow:hidden;
-  box-shadow:0 6px 28px rgba(0,0,0,.4);
-}
+/* BIG CARDS */
+.big-card{border-radius:var(--radius);padding:18px 18px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden;box-shadow:0 6px 28px rgba(0,0,0,.4)}
 .big-card::after{content:'';position:absolute;right:-16px;bottom:-16px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.07)}
 .big-card::before{content:'';position:absolute;right:16px;bottom:-28px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.04)}
 .bc-icon{font-size:34px;flex-shrink:0;z-index:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.3))}
@@ -241,14 +171,12 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .bc-label{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.75);margin-bottom:3px}
 .bc-value{font-size:30px;font-weight:900;color:#fff;line-height:1;font-family:'Barlow Condensed',sans-serif;text-shadow:0 2px 8px rgba(0,0,0,.3)}
 .bc-sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:4px;line-height:1.3}
-.bc-red   {background:linear-gradient(135deg,#990000,#CC0000,#EE2222)}
-.bc-gold  {background:linear-gradient(135deg,#8B6914,#B8860B,#D4A017)}
-.bc-green {background:linear-gradient(135deg,#0d6b50,#1D9E75,#00CC88)}
-.bc-blue  {background:linear-gradient(135deg,#004499,#0066CC,#1188EE)}
+.bc-red{background:linear-gradient(135deg,#990000,#CC0000,#EE2222)}
+.bc-gold{background:linear-gradient(135deg,#8B6914,#B8860B,#D4A017)}
+.bc-green{background:linear-gradient(135deg,#0d6b50,#1D9E75,#00CC88)}
 .bc-purple{background:linear-gradient(135deg,#440099,#6600CC,#9922EE)}
-.bc-orange{background:linear-gradient(135deg,#994400,#CC6600,#EE8800)}
 
-/* ── CARDS DE NÍVEL ─────────────────────────────────── */
+/* NÍVEL CARDS */
 .nivel-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
 .nivel-card{border-radius:var(--radius-sm);padding:14px 8px;text-align:center;border:1.5px solid transparent;transition:all .25s;box-shadow:0 2px 10px rgba(0,0,0,.3)}
 .nivel-card.ativo{border-color:rgba(255,255,255,.35);transform:scale(1.04);box-shadow:0 4px 20px rgba(0,0,0,.5)}
@@ -256,56 +184,76 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .nc-nome{font-size:11px;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:.3px}
 .nc-pts{font-size:9px;color:rgba(255,255,255,.55);margin-top:3px;line-height:1.4}
 
-/* ── REFINAMENTOS GERAIS ────────────────────────────── */
-body{color:#FFFFFF;font-size:15px;-webkit-font-smoothing:antialiased}
-.card{border:1px solid #202020;background:#141414}
+/* ══ GAMES ═══════════════════════════════════════════ */
+.games-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px 12px}
+.game-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.game-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.game-card.snake::before{background:linear-gradient(90deg,#00AA44,#00FF66)}
+.game-card.snake{border-color:#00AA4433}
+.game-card.nave::before{background:linear-gradient(90deg,#0044CC,#2288FF)}
+.game-card.nave{border-color:#0044CC33}
+.game-card.tetris::before{background:linear-gradient(90deg,#CC6600,#FF9900)}
+.game-card.tetris{border-color:#CC660033}
+.game-card:active{transform:scale(.96);box-shadow:none}
+.game-card-icon{font-size:36px;margin-bottom:8px;display:block}
+.game-card-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;letter-spacing:.5px;margin-bottom:4px}
+.game-card-desc{font-size:10px;color:var(--text3);line-height:1.4;margin-bottom:8px}
+.game-card-record{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;display:inline-block}
+.game-card.snake .game-card-record{background:#00AA4422;color:#00CC55}
+.game-card.nave .game-card-record{background:#0044CC22;color:#2288FF}
+.game-card.tetris .game-card-record{background:#CC660022;color:#FF9900}
 
-/* Inputs refinados */
+/* STREAK */
+.streak-box{background:linear-gradient(135deg,#1a0a00,#2a1200);border:1px solid #CC660033;border-radius:var(--radius-sm);padding:14px;margin:0 12px 10px;position:relative;overflow:hidden}
+.streak-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#CC4400,#FF8800,#FFCC00)}
+.streak-days{display:flex;gap:6px;margin:10px 0 6px;justify-content:center}
+.streak-day{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;border:1px solid #333;transition:all .3s}
+.streak-day.done{background:linear-gradient(135deg,#CC4400,#FF6600);border-color:#FF660044;box-shadow:0 2px 8px rgba(255,100,0,.3)}
+.streak-day.today{border-color:#FF8800;box-shadow:0 0 0 2px #FF880033}
+
+/* GAME OVERLAY */
+.game-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:100;flex-direction:column}
+.game-overlay.on{display:flex}
+.game-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0}
+.game-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;letter-spacing:.5px}
+.game-score-bar{display:flex;gap:16px;align-items:center}
+.game-score-item{text-align:center}
+.game-score-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
+.game-score-val{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:var(--gold)}
+.game-canvas-wrap{flex:1;display:flex;align-items:center;justify-content:center;background:var(--bg);overflow:hidden;position:relative}
+canvas#gameCanvas{display:block;image-rendering:pixelated;max-width:100%;max-height:100%}
+.game-controls{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 16px calc(10px + var(--safe));background:var(--bg2);border-top:1px solid var(--border);flex-shrink:0}
+.dpad{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(2,52px);gap:4px;justify-content:center}
+.dpad-btn{background:var(--bg3);border:1px solid #333;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;user-select:none;transition:background .1s;touch-action:manipulation}
+.dpad-btn:active{background:#2a2a2a}
+.game-btn{background:var(--bg3);border:1px solid #333;border-radius:10px;padding:10px 28px;font-size:14px;font-weight:700;font-family:'Barlow',sans-serif;color:var(--text2);cursor:pointer;letter-spacing:.3px}
+.game-btn.red{background:var(--red);border-color:transparent;color:#fff;box-shadow:0 3px 12px rgba(204,0,0,.35)}
+.game-btn:active{transform:scale(.96)}
+.game-overlay-msg{display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.9);border:1px solid #CC000044;border-radius:16px;padding:24px 32px;text-align:center;min-width:240px;z-index:10;backdrop-filter:blur(8px)}
+.game-overlay-msg.on{display:block}
+.game-over-title{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;letter-spacing:1px;margin-bottom:4px}
+.game-over-score{font-size:14px;color:var(--text3);margin-bottom:16px}
+.game-over-reward{background:#FFD70015;border:1px solid #FFD70033;border-radius:10px;padding:10px 16px;margin-bottom:16px;font-size:13px;color:var(--gold);font-weight:700}
+
+/* RANKING GAMES */
+.game-rk-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #1a1a1a}
+.game-rk-row:last-child{border-bottom:none}
+
+/* RECOMPENSAS TOAST */
+.reward-popup{display:none;position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#8B6914,#D4A017);color:#fff;padding:14px 20px;border-radius:14px;text-align:center;z-index:150;box-shadow:0 6px 24px rgba(212,160,23,.4);min-width:260px;font-weight:700}
+.reward-popup.on{display:block;animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:translateX(-50%) scale(.6);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
+
+/* RESPONSIVO */
+body{color:#FFFFFF;-webkit-font-smoothing:antialiased}
+.card{border:1px solid #202020;background:#141414}
 .inp{border:1px solid #252525 !important;color:#FFF !important;font-size:15px !important;background:#181818 !important;border-radius:10px !important}
 .inp:focus{border-color:#CC000055 !important;box-shadow:0 0 0 3px rgba(204,0,0,.1) !important}
-
-/* Botão principal */
 .btn-red{font-size:15px !important;padding:14px !important;border-radius:10px !important;letter-spacing:.5px}
-
-/* Card title accent */
 .card-title::before{background:var(--red) !important;box-shadow:0 0 8px rgba(204,0,0,.4)}
-
-/* Hover table rows */
-.tbl tr:hover td,.tabela tr:hover td{background:#1a1a1a !important}
-
-/* Toast refinado */
-.toast,.toast-el{font-size:13px !important}
-
-/* Glow text kpis */
 .kv,.kpi-val,.smv,.stat2-v{text-shadow:0 0 12px currentColor}
-
-/* ── RESPONSIVO MOBILE ──────────────────────────────── */
-@media (max-width: 768px) {
-  .topbar,.tb{flex-wrap:wrap;height:auto;min-height:50px;padding:6px 10px}
-  .tbtabs,.tabs{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-  .tbtabs::-webkit-scrollbar,.tabs::-webkit-scrollbar{display:none}
-  .tbt,.tab{flex-shrink:0;font-size:11px;padding:7px 10px}
-  .main{padding:10px}
-  .g2,.g3{grid-template-columns:1fr !important}
-  .card{padding:14px}
-  .bv,.bverm,.bg,.btn-red{padding:14px !important;font-size:15px !important}
-  .inp,select{padding:13px 15px !important;font-size:15px !important}
-  .mov{padding:0 !important;align-items:flex-end !important}
-  .mbox{border-radius:20px 20px 0 0 !important;max-width:100% !important;width:100% !important}
-  /* Big cards menores no mobile pequeno */
-  .bc-value{font-size:26px}
-  .bc-icon{font-size:30px}
-  .big-card{padding:16px 14px 14px}
-}
-
-@media (max-width: 360px) {
-  .premios-grid{grid-template-columns:1fr 1fr;gap:7px}
-  .qa-row{gap:6px}
-  .qa-ico{width:34px;height:34px;font-size:17px}
-  .bc-value{font-size:24px}
-  .nivel-cards{gap:6px}
-  .nc-pts{font-size:8px}
-}
+@media(max-width:768px){.main{padding:10px}.g2,.g3{grid-template-columns:1fr !important}.bc-value{font-size:26px}.bc-icon{font-size:30px}.big-card{padding:16px 14px 14px}}
+@media(max-width:360px){.premios-grid,.games-grid{grid-template-columns:1fr 1fr;gap:7px}.qa-row{gap:6px}.bc-value{font-size:24px}.nivel-cards{gap:6px}.nc-pts{font-size:8px}.dpad-btn{width:46px;height:46px}}
 </style>
 </head>
 <body>
@@ -322,12 +270,69 @@ body{color:#FFFFFF;font-size:15px;-webkit-font-smoothing:antialiased}
     <input type="tel" class="inp" id="l-tel" placeholder="Seu telefone (somente números)" autocomplete="tel" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
     <div id="l-err" style="color:#FF4444;font-size:12px;margin-bottom:8px;display:none">Nome ou telefone incorretos</div>
     <button class="btn-red" id="l-btn" onclick="fazerLogin()">ENTRAR →</button>
-    <div style="background:#CC000011;border:.5px solid #CC000022;border-radius:8px;padding:8px 12px;font-size:11px;color:#CC000088;margin-bottom:12px;text-align:center">
+    <div style="background:#CC000011;border:.5px solid #CC000022;border-radius:8px;padding:8px 12px;font-size:11px;color:#CC000088;margin-bottom:12px;text-align:center;margin-top:10px">
       🔑 Login: <strong style="color:#f0f0f0">primeiro nome</strong> + <strong style="color:#f0f0f0">telefone</strong>
     </div>
-
     <div class="login-links">
       <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/ceo/">Sou CEO</a> · <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/funcionario/">Sou Funcionário</a>
+    </div>
+  </div>
+</div>
+
+<!-- BANNER PROMO MODAL -->
+<div id="promo-banner-modal" class="promo-banner-modal">
+  <div class="promo-banner-inner">
+    <button class="promo-banner-close" onclick="fecharBanner()">×</button>
+    <div class="promo-banner-title" id="promo-banner-titulo">PROMOÇÃO ALPHA</div>
+    <img id="promo-banner-img" src="" alt="Promoção">
+  </div>
+</div>
+
+<!-- REWARD POPUP -->
+<div id="reward-popup" class="reward-popup"></div>
+
+<!-- GAME OVERLAY -->
+<div id="game-overlay" class="game-overlay">
+  <div class="game-header">
+    <div>
+      <div class="game-title" id="game-title-txt">SNAKE</div>
+      <div style="font-size:10px;color:var(--text3)" id="game-subtitle-txt">Colete proteínas, fuja do lixo!</div>
+    </div>
+    <div class="game-score-bar">
+      <div class="game-score-item">
+        <div class="game-score-label">Pontos</div>
+        <div class="game-score-val" id="game-score-display">0</div>
+      </div>
+      <div class="game-score-item">
+        <div class="game-score-label">Recorde</div>
+        <div class="game-score-val" id="game-record-display">0</div>
+      </div>
+      <button onclick="fecharGame()" style="background:var(--bg3);border:1px solid #333;border-radius:8px;padding:6px 12px;color:var(--text3);font-size:13px;cursor:pointer">✕ Sair</button>
+    </div>
+  </div>
+  <div class="game-canvas-wrap">
+    <canvas id="gameCanvas"></canvas>
+    <div id="game-overlay-msg" class="game-overlay-msg">
+      <div class="game-over-title" id="game-over-title">GAME OVER</div>
+      <div class="game-over-score" id="game-over-score">Pontuação: 0</div>
+      <div class="game-over-reward" id="game-over-reward" style="display:none">🏆 +3 pts ganhos hoje!</div>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <button class="game-btn red" onclick="reiniciarGame()">🔄 Jogar de Novo</button>
+        <button class="game-btn" onclick="fecharGame()">← Voltar</button>
+      </div>
+    </div>
+  </div>
+  <div class="game-controls">
+    <div style="display:flex;gap:10px;margin-bottom:6px">
+      <button class="game-btn" id="game-start-btn" onclick="toggleGame()" style="min-width:120px">▶ Iniciar</button>
+    </div>
+    <div class="dpad" id="dpad-controls">
+      <div></div>
+      <div class="dpad-btn" ontouchstart="dpadPress('up')" onmousedown="dpadPress('up')">↑</div>
+      <div></div>
+      <div class="dpad-btn" ontouchstart="dpadPress('left')" onmousedown="dpadPress('left')">←</div>
+      <div class="dpad-btn" ontouchstart="dpadPress('down')" onmousedown="dpadPress('down')">↓</div>
+      <div class="dpad-btn" ontouchstart="dpadPress('right')" onmousedown="dpadPress('right')">→</div>
     </div>
   </div>
 </div>
@@ -347,7 +352,6 @@ body{color:#FFFFFF;font-size:15px;-webkit-font-smoothing:antialiased}
 
   <!-- HOME -->
   <div id="sc-home" class="screen on">
-    <!-- HEADER CARD USUÁRIO -->
     <div class="lcard">
       <div class="lcard-stripe"></div>
       <div class="lcard-body">
@@ -360,91 +364,86 @@ body{color:#FFFFFF;font-size:15px;-webkit-font-smoothing:antialiased}
       </div>
     </div>
 
-    <!-- CARDS COLORIDOS GRANDES -->
-    <div class="big-card bc-red">
+    <div class="big-card bc-red" style="margin:12px 12px 10px">
       <div class="bc-icon">⭐</div>
       <div class="bc-body">
         <div class="bc-label">Pontos Acumulados</div>
-        <div class="bc-value" id="lc-pts">3.420</div>
+        <div class="bc-value" id="lc-pts">0</div>
         <div class="bc-sub">Use para resgatar prêmios</div>
       </div>
     </div>
-
-    <div class="big-card bc-green">
+    <div class="big-card bc-green" style="margin:0 12px 10px">
       <div class="bc-icon">💰</div>
       <div class="bc-body">
         <div class="bc-label">Cashback Disponível</div>
-        <div class="bc-value" id="lc-cb">R$241,40</div>
+        <div class="bc-value" id="lc-cb">R$0,00</div>
         <div class="bc-sub">Desconto na próxima compra</div>
       </div>
     </div>
-
-    <div class="big-card bc-gold">
+    <div class="big-card bc-gold" style="margin:0 12px 10px">
       <div class="bc-icon">🛍️</div>
       <div class="bc-body">
         <div class="bc-label">Gasto Este Mês</div>
-        <div class="bc-value" id="lc-gasto">R$380,00</div>
+        <div class="bc-value" id="lc-gasto">R$0,00</div>
         <div class="bc-sub" id="prog-msg">Continue comprando!</div>
       </div>
     </div>
-
-    <div class="big-card bc-purple">
+    <div class="big-card bc-purple" style="margin:0 12px 10px">
       <div class="bc-icon">🎯</div>
       <div class="bc-body">
         <div class="bc-label">Indicações Realizadas</div>
         <div class="bc-value" id="lc-ind">0</div>
-        <div class="bc-sub">+100 pts + R$10 cashback na 1ª compra do indicado</div>
+        <div class="bc-sub">+100 pts + R$10 cashback</div>
       </div>
     </div>
 
-    <!-- CARDS DE NÍVEL -->
-    <div class="nivel-cards">
-      <div class="nivel-card" id="pl-b" style="background:linear-gradient(135deg,#3D2000,#8B4513)">
-        <span class="nc-emoji">🥉</span>
-        <div class="nc-nome" style="color:#CD7F32">Bronze</div>
-        <div class="nc-pts">1pt/R$ · 2%CB · ≥R$200/2m</div>
+    <div style="padding:0 12px">
+      <div class="nivel-cards">
+        <div class="nivel-card" id="pl-b" style="background:linear-gradient(135deg,#3D2000,#8B4513)">
+          <span class="nc-emoji">🥉</span>
+          <div class="nc-nome" style="color:#CD7F32">Bronze</div>
+          <div class="nc-pts">1pt/R$ · 2%CB</div>
+        </div>
+        <div class="nivel-card" id="pl-p" style="background:linear-gradient(135deg,#1a1a2e,#333366)">
+          <span class="nc-emoji">🥈</span>
+          <div class="nc-nome" style="color:#C8C8C8">Prata</div>
+          <div class="nc-pts">1,5pt/R$ · 5%CB</div>
+        </div>
+        <div class="nivel-card" id="pl-o" style="background:linear-gradient(135deg,#2a1a00,#665500)">
+          <span class="nc-emoji">🥇</span>
+          <div class="nc-nome" style="color:#FFD700">Ouro</div>
+          <div class="nc-pts">2pt/R$ · 7%CB</div>
+        </div>
       </div>
-      <div class="nivel-card" id="pl-p" style="background:linear-gradient(135deg,#1a1a2e,#333366)">
-        <span class="nc-emoji">🥈</span>
-        <div class="nc-nome" style="color:#C8C8C8">Prata</div>
-        <div class="nc-pts">1,5pt/R$ · 5%CB · ≥R$200/2m</div>
-      </div>
-      <div class="nivel-card" id="pl-o" style="background:linear-gradient(135deg,#2a1a00,#665500)">
-        <span class="nc-emoji">🥇</span>
-        <div class="nc-nome" style="color:#FFD700">Ouro</div>
-        <div class="nc-pts">2pt/R$ · 7%CB · ≥R$250/2m</div>
-      </div>
-    </div>
 
-    <!-- BARRA DE PROGRESSO -->
-    <div style="background:#1a1a1a;border-radius:12px;padding:14px;margin-bottom:14px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-        <span style="font-size:12px;font-weight:700;color:#fff">Progresso de Nível</span>
-        <span style="font-size:11px;color:#aaa" id="prog-meta"></span>
-      </div>
-      <div class="bar-bg"><div class="bar-fill" id="prog-bar" style="width:100%"></div></div>
-      <div style="display:flex;justify-content:space-between;margin-top:6px">
-        <span style="font-size:10px;color:#888" id="prog-gasto"></span>
-        <span style="font-size:10px;color:#CC0000;font-weight:700" id="prog-falta"></span>
+      <div style="background:#1a1a1a;border-radius:12px;padding:14px;margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:12px;font-weight:700;color:#fff">Progresso de Nível</span>
+          <span style="font-size:11px;color:#aaa" id="prog-meta"></span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="prog-bar" style="width:0%"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px">
+          <span style="font-size:10px;color:#888" id="prog-gasto"></span>
+          <span style="font-size:10px;color:#CC0000;font-weight:700" id="prog-falta"></span>
+        </div>
       </div>
     </div>
 
     <div class="readonly-banner">🔒 Compras e resgates são processados pelo funcionário na loja</div>
 
-    <!-- AÇÕES RÁPIDAS -->
     <div class="qa-row">
       <button class="qa" onclick="goScreen('premios')"><div class="qa-ico" style="background:#FFD70022">🏆</div><div class="qa-lbl">Prêmios</div></button>
+      <button class="qa" onclick="goScreen('games')"><div class="qa-ico" style="background:#00FF6622">🎮</div><div class="qa-lbl">Games</div></button>
       <button class="qa" onclick="goScreen('indicar')"><div class="qa-ico" style="background:#CC000022">🎯</div><div class="qa-lbl">Indicar</div></button>
       <button class="qa" onclick="goScreen('historico')"><div class="qa-ico" style="background:#00CC6622">📋</div><div class="qa-lbl">Histórico</div></button>
-      <button class="qa" onclick="goScreen('beneficios')"><div class="qa-ico" style="background:#00CCFF22">⭐</div><div class="qa-lbl">Benefícios</div></button>
     </div>
 
-    <!-- RANKING -->
-    <div style="background:#1a1a1a;border-radius:12px;padding:14px;margin-bottom:14px">
-      <div style="font-size:12px;font-weight:700;color:#FFD700;margin-bottom:10px">🏆 RANKING — MINHA POSIÇÃO</div>
-      <div id="rk-list"></div>
+    <div style="padding:0 12px 12px">
+      <div style="background:#1a1a1a;border-radius:12px;padding:14px">
+        <div style="font-size:12px;font-weight:700;color:#FFD700;margin-bottom:10px">🏆 RANKING — MINHA POSIÇÃO</div>
+        <div id="rk-list"></div>
+      </div>
     </div>
-
   </div><!-- end sc-home -->
 
   <!-- PRÊMIOS -->
@@ -453,8 +452,98 @@ body{color:#FFFFFF;font-size:15px;-webkit-font-smoothing:antialiased}
     <div class="premios-grid" id="premios-grid" style="padding-bottom:10px"></div>
     <div class="sec" style="padding-top:10px">
       <div style="background:var(--bg3);border:.5px solid #CC000033;border-radius:10px;padding:12px;font-size:12px;color:var(--text3);line-height:1.8">
-        🔒 Para resgatar um prêmio, dirija-se à loja e solicite ao funcionário.<br>
-        O resgate é feito presencialmente e gera um código de retirada.
+        🔒 Para resgatar um prêmio, dirija-se à loja e solicite ao funcionário.
+      </div>
+    </div>
+  </div>
+
+  <!-- GAMES -->
+  <div id="sc-games" class="screen">
+    <div class="pg-hdr">
+      <div class="pg-title">🎮 ALPHA GAMES</div>
+      <div class="pg-sub">Jogue, ganhe pontos e concorra no ranking!</div>
+    </div>
+
+    <!-- STREAK BOX -->
+    <div class="streak-box" style="margin:0 12px 10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#FF8800;letter-spacing:.5px">🔥 SEQUÊNCIA DE DIAS</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">Entre todo dia e ganhe recompensas!</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#FF8800;line-height:1" id="streak-num">0</div>
+          <div style="font-size:9px;color:#FF880088">dias seguidos</div>
+        </div>
+      </div>
+      <div class="streak-days" id="streak-days"></div>
+      <div style="font-size:11px;color:var(--text3);text-align:center" id="streak-msg">Entre hoje para começar sua sequência!</div>
+    </div>
+
+    <!-- RECOMPENSAS GAMES -->
+    <div style="padding:0 12px 10px">
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px">
+        <div class="card-title" style="margin-bottom:10px">Recompensas</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="background:#00AA4411;border:1px solid #00AA4433;border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:18px;margin-bottom:4px">🎮</div>
+            <div style="font-size:11px;font-weight:700;color:#00CC55">+3 pts</div>
+            <div style="font-size:9px;color:var(--text3);margin-top:2px">Jogar hoje<br>(1x por dia)</div>
+          </div>
+          <div style="background:#FF880011;border:1px solid #FF880033;border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:18px;margin-bottom:4px">🔥</div>
+            <div style="font-size:11px;font-weight:700;color:#FF8800">+5 pts</div>
+            <div style="font-size:9px;color:var(--text3);margin-top:2px">Novo recorde<br>pessoal</div>
+          </div>
+          <div style="background:#FFD70011;border:1px solid #FFD70033;border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:18px;margin-bottom:4px">🏅</div>
+            <div style="font-size:11px;font-weight:700;color:#FFD700">R$5 cashback</div>
+            <div style="font-size:9px;color:var(--text3);margin-top:2px">7 dias seguidos</div>
+          </div>
+          <div style="background:#CC000011;border:1px solid #CC000033;border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:18px;margin-bottom:4px">🔥</div>
+            <div style="font-size:11px;font-weight:700;color:#FF4444">R$15 cashback</div>
+            <div style="font-size:9px;color:var(--text3);margin-top:2px">30 dias seguidos</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;padding:8px 10px;background:#FFD70008;border:.5px solid #FFD70022;border-radius:8px;font-size:10px;color:var(--text3);text-align:center;line-height:1.5">
+          ⚠️ Cashback de games é resgatável na loja na sua próxima compra.<br>
+          Marcos de pontos: <span style="color:#FFD700;font-weight:700">500 pts = R$10 bônus</span> · <span style="color:#FFD700;font-weight:700">1000 pts = R$20 bônus</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOGOS -->
+    <div class="games-grid">
+      <div class="game-card snake" onclick="abrirGame('snake')">
+        <span class="game-card-icon">🐍</span>
+        <div class="game-card-name" style="color:#00CC55">WHEY SNAKE</div>
+        <div class="game-card-desc">Colete wheys e proteínas. Fuja dos suplementos ruins!</div>
+        <div class="game-card-record snake" id="record-snake">Recorde: 0</div>
+      </div>
+      <div class="game-card nave" onclick="abrirGame('nave')">
+        <span class="game-card-icon">🚀</span>
+        <div class="game-card-name" style="color:#2288FF">ALPHA FORCE</div>
+        <div class="game-card-desc">Destrua os gordos e colete suplementos no espaço!</div>
+        <div class="game-card-record nave" id="record-nave">Recorde: 0</div>
+      </div>
+      <div class="game-card tetris" onclick="abrirGame('tetris')">
+        <span class="game-card-icon">💪</span>
+        <div class="game-card-name" style="color:#FF9900">STACK MUSCLE</div>
+        <div class="game-card-desc">Empilhe os blocos de suplemento e complete linhas!</div>
+        <div class="game-card-record tetris" id="record-tetris">Recorde: 0</div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:.5">
+        <div style="font-size:32px;margin-bottom:8px">🔒</div>
+        <div style="font-size:11px;color:var(--text3)">Mais jogos<br>em breve!</div>
+      </div>
+    </div>
+
+    <!-- RANKING GAMES -->
+    <div style="padding:10px 12px">
+      <div class="card">
+        <div class="card-title">Ranking Geral de Games</div>
+        <div id="game-rk-list"><div style="color:var(--text3);font-size:12px;padding:8px 0">Carregando...</div></div>
       </div>
     </div>
   </div>
@@ -464,20 +553,19 @@ body{color:#FFFFFF;font-size:15px;-webkit-font-smoothing:antialiased}
     <div class="pg-hdr"><div class="pg-title">INDICAR AMIGOS</div><div class="pg-sub">Ganhe pontos indicando!</div></div>
     <div class="sec">
       <div class="ref-card">
-        <div style="font-size:10px;color:var(--text3);margin-bottom:4px;letter-spacing:.5px">SEU CÓDIGO EXCLUSIVO DE INDICAÇÃO</div>
+        <div style="font-size:10px;color:var(--text3);margin-bottom:4px;letter-spacing:.5px">SEU CÓDIGO EXCLUSIVO</div>
         <div class="ref-code" id="ref-code">ALPHA01</div>
-        <div class="ref-link" id="ref-link">Compartilhe este código com seus amigos!</div>
         <div style="display:flex;gap:8px;margin-top:12px;justify-content:center">
-          <button class="btn-outline" onclick="copiarCodigo()">📋 Copiar código</button>
-          <button class="btn-outline" onclick="compartilharWA()" style="background:#25D36622;border-color:#25D36644;color:#25D366">📱 Compartilhar WA</button>
+          <button class="btn-outline" onclick="copiarCodigo()">📋 Copiar</button>
+          <button class="btn-outline" onclick="compartilharWA()" style="background:#25D36622;border-color:#25D36644;color:#25D366">📱 WhatsApp</button>
         </div>
       </div>
       <div style="background:#CC000011;border:.5px solid #CC000022;border-radius:10px;padding:12px;margin-bottom:12px;font-size:12px;color:var(--text3);text-align:center;line-height:1.8">
-        📢 Diga ao seu amigo: <strong style="color:var(--text)">"Use meu código <span id="ref-inline">ALPHA01</span> ao se cadastrar na Alpha Suplementos!"</strong><br>
-        Ele ganha <strong style="color:var(--gold)">+50 pts + R$5 cashback</strong> no cadastro e você ganha <strong style="color:var(--gold)">+100 pts + R$10 cashback</strong> na primeira compra dele!
+        📢 <strong style="color:var(--text)">"Use meu código <span id="ref-inline">ALPHA01</span> ao se cadastrar!"</strong><br>
+        Ele ganha <strong style="color:var(--gold)">+50 pts + R$5</strong> · Você ganha <strong style="color:var(--gold)">+100 pts + R$10</strong>
       </div>
-      <div class="ben-row"><span class="ben-ico">🐺</span><div class="ben-txt">Você ganha <span class="ben-pts">+100 pts + R$10 cashback</span> quando seu amigo fizer a 1ª compra</div></div>
-      <div class="ben-row"><span class="ben-ico">🎉</span><div class="ben-txt">Seu amigo ganha <span class="ben-pts">+50 pts + R$5 cashback</span> ao se cadastrar com seu código</div></div>
+      <div class="ben-row"><span class="ben-ico">🐺</span><div class="ben-txt">Você ganha <span class="ben-pts">+100 pts + R$10 cashback</span> na 1ª compra do indicado</div></div>
+      <div class="ben-row"><span class="ben-ico">🎉</span><div class="ben-txt">Amigo ganha <span class="ben-pts">+50 pts + R$5 cashback</span> ao se cadastrar</div></div>
       <div class="ben-row"><span class="ben-ico">♾️</span><div class="ben-txt">Sem limite — indique quantos quiser!</div></div>
       <div class="card" style="margin-top:12px">
         <div class="card-title">Minhas indicações</div>
@@ -506,7 +594,89 @@ body{color:#FFFFFF;font-size:15px;-webkit-font-smoothing:antialiased}
       </div>
       <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:10px;padding:12px;font-size:12px;color:var(--text3);line-height:1.9">
         <div style="font-weight:600;color:var(--text);margin-bottom:6px">Como funciona o cashback?</div>
-        Você ganha cashback em toda compra. Para usar: a cada <strong style="color:var(--text)">R$7</strong> em compras você pode descontar <strong style="color:var(--text)">R$1</strong> do saldo acumulado. Solicite ao funcionário na hora da compra.
+        A cada <strong style="color:var(--text)">R$7</strong> em compras você pode descontar <strong style="color:var(--text)">R$1</strong> do saldo. Solicite ao funcionário na compra.
+      </div>
+    </div>
+  </div>
+
+  <!-- GAMES -->
+  <div id="sc-games" class="screen">
+    <div class="pg-hdr"><div class="pg-title">🎮 GAMES ALPHA</div><div class="pg-sub">Jogue, compita e ganhe recompensas</div></div>
+
+    <!-- Streak banner -->
+    <div id="streak-banner" class="streak-banner" style="display:none">
+      <div class="streak-fire">🔥</div>
+      <div class="streak-info">
+        <div class="streak-title" id="streak-title">7 DIAS CONSECUTIVOS!</div>
+        <div class="streak-sub" id="streak-sub">Próxima recompensa: 7 dias = R$5 cashback</div>
+      </div>
+      <div class="streak-count" id="streak-count">0</div>
+    </div>
+
+    <!-- Cards dos jogos -->
+    <div class="games-grid">
+      <div class="game-card snake" onclick="abrirJogo('snake')">
+        <span class="game-ico">🐍</span>
+        <div class="game-name">SNAKE<br>FITNESS</div>
+        <div class="game-rec" id="rec-snake">Recorde: 0</div>
+      </div>
+      <div class="game-card nave" onclick="abrirJogo('nave')">
+        <span class="game-ico">🚀</span>
+        <div class="game-name">GALAXY<br>PUMP</div>
+        <div class="game-rec" id="rec-nave">Recorde: 0</div>
+      </div>
+      <div class="game-card tetris" onclick="abrirJogo('tetris')">
+        <span class="game-ico">🏋️</span>
+        <div class="game-name">MUSCLE<br>BLOCKS</div>
+        <div class="game-rec" id="rec-tetris">Recorde: 0</div>
+      </div>
+    </div>
+
+    <!-- Recompensas -->
+    <div class="sec">
+      <div class="card" style="margin-bottom:10px">
+        <div class="card-title">Recompensas diárias</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a1a1a">
+            <div><div style="font-size:12px;font-weight:600">🎮 Jogar hoje</div><div style="font-size:10px;color:var(--text3)">Qualquer jogo, 1x por dia</div></div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--gold)" id="daily-status">+3 pts</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a1a1a">
+            <div><div style="font-size:12px;font-weight:600">🔥 7 dias seguidos</div><div style="font-size:10px;color:var(--text3)">Acesso diário ao app</div></div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:#D4A017">R$5 cashback</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a1a1a">
+            <div><div style="font-size:12px;font-weight:600">🔥🔥 30 dias seguidos</div><div style="font-size:10px;color:var(--text3)">Sequência mensal completa</div></div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:#D4A017">R$15 cashback</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a1a1a">
+            <div><div style="font-size:12px;font-weight:600">🏅 Bater recorde pessoal</div><div style="font-size:10px;color:var(--text3)">Novo máximo em qualquer jogo</div></div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--gold)">+5 pts</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a1a1a">
+            <div><div style="font-size:12px;font-weight:600">⭐ Marco 500 pts totais</div><div style="font-size:10px;color:var(--text3)">Conquistado uma vez</div></div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--green)">R$10 cashback</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0">
+            <div><div style="font-size:12px;font-weight:600">🏆 Marco 1.000 pts totais</div><div style="font-size:10px;color:var(--text3)">Conquistado uma vez</div></div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--green)">R$20 cashback</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ranking de jogos -->
+      <div class="card" style="margin-bottom:10px">
+        <div class="card-title">Ranking dos jogadores</div>
+        <div style="display:flex;gap:6px;margin-bottom:10px">
+          <button id="grk-btn-snake" onclick="mostrarRankingJogo('snake')" style="flex:1;background:#00aa4422;border:1px solid #00aa4444;color:#00ff88;border-radius:8px;padding:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">🐍 Snake</button>
+          <button id="grk-btn-nave" onclick="mostrarRankingJogo('nave')" style="flex:1;background:#1e1e1e;border:1px solid #2a2a2a;color:#888;border-radius:8px;padding:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">🚀 Nave</button>
+          <button id="grk-btn-tetris" onclick="mostrarRankingJogo('tetris')" style="flex:1;background:#1e1e1e;border:1px solid #2a2a2a;color:#888;border-radius:8px;padding:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">🏋️ Tetris</button>
+        </div>
+        <div id="game-ranking-list"></div>
+      </div>
+
+      <div style="background:var(--bg3);border:.5px solid var(--border);border-radius:10px;padding:12px;font-size:12px;color:var(--text3);line-height:1.8">
+        💡 Os pontos ganhos nos jogos são creditados automaticamente. Cashback de recompensa é resgatado na loja com o funcionário.
       </div>
     </div>
   </div>
@@ -514,577 +684,1196 @@ body{color:#FFFFFF;font-size:15px;-webkit-font-smoothing:antialiased}
   <div class="bnav">
     <button class="bn on" id="bn-home" onclick="goScreen('home')"><span class="bn-ico">🏠</span><span class="bn-lbl">Início</span></button>
     <button class="bn" id="bn-premios" onclick="goScreen('premios')"><span class="bn-ico">🏆</span><span class="bn-lbl">Prêmios</span></button>
+    <button class="bn" id="bn-games" onclick="goScreen('games')"><span class="bn-ico">🎮</span><span class="bn-lbl">Games</span></button>
     <button class="bn" id="bn-indicar" onclick="goScreen('indicar')"><span class="bn-ico">🐺</span><span class="bn-lbl">Indicar</span></button>
     <button class="bn" id="bn-historico" onclick="goScreen('historico')"><span class="bn-ico">📋</span><span class="bn-lbl">Histórico</span></button>
-    <button class="bn" id="bn-beneficios" onclick="goScreen('beneficios')"><span class="bn-ico">⭐</span><span class="bn-lbl">Benefícios</span></button>
   </div>
 </div>
 
 <div class="toast" id="toast-el"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-
 <script>
-
-// ══ SEGURANÇA CLIENTE ═══════════════════════════════
+// ══ CONFIG ═══════════════════════════════════════════
 var _API_TOKEN = 'd9O-8jZLUcPHX_YlWF_XEUTySCNa3EZlVmJPL9thg94';
 var _CLI_SESSION_KEY = 'alpha_cli_session';
-var _CLI_SESSION_EXPIRY = 24 * 60 * 60 * 1000; // 24 horas
+var _CLI_SESSION_EXPIRY = 24 * 60 * 60 * 1000;
+var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw7AIr8DrCMGFhpoaz6gE7_v0M4sElvNPZh7PaEpP4h_oX_vwfraiUAaGOQNMoQK_8WpQ/exec';
 
-function salvarSessaoCli(userData) {
-  localStorage.setItem(_CLI_SESSION_KEY, JSON.stringify({user: userData, expiry: Date.now() + _CLI_SESSION_EXPIRY}));
+var TODOS = [], HIST_DATA = [];
+var U = null;
+
+// ══ BANNER PROMOÇÃO ══════════════════════════════════
+function verificarBanner(){
+  if(!window.firebaseDB){setTimeout(verificarBanner,1000);return;}
+  try{
+    var r=window.firebaseRef(window.firebaseDB,'banner_promo');
+    window.firebaseOnValue(r,function(snap){
+      var b=snap.val();
+      if(!b||!b.ativo)return;
+      var visto=localStorage.getItem('alpha_banner_'+(b.id||'x'));
+      if(visto)return;
+      var iw=document.getElementById('promo-banner-img-wrap');
+      if(b.imgUrl)iw.innerHTML='<img class="promo-banner-img" src="'+b.imgUrl+'" onerror="this.style.display=\'none\'">';
+      else iw.innerHTML='<div class="promo-banner-img-placeholder">💪</div>';
+      document.getElementById('promo-banner-title').textContent=b.titulo||'🔥 OFERTA ESPECIAL!';
+      document.getElementById('promo-banner-msg').textContent=b.mensagem||'Confira nossas promoções!';
+      window._bannerID=b.id||'x';
+      document.getElementById('promo-banner-overlay').style.display='flex';
+    },{onlyOnce:true});
+  }catch(e){}
+}
+function fecharBanner(ev){
+  if(ev&&ev.target&&ev.target.id!=='promo-banner-overlay')return;
+  document.getElementById('promo-banner-overlay').style.display='none';
+  if(window._bannerID)localStorage.setItem('alpha_banner_'+window._bannerID,'1');
 }
 
-function verificarSessaoCli() {
-  try {
-    var sess = JSON.parse(localStorage.getItem(_CLI_SESSION_KEY) || 'null');
-    if(sess && sess.expiry > Date.now()) return sess.user;
-    localStorage.removeItem(_CLI_SESSION_KEY);
-  } catch(e) {}
-  return null;
+// ══ STREAK ══════════════════════════════════════════
+var STREAK_KEY='alpha_streak_v1',DAILY_GAME_KEY='alpha_daily_game';
+function lerStreak(){try{return JSON.parse(localStorage.getItem(STREAK_KEY)||'{"dias":0,"ultimo":"","recompensas":[]}');}catch(e){return{dias:0,ultimo:'',recompensas:[]};}}
+function salvarStreak(s){localStorage.setItem(STREAK_KEY,JSON.stringify(s));}
+function hoje(){return new Date().toISOString().slice(0,10);}
+function ontem(){var d=new Date();d.setDate(d.getDate()-1);return d.toISOString().slice(0,10);}
+
+function registrarAcessoDiario(){
+  var s=lerStreak(),h=hoje();
+  if(s.ultimo===h)return s;
+  s.dias=(s.ultimo===ontem())?s.dias+1:1;
+  s.ultimo=h;
+  salvarStreak(s);
+  verificarRecompensasStreak(s);
+  return s;
+}
+function verificarRecompensasStreak(s){
+  var r=s.recompensas||[];
+  if(s.dias>=30&&!r.includes('s30')){r.push('s30');salvarStreak(Object.assign({},s,{recompensas:r}));creditarRecompensa('cashback','R$15 cashback — 30 dias consecutivos! 🔥🔥 Resgate na loja.',15,'streak30');}
+  else if(s.dias>=7&&!r.includes('s7')){r.push('s7');salvarStreak(Object.assign({},s,{recompensas:r}));creditarRecompensa('cashback','R$5 cashback — 7 dias consecutivos! 🔥 Resgate na loja.',5,'streak7');}
+}
+async function creditarRecompensa(tipo,msg,valor,origem){
+  toast('🎉 '+msg);
+  if(!U)return;
+  try{await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({acao:'registrar_recompensa_jogo',dados:{clienteId:U.id,tipo:tipo,valor:valor,origem:origem,token:_API_TOKEN}})});}catch(e){}
+}
+function atualizarUIStreak(){
+  var s=lerStreak();
+  var sb=document.getElementById('streak-banner');
+  if(!sb)return;
+  if(s.dias>=2){
+    sb.style.display='flex';
+    document.getElementById('streak-count').textContent=s.dias+'d';
+    document.getElementById('streak-title').textContent=(s.dias>=30?'🔥🔥 '+s.dias+' DIAS SEGUIDOS!':s.dias>=7?'🔥 '+s.dias+' DIAS SEGUIDOS!':'🔥 '+s.dias+' DIAS');
+    var ss=document.getElementById('streak-sub');
+    if(s.dias<7)ss.textContent='Faltam '+(7-s.dias)+' dias para R$5 cashback!';
+    else if(s.dias<30)ss.textContent='Faltam '+(30-s.dias)+' dias para R$15 cashback!';
+    else ss.textContent='Sequência máxima! 💪';
+  }else{sb.style.display='none';}
+}
+function verificarMarcosPontos(){
+  if(!U)return;
+  var marcos=JSON.parse(localStorage.getItem('alpha_marcos')||'[]');
+  if(U.pontos>=1000&&!marcos.includes('m1000')){marcos.push('m1000');localStorage.setItem('alpha_marcos',JSON.stringify(marcos));creditarRecompensa('cashback','R$20 cashback — 1.000 pontos! 🏆',20,'marco1000');}
+  else if(U.pontos>=500&&!marcos.includes('m500')){marcos.push('m500');localStorage.setItem('alpha_marcos',JSON.stringify(marcos));creditarRecompensa('cashback','R$10 cashback — 500 pontos! ⭐',10,'marco500');}
 }
 
-function verificarBloqueioCli() {
-  try {
-    var bl = JSON.parse(localStorage.getItem('alpha_cli_block') || 'null');
-    if(bl && bl.until > Date.now()) return Math.ceil((bl.until-Date.now())/60000);
-    if(bl) localStorage.removeItem('alpha_cli_block');
-  } catch(e) {}
-  return 0;
+// ══ RANKING JOGOS ════════════════════════════════════
+var _rankingAtual='snake';
+function lerRecorde(j){return parseInt(localStorage.getItem('alpha_rec_'+j)||'0');}
+function salvarRecorde(j,v){localStorage.setItem('alpha_rec_'+j,String(v));}
+function atualizarRecordesUI(){['snake','nave','tetris'].forEach(function(g){var el=document.getElementById('rec-'+g);if(el)el.textContent='Recorde: '+lerRecorde(g).toLocaleString('pt-BR');});}
+
+async function salvarPlacar(jogo,score){
+  if(!U||score<=0)return;
+  var key='alpha_grk_'+jogo,lista=JSON.parse(localStorage.getItem(key)||'[]');
+  var idx=lista.findIndex(function(x){return x.id===U.id;});
+  if(idx>=0){if(score>lista[idx].score)lista[idx].score=score;}else lista.push({id:U.id,nome:U.nome,score:score});
+  lista.sort(function(a,b){return b.score-a.score;});
+  localStorage.setItem(key,JSON.stringify(lista.slice(0,50)));
+  try{fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({acao:'salvar_placar_jogo',dados:{clienteId:U.id,nome:U.nome,jogo:jogo,score:score,token:_API_TOKEN}})});}catch(e){}
 }
-
-function registrarTentativaCli() {
-  try {
-    var bl = JSON.parse(localStorage.getItem('alpha_cli_block') || '{"count":0}');
-    bl.count = (bl.count||0)+1;
-    if(bl.count >= 5){ bl.until=Date.now()+(5*60*1000); bl.count=0; }
-    localStorage.setItem('alpha_cli_block', JSON.stringify(bl));
-  } catch(e) {}
-}
-// ════════════════════════════════════════════════════
-
-var WEB_APP_URL='https://script.google.com/macros/s/AKfycbw7AIr8DrCMGFhpoaz6gE7_v0M4sElvNPZh7PaEpP4h_oX_vwfraiUAaGOQNMoQK_8WpQ/exec';
-const DEMOS={};
-// FIX: TODOS e HIST agora são arrays reativos carregados da API
-var TODOS=[];
-var HIST_DATA=[];
-const PREMIOS=[
-  {id:'PRM_001',nome:'Coqueteleira Alpha',         pts:300,  nivel:'BRONZE', cat:'Acessório',  desc:'Coqueteleira exclusiva Alpha Suplementos',    emoji:'🥤'},
-  {id:'PRM_002',nome:'Pré-Treino Olimpia',         pts:1100, nivel:'BRONZE', cat:'Pré-Treino', desc:'Pré-treino Olimpia — dose única',             emoji:'⚡'},
-  {id:'PRM_003',nome:'Pré-Treino Oxan Pump',       pts:1000, nivel:'BRONZE', cat:'Pré-Treino', desc:'Pré-treino Oxan Pump — dose única',           emoji:'💪'},
-  {id:'PRM_004',nome:'Creatina 300g Infinity Labs',pts:900,  nivel:'BRONZE', cat:'Creatina',   desc:'Creatina monohidratada 300g Infinity Labs',   emoji:'🔬'},
-  {id:'PRM_005',nome:'Wheyzinho',                  pts:1500, nivel:'PRATA',  cat:'Proteína',   desc:'Whey protein sabor especial — porção',        emoji:'🥛'},
-  {id:'PRM_006',nome:'Deca Whey',                  pts:1800, nivel:'PRATA',  cat:'Proteína',   desc:'Deca Whey protein premium — porção',          emoji:'🏆'},
-];
-// FIX: regras de nível corretas — Prata: R$200 x 2 meses, Ouro: R$250 x 2 meses
-const NCFG={
-  OURO:  {emoji:'🥇', cor:'#FFD700', pts:2.0, cb:0.07, metaGasto:250, metaMeses:2},
-  PRATA: {emoji:'🥈', cor:'#C8C8C8', pts:1.5, cb:0.05, metaGasto:200, metaMeses:2},
-  BRONZE:{emoji:'🥉', cor:'#CD7F32', pts:1.0, cb:0.02, metaGasto:0,   metaMeses:0}
-};
-const fR=v=>'R$'+Number(v).toFixed(2).replace('.',',');
-const fP=v=>Number(v).toLocaleString('pt-BR')+' pts';
-const ini=n=>n.split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
-const niO=n=>['BRONZE','PRATA','OURO'].indexOf(n);
-
-let U=null;
-function toast(msg){const t=document.getElementById('toast-el');t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2800)}
-
-async function fazerLogin(){
-  // Verificar bloqueio
-  var mins = verificarBloqueioCli();
-  if(mins > 0){
-    var err=document.getElementById('l-err');
-    err.style.display='block';
-    err.textContent='Muitas tentativas. Aguarde '+mins+' minuto(s).';
-    return;
-  }
-
-  var nome = (document.getElementById('l-nome')||{value:''}).value.trim().toLowerCase();
-  var tel  = (document.getElementById('l-tel') ||{value:''}).value.trim().replace(/[^0-9]/g,'');
-  var err  = document.getElementById('l-err');
-
-  if(!nome || !tel){
-    err.style.display='block';
-    err.textContent='Informe seu primeiro nome e telefone';
-    return;
-  }
-
-  err.style.display='none';
-
-  // FIX: botão de loading agora funciona (id="l-btn" adicionado no HTML)
-  var btn = document.getElementById('l-btn');
-  if(btn){ btn.textContent='Buscando...'; btn.disabled=true; }
-
-  var encontrado = null;
-
-  try {
-    // v45: usa endpoint login_cliente (rota pública — não precisa de token)
-    // Muito mais seguro: não expõe a lista completa de clientes
-    var resp = await fetch(WEB_APP_URL+'?acao=login_cliente&nome='+encodeURIComponent(nome)+'&telefone='+encodeURIComponent(tel));
-    var data = await resp.json();
-    if(data.sucesso && data.dados){
-      var d = data.dados;
-      encontrado = {
-        id:         String(d.id||''),
-        nome:       String(d.nome||nome),
-        email:      String(d.email||''),
-        tel:        tel,
-        nivel:      String(d.nivel||'BRONZE'),
-        pontos:     Number(d.pontos)||0,
-        cashback:   Number(d.cashback)||0,
-        gastoMes:   Number(d.gastoMes)||0,
-        mesesRec:   Number(d.mesesRec)||0,
-        indicacoes: Number(d.indicacoes)||0,
-        ref:        String(d.codigoReferral||gerarRefLocal())
-      };
-      // Carregar ranking em background com token (não bloqueia o login)
-      carregarRanking();
-    }
-  } catch(e){ console.log('API offline:', e.message); }
-
-  if(btn){ btn.textContent='ENTRAR →'; btn.disabled=false; }
-
-  if(encontrado){
-    U = encontrado;
-    salvarSessaoCli(U);
-    iniciar();
-    // FIX: Carregar histórico após login
-    carregarHistorico();
-    return;
-  }
-
-  registrarTentativaCli();
-  err.style.display='block';
-  err.textContent='Nome ou telefone não encontrados. Cadastre-se na loja!';
-}
-
-// v45: Carregar ranking em background com token (separado do login)
-async function carregarRanking(){
-  try {
-    var r = await fetch(WEB_APP_URL+'?acao=listar_clientes_todos&token='+_API_TOKEN+'&funcionario=cliente');
-    var d = await r.json();
-    if(d.sucesso && d.dados){
-      TODOS.length = 0;
-      d.dados.forEach(function(row){
-        if(row[0] && row[1]) TODOS.push({
-          id: String(row[0]), nome: String(row[1]),
-          nivel: String(row[7]||'BRONZE'), pontos: Number(row[6])||0
-        });
-      });
-      // Atualizar ranking na tela após carregar
-      try { renderAll(); } catch(e) {}
-    }
-  } catch(e){ console.log('Ranking offline:', e.message); }
-}
-
-// FIX: Função para carregar histórico do cliente logado via API
-async function carregarHistorico(){
-  if(!U) return;
-  try {
-    // v45: filtra por clienteId (mais preciso que email)
-    var resp = await fetch(WEB_APP_URL+'?acao=listar_historico&token='+_API_TOKEN+'&clienteId='+encodeURIComponent(U.id||''));
-    var data = await resp.json();
-    HIST_DATA.length = 0;
-    if(data.sucesso && data.dados){
-      // Filtrar apenas registros deste cliente (col[1] = clienteId)
-      data.dados.forEach(function(r){
-        if(String(r[1]) === String(U.id)){
-          HIST_DATA.push({
-            id:    r[0]||'',
-            tipo:  String(r[9]||'compra').toLowerCase().indexOf('prize')>=0||String(r[0]||'').startsWith('RPT')?'premio':'compra',
-            desc:  r[2]||r[6]||'Compra',
-            valor: Number(r[3])||0,
-            pts:   Number(r[4])||0,
-            data:  r[8] ? new Date(r[8]).toLocaleDateString('pt-BR') : ''
-          });
-        }
-      });
-      // Mais recente primeiro
-      HIST_DATA.reverse();
-    }
-    renderHistorico();
-  } catch(e){ console.log('Erro ao carregar histórico:', e.message); }
-}
-
-// FIX: Renderizar histórico separado para poder chamar após carregamento assíncrono
-function renderHistorico(){
-  var hl = document.getElementById('hist-list');
-  if(!hl) return;
-  if(HIST_DATA.length === 0){
-    hl.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:16px 0;text-align:center">Nenhuma movimentação ainda.</div>';
-    return;
-  }
-  hl.innerHTML = HIST_DATA.map(function(h){
-    var isC = h.tipo==='compra';
-    return '<div class="hi">'+
-      '<div class="hi-ico" style="background:'+(isC?'#CC000022':'#FFD70022')+'">'+(isC?'🛍️':'🎁')+'</div>'+
-      '<div class="hi-info"><div class="hi-desc">'+h.desc+'</div><div class="hi-date">'+h.data+'</div></div>'+
-      '<div class="hi-val">'+
-        '<div class="hi-main" style="color:'+(h.pts>0?'var(--gold)':'var(--red)')+'">'+(h.pts>0?'+':'')+fP(h.pts)+'</div>'+
-        (h.valor>0?'<div style="font-size:10px;color:var(--text3)">'+fR(h.valor)+'</div>':'')+
-      '</div></div>';
+function mostrarRankingJogo(jogo){
+  _rankingAtual=jogo;
+  ['snake','nave','tetris'].forEach(function(g){
+    var btn=document.getElementById('grk-btn-'+g);if(!btn)return;
+    var ativo=g===jogo;
+    btn.style.background=ativo?(g==='snake'?'#00aa4422':g==='nave'?'#0044cc22':'#aa00cc22'):'#1e1e1e';
+    btn.style.borderColor=ativo?(g==='snake'?'#00aa4444':g==='nave'?'#0044cc44':'#aa00cc44'):'#2a2a2a';
+    btn.style.color=ativo?(g==='snake'?'#00ff88':g==='nave'?'#00aaff':'#ff44ff'):'#888';
+  });
+  var lista=JSON.parse(localStorage.getItem('alpha_grk_'+jogo)||'[]');
+  var el=document.getElementById('game-ranking-list');if(!el)return;
+  if(!lista.length){el.innerHTML='<div style="color:var(--text3);font-size:13px;padding:12px 0;text-align:center">Nenhum placar ainda. Jogue primeiro!</div>';return;}
+  el.innerHTML=lista.slice(0,10).map(function(c,i){
+    var isMe=U&&c.id===U.id;
+    var pc=i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#888';
+    var pos=i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
+    return '<div class="grk"><div class="grk-pos" style="color:'+pc+'">'+pos+'</div>'+
+      '<div class="grk-av" style="'+(isMe?'border-color:var(--gold);color:var(--gold)':'')+'">'+(ini(c.nome))+'</div>'+
+      '<div class="grk-name">'+(isMe?'<strong>'+c.nome+'</strong>':c.nome)+'</div>'+
+      '<div class="grk-score">'+Number(c.score).toLocaleString('pt-BR')+'</div></div>';
   }).join('');
 }
 
-async function salvarTokenNaPlanilha(token){
-  if(!window.U || !window.U.email) return;
-  try {
-    await fetch(WEB_APP_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'text/plain'},
-      body: JSON.stringify({
-        acao: 'salvar_token_push',
-        dados: { email: window.U.email, token: token }
-      })
+// ══ ENGINE DE JOGOS ══════════════════════════════════
+var _jogoAtual=null,_jogoLoop=null,_jogoScore=0,_jogoDir={x:1,y:0},_jogoDirProx={x:1,y:0},_jogoState='idle';
+var _touchX=0,_touchY=0;
+
+async function registrarJogoDiario(){
+  var h=hoje(),ultimo=localStorage.getItem(DAILY_GAME_KEY);
+  if(ultimo===h)return false;
+  localStorage.setItem(DAILY_GAME_KEY,h);
+  toast('🎮 +3 pts pelo jogo de hoje! Continue voltando! 💪');
+  await creditarRecompensa('pontos','+3 pts por jogar hoje',3,'jogo_diario');
+  return true;
+}
+function abrirJogo(jogo){
+  _jogoAtual=jogo;_jogoState='idle';
+  var nomes={snake:'SNAKE FITNESS',nave:'GALAXY PUMP',tetris:'MUSCLE BLOCKS'};
+  var subs={snake:'Colete os suplementos 💊 para crescer! Evite as paredes e seu próprio corpo.',nave:'Destrua os pesos 🏋️ e colete suplementos! Sobreviva o máximo.',tetris:'Encaixe os blocos musculares 💪 e complete linhas para pontuar!'};
+  document.getElementById('game-hdr-title').textContent=nomes[jogo];
+  document.getElementById('go-title').textContent='PRONTO?';
+  document.getElementById('go-sub').textContent=subs[jogo];
+  document.getElementById('gs-rec').textContent=lerRecorde(jogo).toLocaleString('pt-BR');
+  document.getElementById('gs-score').textContent='0';
+  document.getElementById('go-btn').textContent='JOGAR AGORA 💪';
+  document.getElementById('game-overlay').style.display='flex';
+  document.getElementById('game-modal').classList.add('on');
+  redimensionarCanvas();
+}
+function fecharJogo(){pararJogo();document.getElementById('game-modal').classList.remove('on');atualizarRecordesUI();}
+function redimensionarCanvas(){
+  var wrap=document.querySelector('.game-canvas-wrap'),canvas=document.getElementById('game-canvas');
+  if(!wrap||!canvas)return;
+  var sz=Math.min(wrap.offsetWidth,wrap.offsetHeight,340);sz=Math.max(sz,240);
+  canvas.width=sz;canvas.height=sz;
+}
+function pararJogo(){if(_jogoLoop){clearInterval(_jogoLoop);_jogoLoop=null;}_jogoState='idle';}
+function iniciarJogo(){
+  document.getElementById('game-overlay').style.display='none';
+  pararJogo();_jogoScore=0;_jogoState='running';
+  document.getElementById('gs-score').textContent='0';
+  if(_jogoAtual==='snake')iniciarSnake();
+  else if(_jogoAtual==='nave')iniciarNave();
+  else if(_jogoAtual==='tetris')iniciarTetris();
+}
+async function gameOver(score){
+  pararJogo();_jogoState='over';
+  var rec=lerRecorde(_jogoAtual),novoRec=score>rec;
+  if(novoRec){salvarRecorde(_jogoAtual,score);await creditarRecompensa('pontos','+5 pts — novo recorde em '+_jogoAtual+'! 🏅',5,'record_'+_jogoAtual);}
+  await salvarPlacar(_jogoAtual,score);
+  await registrarJogoDiario();
+  document.getElementById('gs-rec').textContent=(novoRec?score:rec).toLocaleString('pt-BR');
+  document.getElementById('go-title').textContent='FIM DE JOGO!';
+  document.getElementById('go-sub').textContent='Você fez '+score.toLocaleString('pt-BR')+' pontos!'+(novoRec?' 🏅 NOVO RECORDE!':'');
+  document.getElementById('go-btn').textContent='JOGAR DE NOVO 💪';
+  document.getElementById('game-overlay').style.display='flex';
+}
+function dpad(dir){
+  if(_jogoState!=='running')return;
+  if(_jogoAtual==='snake'){
+    if(dir==='up'&&_jogoDir.y!==1)_jogoDirProx={x:0,y:-1};
+    else if(dir==='down'&&_jogoDir.y!==-1)_jogoDirProx={x:0,y:1};
+    else if(dir==='left'&&_jogoDir.x!==1)_jogoDirProx={x:-1,y:0};
+    else if(dir==='right'&&_jogoDir.x!==-1)_jogoDirProx={x:1,y:0};
+  }else if(_jogoAtual==='nave'){
+    if(dir==='left')_naveMoveDir=-1;else if(dir==='right')_naveMoveDir=1;
+    else if(dir==='up')dispararNave();else _naveMoveDir=0;
+  }else if(_jogoAtual==='tetris'){
+    if(dir==='left')moverTetris(-1);else if(dir==='right')moverTetris(1);
+    else if(dir==='down')descerTetris();else if(dir==='up')rotarTetris();
+  }
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var cw=document.querySelector('.game-canvas-wrap');if(!cw)return;
+  cw.addEventListener('touchstart',function(e){_touchX=e.touches[0].clientX;_touchY=e.touches[0].clientY;},{passive:true});
+  cw.addEventListener('touchend',function(e){
+    if(_jogoState!=='running')return;
+    var dx=e.changedTouches[0].clientX-_touchX,dy=e.changedTouches[0].clientY-_touchY;
+    dpad(Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up'));
+  },{passive:true});
+});
+document.addEventListener('keydown',function(e){
+  if(_jogoState!=='running')return;
+  var m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right'};
+  if(m[e.key]){e.preventDefault();dpad(m[e.key]);}
+  if(e.key===' '&&_jogoAtual==='nave')dispararNave();
+});
+
+// ── SNAKE FITNESS ─────────────────────────────────────
+var _snake=[],_food={},_snakeGrid=15;
+var _snakeItems=['💊','🥛','⚡','🔬','💪'];
+function iniciarSnake(){
+  var canvas=document.getElementById('game-canvas'),sz=canvas.width,g=_snakeGrid;
+  var cols=Math.floor(sz/g),rows=Math.floor(sz/g);
+  _snake=[{x:Math.floor(cols/2),y:Math.floor(rows/2)}];
+  _jogoDir={x:1,y:0};_jogoDirProx={x:1,y:0};
+  _food={x:Math.floor(Math.random()*(cols-2))+1,y:Math.floor(Math.random()*(rows-2))+1,item:_snakeItems[Math.floor(Math.random()*_snakeItems.length)]};
+  _jogoLoop=setInterval(function(){tickSnake(cols,rows);},130);
+}
+function tickSnake(cols,rows){
+  _jogoDir=Object.assign({},_jogoDirProx);
+  var head={x:_snake[0].x+_jogoDir.x,y:_snake[0].y+_jogoDir.y};
+  if(head.x<0||head.x>=cols||head.y<0||head.y>=rows){gameOver(_jogoScore);return;}
+  if(_snake.some(function(s){return s.x===head.x&&s.y===head.y;})){gameOver(_jogoScore);return;}
+  _snake.unshift(head);
+  if(head.x===_food.x&&head.y===_food.y){
+    _jogoScore+=10;document.getElementById('gs-score').textContent=_jogoScore.toLocaleString('pt-BR');
+    _food={x:Math.floor(Math.random()*(cols-2))+1,y:Math.floor(Math.random()*(rows-2))+1,item:_snakeItems[Math.floor(Math.random()*_snakeItems.length)]};
+  }else{_snake.pop();}
+  desenharSnake(cols,rows);
+}
+function desenharSnake(cols,rows){
+  var canvas=document.getElementById('game-canvas'),ctx=canvas.getContext('2d'),g=_snakeGrid,sz=canvas.width;
+  ctx.fillStyle='#050505';ctx.fillRect(0,0,sz,sz);
+  ctx.strokeStyle='#0f0f0f';ctx.lineWidth=0.5;
+  for(var i=0;i<=cols;i++){ctx.beginPath();ctx.moveTo(i*g,0);ctx.lineTo(i*g,rows*g);ctx.stroke();}
+  for(var j=0;j<=rows;j++){ctx.beginPath();ctx.moveTo(0,j*g);ctx.lineTo(cols*g,j*g);ctx.stroke();}
+  ctx.font=(g-2)+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(_food.item,_food.x*g+g/2,_food.y*g+g/2);
+  _snake.forEach(function(s,i){
+    var t=1-i/_snake.length;
+    ctx.fillStyle=i===0?'#CC0000':('hsl('+(5+t*10)+',80%,'+(25+t*20)+'%)');
+    ctx.beginPath();ctx.roundRect(s.x*g+1,s.y*g+1,g-2,g-2,3);ctx.fill();
+    if(i===0){ctx.fillStyle='rgba(255,255,255,.8)';ctx.font='9px serif';ctx.fillText('💊',s.x*g+g/2,s.y*g+g/2);}
+  });
+}
+
+// ── GALAXY PUMP (Nave) ────────────────────────────────
+var _naveX=0,_naveY=0,_naveVelX=0,_naveMoveDir=0;
+var _naveBalas=[],_naveInimigos=[],_naveParticulas=[],_naveTick=0,_naveFireCooldown=0;
+var _naveItems=['🏋️','⚖️','💪','🦾'];
+function iniciarNave(){
+  var canvas=document.getElementById('game-canvas');
+  _naveX=canvas.width/2;_naveY=canvas.height-40;
+  _naveBalas=[];_naveInimigos=[];_naveParticulas=[];
+  _naveTick=0;_naveFireCooldown=0;_naveMoveDir=0;_naveVelX=0;
+  canvas._stars=[];
+  _jogoLoop=setInterval(tickNave,33);
+}
+function dispararNave(){if(_naveFireCooldown>0)return;_naveBalas.push({x:_naveX,y:_naveY-20,vy:-10});_naveFireCooldown=8;}
+function tickNave(){
+  var canvas=document.getElementById('game-canvas'),W=canvas.width,H=canvas.height;
+  _naveTick++;if(_naveFireCooldown>0)_naveFireCooldown--;
+  _naveVelX+=_naveMoveDir*2.5;_naveVelX*=0.82;
+  _naveX=Math.max(18,Math.min(W-18,_naveX+_naveVelX));
+  if(_naveTick%20===0)dispararNave();
+  var spawnRate=Math.max(30,80-Math.floor(_jogoScore/50)*5);
+  if(_naveTick%spawnRate===0)_naveInimigos.push({x:Math.random()*(W-40)+20,y:-20,vy:1.5+Math.random()*1.5,item:_naveItems[Math.floor(Math.random()*_naveItems.length)],r:18});
+  _naveBalas=_naveBalas.filter(function(b){b.y+=b.vy;return b.y>-10;});
+  _naveInimigos=_naveInimigos.filter(function(e){e.y+=e.vy;return e.y<H+30;});
+  _naveBalas=_naveBalas.filter(function(b){
+    var hit=false;
+    _naveInimigos=_naveInimigos.filter(function(e){
+      if(hit)return true;
+      var dx=b.x-e.x,dy=b.y-e.y;
+      if(Math.sqrt(dx*dx+dy*dy)<e.r){hit=true;_jogoScore+=10;document.getElementById('gs-score').textContent=_jogoScore.toLocaleString('pt-BR');for(var p=0;p<6;p++)_naveParticulas.push({x:e.x,y:e.y,vx:(Math.random()-.5)*4,vy:(Math.random()-.5)*4,life:15});return false;}
+      return true;
+    });return !hit;
+  });
+  _naveParticulas=_naveParticulas.filter(function(p){p.x+=p.vx;p.y+=p.vy;p.life--;return p.life>0;});
+  for(var i=0;i<_naveInimigos.length;i++){var e=_naveInimigos[i];var dx=e.x-_naveX,dy=e.y-_naveY;if(Math.sqrt(dx*dx+dy*dy)<e.r+14){gameOver(_jogoScore);return;}}
+  desenharNave(W,H);
+}
+function desenharNave(W,H){
+  var canvas=document.getElementById('game-canvas'),ctx=canvas.getContext('2d');
+  ctx.fillStyle='#03030a';ctx.fillRect(0,0,W,H);
+  if(!canvas._stars||!canvas._stars.length){canvas._stars=[];for(var i=0;i<50;i++)canvas._stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+.3,sp:Math.random()*.5+.2});}
+  canvas._stars.forEach(function(s){s.y+=s.sp;if(s.y>H)s.y=0;ctx.fillStyle='rgba(255,255,255,'+(0.3+s.r/2)+')';ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();});
+  _naveParticulas.forEach(function(p){ctx.fillStyle='rgba(255,100,0,'+p.life/15+')';ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill();});
+  _naveBalas.forEach(function(b){ctx.fillStyle='#FF4444';ctx.beginPath();ctx.roundRect(b.x-2,b.y-8,4,10,2);ctx.fill();});
+  ctx.font='28px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  _naveInimigos.forEach(function(e){ctx.fillText(e.item,e.x,e.y);});
+  ctx.save();ctx.translate(_naveX,_naveY);
+  ctx.fillStyle='#CC0000';ctx.beginPath();ctx.moveTo(0,-22);ctx.lineTo(14,10);ctx.lineTo(-14,10);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#FF4444';ctx.beginPath();ctx.moveTo(0,-18);ctx.lineTo(10,6);ctx.lineTo(-10,6);ctx.closePath();ctx.fill();
+  if(_naveTick%4<2){ctx.fillStyle='rgba(255,140,0,.9)';ctx.beginPath();ctx.moveTo(-6,10);ctx.lineTo(6,10);ctx.lineTo(0,22);ctx.closePath();ctx.fill();}
+  ctx.restore();
+}
+
+// ── MUSCLE BLOCKS (Tetris) ─────────────────────────────
+var _tetCols=10,_tetRows=18,_tetBoard=[],_tetPeca=null,_tetProx=null,_tetTick=0;
+var _PECAS=[
+  {c:'#CC0000',b:[[1,1,1,1]]},
+  {c:'#1D9E75',b:[[1,1],[1,1]]},
+  {c:'#D4A017',b:[[0,1,0],[1,1,1]]},
+  {c:'#0066CC',b:[[1,0],[1,0],[1,1]]},
+  {c:'#9922EE',b:[[0,1],[0,1],[1,1]]},
+  {c:'#00AAFF',b:[[0,1,1],[1,1,0]]},
+  {c:'#FF4444',b:[[1,1,0],[0,1,1]]},
+];
+function novaPecaTetris(){var p=_PECAS[Math.floor(Math.random()*_PECAS.length)];return{c:p.c,b:p.b.map(function(r){return r.slice();}),x:Math.floor(_tetCols/2)-1,y:0};}
+function iniciarTetris(){
+  _tetBoard=[];for(var r=0;r<_tetRows;r++)_tetBoard.push(new Array(_tetCols).fill(0));
+  _tetPeca=novaPecaTetris();_tetProx=novaPecaTetris();_tetTick=0;
+  _jogoLoop=setInterval(tickTetris,33);
+}
+function colideT(peca,ox,oy){
+  for(var r=0;r<peca.b.length;r++)for(var c=0;c<peca.b[r].length;c++){
+    if(!peca.b[r][c])continue;
+    var nx=peca.x+c+ox,ny=peca.y+r+oy;
+    if(nx<0||nx>=_tetCols||ny>=_tetRows)return true;
+    if(ny>=0&&_tetBoard[ny][nx])return true;
+  }return false;
+}
+function fixarTetris(){
+  _tetPeca.b.forEach(function(row,r){row.forEach(function(v,c){if(v)_tetBoard[_tetPeca.y+r][_tetPeca.x+c]=_tetPeca.c;});});
+  var linhas=0;
+  _tetBoard=_tetBoard.filter(function(row){if(row.every(Boolean)){linhas++;return false;}return true;});
+  while(_tetBoard.length<_tetRows)_tetBoard.unshift(new Array(_tetCols).fill(0));
+  if(linhas>0){_jogoScore+=linhas*linhas*100;document.getElementById('gs-score').textContent=_jogoScore.toLocaleString('pt-BR');}
+  _tetPeca=_tetProx;_tetProx=novaPecaTetris();
+  if(colideT(_tetPeca,0,0))gameOver(_jogoScore);
+}
+function tickTetris(){
+  _tetTick++;var spd=Math.max(8,30-Math.floor(_jogoScore/500)*3);
+  if(_tetTick%spd===0){if(!colideT(_tetPeca,0,1))_tetPeca.y++;else fixarTetris();}
+  desenharTetris();
+}
+function moverTetris(dx){if(!colideT(_tetPeca,dx,0))_tetPeca.x+=dx;}
+function descerTetris(){if(!colideT(_tetPeca,0,1))_tetPeca.y++;else fixarTetris();}
+function rotarTetris(){var rot=_tetPeca.b[0].map(function(_,c){return _tetPeca.b.map(function(r){return r[c];}).reverse();});var old=_tetPeca.b;_tetPeca.b=rot;if(colideT(_tetPeca,0,0))_tetPeca.b=old;}
+function desenharTetris(){
+  var canvas=document.getElementById('game-canvas'),ctx=canvas.getContext('2d'),W=canvas.width,H=canvas.height;
+  var bw=Math.floor(W/_tetCols),bh=Math.floor(H/_tetRows);
+  ctx.fillStyle='#050505';ctx.fillRect(0,0,W,H);
+  _tetBoard.forEach(function(row,r){row.forEach(function(v,c){
+    if(v){ctx.fillStyle=v;ctx.fillRect(c*bw+1,r*bh+1,bw-2,bh-2);ctx.fillStyle='rgba(255,255,255,.15)';ctx.fillRect(c*bw+1,r*bh+1,bw-2,3);}
+    else{ctx.strokeStyle='#111';ctx.lineWidth=0.5;ctx.strokeRect(c*bw,r*bh,bw,bh);}
+  });});
+  if(_tetPeca){
+    var sy=_tetPeca.y;while(!colideT({b:_tetPeca.b,x:_tetPeca.x,y:sy+1},0,0))sy++;
+    _tetPeca.b.forEach(function(row,r){row.forEach(function(v,c){if(!v)return;ctx.fillStyle='rgba(255,255,255,.08)';ctx.fillRect((_tetPeca.x+c)*bw+1,(sy+r)*bh+1,bw-2,bh-2);});});
+    _tetPeca.b.forEach(function(row,r){row.forEach(function(v,c){
+      if(!v)return;
+      ctx.fillStyle=_tetPeca.c;ctx.fillRect((_tetPeca.x+c)*bw+1,(_tetPeca.y+r)*bh+1,bw-2,bh-2);
+      ctx.fillStyle='rgba(255,255,255,.25)';ctx.fillRect((_tetPeca.x+c)*bw+1,(_tetPeca.y+r)*bh+1,bw-2,3);
+    });});
+  }
+  ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillRect(0,0,W,20);
+  ctx.fillStyle='#FFD700';ctx.font='bold 11px Barlow,sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';
+  ctx.fillText('💪 '+_jogoScore.toLocaleString('pt-BR'),6,10);
+}
+
+// ══ INICIALIZAR GAMES ════════════════════════════════
+function iniciarGames(){
+  registrarAcessoDiario();
+  atualizarUIStreak();
+  atualizarRecordesUI();
+  verificarMarcosPontos();
+  mostrarRankingJogo('snake');
+  setTimeout(function(){if(U)verificarBanner();},800);
+}
+
+
+
+const PREMIOS = [
+  {id:'PRM_001',nome:'Coqueteleira Alpha',pts:300,nivel:'BRONZE',cat:'Acessório',emoji:'🥤'},
+  {id:'PRM_002',nome:'Pré-Treino Olimpia',pts:1100,nivel:'BRONZE',cat:'Pré-Treino',emoji:'⚡'},
+  {id:'PRM_003',nome:'Pré-Treino Oxan Pump',pts:1000,nivel:'BRONZE',cat:'Pré-Treino',emoji:'💪'},
+  {id:'PRM_004',nome:'Creatina 300g',pts:900,nivel:'BRONZE',cat:'Creatina',emoji:'🔬'},
+  {id:'PRM_005',nome:'Wheyzinho',pts:1500,nivel:'PRATA',cat:'Proteína',emoji:'🥛'},
+  {id:'PRM_006',nome:'Deca Whey',pts:1800,nivel:'PRATA',cat:'Proteína',emoji:'🏆'},
+];
+const NCFG = {
+  OURO:  {emoji:'🥇',cor:'#FFD700',pts:2.0,cb:0.07,metaGasto:250,metaMeses:2},
+  PRATA: {emoji:'🥈',cor:'#C8C8C8',pts:1.5,cb:0.05,metaGasto:200,metaMeses:2},
+  BRONZE:{emoji:'🥉',cor:'#CD7F32',pts:1.0,cb:0.02,metaGasto:0,  metaMeses:0}
+};
+const fR = v => 'R$' + Number(v).toFixed(2).replace('.', ',');
+const fP = v => Number(v).toLocaleString('pt-BR') + ' pts';
+const ini = n => n.split(' ').slice(0,2).map(p=>p[0]).join('').toUpperCase();
+const niO = n => ['BRONZE','PRATA','OURO'].indexOf(n);
+
+// ══ AUTH ══════════════════════════════════════════════
+function salvarSessaoCli(u){localStorage.setItem(_CLI_SESSION_KEY,JSON.stringify({user:u,expiry:Date.now()+_CLI_SESSION_EXPIRY}))}
+function verificarSessaoCli(){try{var s=JSON.parse(localStorage.getItem(_CLI_SESSION_KEY)||'null');if(s&&s.expiry>Date.now())return s.user;localStorage.removeItem(_CLI_SESSION_KEY)}catch(e){}return null}
+function verificarBloqueioCli(){try{var b=JSON.parse(localStorage.getItem('alpha_cli_block')||'null');if(b&&b.until>Date.now())return Math.ceil((b.until-Date.now())/60000);if(b)localStorage.removeItem('alpha_cli_block')}catch(e){}return 0}
+function registrarTentativaCli(){try{var b=JSON.parse(localStorage.getItem('alpha_cli_block')||'{"count":0}');b.count=(b.count||0)+1;if(b.count>=5){b.until=Date.now()+(5*60*1000);b.count=0;}localStorage.setItem('alpha_cli_block',JSON.stringify(b))}catch(e){}}
+
+// ══ TOAST & REWARD ════════════════════════════════════
+function toast(msg){var t=document.getElementById('toast-el');t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2800)}
+function showReward(msg){var p=document.getElementById('reward-popup');p.innerHTML=msg;p.classList.add('on');clearTimeout(p._t);p._t=setTimeout(()=>p.classList.remove('on'),3500)}
+
+// ══ LOGIN ══════════════════════════════════════════════
+async function fazerLogin(){
+  var mins=verificarBloqueioCli();
+  var err=document.getElementById('l-err');
+  if(mins>0){err.style.display='block';err.textContent='Muitas tentativas. Aguarde '+mins+'min.';return}
+  var nome=(document.getElementById('l-nome')||{value:''}).value.trim().toLowerCase();
+  var tel=(document.getElementById('l-tel')||{value:''}).value.trim().replace(/[^0-9]/g,'');
+  if(!nome||!tel){err.style.display='block';err.textContent='Informe seu nome e telefone';return}
+  err.style.display='none';
+  var btn=document.getElementById('l-btn');
+  if(btn){btn.textContent='Buscando...';btn.disabled=true}
+  var encontrado=null;
+  try{
+    var resp=await fetch(WEB_APP_URL+'?acao=login_cliente&nome='+encodeURIComponent(nome)+'&telefone='+encodeURIComponent(tel));
+    var data=await resp.json();
+    if(data.sucesso&&data.dados){
+      var d=data.dados;
+      encontrado={id:String(d.id||''),nome:String(d.nome||nome),email:String(d.email||''),tel:tel,nivel:String(d.nivel||'BRONZE'),pontos:Number(d.pontos)||0,cashback:Number(d.cashback)||0,gastoMes:Number(d.gastoMes)||0,mesesRec:Number(d.mesesRec)||0,indicacoes:Number(d.indicacoes)||0,ref:String(d.codigoReferral||gerarRefLocal())};
+      carregarRanking();
+    }
+  }catch(e){console.log('API offline:',e.message)}
+  if(btn){btn.textContent='ENTRAR →';btn.disabled=false}
+  if(encontrado){
+    U=encontrado;salvarSessaoCli(U);
+    iniciar();carregarHistorico();
+    verificarStreakLogin();
+    verificarMarcosPontos();
+    return;
+  }
+  registrarTentativaCli();err.style.display='block';err.textContent='Nome ou telefone não encontrados. Cadastre-se na loja!';
+}
+
+// ══ RANKING GERAL ══════════════════════════════════════
+async function carregarRanking(){
+  try{
+    var r=await fetch(WEB_APP_URL+'?acao=listar_clientes_todos&token='+_API_TOKEN+'&funcionario=cliente');
+    var d=await r.json();
+    if(d.sucesso&&d.dados){
+      TODOS.length=0;
+      d.dados.forEach(function(row){if(row[0]&&row[1])TODOS.push({id:String(row[0]),nome:String(row[1]),nivel:String(row[7]||'BRONZE'),pontos:Number(row[6])||0})});
+      try{renderAll()}catch(e){}
+    }
+  }catch(e){console.log('Ranking offline:',e.message)}
+}
+
+// ══ HISTÓRICO ══════════════════════════════════════════
+async function carregarHistorico(){
+  if(!U)return;
+  try{
+    var resp=await fetch(WEB_APP_URL+'?acao=listar_historico&token='+_API_TOKEN+'&clienteId='+encodeURIComponent(U.id||''));
+    var data=await resp.json();
+    HIST_DATA.length=0;
+    if(data.sucesso&&data.dados){
+      data.dados.forEach(function(r){
+        if(String(r[1])===String(U.id)){
+          HIST_DATA.push({id:r[0]||'',tipo:String(r[9]||'compra').toLowerCase().indexOf('prize')>=0||String(r[0]||'').startsWith('RPT')?'premio':'compra',desc:r[2]||r[6]||'Compra',valor:Number(r[3])||0,pts:Number(r[4])||0,data:r[8]?new Date(r[8]).toLocaleDateString('pt-BR'):''});
+        }
+      });
+      HIST_DATA.reverse();
+    }
+    renderHistorico();
+  }catch(e){console.log('Histórico erro:',e.message)}
+}
+function renderHistorico(){
+  var hl=document.getElementById('hist-list');if(!hl)return;
+  if(HIST_DATA.length===0){hl.innerHTML='<div style="color:var(--text3);font-size:13px;padding:16px 0;text-align:center">Nenhuma movimentação ainda.</div>';return}
+  hl.innerHTML=HIST_DATA.map(function(h){var isC=h.tipo==='compra';return '<div class="hi"><div class="hi-ico" style="background:'+(isC?'#CC000022':'#FFD70022')+'">'+(isC?'🛍️':'🎁')+'</div><div class="hi-info"><div class="hi-desc">'+h.desc+'</div><div class="hi-date">'+h.data+'</div></div><div class="hi-val"><div class="hi-main" style="color:'+(h.pts>0?'var(--gold)':'var(--red)')+'\">'+(h.pts>0?'+':'')+fP(h.pts)+'</div>'+(h.valor>0?'<div style="font-size:10px;color:var(--text3)">'+fR(h.valor)+'</div>':'')+'</div></div>'}).join('');
+}
+
+// ══ STREAK ════════════════════════════════════════════
+function getStreakData(){
+  try{return JSON.parse(localStorage.getItem('alpha_streak_'+((U&&U.id)||'x'))||'{"streak":0,"lastDay":"","history":[]}')}catch(e){return{streak:0,lastDay:'',history:[]}}
+}
+function saveStreakData(d){localStorage.setItem('alpha_streak_'+((U&&U.id)||'x'),JSON.stringify(d))}
+
+function verificarStreakLogin(){
+  if(!U)return;
+  var d=getStreakData();
+  var hoje=new Date().toISOString().slice(0,10);
+  var ontem=new Date(Date.now()-86400000).toISOString().slice(0,10);
+  var jaContou=d.lastDay===hoje;
+  if(!jaContou){
+    if(d.lastDay===ontem){d.streak=(d.streak||0)+1}
+    else if(d.lastDay!==hoje){d.streak=1}
+    d.lastDay=hoje;
+    if(!d.history)d.history=[];
+    d.history.push(hoje);
+    if(d.history.length>30)d.history=d.history.slice(-30);
+    saveStreakData(d);
+    // Verificar recompensas de streak
+    if(d.streak===7){
+      setTimeout(function(){showReward('🏅 PARABÉNS! 7 dias seguidos!<br>Você ganhou R$5 cashback!<br>Mostre ao funcionário na loja.')},1000);
+    } else if(d.streak===30){
+      setTimeout(function(){showReward('🔥 INCRÍVEL! 30 dias seguidos!<br>Você ganhou R$15 cashback!<br>Mostre ao funcionário na loja.')},1000);
+    } else if(d.streak>1){
+      toast('🔥 '+d.streak+' dias seguidos! Continue assim!');
+    }
+  }
+  renderStreak();
+}
+
+function renderStreak(){
+  var d=getStreakData();
+  var sn=document.getElementById('streak-num');if(sn)sn.textContent=d.streak||0;
+  var sm=document.getElementById('streak-msg');
+  if(sm){
+    if((d.streak||0)===0)sm.textContent='Entre hoje para começar sua sequência!';
+    else if((d.streak||0)<7)sm.textContent='Faltam '+(7-(d.streak||0))+' dias para R$5 cashback! 💪';
+    else if((d.streak||0)<30)sm.textContent='Faltam '+(30-(d.streak||0))+' dias para R$15 cashback! 🔥';
+    else sm.textContent='🏆 Você é um campeão! '+d.streak+' dias seguidos!';
+  }
+  // Renderizar bolinhas dos últimos 7 dias
+  var sd=document.getElementById('streak-days');if(!sd)return;
+  var hoje=new Date().toISOString().slice(0,10);
+  var history=d.history||[];
+  var html='';
+  for(var i=6;i>=0;i--){
+    var dia=new Date(Date.now()-i*86400000).toISOString().slice(0,10);
+    var feito=history.indexOf(dia)>=0;
+    var isHoje=dia===hoje;
+    var label=['D','S','T','Q','Q','S','S'][new Date(dia).getDay()];
+    html+='<div class="streak-day'+(feito?' done':'')+(isHoje&&!feito?' today':'')+'">'+label+'</div>';
+  }
+  sd.innerHTML=html;
+}
+
+// ══ MARCOS DE PONTOS ══════════════════════════════════
+function verificarMarcosPontos(){
+  if(!U)return;
+  var key='alpha_marcos_'+((U&&U.id)||'x');
+  var marcos=JSON.parse(localStorage.getItem(key)||'{}');
+  if(U.pontos>=1000&&!marcos.m1000){
+    marcos.m1000=true;localStorage.setItem(key,JSON.stringify(marcos));
+    setTimeout(function(){showReward('🏆 MARCO: 1000 PONTOS!<br>Você ganhou R$20 cashback bônus!<br>Mostre ao funcionário na loja.')},1500);
+  } else if(U.pontos>=500&&!marcos.m500){
+    marcos.m500=true;localStorage.setItem(key,JSON.stringify(marcos));
+    setTimeout(function(){showReward('⭐ MARCO: 500 PONTOS!<br>Você ganhou R$10 cashback bônus!<br>Mostre ao funcionário na loja.')},1500);
+  }
+}
+
+// ══ BANNER PROMO ══════════════════════════════════════
+function verificarBannerPromo(db){
+  if(!window.firebaseRef||!window.firebaseOnValue||!db)return;
+  try{
+    window.firebaseOnValue(window.firebaseRef(db,'banner_promo'),function(snap){
+      var b=snap.val();
+      if(b&&b.ativo&&b.imagem_url){
+        var key='alpha_banner_visto_'+b.id;
+        if(!sessionStorage.getItem(key)){
+          sessionStorage.setItem(key,'1');
+          var el=document.getElementById('promo-banner-modal');
+          var img=document.getElementById('promo-banner-img');
+          var tit=document.getElementById('promo-banner-titulo');
+          if(el&&img&&tit){
+            img.src=b.imagem_url;
+            tit.textContent=b.titulo||'PROMOÇÃO ALPHA';
+            el.classList.add('on');
+          }
+        }
+      }
     });
-    console.log('Token FCM salvo na planilha!');
-  } catch(e) {
-    console.log('Erro ao salvar token:', e);
+  }catch(e){console.log('Banner erro:',e)}
+}
+function fecharBanner(){
+  var el=document.getElementById('promo-banner-modal');
+  if(el)el.classList.remove('on');
+}
+
+// ══ GAMES ENGINE ══════════════════════════════════════
+var gameAtivo=null;
+var gameLoop=null;
+var gamePausado=true;
+var gameScore=0;
+var gameRecord={snake:0,nave:0,tetris:0};
+var gameState={};
+var ganhouPtsHoje={snake:false,nave:false,tetris:false};
+
+function loadGameRecords(){
+  var key='alpha_game_records_'+((U&&U.id)||'x');
+  try{gameRecord=JSON.parse(localStorage.getItem(key)||'{"snake":0,"nave":0,"tetris":0}')}catch(e){}
+  var kh='alpha_game_hoje_'+((U&&U.id)||'x')+'_'+new Date().toISOString().slice(0,10);
+  try{ganhouPtsHoje=JSON.parse(localStorage.getItem(kh)||'{"snake":false,"nave":false,"tetris":false}')}catch(e){}
+}
+function saveGameRecords(){
+  var key='alpha_game_records_'+((U&&U.id)||'x');
+  localStorage.setItem(key,JSON.stringify(gameRecord));
+}
+function saveGanhouHoje(){
+  var kh='alpha_game_hoje_'+((U&&U.id)||'x')+'_'+new Date().toISOString().slice(0,10);
+  localStorage.setItem(kh,JSON.stringify(ganhouPtsHoje));
+}
+
+function atualizarDisplayRecords(){
+  ['snake','nave','tetris'].forEach(function(g){
+    var el=document.getElementById('record-'+g);
+    if(el)el.textContent='Recorde: '+(gameRecord[g]||0);
+  });
+}
+
+function abrirGame(tipo){
+  gameAtivo=tipo;
+  loadGameRecords();
+  var titulos={snake:'WHEY SNAKE',nave:'ALPHA FORCE',tetris:'STACK MUSCLE'};
+  var subs={snake:'Colete wheys e proteínas. Fuja do lixo!',nave:'Destrua inimigos e colete suplementos!',tetris:'Empilhe blocos e complete linhas!'};
+  document.getElementById('game-title-txt').textContent=titulos[tipo];
+  document.getElementById('game-subtitle-txt').textContent=subs[tipo];
+  document.getElementById('game-record-display').textContent=gameRecord[tipo]||0;
+  document.getElementById('game-score-display').textContent=0;
+  document.getElementById('game-overlay-msg').classList.remove('on');
+  document.getElementById('game-start-btn').textContent='▶ Iniciar';
+  document.getElementById('game-overlay').classList.add('on');
+  // Mostrar/ocultar dpad conforme o jogo
+  document.getElementById('dpad-controls').style.display=tipo==='tetris'?'grid':'grid';
+  setupCanvas(tipo);
+}
+
+function fecharGame(){
+  stopGame();
+  document.getElementById('game-overlay').classList.remove('on');
+  gameAtivo=null;
+  atualizarDisplayRecords();
+  renderGameRanking();
+}
+
+function setupCanvas(tipo){
+  var canvas=document.getElementById('gameCanvas');
+  var wrap=canvas.parentElement;
+  var w=Math.min(wrap.clientWidth,360);
+  var h=Math.min(wrap.clientHeight,480);
+  canvas.width=w;canvas.height=h;
+  gameState={};
+  if(tipo==='snake')initSnake(canvas);
+  else if(tipo==='nave')initNave(canvas);
+  else if(tipo==='tetris')initTetris(canvas);
+}
+
+function toggleGame(){
+  if(gamePausado){startGame()}else{pauseGame()}
+}
+function startGame(){
+  gamePausado=false;
+  gameScore=0;
+  document.getElementById('game-score-display').textContent=0;
+  document.getElementById('game-overlay-msg').classList.remove('on');
+  document.getElementById('game-start-btn').textContent='⏸ Pausar';
+  setupCanvas(gameAtivo);
+  var fps=gameAtivo==='snake'?8:gameAtivo==='nave'?30:30;
+  clearInterval(gameLoop);
+  gameLoop=setInterval(gameFrame,1000/fps);
+}
+function pauseGame(){
+  gamePausado=true;
+  clearInterval(gameLoop);
+  document.getElementById('game-start-btn').textContent='▶ Continuar';
+}
+function stopGame(){
+  gamePausado=true;
+  clearInterval(gameLoop);
+}
+function reiniciarGame(){startGame()}
+
+function gameFrame(){
+  if(gamePausado)return;
+  var canvas=document.getElementById('gameCanvas');
+  if(gameAtivo==='snake')updateSnake(canvas);
+  else if(gameAtivo==='nave')updateNave(canvas);
+  else if(gameAtivo==='tetris')updateTetris(canvas);
+}
+
+function onGameOver(){
+  stopGame();
+  var era=gameRecord[gameAtivo]||0;
+  var isRecord=gameScore>era;
+  if(isRecord){gameRecord[gameAtivo]=gameScore;saveGameRecords()}
+  document.getElementById('game-record-display').textContent=gameRecord[gameAtivo];
+  document.getElementById('game-over-title').textContent=isRecord?'🏆 NOVO RECORDE!':'GAME OVER';
+  document.getElementById('game-over-title').style.color=isRecord?'#FFD700':'#FF4444';
+  document.getElementById('game-over-score').textContent='Pontuação: '+gameScore+(isRecord?' 🎉':'');
+  document.getElementById('game-start-btn').textContent='▶ Iniciar';
+  // Recompensas
+  var rewardEl=document.getElementById('game-over-reward');
+  var msgs=[];
+  if(!ganhouPtsHoje[gameAtivo]){ganhouPtsHoje[gameAtivo]=true;saveGanhouHoje();msgs.push('+3 pts no jogo')}
+  if(isRecord)msgs.push('+5 pts pelo recorde!');
+  if(msgs.length>0){rewardEl.style.display='block';rewardEl.textContent='🏆 '+msgs.join(' · ')}
+  else{rewardEl.style.display='none'}
+  document.getElementById('game-overlay-msg').classList.add('on');
+}
+
+function addScore(pts){
+  gameScore+=pts;
+  document.getElementById('game-score-display').textContent=gameScore;
+}
+
+// ══ SNAKE ══════════════════════════════════════════════
+var snakeDir={x:1,y:0},snakeNext={x:1,y:0};
+function initSnake(canvas){
+  var cs=20;
+  var cols=Math.floor(canvas.width/cs);
+  var rows=Math.floor(canvas.height/cs);
+  snakeDir={x:1,y:0};snakeNext={x:1,y:0};
+  gameState.snake={
+    cs:cs,cols:cols,rows:rows,
+    body:[{x:Math.floor(cols/2),y:Math.floor(rows/2)}],
+    food:spawnFood(cols,rows,null),
+    bonus:null,bonusTimer:0
+  };
+  drawSnake(canvas);
+}
+function spawnFood(cols,rows,body){
+  var f;do{f={x:Math.floor(Math.random()*cols),y:Math.floor(Math.random()*rows)}}while(body&&body.some(s=>s.x===f.x&&s.y===f.y));return f;
+}
+function updateSnake(canvas){
+  var s=gameState.snake;
+  snakeDir.x=snakeNext.x;snakeDir.y=snakeNext.y;
+  var head={x:(s.body[0].x+snakeDir.x+s.cols)%s.cols,y:(s.body[0].y+snakeDir.y+s.rows)%s.rows};
+  if(s.body.slice(1).some(b=>b.x===head.x&&b.y===head.y)){onGameOver();return}
+  s.body.unshift(head);
+  var comeu=false;
+  if(head.x===s.food.x&&head.y===s.food.y){comeu=true;addScore(10);s.food=spawnFood(s.cols,s.rows,s.body)}
+  else{s.body.pop()}
+  s.bonusTimer--;
+  if(s.bonusTimer<=0){s.bonus=s.bonusTimer<=-60?spawnFood(s.cols,s.rows,s.body):null;if(s.bonusTimer<=-60)s.bonusTimer=120}
+  if(s.bonus&&head.x===s.bonus.x&&head.y===s.bonus.y){addScore(30);s.bonus=null;s.bonusTimer=0}
+  drawSnake(canvas);
+}
+function drawSnake(canvas){
+  var ctx=canvas.getContext('2d');
+  var s=gameState.snake;var cs=s.cs;
+  ctx.fillStyle='#0a0a0a';ctx.fillRect(0,0,canvas.width,canvas.height);
+  // Grade
+  ctx.strokeStyle='#111';ctx.lineWidth=.5;
+  for(var x=0;x<canvas.width;x+=cs){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke()}
+  for(var y=0;y<canvas.height;y+=cs){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke()}
+  // Snake (corpo em forma de haltere)
+  s.body.forEach(function(seg,i){
+    var prog=i/s.body.length;
+    var r=Math.floor(0+(1-prog)*200);var g=Math.floor(180*(1-prog/2));
+    ctx.fillStyle='rgb('+r+','+g+',0)';
+    ctx.beginPath();ctx.roundRect(seg.x*cs+1,seg.y*cs+1,cs-2,cs-2,4);ctx.fill();
+    if(i===0){ctx.fillStyle='#fff';ctx.font='bold '+(cs-4)+'px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('💪',seg.x*cs+cs/2,seg.y*cs+cs/2)}
+  });
+  // Comida (whey)
+  ctx.font=(cs-2)+'px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('🥛',s.food.x*cs+cs/2,s.food.y*cs+cs/2);
+  if(s.bonus){ctx.fillText('⭐',s.bonus.x*cs+cs/2,s.bonus.y*cs+cs/2)}
+  // Score
+  ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillRect(0,0,canvas.width,22);
+  ctx.fillStyle='#00CC55';ctx.font='bold 13px Barlow,sans-serif';ctx.textAlign='left';
+  ctx.fillText('🐍 Whey Snake — '+s.body.length+' segs',8,14);
+}
+
+// ══ NAVE ═══════════════════════════════════════════════
+function initNave(canvas){
+  var W=canvas.width,H=canvas.height;
+  gameState.nave={
+    W:W,H:H,
+    player:{x:W/2,y:H-60,w:32,h:32},
+    bullets:[],
+    enemies:[],
+    stars:[],
+    powerups:[],
+    spawnTimer:60,
+    fireTimer:0,
+    lives:3
+  };
+  for(var i=0;i<40;i++)gameState.nave.stars.push({x:Math.random()*W,y:Math.random()*H,s:Math.random()*1.5+.5});
+}
+function updateNave(canvas){
+  var n=gameState.nave;
+  var W=n.W,H=n.H;
+  // Stars
+  n.stars.forEach(s=>{s.y+=s.s;if(s.y>H){s.y=0;s.x=Math.random()*W}});
+  // Auto fire
+  n.fireTimer--;
+  if(n.fireTimer<=0){n.bullets.push({x:n.player.x,y:n.player.y-20,vy:-12});n.fireTimer=12}
+  // Bullets
+  n.bullets=n.bullets.filter(b=>{b.y+=b.vy;return b.y>-10});
+  // Spawn enemies
+  n.spawnTimer--;
+  if(n.spawnTimer<=0){
+    var tipos=['💀','🍔','☠️'];
+    n.enemies.push({x:Math.random()*(W-40)+20,y:-30,vy:1.5+Math.random()*1.5,w:28,h:28,t:tipos[Math.floor(Math.random()*tipos.length)],hp:1});
+    n.spawnTimer=Math.max(20,50-Math.floor(gameScore/100));
+    // Powerup aleatório
+    if(Math.random()<0.08)n.powerups.push({x:Math.random()*(W-40)+20,y:-20,vy:1.5,t:['💊','🥛','⚡'][Math.floor(Math.random()*3)]});
+  }
+  // Move enemies
+  n.enemies=n.enemies.filter(e=>{e.y+=e.vy;return e.y<H+40});
+  // Powerups
+  n.powerups=n.powerups.filter(p=>{p.y+=p.vy;return p.y<H+20});
+  // Colisões bala-inimigo
+  n.bullets.forEach(function(b,bi){
+    n.enemies.forEach(function(e,ei){
+      if(Math.abs(b.x-e.x)<18&&Math.abs(b.y-e.y)<18){
+        n.bullets.splice(bi,1);e.hp--;
+        if(e.hp<=0){n.enemies.splice(ei,1);addScore(20)}
+      }
+    });
+  });
+  // Colisão player-inimigo
+  n.enemies.forEach(function(e,ei){
+    if(Math.abs(n.player.x-e.x)<24&&Math.abs(n.player.y-e.y)<24){
+      n.enemies.splice(ei,1);n.lives--;
+      if(n.lives<=0){onGameOver();return}
+    }
+  });
+  // Powerup coletado
+  n.powerups=n.powerups.filter(function(p){
+    if(Math.abs(n.player.x-p.x)<24&&Math.abs(n.player.y-p.y)<24){addScore(50);return false}
+    return true;
+  });
+  drawNave(canvas);
+}
+function drawNave(canvas){
+  var ctx=canvas.getContext('2d');
+  var n=gameState.nave;
+  ctx.fillStyle='#05050f';ctx.fillRect(0,0,canvas.width,canvas.height);
+  // Stars
+  n.stars.forEach(s=>{ctx.fillStyle='rgba(255,255,255,'+(s.s/2)+')';ctx.beginPath();ctx.arc(s.x,s.y,s.s/2,0,Math.PI*2);ctx.fill()});
+  ctx.font='22px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  // Player
+  ctx.fillText('🚀',n.player.x,n.player.y);
+  // Bullets
+  n.bullets.forEach(b=>{ctx.fillStyle='#00FF88';ctx.fillRect(b.x-2,b.y-8,4,12)});
+  // Enemies
+  n.enemies.forEach(e=>ctx.fillText(e.t,e.x,e.y));
+  // Powerups
+  n.powerups.forEach(p=>ctx.fillText(p.t,p.x,p.y));
+  // HUD
+  ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillRect(0,0,canvas.width,22);
+  ctx.fillStyle='#2288FF';ctx.font='bold 13px Barlow,sans-serif';ctx.textAlign='left';
+  ctx.fillText('🚀 Alpha Force  ❤️'.repeat(n.lives).slice(0,30),8,14);
+}
+
+// ══ TETRIS ═════════════════════════════════════════════
+var TETRIS_PIECES=[
+  {s:[[1,1,1,1]],c:'#00FFFF',e:'💊'},
+  {s:[[1,1],[1,1]],c:'#FFD700',e:'🥛'},
+  {s:[[1,1,1],[0,1,0]],c:'#CC00FF',e:'💪'},
+  {s:[[1,1,1],[1,0,0]],c:'#FF8800',e:'🏋️'},
+  {s:[[1,1,1],[0,0,1]],c:'#0000FF',e:'🔬'},
+  {s:[[1,1,0],[0,1,1]],c:'#00CC00',e:'⚡'},
+  {s:[[0,1,1],[1,1,0]],c:'#CC0000',e:'🏆'},
+];
+var tetrisKey;
+function initTetris(canvas){
+  var cols=10,rows=20;
+  var cs=Math.floor(Math.min(canvas.width/cols,(canvas.height-40)/rows));
+  var offX=Math.floor((canvas.width-cols*cs)/2);
+  tetrisKey=null;
+  gameState.tetris={
+    cols:cols,rows:rows,cs:cs,offX:offX,
+    board:Array.from({length:rows},()=>Array(cols).fill(0)),
+    cur:null,cx:0,cy:0,
+    next:randomPiece(),
+    fallTimer:0,fallSpeed:30,
+    lockTimer:0
+  };
+  spawnPiece();
+  drawTetris(canvas);
+}
+function randomPiece(){return TETRIS_PIECES[Math.floor(Math.random()*TETRIS_PIECES.length)]}
+function spawnPiece(){
+  var t=gameState.tetris;
+  t.cur=t.next;t.next=randomPiece();
+  t.cx=Math.floor((t.cols-t.cur.s[0].length)/2);t.cy=0;
+  if(collision(t.board,t.cur.s,t.cx,t.cy)){onGameOver()}
+}
+function collision(board,shape,cx,cy){
+  for(var r=0;r<shape.length;r++)for(var c=0;c<shape[r].length;c++){
+    if(!shape[r][c])continue;
+    var nx=cx+c,ny=cy+r;
+    if(nx<0||nx>=board[0].length||ny>=board.length)return true;
+    if(ny>=0&&board[ny][nx])return true;
+  }
+  return false;
+}
+function rotatePiece(s){return s[0].map((_,i)=>s.map(r=>r[i])).reverse()}
+function updateTetris(canvas){
+  var t=gameState.tetris;
+  t.fallTimer++;
+  if(t.fallTimer>=t.fallSpeed){
+    t.fallTimer=0;
+    if(!collision(t.board,t.cur.s,t.cx,t.cy+1)){t.cy++}
+    else{
+      // Lock
+      for(var r=0;r<t.cur.s.length;r++)for(var c=0;c<t.cur.s[r].length;c++){
+        if(t.cur.s[r][c]&&t.cy+r>=0)t.board[t.cy+r][t.cx+c]=t.cur;
+      }
+      // Clear lines
+      var cleared=0;
+      for(var row=t.rows-1;row>=0;row--){
+        if(t.board[row].every(c=>c!==0)){
+          t.board.splice(row,1);t.board.unshift(Array(t.cols).fill(0));
+          cleared++;row++;
+        }
+      }
+      if(cleared>0){
+        var pts=[0,40,100,300,1200][Math.min(cleared,4)];
+        addScore(pts);
+        t.fallSpeed=Math.max(5,30-Math.floor(gameScore/200));
+      }
+      spawnPiece();
+    }
+  }
+  drawTetris(canvas);
+}
+function drawTetris(canvas){
+  var ctx=canvas.getContext('2d');
+  var t=gameState.tetris;
+  ctx.fillStyle='#080808';ctx.fillRect(0,0,canvas.width,canvas.height);
+  // Grade
+  ctx.strokeStyle='#1a1a1a';ctx.lineWidth=.5;
+  for(var r=0;r<t.rows;r++)for(var c=0;c<t.cols;c++){
+    ctx.strokeRect(t.offX+c*t.cs,40+r*t.cs,t.cs,t.cs);
+  }
+  // Board
+  for(var r=0;r<t.rows;r++)for(var c=0;c<t.cols;c++){
+    if(t.board[r][c]){
+      var p=t.board[r][c];
+      ctx.fillStyle=p.c+'88';ctx.fillRect(t.offX+c*t.cs+1,40+r*t.cs+1,t.cs-2,t.cs-2);
+      ctx.font=(t.cs-4)+'px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(p.e,t.offX+c*t.cs+t.cs/2,40+r*t.cs+t.cs/2);
+    }
+  }
+  // Peça atual
+  if(t.cur){
+    // Ghost
+    var gy=t.cy;while(!collision(t.board,t.cur.s,t.cx,gy+1))gy++;
+    for(var r=0;r<t.cur.s.length;r++)for(var c=0;c<t.cur.s[r].length;c++){
+      if(t.cur.s[r][c]){
+        ctx.fillStyle=t.cur.c+'22';
+        ctx.fillRect(t.offX+(t.cx+c)*t.cs+1,40+(gy+r)*t.cs+1,t.cs-2,t.cs-2);
+      }
+    }
+    for(var r=0;r<t.cur.s.length;r++)for(var c=0;c<t.cur.s[r].length;c++){
+      if(t.cur.s[r][c]){
+        ctx.fillStyle=t.cur.c;ctx.fillRect(t.offX+(t.cx+c)*t.cs+1,40+(t.cy+r)*t.cs+1,t.cs-2,t.cs-2);
+        ctx.font=(t.cs-4)+'px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+        ctx.fillText(t.cur.e,t.offX+(t.cx+c)*t.cs+t.cs/2,40+(t.cy+r)*t.cs+t.cs/2);
+      }
+    }
+  }
+  // HUD
+  ctx.fillStyle='rgba(0,0,0,.7)';ctx.fillRect(0,0,canvas.width,38);
+  ctx.fillStyle='#FF9900';ctx.font='bold 13px Barlow,sans-serif';ctx.textAlign='left';
+  ctx.fillText('💪 Stack Muscle',8,16);
+  ctx.fillStyle='#fff';ctx.font='11px Barlow,sans-serif';
+  ctx.fillText('Vel: '+(30-t.fallSpeed+1)+'x   Próx: '+t.next.e,8,30);
+}
+
+// ══ D-PAD ══════════════════════════════════════════════
+function dpadPress(dir){
+  if(gamePausado||!gameAtivo)return;
+  if(gameAtivo==='snake'){
+    if(dir==='up'&&snakeDir.y!==1){snakeNext={x:0,y:-1}}
+    else if(dir==='down'&&snakeDir.y!==-1){snakeNext={x:0,y:1}}
+    else if(dir==='left'&&snakeDir.x!==1){snakeNext={x:-1,y:0}}
+    else if(dir==='right'&&snakeDir.x!==-1){snakeNext={x:1,y:0}}
+  } else if(gameAtivo==='nave'){
+    var n=gameState.nave;var spd=16;
+    if(dir==='left')n.player.x=Math.max(20,n.player.x-spd);
+    else if(dir==='right')n.player.x=Math.min(n.W-20,n.player.x+spd);
+    else if(dir==='up')n.player.y=Math.max(30,n.player.y-spd);
+    else if(dir==='down')n.player.y=Math.min(n.H-30,n.player.y+spd);
+  } else if(gameAtivo==='tetris'){
+    var t=gameState.tetris;
+    if(dir==='left'&&!collision(t.board,t.cur.s,t.cx-1,t.cy))t.cx--;
+    else if(dir==='right'&&!collision(t.board,t.cur.s,t.cx+1,t.cy))t.cx++;
+    else if(dir==='down'){while(!collision(t.board,t.cur.s,t.cx,t.cy+1))t.cy++;t.fallTimer=t.fallSpeed}
+    else if(dir==='up'){var rot=rotatePiece(t.cur.s);if(!collision(t.board,rot,t.cx,t.cy))t.cur={...t.cur,s:rot}}
   }
 }
 
-function copiarCodigo(){
-  var cod=U.ref;
-  if(navigator.clipboard){
-    navigator.clipboard.writeText(cod).then(function(){toast('Código '+cod+' copiado!');});
-  } else {
-    toast('Código: '+cod);
-  }
-}
-function copiarLink(){copiarCodigo();}
-function compartilharWA(){
-  var msg='Oi! Me cadastrei no programa de fidelidade da *Alpha Suplementos* e quero te indicar!'+
-    ' Use meu código *'+U.ref+'* ao se cadastrar e ganhe *+50 pontos + R$5 cashback* de boas-vindas!'+
-    ' Acesse: sistemaalphasuplementos.github.io/alpha-suplementos/cliente/';
-  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+// Teclado
+document.addEventListener('keydown',function(e){
+  var map={'ArrowUp':'up','ArrowDown':'down','ArrowLeft':'left','ArrowRight':'right','w':'up','s':'down','a':'left','d':'right',' ':'space'};
+  var d=map[e.key];
+  if(d==='space'){if(gameAtivo){toggleGame();e.preventDefault()}}
+  else if(d){dpadPress(d);e.preventDefault()}
+});
+
+// ══ RANKING GAMES ══════════════════════════════════════
+function renderGameRanking(){
+  var el=document.getElementById('game-rk-list');if(!el)return;
+  var todos2=TODOS.slice().sort(function(a,b){return b.pontos-a.pontos});
+  if(todos2.length===0){el.innerHTML='<div style="color:var(--text3);font-size:12px;padding:8px 0">Entre no ranking jogando!</div>';return}
+  el.innerHTML=todos2.slice(0,5).map(function(c,i){
+    var isMe=U&&String(c.id)===String(U.id);
+    var pos=i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
+    return '<div class="game-rk-row">'+
+      '<div style="width:26px;font-family:\'Barlow Condensed\',sans-serif;font-size:15px;font-weight:900;text-align:center">'+pos+'</div>'+
+      '<div style="flex:1;font-size:12px;font-weight:'+(isMe?'700':'500')+'">'+c.nome+(isMe?' (Você)':'')+'</div>'+
+      '<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:14px;font-weight:700;color:var(--gold)">'+fP(c.pontos)+'</div></div>';
+  }).join('');
 }
 
-function gerarRefLocal(){
-  var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  var cod='ALPHA';
-  for(var i=0;i<4;i++) cod+=chars.charAt(Math.floor(Math.random()*chars.length));
-  return cod;
+// ══ UTILS ══════════════════════════════════════════════
+function gerarRefLocal(){var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',s='ALPHA';for(var i=0;i<4;i++)s+=c.charAt(Math.floor(Math.random()*c.length));return s}
+function copiarCodigo(){var cod=U.ref;if(navigator.clipboard){navigator.clipboard.writeText(cod).then(function(){toast('Código '+cod+' copiado!')})}else{toast('Código: '+cod)}}
+function compartilharWA(){var msg='Oi! Me cadastrei no programa de fidelidade da *Alpha Suplementos* e quero te indicar! Use meu código *'+U.ref+'* ao se cadastrar e ganhe *+50 pts + R$5 cashback*! Acesse: sistemaalphasuplementos.github.io/alpha-suplementos/cliente/';window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank')}
+
+async function salvarTokenNaPlanilha(token){
+  if(!window.U||!window.U.email)return;
+  try{await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({acao:'salvar_token_push',dados:{email:window.U.email,token:token}})})}catch(e){}
 }
 
+// ══ RENDER ALL ═════════════════════════════════════════
+function renderAll(){
+  if(!U)return;
+  try{
+    var cfg=NCFG[U.nivel]||NCFG.BRONZE;
+    var av=document.getElementById('hdr-av');if(av)av.textContent=ini(U.nome);
+    var e=document.getElementById('lc-e');if(e)e.textContent=cfg.emoji;
+    var nt=document.getElementById('lc-nt');if(nt){nt.textContent=U.nivel;nt.style.color=cfg.cor}
+    var nm=document.getElementById('lc-nm');if(nm)nm.textContent=U.nome.toUpperCase();
+    var em=document.getElementById('lc-em');if(em)em.textContent=U.email||'';
+    var pts=document.getElementById('lc-pts');if(pts)pts.textContent=Number(U.pontos).toLocaleString('pt-BR');
+    var cb=document.getElementById('lc-cb');if(cb)cb.textContent=fR(U.cashback);
+    var gs=document.getElementById('lc-gasto');if(gs)gs.textContent=fR(U.gastoMes||0);
+    var ind=document.getElementById('lc-ind');if(ind)ind.textContent=String(U.indicacoes||0);
+    ['b','p','o'].forEach(function(k,i){var el=document.getElementById('pl-'+k);var nv=['BRONZE','PRATA','OURO'][i];if(el){el.classList.remove('ativo');if(nv===U.nivel)el.classList.add('ativo')}});
+    // Progress
+    var metaGasto=U.nivel==='OURO'?250:200;var gasto=U.gastoMes||0;var meses=U.mesesRec||0;
+    var pct=Math.min(100,Math.round(gasto/metaGasto*100));
+    var bar=document.getElementById('prog-bar');if(bar)bar.style.width=pct+'%';
+    var pmeta=document.getElementById('prog-meta');if(pmeta)pmeta.textContent=U.nivel==='OURO'?'🥇 Nível máximo!':'Meta: R$'+(U.nivel==='PRATA'?'250 (Ouro)':'200 (Prata)')+' · '+meses+'/2 meses';
+    var pgasto=document.getElementById('prog-gasto');if(pgasto)pgasto.textContent='R$'+gasto.toFixed(2)+' gastos este mês';
+    var pfalta=document.getElementById('prog-falta');if(pfalta){var falta=Math.max(0,metaGasto-gasto);pfalta.textContent=U.nivel==='OURO'?'✅ Nível máximo!':falta>0?'Faltam R$'+falta.toFixed(2):'✅ Meta atingida! ('+meses+'/2 meses)'}
+    var pmsg=document.getElementById('prog-msg');if(pmsg){if(U.nivel==='OURO')pmsg.textContent='🥇 Você é OURO!';else if(U.nivel==='PRATA')pmsg.textContent='🥈 Prata! ('+meses+'/2 ≥R$200)';else pmsg.textContent='🥉 R$200/mês × 2 meses = Prata!'}
+    // Ranking
+    var rkList=document.getElementById('rk-list');
+    if(rkList){
+      if(TODOS.length===0){rkList.innerHTML='<div style="color:var(--text3);font-size:12px;padding:10px 0">Carregando ranking...</div>'}
+      else{
+        var todos2=TODOS.slice().sort(function(a,b){return b.pontos-a.pontos});
+        var top=todos2.slice(0,10);
+        var meIdx=todos2.findIndex(function(c){return String(c.id)===String(U.id)});
+        var meNaLista=top.findIndex(function(c){return String(c.id)===String(U.id)})>=0;
+        var html=top.map(function(c,i){
+          var isMe=String(c.id)===String(U.id);
+          var posL=i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
+          var posC=i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#888';
+          var nc=NCFG[c.nivel]||NCFG.BRONZE;
+          return '<div class="rk'+(isMe?' rk-me')+'">' +
+            '<div class="rk-pos" style="color:'+posC+'">'+posL+'</div>'+
+            '<div class="rk-av" style="'+(isMe?'border-color:var(--gold);color:var(--gold)':'')+'">'+ini(c.nome)+'</div>'+
+            '<div class="rk-info"><div class="rk-name">'+(isMe?'<strong>'+c.nome+' (Você)</strong>':c.nome)+'</div><div class="rk-sub">'+nc.emoji+' '+c.nivel+'</div></div>'+
+            '<div class="rk-pts">'+fP(c.pontos)+'</div></div>';
+        }).join('');
+        if(!meNaLista&&meIdx>=0){var me=todos2[meIdx];var nc2=NCFG[me.nivel]||NCFG.BRONZE;html+='<div style="border-top:1px dashed #333;margin-top:4px;padding-top:4px"><div class="rk rk-me"><div class="rk-pos" style="color:#888">#'+(meIdx+1)+'</div><div class="rk-av" style="border-color:var(--gold);color:var(--gold)">'+ini(me.nome)+'</div><div class="rk-info"><div class="rk-name"><strong>'+me.nome+' (Você)</strong></div><div class="rk-sub">'+nc2.emoji+' '+me.nivel+'</div></div><div class="rk-pts">'+fP(me.pontos)+'</div></div></div>'}
+        rkList.innerHTML=html;
+      }
+    }
+    // Ref
+    var rc=document.getElementById('ref-code');if(rc)rc.textContent=U.ref||'ALPHA01';
+    var ri=document.getElementById('ref-inline');if(ri)ri.textContent=U.ref||'ALPHA01';
+    // Prêmios
+    var pg=document.getElementById('premios-grid');
+    if(pg){
+      var ps=document.getElementById('premios-sub');if(ps)ps.textContent='Você tem '+fP(U.pontos);
+      pg.innerHTML=PREMIOS.map(function(p){var niOk=niO(U.nivel)>=niO(p.nivel);var ptOk=U.pontos>=p.pts;var pode=niOk&&ptOk;var pct2=Math.min(100,Math.round(U.pontos/p.pts*100));return '<div class="pc '+(pode?'av':niOk?'':'lk')+'">'+(pode?'<div class="pc-badge">DISPONÍVEL</div>':!niOk?'<div class="pc-lock">🔒 '+p.nivel+'</div>':'')+'<div class="pc-cat">'+(p.emoji||'🎁')+' '+(p.cat||'')+'</div><div class="pc-nome">'+p.nome+'</div><div class="pc-pts">'+fP(p.pts)+'</div><div class="pc-bar-bg"><div class="pc-bar-fill" style="width:'+pct2+'%;background:'+(pode?'var(--red)':'#444')+'"></div></div><div class="pc-info">'+(pode?'✅ Solicite na loja!':!niOk?'Exige nível '+p.nivel:'Faltam '+fP(p.pts-U.pontos))+'</div></div>'}).join('');
+    }
+    renderHistorico();
+    // Indicações
+    var il=document.getElementById('ind-lista');if(il)il.innerHTML='<div style="color:var(--text3);font-size:13px;padding:16px 0">'+(U.indicacoes>0?'✅ Você indicou <strong style="color:var(--gold)">'+U.indicacoes+'</strong> amigo(s).':'Nenhuma indicação ainda.')+'</div>';
+    // Benefícios
+    var bl=document.getElementById('ben-lista');var bs=document.getElementById('ben-sub');
+    if(bl&&bs){bs.textContent=cfg.emoji+' Nível '+U.nivel;bl.innerHTML=[{ico:'⭐',txt:'Você ganha <strong>'+cfg.pts+'pt por R$1</strong> em cada compra'},{ico:'💰',txt:'<strong>'+(cfg.cb*100).toFixed(0)+'% cashback</strong> em toda compra'},{ico:'🎁',txt:'Acesso aos prêmios da loja de pontos'},{ico:'🎮',txt:'Pontos bônus jogando no Alpha Games todos os dias'}].map(function(b){return '<div class="ben-item"><span class="ben-ico">'+b.ico+'</span><span>'+b.txt+'</span></div>'}).join('')}
+    var nl=document.getElementById('niveis-lista');if(nl)nl.innerHTML=['BRONZE','PRATA','OURO'].map(function(nv){var nc=NCFG[nv];var req=nv==='PRATA'?' (≥R$200/mês · 2 meses)':nv==='OURO'?' (≥R$250/mês · 2 meses)':'';return '<div class="ben-item"><span style="font-size:18px">'+nc.emoji+'</span><span><strong>'+nv+'</strong> — '+nc.pts+'pt/R$ · '+(nc.cb*100).toFixed(0)+'% cashback'+req+'</span></div>'}).join('');
+    // Games
+    loadGameRecords();atualizarDisplayRecords();renderStreak();renderGameRanking();
+  }catch(err){console.log('renderAll erro:',err)}
+}
+
+// ══ INIT APP ══════════════════════════════════════════
 function iniciar(){
-  var ls = document.getElementById('login-screen');
-  if(ls) ls.style.display = 'none';
-  var app = document.getElementById('app');
-  if(app){ app.style.display='flex'; app.style.flexDirection='column'; }
-  if(typeof renderAll === 'function') renderAll();
-  if(typeof goScreen === 'function') goScreen('home');
-  if(typeof pedirPermissaoNotificacao === 'function') pedirPermissaoNotificacao();
+  var ls=document.getElementById('login-screen');if(ls)ls.style.display='none';
+  var app=document.getElementById('app');if(app){app.style.display='flex';app.style.flexDirection='column'}
+  renderAll();goScreen('home');
+  if(typeof pedirPermissaoNotificacao==='function')pedirPermissaoNotificacao();
+  iniciarGames();
 }
 
 function fazerLogout(){
-  U = null;
-  TODOS.length = 0;
-  HIST_DATA.length = 0;
-  try{ localStorage.removeItem(_CLI_SESSION_KEY); }catch(e){}
-  var app = document.getElementById('app');
-  if(app) app.style.display = 'none';
-  var ls = document.getElementById('login-screen');
-  if(ls) ls.style.display = '';
+  U=null;TODOS.length=0;HIST_DATA.length=0;
+  try{localStorage.removeItem(_CLI_SESSION_KEY)}catch(e){}
+  var app=document.getElementById('app');if(app)app.style.display='none';
+  var ls=document.getElementById('login-screen');if(ls)ls.style.display='';
 }
 
-// Verificar sessão salva ao carregar
+function goScreen(name){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on')});
+  document.querySelectorAll('.bn').forEach(function(b){b.classList.remove('on')});
+  var sc=document.getElementById('sc-'+name);if(!sc){sc=document.getElementById('sc-home');name='home'}
+  if(sc)sc.classList.add('on');
+  var bn=document.getElementById('bn-'+name);if(bn)bn.classList.add('on');
+  if(name==='historico')carregarHistorico();
+  if(name==='games'){renderStreak();renderGameRanking();atualizarDisplayRecords()}
+  try{renderAll()}catch(e){}
+}
+
+function pedirPermissaoNotificacao(){if('Notification'in window&&Notification.permission==='default')Notification.requestPermission()}
+
+// Restaurar sessão
 (function(){
-  try {
-    var sess = JSON.parse(localStorage.getItem(_CLI_SESSION_KEY)||'null');
-    if(sess && sess.expiry > Date.now() && sess.user){
-      U = sess.user;
-      document.addEventListener('DOMContentLoaded', function(){
-        iniciar();
-        // FIX: recarregar dados ao restaurar sessão
-        fetch(WEB_APP_URL+'?acao=listar_clientes_todos&token='+_API_TOKEN+'&funcionario=cliente').then(function(r){return r.json();}).then(function(data){
-          if(data.sucesso && data.dados){
-            TODOS.length = 0;
+  try{
+    var sess=JSON.parse(localStorage.getItem(_CLI_SESSION_KEY)||'null');
+    if(sess&&sess.expiry>Date.now()&&sess.user){
+      U=sess.user;
+      document.addEventListener('DOMContentLoaded',function(){
+        iniciar();carregarHistorico();
+        verificarStreakLogin();verificarMarcosPontos();
+        fetch(WEB_APP_URL+'?acao=listar_clientes_todos&token='+_API_TOKEN+'&funcionario=cliente').then(function(r){return r.json()}).then(function(data){
+          if(data.sucesso&&data.dados){
+            TODOS.length=0;
             data.dados.forEach(function(r){
-              if(r[0]&&r[1]) TODOS.push({id:String(r[0]),nome:String(r[1]),nivel:String(r[7]||'BRONZE'),pontos:Number(r[6])||0});
-              // Atualiza dados do usuário logado com dados frescos
-              if(U && String(r[0])===String(U.id)){
-                U.nivel=String(r[7]||'BRONZE');
-                U.pontos=Number(r[6])||0;
-                U.cashback=Number(r[10])||0;
-                U.gastoMes=Number(r[8])||0;
-                U.mesesRec=Number(r[9])||0;
-                U.indicacoes=Number(r[13])||0;
-                salvarSessaoCli(U);
-              }
+              if(r[0]&&r[1])TODOS.push({id:String(r[0]),nome:String(r[1]),nivel:String(r[7]||'BRONZE'),pontos:Number(r[6])||0});
+              if(U&&String(r[0])===String(U.id)){U.nivel=String(r[7]||'BRONZE');U.pontos=Number(r[6])||0;U.cashback=Number(r[10])||0;U.gastoMes=Number(r[8])||0;U.mesesRec=Number(r[9])||0;U.indicacoes=Number(r[13])||0;salvarSessaoCli(U)}
             });
             renderAll();
           }
         }).catch(function(){});
-        carregarHistorico();
       });
     }
-  } catch(e){}
+  }catch(e){}
 })();
-
-function goScreen(name){
-  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');});
-  document.querySelectorAll('.bn').forEach(function(b){b.classList.remove('on');});
-  var sc = document.getElementById('sc-'+name);
-  if(!sc){ sc = document.getElementById('sc-home'); name='home'; }
-  if(sc) sc.classList.add('on');
-  var bn=document.getElementById('bn-'+name);
-  if(bn) bn.classList.add('on');
-  // FIX: recarregar histórico ao abrir a tela
-  if(name==='historico') carregarHistorico();
-  try{ renderAll(); }catch(e){}
-}
-
-function pedirPermissaoNotificacao(){
-  if('Notification' in window && Notification.permission === 'default'){
-    Notification.requestPermission();
-  }
-}
-
-function renderAll(){
-  if(!U) return;
-  try {
-    var cfg = NCFG[U.nivel] || NCFG.BRONZE;
-
-    // Avatar
-    var av = document.getElementById('hdr-av');
-    if(av) av.textContent = ini(U.nome);
-
-    // Card header
-    var e = document.getElementById('lc-e'); if(e) e.textContent = cfg.emoji;
-    var nt = document.getElementById('lc-nt'); if(nt){ nt.textContent=U.nivel; nt.style.color=cfg.cor; }
-    var nm = document.getElementById('lc-nm'); if(nm) nm.textContent = U.nome.toUpperCase();
-    var em = document.getElementById('lc-em'); if(em) em.textContent = U.email||'';
-
-    // Big cards
-    var pts = document.getElementById('lc-pts'); if(pts) pts.textContent = Number(U.pontos).toLocaleString('pt-BR');
-    var cb  = document.getElementById('lc-cb');  if(cb)  cb.textContent  = fR(U.cashback);
-    var gs  = document.getElementById('lc-gasto'); if(gs) gs.textContent = fR(U.gastoMes||0);
-    // FIX: indicacoes agora vem da planilha
-    var ind = document.getElementById('lc-ind'); if(ind) ind.textContent = String(U.indicacoes||0);
-
-    // Nivel cards
-    ['b','p','o'].forEach(function(k,i){
-      var el = document.getElementById('pl-'+k);
-      var nv = ['BRONZE','PRATA','OURO'][i];
-      if(el){ el.classList.remove('ativo'); if(nv===U.nivel) el.classList.add('ativo'); }
-    });
-
-    // FIX: Progress bar com metas corretas — Prata R$200/2m, Ouro R$250/2m
-    var metaGasto = U.nivel==='OURO' ? 250 : 200;
-    var gasto = U.gastoMes||0;
-    var meses = U.mesesRec||0;
-    var pct = Math.min(100, Math.round(gasto/metaGasto*100));
-    var bar = document.getElementById('prog-bar'); if(bar) bar.style.width = pct+'%';
-    var pmeta = document.getElementById('prog-meta');
-    if(pmeta){
-      if(U.nivel==='OURO') pmeta.textContent = '🥇 Nível máximo!';
-      else pmeta.textContent = 'Meta: R$'+(U.nivel==='PRATA'?'250 (Ouro)':'200 (Prata)')+' · '+meses+'/2 meses';
-    }
-    var pgasto = document.getElementById('prog-gasto'); if(pgasto) pgasto.textContent = 'R$'+gasto.toFixed(2)+' gastos este mês';
-    var pfalta = document.getElementById('prog-falta');
-    if(pfalta){
-      var falta = Math.max(0, metaGasto-gasto);
-      if(U.nivel==='OURO') pfalta.textContent = '✅ Nível máximo!';
-      else pfalta.textContent = falta > 0 ? 'Faltam R$'+falta.toFixed(2) : '✅ Meta do mês atingida! ('+meses+'/2 meses)';
-    }
-
-    // Indicador de nível no card dourado
-    var pmsg = document.getElementById('prog-msg');
-    if(pmsg){
-      if(U.nivel==='OURO') pmsg.textContent = '🥇 Você é OURO!';
-      else if(U.nivel==='PRATA') pmsg.textContent = '🥈 Você é PRATA! ('+meses+'/2 meses ≥R$200)';
-      else pmsg.textContent = '🥉 R$200/mês por 2 meses = Prata!';
-    }
-
-    // FIX: Ranking — carregado da API, ordenado por pontos, destaca o usuário logado
-    var rkList = document.getElementById('rk-list');
-    if(rkList){
-      if(TODOS.length === 0){
-        rkList.innerHTML = '<div style="color:var(--text3);font-size:12px;padding:10px 0">Carregando ranking...</div>';
-      } else {
-        var todos2 = TODOS.slice().sort(function(a,b){return b.pontos-a.pontos;});
-        // Mostrar top 10
-        var top = todos2.slice(0,10);
-        // Garantir que o usuário logado apareça
-        var meIdx = todos2.findIndex(function(c){ return String(c.id)===String(U.id); });
-        var meNaLista = top.findIndex(function(c){ return String(c.id)===String(U.id); }) >= 0;
-        var html = top.map(function(c,i){
-          var isMe = String(c.id)===String(U.id);
-          var posL = i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
-          var posC = i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#888';
-          var nc = NCFG[c.nivel]||NCFG.BRONZE;
-          return '<div class="rk'+(isMe?' rk-me':'')+'">' +
-            '<div class="rk-pos" style="color:'+posC+'">'+posL+'</div>'+
-            '<div class="rk-av" style="'+(isMe?'border-color:var(--gold);color:var(--gold)':'')+'">'+ini(c.nome)+'</div>'+
-            '<div class="rk-info"><div class="rk-name">'+(isMe?'<strong>'+c.nome+' (Você)</strong>':c.nome)+'</div>'+
-            '<div class="rk-sub">'+nc.emoji+' '+c.nivel+'</div></div>'+
-            '<div class="rk-pts">'+fP(c.pontos)+'</div>'+
-            '</div>';
-        }).join('');
-        // Se usuário não está no top 10, adiciona ao final
-        if(!meNaLista && meIdx >= 0){
-          var me = todos2[meIdx];
-          var nc2 = NCFG[me.nivel]||NCFG.BRONZE;
-          html += '<div style="border-top:1px dashed #333;margin-top:4px;padding-top:4px">'+
-            '<div class="rk rk-me">'+
-            '<div class="rk-pos" style="color:#888">#'+(meIdx+1)+'</div>'+
-            '<div class="rk-av" style="border-color:var(--gold);color:var(--gold)">'+ini(me.nome)+'</div>'+
-            '<div class="rk-info"><div class="rk-name"><strong>'+me.nome+' (Você)</strong></div>'+
-            '<div class="rk-sub">'+nc2.emoji+' '+me.nivel+'</div></div>'+
-            '<div class="rk-pts">'+fP(me.pontos)+'</div>'+
-            '</div></div>';
-        }
-        rkList.innerHTML = html;
-      }
-    }
-
-    // Referral
-    var rc = document.getElementById('ref-code'); if(rc) rc.textContent = U.ref||'ALPHA01';
-    var rl = document.getElementById('ref-link'); if(rl) rl.textContent = 'Compartilhe este código!';
-    var ri = document.getElementById('ref-inline'); if(ri) ri.textContent = U.ref||'ALPHA01';
-
-    // Prêmios
-    var pg = document.getElementById('premios-grid');
-    if(pg){
-      var ps = document.getElementById('premios-sub');
-      if(ps) ps.textContent = 'Você tem '+fP(U.pontos);
-      pg.innerHTML = PREMIOS.map(function(p){
-        var niOk = niO(U.nivel)>=niO(p.nivel);
-        var ptOk = U.pontos>=p.pts;
-        var pode = niOk&&ptOk;
-        var pct2 = Math.min(100,Math.round(U.pontos/p.pts*100));
-        return '<div class="pc '+(pode?'av':niOk?'':'lk')+'">' +
-          (pode?'<div class="pc-badge">DISPONÍVEL</div>':!niOk?'<div class="pc-lock">🔒 '+p.nivel+'</div>':'')+
-          '<div class="pc-cat">'+(p.emoji||'🎁')+' '+(p.cat||'')+'</div>'+
-          '<div class="pc-nome">'+p.nome+'</div>'+
-          '<div class="pc-pts">'+fP(p.pts)+'</div>'+
-          '<div class="pc-bar-bg"><div class="pc-bar-fill" style="width:'+pct2+'%;background:'+(pode?'var(--red)':'#444')+'"></div></div>'+
-          '<div class="pc-info">'+(pode?'✅ Solicite na loja!':!niOk?'Exige nível '+p.nivel:'Faltam '+fP(p.pts-U.pontos))+'</div>'+
-          '</div>';
-      }).join('');
-    }
-
-    // FIX: Histórico renderizado pela função dedicada
-    renderHistorico();
-
-    // Indicações
-    var il = document.getElementById('ind-lista');
-    if(il){
-      il.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:16px 0">'+
-        (U.indicacoes>0 ? '✅ Você indicou <strong style="color:var(--gold)">'+U.indicacoes+'</strong> amigo(s).' : 'Nenhuma indicação ainda.')+
-        '</div>';
-    }
-
-    // Benefícios
-    var bl = document.getElementById('ben-lista');
-    var bs = document.getElementById('ben-sub');
-    if(bl && bs){
-      bs.textContent = cfg.emoji+' Nível '+U.nivel;
-      bl.innerHTML = [
-        {ico:'⭐', txt:'Você ganha <strong>'+cfg.pts+'pt por R$1</strong> em cada compra'},
-        {ico:'💰', txt:'<strong>'+(cfg.cb*100).toFixed(0)+'% cashback</strong> em toda compra'},
-        {ico:'🎁', txt:'Acesso aos prêmios da loja de pontos'},
-        {ico:'🎯', txt:'Código de indicação exclusivo para ganhar mais pontos'},
-      ].map(function(b){ return '<div class="ben-item"><span class="ben-ico">'+b.ico+'</span><span>'+b.txt+'</span></div>'; }).join('');
-    }
-
-    // FIX: Regras de nível corretas na tela de benefícios
-    var nl = document.getElementById('niveis-lista');
-    if(nl){
-      nl.innerHTML = ['BRONZE','PRATA','OURO'].map(function(nv){
-        var nc = NCFG[nv];
-        var req = nv==='PRATA' ? ' (≥R$200/mês por 2 meses consecutivos)' :
-                  nv==='OURO'  ? ' (≥R$250/mês por 2 meses consecutivos)' : '';
-        return '<div class="ben-item">'+
-          '<span style="font-size:18px">'+nc.emoji+'</span>'+
-          '<span><strong>'+nv+'</strong> — '+nc.pts+'pt/R$ · '+(nc.cb*100).toFixed(0)+'% cashback'+req+'</span></div>';
-      }).join('');
-    }
-  } catch(err){ console.log('renderAll erro:', err); }
-}
 </script>
 
 <!-- Firebase -->
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
   import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging.js';
   import { getDatabase, ref, onValue, set } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js';
 
   const firebaseConfig = {
-    apiKey: "AIzaSyBUZaER1-J4-sui90-lHW56P7JTBvfAQHE",
-    authDomain: "sistema-alpha-b12d0.firebaseapp.com",
-    projectId: "sistema-alpha-b12d0",
-    storageBucket: "sistema-alpha-b12d0.firebasestorage.app",
-    messagingSenderId: "714388410138",
-    appId: "1:714388410138:web:c42c2391931d25acc0e6a3",
-    measurementId: "G-M706VJSX9F",
-    databaseURL: "https://sistema-alpha-b12d0-default-rtdb.firebaseio.com"
+    apiKey:"AIzaSyBUZaER1-J4-sui90-lHW56P7JTBvfAQHE",
+    authDomain:"sistema-alpha-b12d0.firebaseapp.com",
+    projectId:"sistema-alpha-b12d0",
+    storageBucket:"sistema-alpha-b12d0.firebasestorage.app",
+    messagingSenderId:"714388410138",
+    appId:"1:714388410138:web:c42c2391931d25acc0e6a3",
+    measurementId:"G-M706VJSX9F",
+    databaseURL:"https://sistema-alpha-b12d0-default-rtdb.firebaseio.com"
   };
 
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
   const db = getDatabase(app);
-
-  // Tornar auth global para o login
-  window.firebaseAuth = auth;
   window.firebaseDB = db;
-  window.firebaseSignIn = signInWithEmailAndPassword;
-  window.firebaseCreateUser = createUserWithEmailAndPassword;
-  window.firebaseOnAuthStateChanged = onAuthStateChanged;
   window.firebaseRef = ref;
-  window.firebaseSet = set;
   window.firebaseOnValue = onValue;
+  window.firebaseSet = set;
 
-  // Push notifications
-  if ('serviceWorker' in navigator && 'Notification' in window) {
-    navigator.serviceWorker.register('https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/firebase-sw.js').then(function(reg) {
-      try {
+  // Banner promo via Firebase
+  verificarBannerPromo(db);
+
+  // Push
+  if('serviceWorker' in navigator && 'Notification' in window){
+    navigator.serviceWorker.register('https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/firebase-sw.js').then(function(reg){
+      try{
         const messaging = getMessaging(app);
-        getToken(messaging, {
-          vapidKey: 'BL2KdPeb1VExfCJ2cGHrhY4_dMoGBMHZZh08pl9HnsvRcSz3TRllo59EkgNOAex_4UzWCr4V4GRq4lY5qohER6M',
-          serviceWorkerRegistration: reg
-        }).then(function(token) {
-          if(token) {
-            window.fcmToken = token;
-            console.log('FCM Token:', token);
-            // Salvar token no Firebase
-            if(window.U && window.U.email) {
-              var safeEmail = window.U.email.replace(/\./g,'_').replace(/@/g,'_at_');
-              set(ref(db, 'tokens/' + safeEmail), {token: token, updated: Date.now()});
-            }
-            // Salvar token na planilha Google Sheets para push nativo
-            salvarTokenNaPlanilha(token);
-          }
-        }).catch(function(e){ console.log('FCM token error:', e); });
-
-        onMessage(messaging, function(payload) {
-          console.log('Push recebido:', payload);
-          var n = payload.notification;
-          if(n) {
-            // Mostrar notificação visual no app
-            var banner = document.createElement('div');
-            banner.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#CC0000;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:999;max-width:90vw;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.3)';
-            banner.innerHTML = '🔔 <strong>' + (n.title||'Alpha Suplementos') + '</strong><br><span style="font-weight:400">' + (n.body||'') + '</span>';
-            document.body.appendChild(banner);
-            setTimeout(function(){ banner.remove(); }, 5000);
-          }
+        getToken(messaging,{vapidKey:'BL2KdPeb1VExfCJ2cGHrhY4_dMoGBMHZZh08pl9HnsvRcSz3TRllo59EkgNOAex_4UzWCr4V4GRq4lY5qohER6M',serviceWorkerRegistration:reg}).then(function(token){
+          if(token){window.fcmToken=token;salvarTokenNaPlanilha(token)}
+        }).catch(function(e){console.log('FCM:',e)});
+        onMessage(messaging,function(payload){
+          var n=payload.notification;
+          if(n){var b=document.createElement('div');b.style.cssText='position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#CC0000;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:999;max-width:90vw;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.3)';b.innerHTML='🔔 <strong>'+(n.title||'Alpha')+'</strong><br><span style="font-weight:400">'+(n.body||'')+'</span>';document.body.appendChild(b);setTimeout(function(){b.remove()},5000)}
         });
-      } catch(e){ console.log('Messaging not supported:', e); }
-    }).catch(function(e){ console.log('SW error:', e); });
+      }catch(e){console.log('Messaging:',e)}
+    }).catch(function(e){console.log('SW:',e)});
   }
 
-  // Monitorar promoções relâmpago em tempo real
-  onValue(ref(db, 'promocoes/ativa'), function(snapshot) {
-    var promo = snapshot.val();
-    if(promo && promo.ativa && Date.now() - promo.timestamp < 7200000) {
-      var banner = document.createElement('div');
-      banner.style.cssText = 'position:fixed;bottom:80px;left:12px;right:12px;background:linear-gradient(135deg,#CC0000,#FF4500);color:#fff;padding:14px 16px;border-radius:12px;font-size:13px;font-weight:600;z-index:99;box-shadow:0 4px 20px rgba(204,0,0,.4);display:flex;align-items:center;justify-content:space-between';
-      banner.innerHTML = '<span>⚡ <strong>' + promo.titulo + '</strong><br><span style="font-weight:400;font-size:12px">' + promo.mensagem + '</span></span>' +
-        '<button onclick="this.parentElement.remove()" style="background:none;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 0 0 10px">×</button>';
-      document.body.appendChild(banner);
-      setTimeout(function(){ if(banner.parentElement) banner.remove(); }, 10000);
+  // Promoções relâmpago Firebase
+  onValue(ref(db,'promocoes/ativa'),function(snapshot){
+    var promo=snapshot.val();
+    if(promo&&promo.ativa&&Date.now()-promo.timestamp<7200000){
+      var b=document.createElement('div');
+      b.style.cssText='position:fixed;bottom:80px;left:12px;right:12px;background:linear-gradient(135deg,#CC0000,#FF4500);color:#fff;padding:14px 16px;border-radius:12px;font-size:13px;font-weight:600;z-index:99;box-shadow:0 4px 20px rgba(204,0,0,.4);display:flex;align-items:center;justify-content:space-between';
+      b.innerHTML='<span>⚡ <strong>'+promo.titulo+'</strong><br><span style="font-weight:400;font-size:12px">'+promo.mensagem+'</span></span><button onclick="this.parentElement.remove()" style="background:none;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 0 0 10px">×</button>';
+      document.body.appendChild(b);setTimeout(function(){if(b.parentElement)b.remove()},10000);
     }
   });
 </script>
