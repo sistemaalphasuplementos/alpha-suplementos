@@ -1738,7 +1738,7 @@ function renderAll(){
           var posL=i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
           var posC=i===0?'#FFD700':i===1?'#C8C8C8':i===2?'#CD7F32':'#888';
           var nc=NCFG[c.nivel]||NCFG.BRONZE;
-          return '<div class="rk'+(isMe?' rk-me')+'">' +
+          return '<div class="rk'+(isMe?' rk-me':'')+'">' +
             '<div class="rk-pos" style="color:'+posC+'">'+posL+'</div>'+
             '<div class="rk-av" style="'+(isMe?'border-color:var(--gold);color:var(--gold)':'')+'">'+ini(c.nome)+'</div>'+
             '<div class="rk-info"><div class="rk-name">'+(isMe?'<strong>'+c.nome+' (Você)</strong>':c.nome)+'</div><div class="rk-sub">'+nc.emoji+' '+c.nivel+'</div></div>'+
