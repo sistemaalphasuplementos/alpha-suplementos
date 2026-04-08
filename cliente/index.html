@@ -184,63 +184,227 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .nc-nome{font-size:11px;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:.3px}
 .nc-pts{font-size:9px;color:rgba(255,255,255,.55);margin-top:3px;line-height:1.4}
 
-/* ══ GAMES ═══════════════════════════════════════════ */
-.games-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px 12px}
-.game-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.3)}
-.game-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.game-card.snake::before{background:linear-gradient(90deg,#00AA44,#00FF66)}
-.game-card.snake{border-color:#00AA4433}
-.game-card.nave::before{background:linear-gradient(90deg,#0044CC,#2288FF)}
-.game-card.nave{border-color:#0044CC33}
-.game-card.tetris::before{background:linear-gradient(90deg,#CC6600,#FF9900)}
-.game-card.tetris{border-color:#CC660033}
-.game-card:active{transform:scale(.96);box-shadow:none}
-.game-card-icon{font-size:36px;margin-bottom:8px;display:block}
-.game-card-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;letter-spacing:.5px;margin-bottom:4px}
-.game-card-desc{font-size:10px;color:var(--text3);line-height:1.4;margin-bottom:8px}
-.game-card-record{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;display:inline-block}
-.game-card.snake .game-card-record{background:#00AA4422;color:#00CC55}
-.game-card.nave .game-card-record{background:#0044CC22;color:#2288FF}
-.game-card.tetris .game-card-record{background:#CC660022;color:#FF9900}
+/* ══ GAMES — REDESIGN PREMIUM v47 ════════════════════ */
 
-/* STREAK */
-.streak-box{background:linear-gradient(135deg,#1a0a00,#2a1200);border:1px solid #CC660033;border-radius:var(--radius-sm);padding:14px;margin:0 12px 10px;position:relative;overflow:hidden}
-.streak-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#CC4400,#FF8800,#FFCC00)}
-.streak-days{display:flex;gap:6px;margin:10px 0 6px;justify-content:center}
-.streak-day{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;border:1px solid #333;transition:all .3s}
-.streak-day.done{background:linear-gradient(135deg,#CC4400,#FF6600);border-color:#FF660044;box-shadow:0 2px 8px rgba(255,100,0,.3)}
-.streak-day.today{border-color:#FF8800;box-shadow:0 0 0 2px #FF880033}
+/* ── Tela dos jogos ── */
+.sc-games-hero{padding:16px 12px 0;display:flex;align-items:center;justify-content:space-between}
+.sc-games-title{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;letter-spacing:.5px}
+.sc-games-sub{font-size:11px;color:var(--text3);margin-top:1px}
 
-/* GAME OVERLAY */
-.game-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:100;flex-direction:column}
+/* ── Cards de jogos ── */
+.games-grid{display:flex;flex-direction:column;gap:10px;padding:0 12px 12px}
+.game-card{
+  position:relative;overflow:hidden;border-radius:16px;
+  padding:18px 18px 16px;cursor:pointer;
+  display:flex;align-items:center;gap:14px;
+  border:1px solid transparent;
+  transition:transform .15s,box-shadow .15s;
+  min-height:88px;
+}
+.game-card:active{transform:scale(.975);box-shadow:none!important}
+.game-card.snake{background:linear-gradient(135deg,#041a0a,#082814);border-color:#00AA4428;box-shadow:0 4px 20px rgba(0,170,68,.12)}
+.game-card.nave {background:linear-gradient(135deg,#020d1f,#041830);border-color:#1155DD28;box-shadow:0 4px 20px rgba(17,85,221,.12)}
+.game-card.tetris{background:linear-gradient(135deg,#1a0c00,#2a1400);border-color:#CC660028;box-shadow:0 4px 20px rgba(204,102,0,.12)}
+
+/* Stripe lateral colorida */
+.game-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:16px 0 0 16px}
+.game-card.snake::before{background:linear-gradient(180deg,#00FF88,#00AA44)}
+.game-card.nave::before {background:linear-gradient(180deg,#66BBFF,#1155DD)}
+.game-card.tetris::before{background:linear-gradient(180deg,#FFBB44,#CC6600)}
+
+/* Brilho de fundo decorativo */
+.game-card::after{content:'';position:absolute;right:-20px;top:50%;transform:translateY(-50%);width:80px;height:80px;border-radius:50%;opacity:.06;filter:blur(16px)}
+.game-card.snake::after{background:#00FF88}
+.game-card.nave::after {background:#4499FF}
+.game-card.tetris::after{background:#FFAA00}
+
+.game-card-ico-wrap{
+  width:58px;height:58px;border-radius:14px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:30px;position:relative;z-index:1;
+}
+.game-card.snake  .game-card-ico-wrap{background:rgba(0,170,68,.15);border:1px solid rgba(0,170,68,.25)}
+.game-card.nave   .game-card-ico-wrap{background:rgba(17,85,221,.15);border:1px solid rgba(17,85,221,.25)}
+.game-card.tetris .game-card-ico-wrap{background:rgba(204,102,0,.15);border:1px solid rgba(204,102,0,.25)}
+
+.game-card-body{flex:1;min-width:0;position:relative;z-index:1}
+.game-card-name{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;letter-spacing:.4px;line-height:1}
+.game-card.snake  .game-card-name{color:#33DD77}
+.game-card.nave   .game-card-name{color:#66BBFF}
+.game-card.tetris .game-card-name{color:#FFAA33}
+.game-card-desc{font-size:11px;color:#888;margin-top:3px;line-height:1.4}
+.game-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.game-card-record{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:4px}
+.game-card.snake  .game-card-record{background:rgba(0,170,68,.15);color:#33DD77}
+.game-card.nave   .game-card-record{background:rgba(17,85,221,.15);color:#66BBFF}
+.game-card.tetris .game-card-record{background:rgba(204,102,0,.15);color:#FFAA33}
+.game-card-play{font-size:10px;font-weight:700;color:#555;letter-spacing:.3px;text-transform:uppercase}
+
+/* Card "em breve" */
+.game-card-soon{
+  background:var(--bg3);border:1px dashed #222;border-radius:16px;
+  padding:18px;display:flex;align-items:center;gap:14px;opacity:.45;
+}
+
+/* ── Streak redesign ── */
+.streak-box{
+  margin:0 12px 12px;border-radius:14px;padding:14px 16px;
+  background:linear-gradient(135deg,#0f0800,#1e1200);
+  border:1px solid #FF880020;position:relative;overflow:hidden;
+}
+.streak-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#882200,#FF6600,#FFCC00,#FF6600,#882200)}
+.streak-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.streak-label{font-size:10px;font-weight:700;color:#FF8800;letter-spacing:.8px;text-transform:uppercase}
+.streak-sublabel{font-size:10px;color:#666;margin-top:1px}
+.streak-count-wrap{display:flex;align-items:baseline;gap:3px}
+.streak-count-num{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:#FF8800;line-height:1}
+.streak-count-unit{font-size:10px;color:#FF880066;font-weight:700}
+.streak-days{display:flex;gap:5px;justify-content:center;margin-bottom:8px}
+.streak-day{
+  flex:1;height:34px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;border:1px solid #252525;
+  color:#444;transition:all .3s;position:relative;overflow:hidden;
+}
+.streak-day.done{
+  background:linear-gradient(135deg,#992200,#FF5500);
+  border-color:transparent;color:#fff;
+  box-shadow:0 2px 10px rgba(255,85,0,.3);
+}
+.streak-day.done::after{content:'🔥';font-size:14px;line-height:1}
+.streak-day.today{border-color:#FF8800;box-shadow:0 0 0 2px #FF880025;color:#FF8800}
+.streak-day.today::after{content:'★';font-size:14px;line-height:1}
+.streak-day:not(.done):not(.today)::after{content:attr(data-d);font-size:9px}
+.streak-msg{font-size:11px;color:#666;text-align:center}
+
+/* ── Seção de recompensas ── */
+.reward-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 12px}
+.reward-item{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:12px;padding:11px 10px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.reward-item::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.reward-item.green::before{background:linear-gradient(90deg,#007733,#00CC55)}
+.reward-item.orange::before{background:linear-gradient(90deg,#993300,#FF6600)}
+.reward-item.gold::before{background:linear-gradient(90deg,#664400,#FFD700)}
+.reward-item.red::before{background:linear-gradient(90deg,#660000,#CC0000)}
+.reward-ico{font-size:20px;margin-bottom:5px}
+.reward-val{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;line-height:1;margin-bottom:3px}
+.reward-item.green .reward-val{color:#00CC55}
+.reward-item.orange .reward-val{color:#FF6600}
+.reward-item.gold .reward-val{color:#FFD700}
+.reward-item.red .reward-val{color:#FF4444}
+.reward-desc{font-size:9px;color:#555;line-height:1.4}
+
+/* ── Modal do jogo ── */
+.game-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#030303;z-index:100;flex-direction:column}
 .game-overlay.on{display:flex}
-.game-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0}
-.game-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;letter-spacing:.5px}
-.game-score-bar{display:flex;gap:16px;align-items:center}
-.game-score-item{text-align:center}
-.game-score-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
-.game-score-val{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:var(--gold)}
-.game-canvas-wrap{flex:1;display:flex;align-items:center;justify-content:center;background:var(--bg);overflow:hidden;position:relative}
-canvas#gameCanvas{display:block;image-rendering:pixelated;max-width:100%;max-height:100%}
-.game-controls{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 16px calc(10px + var(--safe));background:var(--bg2);border-top:1px solid var(--border);flex-shrink:0}
-.dpad{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(2,52px);gap:4px;justify-content:center}
-.dpad-btn{background:var(--bg3);border:1px solid #333;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;user-select:none;transition:background .1s;touch-action:manipulation}
-.dpad-btn:active{background:#2a2a2a}
-.game-btn{background:var(--bg3);border:1px solid #333;border-radius:10px;padding:10px 28px;font-size:14px;font-weight:700;font-family:'Barlow',sans-serif;color:var(--text2);cursor:pointer;letter-spacing:.3px}
-.game-btn.red{background:var(--red);border-color:transparent;color:#fff;box-shadow:0 3px 12px rgba(204,0,0,.35)}
-.game-btn:active{transform:scale(.96)}
-.game-overlay-msg{display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.9);border:1px solid #CC000044;border-radius:16px;padding:24px 32px;text-align:center;min-width:240px;z-index:10;backdrop-filter:blur(8px)}
-.game-overlay-msg.on{display:block}
-.game-over-title{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;letter-spacing:1px;margin-bottom:4px}
-.game-over-score{font-size:14px;color:var(--text3);margin-bottom:16px}
-.game-over-reward{background:#FFD70015;border:1px solid #FFD70033;border-radius:10px;padding:10px 16px;margin-bottom:16px;font-size:13px;color:var(--gold);font-weight:700}
 
-/* RANKING GAMES */
-.game-rk-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #1a1a1a}
+.game-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;background:rgba(5,5,5,.97);
+  border-bottom:1px solid #191919;flex-shrink:0;
+}
+.game-header-left{display:flex;align-items:center;gap:10px}
+.game-back-btn{
+  width:36px;height:36px;border-radius:10px;background:#161616;
+  border:1px solid #252525;display:flex;align-items:center;
+  justify-content:center;font-size:16px;cursor:pointer;color:#888;
+  flex-shrink:0;transition:background .15s;
+}
+.game-back-btn:active{background:#1e1e1e}
+.game-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;letter-spacing:.3px}
+.game-score-bar{display:flex;gap:14px;align-items:center}
+.game-score-item{text-align:right}
+.game-score-label{font-size:8px;color:#444;text-transform:uppercase;letter-spacing:.6px}
+.game-score-val{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:var(--gold);line-height:1}
+.game-score-item.rec .game-score-val{color:#555;font-size:16px}
+
+.game-canvas-wrap{flex:1;display:flex;align-items:center;justify-content:center;background:#020202;overflow:hidden;position:relative}
+canvas#gameCanvas{display:block;image-rendering:pixelated;max-width:100%;max-height:100%}
+
+/* Pausa/start overlay sobre o canvas */
+.game-overlay-msg{
+  display:none;position:absolute;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  background:rgba(4,4,4,.95);
+  border:1px solid #CC000033;border-radius:18px;
+  padding:24px 28px;text-align:center;min-width:240px;max-width:88vw;
+  z-index:10;
+}
+.game-overlay-msg.on{display:block}
+.game-over-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:36px;font-weight:900;letter-spacing:1px;
+  margin-bottom:2px;
+}
+.game-over-title.win{color:#FFD700}
+.game-over-title.lose{color:#CC0000}
+.game-over-score{font-size:13px;color:#666;margin-bottom:14px}
+.game-over-new-rec{
+  background:linear-gradient(135deg,#1a1000,#2a1a00);
+  border:1px solid #FFD70033;border-radius:10px;
+  padding:8px 14px;margin-bottom:14px;
+  font-size:12px;color:#FFD700;font-weight:700;
+  display:none;
+}
+.game-over-pts{
+  background:#CC000012;border:1px solid #CC000030;
+  border-radius:10px;padding:8px 14px;margin-bottom:16px;
+  font-size:12px;color:#FF6666;font-weight:700;
+}
+.game-btn{
+  border-radius:10px;padding:11px 22px;
+  font-size:13px;font-weight:700;font-family:'Barlow',sans-serif;
+  cursor:pointer;letter-spacing:.3px;transition:transform .1s;
+  border:none;
+}
+.game-btn:active{transform:scale(.96)}
+.game-btn.red{background:linear-gradient(135deg,#CC0000,#EE2222);color:#fff;box-shadow:0 3px 12px rgba(204,0,0,.4)}
+.game-btn.ghost{background:#161616;color:#888;border:1px solid #252525;margin-left:8px}
+
+/* ── D-Pad premium ── */
+.game-controls{
+  padding:10px 16px calc(12px + var(--safe));
+  background:rgba(5,5,5,.97);border-top:1px solid #161616;
+  flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:0;
+}
+.dpad{
+  display:grid;grid-template-columns:repeat(3,56px);
+  grid-template-rows:repeat(2,56px);gap:5px;
+  justify-content:center;
+}
+.dpad-btn{
+  background:linear-gradient(145deg,#1c1c1c,#141414);
+  border:1px solid #282828;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;cursor:pointer;user-select:none;
+  transition:all .08s;touch-action:manipulation;
+  color:#888;
+  box-shadow:0 2px 4px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.04);
+}
+.dpad-btn:active{
+  background:linear-gradient(145deg,#242424,#1a1a1a);
+  transform:scale(.92);box-shadow:none;color:#CC0000;
+}
+.dpad-empty{visibility:hidden}
+
+/* ── Ranking games ── */
+.game-rk-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #161616}
 .game-rk-row:last-child{border-bottom:none}
 
-/* RECOMPENSAS TOAST */
-.reward-popup{display:none;position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#8B6914,#D4A017);color:#fff;padding:14px 20px;border-radius:14px;text-align:center;z-index:150;box-shadow:0 6px 24px rgba(212,160,23,.4);min-width:260px;font-weight:700}
+/* ── Popup de recompensa ── */
+.reward-popup{
+  display:none;position:fixed;bottom:90px;left:50%;
+  transform:translateX(-50%);
+  background:linear-gradient(135deg,#1a1000,#2a1800);
+  border:1px solid #FFD70044;
+  color:#FFD700;padding:12px 20px;border-radius:14px;
+  text-align:center;z-index:150;
+  box-shadow:0 6px 28px rgba(212,160,23,.25);
+  min-width:240px;font-weight:700;font-size:13px;
+}
 .reward-popup.on{display:block;animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
 @keyframes popIn{from{transform:translateX(-50%) scale(.6);opacity:0}to{transform:translateX(-50%) scale(1);opacity:1}}
 
@@ -294,20 +458,22 @@ body{color:#FFFFFF;-webkit-font-smoothing:antialiased}
 <!-- GAME OVERLAY -->
 <div id="game-overlay" class="game-overlay">
   <div class="game-header">
-    <div>
-      <div class="game-title" id="game-title-txt">SNAKE</div>
-      <div style="font-size:10px;color:var(--text3)" id="game-subtitle-txt">Colete proteínas, fuja do lixo!</div>
+    <div class="game-header-left">
+      <div class="game-back-btn" onclick="fecharGame()">←</div>
+      <div>
+        <div class="game-title" id="game-title-txt">SNAKE</div>
+        <div style="font-size:10px;color:#444;margin-top:1px" id="game-subtitle-txt">Colete proteínas, fuja do lixo!</div>
+      </div>
     </div>
     <div class="game-score-bar">
       <div class="game-score-item">
-        <div class="game-score-label">Pontos</div>
+        <div class="game-score-label">Score</div>
         <div class="game-score-val" id="game-score-display">0</div>
       </div>
-      <div class="game-score-item">
+      <div class="game-score-item rec">
         <div class="game-score-label">Recorde</div>
         <div class="game-score-val" id="game-record-display">0</div>
       </div>
-      <button onclick="fecharGame()" style="background:var(--bg3);border:1px solid #333;border-radius:8px;padding:6px 12px;color:var(--text3);font-size:13px;cursor:pointer">✕ Sair</button>
     </div>
   </div>
   <div class="game-canvas-wrap">
@@ -315,21 +481,22 @@ body{color:#FFFFFF;-webkit-font-smoothing:antialiased}
     <div id="game-overlay-msg" class="game-overlay-msg">
       <div class="game-over-title" id="game-over-title">GAME OVER</div>
       <div class="game-over-score" id="game-over-score">Pontuação: 0</div>
-      <div class="game-over-reward" id="game-over-reward" style="display:none">🏆 +3 pts ganhos hoje!</div>
-      <div style="display:flex;gap:10px;justify-content:center">
+      <div class="game-over-new-rec" id="game-over-new-rec">🏆 NOVO RECORDE! +5 pts</div>
+      <div class="game-over-pts" id="game-over-reward" style="display:none">🎮 +3 pts ganhos hoje!</div>
+      <div style="display:flex;gap:8px;justify-content:center">
         <button class="game-btn red" onclick="reiniciarGame()">🔄 Jogar de Novo</button>
-        <button class="game-btn" onclick="fecharGame()">← Voltar</button>
+        <button class="game-btn ghost" onclick="fecharGame()">← Sair</button>
       </div>
     </div>
   </div>
   <div class="game-controls">
-    <div style="display:flex;gap:10px;margin-bottom:6px">
-      <button class="game-btn" id="game-start-btn" onclick="toggleGame()" style="min-width:120px">▶ Iniciar</button>
+    <div style="display:flex;gap:10px;margin-bottom:8px">
+      <button class="game-btn red" id="game-start-btn" onclick="toggleGame()" style="min-width:130px;font-size:14px">▶ INICIAR</button>
     </div>
     <div class="dpad" id="dpad-controls">
-      <div></div>
+      <div class="dpad-empty"></div>
       <div class="dpad-btn" ontouchstart="dpadPress('up')" onmousedown="dpadPress('up')">↑</div>
-      <div></div>
+      <div class="dpad-empty"></div>
       <div class="dpad-btn" ontouchstart="dpadPress('left')" onmousedown="dpadPress('left')">←</div>
       <div class="dpad-btn" ontouchstart="dpadPress('down')" onmousedown="dpadPress('down')">↓</div>
       <div class="dpad-btn" ontouchstart="dpadPress('right')" onmousedown="dpadPress('right')">→</div>
@@ -459,93 +626,119 @@ body{color:#FFFFFF;-webkit-font-smoothing:antialiased}
 
   <!-- GAMES -->
   <div id="sc-games" class="screen">
-    <div class="pg-hdr">
-      <div class="pg-title">🎮 ALPHA GAMES</div>
-      <div class="pg-sub">Jogue, ganhe pontos e concorra no ranking!</div>
+
+    <!-- Cabeçalho -->
+    <div class="sc-games-hero">
+      <div>
+        <div class="sc-games-title">🎮 ALPHA GAMES</div>
+        <div class="sc-games-sub">Jogue, ganhe pontos e suba no ranking!</div>
+      </div>
     </div>
 
     <!-- STREAK BOX -->
-    <div class="streak-box" style="margin:0 12px 10px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+    <div class="streak-box" style="margin:12px 12px 10px">
+      <div class="streak-header">
         <div>
-          <div style="font-size:11px;font-weight:700;color:#FF8800;letter-spacing:.5px">🔥 SEQUÊNCIA DE DIAS</div>
-          <div style="font-size:10px;color:var(--text3);margin-top:2px">Entre todo dia e ganhe recompensas!</div>
+          <div class="streak-label">🔥 Sequência de dias</div>
+          <div class="streak-sublabel">Entre todo dia e ganhe cashback!</div>
         </div>
-        <div style="text-align:right">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#FF8800;line-height:1" id="streak-num">0</div>
-          <div style="font-size:9px;color:#FF880088">dias seguidos</div>
+        <div class="streak-count-wrap">
+          <div class="streak-count-num" id="streak-num">0</div>
+          <div class="streak-count-unit">dias</div>
         </div>
       </div>
       <div class="streak-days" id="streak-days"></div>
-      <div style="font-size:11px;color:var(--text3);text-align:center" id="streak-msg">Entre hoje para começar sua sequência!</div>
+      <div class="streak-msg" id="streak-msg">Entre hoje para começar sua sequência!</div>
     </div>
 
-    <!-- RECOMPENSAS GAMES -->
-    <div style="padding:0 12px 10px">
-      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px">
-        <div class="card-title" style="margin-bottom:10px">Recompensas</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <div style="background:#00AA4411;border:1px solid #00AA4433;border-radius:8px;padding:10px;text-align:center">
-            <div style="font-size:18px;margin-bottom:4px">🎮</div>
-            <div style="font-size:11px;font-weight:700;color:#00CC55">+3 pts</div>
-            <div style="font-size:9px;color:var(--text3);margin-top:2px">Jogar hoje<br>(1x por dia)</div>
-          </div>
-          <div style="background:#FF880011;border:1px solid #FF880033;border-radius:8px;padding:10px;text-align:center">
-            <div style="font-size:18px;margin-bottom:4px">🔥</div>
-            <div style="font-size:11px;font-weight:700;color:#FF8800">+5 pts</div>
-            <div style="font-size:9px;color:var(--text3);margin-top:2px">Novo recorde<br>pessoal</div>
-          </div>
-          <div style="background:#FFD70011;border:1px solid #FFD70033;border-radius:8px;padding:10px;text-align:center">
-            <div style="font-size:18px;margin-bottom:4px">🏅</div>
-            <div style="font-size:11px;font-weight:700;color:#FFD700">R$5 cashback</div>
-            <div style="font-size:9px;color:var(--text3);margin-top:2px">7 dias seguidos</div>
-          </div>
-          <div style="background:#CC000011;border:1px solid #CC000033;border-radius:8px;padding:10px;text-align:center">
-            <div style="font-size:18px;margin-bottom:4px">🔥</div>
-            <div style="font-size:11px;font-weight:700;color:#FF4444">R$15 cashback</div>
-            <div style="font-size:9px;color:var(--text3);margin-top:2px">30 dias seguidos</div>
-          </div>
-        </div>
-        <div style="margin-top:10px;padding:8px 10px;background:#FFD70008;border:.5px solid #FFD70022;border-radius:8px;font-size:10px;color:var(--text3);text-align:center;line-height:1.5">
-          ⚠️ Cashback de games é resgatável na loja na sua próxima compra.<br>
-          Marcos de pontos: <span style="color:#FFD700;font-weight:700">500 pts = R$10 bônus</span> · <span style="color:#FFD700;font-weight:700">1000 pts = R$20 bônus</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- JOGOS -->
+    <!-- CARDS DOS JOGOS -->
     <div class="games-grid">
+
       <div class="game-card snake" onclick="abrirGame('snake')">
-        <span class="game-card-icon">🐍</span>
-        <div class="game-card-name" style="color:#00CC55">WHEY SNAKE</div>
-        <div class="game-card-desc">Colete wheys e proteínas. Fuja dos suplementos ruins!</div>
-        <div class="game-card-record snake" id="record-snake">Recorde: 0</div>
+        <div class="game-card-ico-wrap">🐍</div>
+        <div class="game-card-body">
+          <div class="game-card-name">WHEY SNAKE</div>
+          <div class="game-card-desc">Colete proteínas e wheys. Fuja dos obstáculos!</div>
+          <div class="game-card-footer">
+            <div class="game-card-record snake" id="record-snake">🏅 Recorde: 0</div>
+            <div class="game-card-play">JOGAR ›</div>
+          </div>
+        </div>
       </div>
+
       <div class="game-card nave" onclick="abrirGame('nave')">
-        <span class="game-card-icon">🚀</span>
-        <div class="game-card-name" style="color:#2288FF">ALPHA FORCE</div>
-        <div class="game-card-desc">Destrua os gordos e colete suplementos no espaço!</div>
-        <div class="game-card-record nave" id="record-nave">Recorde: 0</div>
+        <div class="game-card-ico-wrap">🚀</div>
+        <div class="game-card-body">
+          <div class="game-card-name">ALPHA FORCE</div>
+          <div class="game-card-desc">Destrua os inimigos e colete suplementos!</div>
+          <div class="game-card-footer">
+            <div class="game-card-record nave" id="record-nave">🏅 Recorde: 0</div>
+            <div class="game-card-play">JOGAR ›</div>
+          </div>
+        </div>
       </div>
+
       <div class="game-card tetris" onclick="abrirGame('tetris')">
-        <span class="game-card-icon">💪</span>
-        <div class="game-card-name" style="color:#FF9900">STACK MUSCLE</div>
-        <div class="game-card-desc">Empilhe os blocos de suplemento e complete linhas!</div>
-        <div class="game-card-record tetris" id="record-tetris">Recorde: 0</div>
+        <div class="game-card-ico-wrap">💪</div>
+        <div class="game-card-body">
+          <div class="game-card-name">STACK MUSCLE</div>
+          <div class="game-card-desc">Empilhe blocos e complete linhas para pontuar!</div>
+          <div class="game-card-footer">
+            <div class="game-card-record tetris" id="record-tetris">🏅 Recorde: 0</div>
+            <div class="game-card-play">JOGAR ›</div>
+          </div>
+        </div>
       </div>
-      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:.5">
-        <div style="font-size:32px;margin-bottom:8px">🔒</div>
-        <div style="font-size:11px;color:var(--text3)">Mais jogos<br>em breve!</div>
+
+      <div class="game-card-soon">
+        <div style="width:58px;height:58px;border-radius:14px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">🔒</div>
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:900;color:#333">EM BREVE</div>
+          <div style="font-size:11px;color:#444;margin-top:3px">Novo jogo chegando!</div>
+        </div>
       </div>
+
+    </div>
+
+    <!-- RECOMPENSAS -->
+    <div style="padding:0 12px;margin-bottom:2px">
+      <div style="font-size:9px;font-weight:700;color:#555;letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span style="width:2px;height:10px;background:var(--red);border-radius:2px;display:inline-block"></span>RECOMPENSAS DOS GAMES</div>
+    </div>
+    <div class="reward-grid">
+      <div class="reward-item green">
+        <div class="reward-ico">🎮</div>
+        <div class="reward-val">+3 pts</div>
+        <div class="reward-desc">Jogar hoje<br>(1× por dia)</div>
+      </div>
+      <div class="reward-item orange">
+        <div class="reward-ico">🔥</div>
+        <div class="reward-val">+5 pts</div>
+        <div class="reward-desc">Bater recorde<br>pessoal</div>
+      </div>
+      <div class="reward-item gold">
+        <div class="reward-ico">🏅</div>
+        <div class="reward-val">R$5</div>
+        <div class="reward-desc">7 dias<br>consecutivos</div>
+      </div>
+      <div class="reward-item red">
+        <div class="reward-ico">🔥🔥</div>
+        <div class="reward-val">R$15</div>
+        <div class="reward-desc">30 dias<br>consecutivos</div>
+      </div>
+    </div>
+    <div style="margin:0 12px 12px;background:#FFD70008;border:.5px solid #FFD70018;border-radius:10px;padding:9px 12px;font-size:10px;color:#555;text-align:center;line-height:1.6">
+      Marcos de pontos: <span style="color:#FFD700;font-weight:700">500 pts = R$10 bônus</span> · <span style="color:#FFD700;font-weight:700">1000 pts = R$20 bônus</span><br>
+      Cashback de games é resgatado na loja na próxima compra.
     </div>
 
     <!-- RANKING GAMES -->
-    <div style="padding:10px 12px">
+    <div style="padding:0 12px 12px">
       <div class="card">
-        <div class="card-title">Ranking Geral de Games</div>
+        <div class="card-title">Ranking de games</div>
         <div id="game-rk-list"><div style="color:var(--text3);font-size:12px;padding:8px 0">Carregando...</div></div>
       </div>
     </div>
+
   </div>
 
   <!-- INDICAR -->
