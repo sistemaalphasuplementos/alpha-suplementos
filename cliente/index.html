@@ -672,6 +672,8 @@ async function carregarRanking(){
           nivel: String(row[7]||'BRONZE'), pontos: Number(row[6])||0
         });
       });
+      // Atualizar ranking na tela após carregar
+      try { renderAll(); } catch(e) {}
     }
   } catch(e){ console.log('Ranking offline:', e.message); }
 }
