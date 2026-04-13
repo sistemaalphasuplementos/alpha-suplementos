@@ -430,7 +430,7 @@ body{color:#FFFFFF;-webkit-font-smoothing:antialiased}
   </div>
   <div class="login-form">
     <div class="login-title">ENTRAR NA MINHA CONTA</div>
-    <input type="text" class="inp" id="l-nome" placeholder="Seu primeiro nome" autocomplete="given-name" style="text-transform:capitalize" oninput="this.value=this.value.charAt(0).toUpperCase()+this.value.slice(1)">
+    <input type="text" class="inp" id="l-nome" placeholder="Seu primeiro nome" autocomplete="given-name" style="text-transform:capitalize" inputmode="text" spellcheck="false" autocorrect="off" autocapitalize="words">
     <input type="tel" class="inp" id="l-tel" placeholder="Seu telefone (somente números)" autocomplete="tel" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
     <div id="l-err" style="color:#FF4444;font-size:12px;margin-bottom:8px;display:none">Nome ou telefone incorretos</div>
     <button class="btn-red" id="l-btn" onclick="fazerLogin()">ENTRAR →</button>
@@ -1291,7 +1291,10 @@ async function fazerLogin(){
   var mins=verificarBloqueioCli();
   var err=document.getElementById('l-err');
   if(mins>0){err.style.display='block';err.textContent='Muitas tentativas. Aguarde '+mins+'min.';return}
-  var nome=(document.getElementById('l-nome')||{value:''}).value.trim().toLowerCase();
+  // Pegar apenas o PRIMEIRO nome e normalizar (remove acentos, minúsculo, sem espaços extras)
+  var nomeRaw=(document.getElementById('l-nome')||{value:''}).value.trim();
+  var nomePrimeiro=nomeRaw.split(/\s+/)[0]; // só primeiro nome
+  var nome=nomePrimeiro.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z]/g,'');
   var tel=(document.getElementById('l-tel')||{value:''}).value.trim().replace(/[^0-9]/g,'');
   if(!nome||!tel){err.style.display='block';err.textContent='Informe seu nome e telefone';return}
   err.style.display='none';
@@ -1299,11 +1302,12 @@ async function fazerLogin(){
   if(btn){btn.textContent='Buscando...';btn.disabled=true}
   var encontrado=null;
   try{
+    // Enviar também o nome original (com acentos) como fallback
     var resp=await fetch(WEB_APP_URL+'?acao=login_cliente&nome='+encodeURIComponent(nome)+'&telefone='+encodeURIComponent(tel));
     var data=await resp.json();
     if(data.sucesso&&data.dados){
       var d=data.dados;
-      encontrado={id:String(d.id||''),nome:String(d.nome||nome),email:String(d.email||''),tel:tel,nivel:String(d.nivel||'BRONZE'),pontos:Number(d.pontos)||0,cashback:Number(d.cashback)||0,gastoMes:Number(d.gastoMes)||0,mesesRec:Number(d.mesesRec)||0,indicacoes:Number(d.indicacoes)||0,ref:String(d.codigoReferral||gerarRefLocal())};
+      encontrado={id:String(d.id||''),nome:String(d.nome||nomeRaw),email:String(d.email||''),tel:tel,nivel:String(d.nivel||'BRONZE'),pontos:Number(d.pontos)||0,cashback:Number(d.cashback)||0,gastoMes:Number(d.gastoMes)||0,mesesRec:Number(d.mesesRec)||0,indicacoes:Number(d.indicacoes)||0,ref:String(d.codigoReferral||gerarRefLocal())};
       carregarRanking();
     }
   }catch(e){console.log('API offline:',e.message)}
