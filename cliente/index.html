@@ -2421,7 +2421,13 @@ function drawTetris(canvas){
   ctx.fillStyle='#aabbdd';ctx.textAlign='right';ctx.fillText('L:'+(t.linesCleared||0)+'  V'+(31-t.fallSpeed),W-8,22);
 }
 function _drawTetBgFb(ctx,W,H){var bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#0a1a3a');bg.addColorStop(.5,'#061228');bg.addColorStop(1,'#020810');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);}
-function applyTetrisPU(tipo,t){var msgs=['\uD83D\uDCAA +200pts!','\u26A1 Mais velocidade!','\uD83D\uDCAA For\u00e7a!','\uD83D\uDEE1\uFE0F Defesa!','\uD83D\uDD00 Pe\u00e7as embaralhadas!','\u23F1\uFE0F Tempo extra!','\u26A1 Linha limpa!','\u2764\uFE0F +200pts!'];if(tipo===0||tipo===7){addScore(200);}else if(tipo===1){if(t)t.fallSpeed=Math.min((t.fallSpeed||30)+4,28);}else if(tipo===6){if(t){for(var r=t.rows-1;r>=0;r--){if(t.board[r].some(function(c){return c!==0;})){t.board.splice(r,1);t.board.unshift(Array(t.cols).fill(0));addScore(150);break;}}}}if(typeof toast==='function')toast(msgs[tipo]||'\u26A1 Power-up!');}\n
+function applyTetrisPU(tipo,t){
+  var msgs=['💪 +200pts!','⚡ Mais velocidade!','💪 Forca!','🛡️ Defesa!','🔀 Pecas embaralhadas!','⏱️ Tempo extra!','⚡ Linha limpa!','❤️ +200pts!'];
+  if(tipo===0||tipo===7){addScore(200);}
+  else if(tipo===1){if(t)t.fallSpeed=Math.min((t.fallSpeed||30)+4,28);}
+  else if(tipo===6){if(t){for(var r=t.rows-1;r>=0;r--){if(t.board[r].some(function(c){return c!==0;})){t.board.splice(r,1);t.board.unshift(Array(t.cols).fill(0));addScore(150);break;}}}}
+  if(typeof toast==='function')toast(msgs[tipo]||'⚡ Power-up!');
+}
 // ══ JOYPAD SNES ════════════════════════════════════════
 var _snesHeld={up:false,down:false,left:false,right:false};
 var _snesRepeat={};
