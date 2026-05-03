@@ -489,7 +489,7 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
       </div>
     </div>
   </div>
-  <div class="game-canvas-wrap" id="gcWrap">
+  <div class="game-canvas-wrap" id="gcWrap" style="position:relative;flex:1;min-height:0;">
     <canvas id="gameCanvas" style="touch-action:none"></canvas>
     <!-- Botões Tetris — DENTRO do canvas, bonitos -->
     <div id="tetCtrl" style="display:none;position:absolute;inset:0;pointer-events:none;z-index:2">
@@ -507,6 +507,13 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
       </div>
     </div>
   </div>
+  <!-- overlay de início/pausa — sobre o canvas -->
+  <div class="game-overlay-msg" id="game-overlay-msg" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(4,4,4,.95);border:1px solid #222;border-radius:14px;padding:20px 28px;text-align:center;z-index:10;min-width:180px">
+    <div id="game-over-txt" style="font-size:13px;color:#888;margin-bottom:10px"></div>
+    <button id="game-start-btn" onclick="toggleGame()" style="background:linear-gradient(135deg,#CC0000,#ff4500);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;width:100%;letter-spacing:.5px">▶ Iniciar</button>
+  </div>
+  <!-- hint de controles -->
+  <div style="padding:6px 12px;text-align:center;font-size:10px;color:#444;font-family:monospace;flex-shrink:0" id="snes-hint-txt"></div>
 
 </div>
 
@@ -1594,7 +1601,7 @@ function abrirGame(tipo){
   document.getElementById('game-subtitle-txt').textContent=subs[tipo];
   document.getElementById('game-record-display').textContent=gameRecord[tipo]||0;
   document.getElementById('game-score-display').textContent=0;
-  document.getElementById('game-overlay-msg').classList.remove('on');
+  var _om=document.getElementById('game-overlay-msg');if(_om){_om.style.display='none';_om.classList.remove('on');}
   document.getElementById('game-start-btn').textContent='▶ Iniciar';
   document.getElementById('game-overlay').classList.add('on');
   // Show tetris overlay controls
@@ -1647,7 +1654,8 @@ function startGame(){
 function pauseGame(){
   gamePausado=true;
   clearInterval(gameLoop);
-  document.getElementById('game-start-btn').textContent='▶ Continuar';
+  var sb=document.getElementById('game-start-btn');if(sb)sb.textContent='▶ Continuar';
+  var om=document.getElementById('game-overlay-msg');if(om)om.style.display='block';
 }
 function stopGame(){
   gamePausado=true;
@@ -1667,6 +1675,11 @@ function onGameOver(){
   stopGame();
   var era=gameRecord[gameAtivo]||0;
   var isRecord=gameScore>era;
+  var om=document.getElementById('game-overlay-msg');
+  var ot=document.getElementById('game-over-txt');
+  if(ot)ot.textContent=isRecord?'🏆 Novo Recorde!':'Game Over!';
+  if(om)om.style.display='block';
+  var sb=document.getElementById('game-start-btn');if(sb)sb.textContent='▶ Jogar Novamente';
   if(isRecord){gameRecord[gameAtivo]=gameScore;saveGameRecords()}
   document.getElementById('game-record-display').textContent=gameRecord[gameAtivo];
   document.getElementById('game-over-title').textContent=isRecord?'🏆 NOVO RECORDE!':'GAME OVER';
