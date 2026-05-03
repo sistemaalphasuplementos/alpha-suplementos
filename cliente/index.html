@@ -478,6 +478,9 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
         <div style="font-size:10px;color:#444;margin-top:1px" id="game-subtitle-txt">Colete proteínas, fuja do lixo!</div>
       </div>
     </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button onclick="toggleGame()" style="background:rgba(30,30,30,.9);border:1px solid #333;color:#fff;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-weight:600" id="game-pause-btn">⏸</button>
+    </div>
     <div class="game-score-bar">
       <div class="game-score-item">
         <div class="game-score-label">Score</div>
@@ -1601,8 +1604,6 @@ function abrirGame(tipo){
   document.getElementById('game-subtitle-txt').textContent=subs[tipo];
   document.getElementById('game-record-display').textContent=gameRecord[tipo]||0;
   document.getElementById('game-score-display').textContent=0;
-  var _om=document.getElementById('game-overlay-msg');if(_om){_om.style.display='none';_om.classList.remove('on');}
-  document.getElementById('game-start-btn').textContent='▶ Iniciar';
   document.getElementById('game-overlay').classList.add('on');
   // Show tetris overlay controls
   var ol=document.getElementById('tetOL');
@@ -1611,6 +1612,8 @@ function abrirGame(tipo){
   if(tc)tc.style.display=tipo==='tetris'?'block':'none';
   updateHint();
   setupCanvas(tipo);
+  // Auto-start imediato
+  startGame();
 }
 
 function fecharGame(){
@@ -1638,14 +1641,19 @@ function setupCanvas(tipo){
 }
 
 function toggleGame(){
-  if(gamePausado){startGame()}else{pauseGame()}
+  if(gamePausado){
+    startGame();
+    var pb=document.getElementById('game-pause-btn');if(pb)pb.textContent='⏸';
+  } else {
+    pauseGame();
+  }
 }
 function startGame(){
   gamePausado=false;
   gameScore=0;
   document.getElementById('game-score-display').textContent=0;
-  document.getElementById('game-overlay-msg').classList.remove('on');
-  document.getElementById('game-start-btn').textContent='⏸ Pausar';
+  var _om=document.getElementById('game-overlay-msg');if(_om)_om.style.display='none';
+  var _pb=document.getElementById('game-pause-btn');if(_pb)_pb.textContent='⏸';
   setupCanvas(gameAtivo);
   var fps=gameAtivo==='snake'?8:gameAtivo==='nave'?30:30;
   clearInterval(gameLoop);
@@ -1654,8 +1662,12 @@ function startGame(){
 function pauseGame(){
   gamePausado=true;
   clearInterval(gameLoop);
+  var pb=document.getElementById('game-pause-btn');if(pb)pb.textContent='▶';
+  var om=document.getElementById('game-overlay-msg');
+  var ot=document.getElementById('game-over-txt');
+  if(ot)ot.textContent='';
   var sb=document.getElementById('game-start-btn');if(sb)sb.textContent='▶ Continuar';
-  var om=document.getElementById('game-overlay-msg');if(om)om.style.display='block';
+  if(om)om.style.display='block';
 }
 function stopGame(){
   gamePausado=true;
@@ -1675,12 +1687,14 @@ function onGameOver(){
   stopGame();
   var era=gameRecord[gameAtivo]||0;
   var isRecord=gameScore>era;
+  if(isRecord)gameRecord[gameAtivo]=gameScore;
+  var pb=document.getElementById('game-pause-btn');if(pb)pb.textContent='▶';
   var om=document.getElementById('game-overlay-msg');
   var ot=document.getElementById('game-over-txt');
-  if(ot)ot.textContent=isRecord?'🏆 Novo Recorde!':'Game Over!';
-  if(om)om.style.display='block';
+  if(ot)ot.innerHTML=(isRecord?'<span style="color:#FFD700;font-size:16px">🏆 Novo Recorde!</span><br>':'<span style="font-size:15px">Game Over!</span><br>')+'<span style="color:#666;font-size:11px">Score: '+gameScore+'</span>';
   var sb=document.getElementById('game-start-btn');if(sb)sb.textContent='▶ Jogar Novamente';
-  if(isRecord){gameRecord[gameAtivo]=gameScore;saveGameRecords()}
+  if(om)om.style.display='block';
+  if(isRecord){saveGameRecords()}
   document.getElementById('game-record-display').textContent=gameRecord[gameAtivo];
   document.getElementById('game-over-title').textContent=isRecord?'🏆 NOVO RECORDE!':'GAME OVER';
   document.getElementById('game-over-title').style.color=isRecord?'#FFD700':'#FF4444';
