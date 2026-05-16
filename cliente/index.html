@@ -1640,7 +1640,6 @@ function abrirGame(tipo){
   if(tc)tc.style.display=tipo==='tetris'?'block':'none';
   var pb=document.getElementById('game-pause-btn');if(pb)pb.textContent='⏸';
   updateHint();
-  setupCanvas(tipo);
   startGame();
 }
 
@@ -1986,12 +1985,15 @@ function updateNave(canvas){
   n.enemies.forEach(function(e){
     e.wobble+=0.08;e.y+=e.speed;e.x+=e.dx+Math.sin(e.wobble)*.5;
     if(e.x<e.r||e.x>W-e.r)e.dx*=-1;
-    e.shootCd++;
-    if(e.shootCd>=e.shootRate){
-      e.shootCd=0;
-      var ang=Math.atan2(n.player.y-e.y,n.player.x-e.x);
-      var spd=2.5+n.phase*.25;
-      n.enemyBullets.push({x:e.x,y:e.y+e.r,dy:spd*Math.sin(ang)+Math.abs(spd*Math.cos(ang))*.3,vx:spd*Math.cos(ang)*.6,color:'#ff4466'});
+    // Só atira enquanto estiver acima da nave — após cruzar não há como o jogador acertá-lo
+    if(e.y>0&&e.y<n.player.y){
+      e.shootCd++;
+      if(e.shootCd>=e.shootRate){
+        e.shootCd=0;
+        var ang=Math.atan2(n.player.y-e.y,n.player.x-e.x);
+        var spd=2.5+n.phase*.25;
+        n.enemyBullets.push({x:e.x,y:e.y+e.r,dy:spd*Math.sin(ang)+Math.abs(spd*Math.cos(ang))*.3,vx:spd*Math.cos(ang)*.6,color:'#ff4466'});
+      }
     }
   });
 
