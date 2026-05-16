@@ -1708,31 +1708,39 @@ function gameFrame(){
 
 function onGameOver(){
   stopGame();
-  var pb=document.getElementById('game-pause-btn');if(pb)pb.textContent='▶';
-  var om=document.getElementById('game-overlay-msg');
-  var ot=document.getElementById('game-over-txt');
-  var era=gameRecord[gameAtivo]||0;var isRec=gameScore>era;
-  if(isRec)gameRecord[gameAtivo]=gameScore;
-  if(ot)ot.innerHTML=isRec?'<span style="color:#FFD700;font-size:15px">🏆 Novo Recorde!</span><br>':'<span>Game Over!</span><br>';
-  if(ot)ot.innerHTML+='<small style="color:#666">Score: '+gameScore+'</small>';
-  var sb=document.getElementById('game-start-btn');if(sb)sb.textContent='▶ Jogar Novamente';
-  if(om)om.style.display='block';
-  // original stopGame already called
+  // Verificar novo recorde
   var era=gameRecord[gameAtivo]||0;
   var isRecord=gameScore>era;
-  if(isRecord){gameRecord[gameAtivo]=gameScore;saveGameRecords()}
+  if(isRecord){gameRecord[gameAtivo]=gameScore;saveGameRecords();}
+  // Atualizar UI
+  var pb=document.getElementById('game-pause-btn');if(pb)pb.textContent='▶';
+  var ot=document.getElementById('game-over-txt');
+  if(ot){ot.innerHTML=isRecord?'<span style="color:#FFD700;font-size:15px">🏆 Novo Recorde!</span><br>':'<span>Game Over!</span><br>';ot.innerHTML+='<small style="color:#666">Score: '+gameScore+'</small>';}
   document.getElementById('game-record-display').textContent=gameRecord[gameAtivo];
   document.getElementById('game-over-title').textContent=isRecord?'🏆 NOVO RECORDE!':'GAME OVER';
   document.getElementById('game-over-title').style.color=isRecord?'#FFD700':'#FF4444';
   document.getElementById('game-over-score').textContent='Pontuação: '+gameScore+(isRecord?' 🎉':'');
   document.getElementById('game-start-btn').textContent='▶ Iniciar';
-  // Recompensas
+  // Recompensas — envia ao backend via creditarRecompensa
   var rewardEl=document.getElementById('game-over-reward');
   var msgs=[];
-  if(!ganhouPtsHoje[gameAtivo]){ganhouPtsHoje[gameAtivo]=true;saveGanhouHoje();msgs.push('+3 pts no jogo')}
-  if(isRecord)msgs.push('+5 pts pelo recorde!');
-  if(msgs.length>0){rewardEl.style.display='block';rewardEl.textContent='🏆 '+msgs.join(' · ')}
-  else{rewardEl.style.display='none'}
+  if(!ganhouPtsHoje[gameAtivo]){
+    ganhouPtsHoje[gameAtivo]=true;saveGanhouHoje();
+    msgs.push('+3 pts no jogo');
+    creditarRecompensa('pontos','+3 pts por jogar hoje ('+gameAtivo+')',3,'jogo_diario_'+gameAtivo);
+  }
+  if(isRecord){
+    msgs.push('+5 pts pelo recorde!');
+    creditarRecompensa('pontos','+5 pts — novo recorde em '+gameAtivo+'! 🏅',5,'record_'+gameAtivo);
+  }
+  if(msgs.length>0){rewardEl.style.display='block';rewardEl.textContent='🏆 '+msgs.join(' · ');}
+  else{rewardEl.style.display='none';}
+  // Verificar marcos de pontos totais (500 e 1000 pts)
+  if(U){
+    var marcos=[];try{marcos=JSON.parse(localStorage.getItem('alpha_marcos')||'[]');}catch(e){}
+    if(U.pontos>=1000&&!marcos.includes('m1000')){marcos.push('m1000');localStorage.setItem('alpha_marcos',JSON.stringify(marcos));creditarRecompensa('cashback','R$20 cashback — 1.000 pontos! 🏆',20,'marco1000');}
+    else if(U.pontos>=500&&!marcos.includes('m500')){marcos.push('m500');localStorage.setItem('alpha_marcos',JSON.stringify(marcos));creditarRecompensa('cashback','R$10 cashback — 500 pontos! ⭐',10,'marco500');}
+  }
   document.getElementById('game-overlay-msg').classList.add('on');
 }
 
@@ -2386,13 +2394,13 @@ function drawTetris(canvas){
     ctx.fillStyle='rgba(0,0,20,.8)';ctx.strokeStyle='rgba(60,120,255,.4)';ctx.lineWidth=1;
     ctx.fillRect(px,44,pw,ph);ctx.strokeRect(px,44,pw,ph);
     ctx.fillStyle='#88aacc';ctx.font='bold 9px Barlow,monospace';ctx.textAlign='center';ctx.fillText('NEXT',px+pw/2,58);
-    if(t.next){var ns=t.next.s,ncs=Math.min((pw-4)/ns[0].length,(ph-16)/ns.length),nox=px+(pw-ns[0].length*ncs)/2,noy=62+(ph-16-ns.length*ncs)/2;for(var r=0;r<ns.length;r++)for(var c=0;c<ns[r].length;c++){if(ns[r][c])drawTetrisBlock(ctx,nox+c*ncs,noy+r*ncs,ncs,t.next,1);}}
+    if(t.next){var ns=t.next.s,ncs=Math.min((pw-4)/Math.max(ns[0].length,2),(ph-20)/Math.max(ns.length,2),t.cs-2),nox=px+(pw-ns[0].length*ncs)/2,noy=62+(ph-20-ns.length*ncs)/2;for(var r=0;r<ns.length;r++)for(var c=0;c<ns[r].length;c++){if(ns[r][c])drawTetrisBlock(ctx,nox+c*ncs,noy+r*ncs,ncs,t.next,1);}}
     var hy=44+ph+8;
     if(hy+ph<H-40){
       ctx.fillStyle='rgba(0,0,20,.8)';ctx.strokeStyle='rgba(200,100,40,.4)';
       ctx.fillRect(px,hy,pw,ph);ctx.strokeRect(px,hy,pw,ph);
       ctx.fillStyle='#cc8844';ctx.font='bold 9px Barlow,monospace';ctx.textAlign='center';ctx.fillText('HOLD',px+pw/2,hy+14);
-      if(t.hold){var hs=t.hold.s,hcs=Math.min((pw-4)/hs[0].length,(ph-16)/hs.length),hox=px+(pw-hs[0].length*hcs)/2,hoy=hy+16+(ph-16-hs.length*hcs)/2;for(var r=0;r<hs.length;r++)for(var c=0;c<hs[r].length;c++){if(hs[r][c])drawTetrisBlock(ctx,hox+c*hcs,hoy+r*hcs,hcs,t.hold,t.holdUsed?.3:.9);}}
+      if(t.hold){var hs=t.hold.s,hcs=Math.min((pw-4)/Math.max(hs[0].length,2),(ph-20)/Math.max(hs.length,2),t.cs-2),hox=px+(pw-hs[0].length*hcs)/2,hoy=hy+16+(ph-20-hs.length*hcs)/2;for(var r=0;r<hs.length;r++)for(var c=0;c<hs[r].length;c++){if(hs[r][c])drawTetrisBlock(ctx,hox+c*hcs,hoy+r*hcs,hcs,t.hold,t.holdUsed?.3:.9);}}
     }
   }
   // Power-ups caindo
