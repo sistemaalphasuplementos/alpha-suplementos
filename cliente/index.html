@@ -1630,22 +1630,29 @@ function abrirGame(tipo){
   document.getElementById('game-subtitle-txt').textContent=subs[tipo];
   document.getElementById('game-record-display').textContent=gameRecord[tipo]||0;
   document.getElementById('game-score-display').textContent=0;
-  document.getElementById('game-overlay-msg').classList.remove('on');
   document.getElementById('game-start-btn').textContent='▶ Iniciar';
   document.getElementById('game-overlay').classList.add('on');
-  // Show tetris overlay controls
+  // Controles Tetris
   var ol=document.getElementById('tetOL');
   if(ol)ol.className='tet-ol'+(tipo==='tetris'?' on':'');
   var tc=document.getElementById('tetCtrl');
   if(tc)tc.style.display=tipo==='tetris'?'block':'none';
   var pb=document.getElementById('game-pause-btn');if(pb)pb.textContent='⏸';
   updateHint();
-  startGame();
+  // Parar jogo anterior e limpar estado
+  stopGame();
+  gameState={};
+  // Mostrar popup "Iniciar" — aguarda clique do usuário (não inicia loop)
+  var _om=document.getElementById('game-overlay-msg');if(_om)_om.style.display='block';
+  var _ot=document.getElementById('game-over-txt');if(_ot)_ot.innerHTML='';
 }
 
 function fecharGame(){
   stopGame();
+  gameState={};
   document.getElementById('game-overlay').classList.remove('on');
+  var _om=document.getElementById('game-overlay-msg');if(_om)_om.style.display='none';
+  var _ot=document.getElementById('game-over-txt');if(_ot)_ot.innerHTML='';
   var ol=document.getElementById('tetOL');
   if(ol)ol.className='tet-ol';
   var tc=document.getElementById('tetCtrl');if(tc)tc.style.display='none';
@@ -1668,8 +1675,23 @@ function setupCanvas(tipo){
 }
 
 function toggleGame(){
-  if(gamePausado){startGame();var pb=document.getElementById('game-pause-btn');if(pb)pb.textContent='⏸';}
-  else{pauseGame();}
+  // Se está pausado E já há estado de jogo → apenas retomar (sem reiniciar)
+  if(gamePausado){
+    var temEstado=(gameState.tetris||gameState.nave||gameState.snake);
+    if(temEstado){
+      // Retomar do pause: não reinicia, só despausa
+      gamePausado=false;
+      var _om=document.getElementById('game-overlay-msg');if(_om)_om.style.display='none';
+      var _pb=document.getElementById('game-pause-btn');if(_pb)_pb.textContent='⏸';
+      var fps=gameAtivo==='snake'?8:gameAtivo==='nave'?30:30;
+      clearInterval(gameLoop);
+      gameLoop=setInterval(gameFrame,1000/fps);
+    } else {
+      startGame(); // Primeira vez: iniciar do zero
+    }
+  } else {
+    pauseGame();
+  }
 }
 function startGame(){
   gamePausado=false;
@@ -1677,7 +1699,7 @@ function startGame(){
   document.getElementById('game-score-display').textContent=0;
   var _om=document.getElementById('game-overlay-msg');if(_om)_om.style.display='none';
   var _pb=document.getElementById('game-pause-btn');if(_pb)_pb.textContent='⏸';
-  setupCanvas(gameAtivo);
+  setupCanvas(gameAtivo); // inicializa estado fresco
   var fps=gameAtivo==='snake'?8:gameAtivo==='nave'?30:30;
   clearInterval(gameLoop);
   gameLoop=setInterval(gameFrame,1000/fps);
@@ -1740,7 +1762,9 @@ function onGameOver(){
     if(U.pontos>=1000&&!marcos.includes('m1000')){marcos.push('m1000');localStorage.setItem('alpha_marcos',JSON.stringify(marcos));creditarRecompensa('cashback','R$20 cashback — 1.000 pontos! 🏆',20,'marco1000');}
     else if(U.pontos>=500&&!marcos.includes('m500')){marcos.push('m500');localStorage.setItem('alpha_marcos',JSON.stringify(marcos));creditarRecompensa('cashback','R$10 cashback — 500 pontos! ⭐',10,'marco500');}
   }
-  document.getElementById('game-overlay-msg').classList.add('on');
+  var _omGO=document.getElementById('game-overlay-msg');if(_omGO)_omGO.style.display='block';
+  // Limpar estado do jogo — próximo clique em "Iniciar" reinicia do zero
+  gameState={};
 }
 
 function addScore(pts){
@@ -1876,11 +1900,11 @@ var NAVE_ELITE_TYPES=[
   {hp:12,speed:0.7,pts:70,r:30,nome:'Panqueca'},
 ];
 var NAVE_BOSS_TYPES=[
-  {hp:80, name:'BIG BURGER',          color:'#ff8800',pattern:'spread',pts:400},
-  {hp:120,name:'CHOCOLATE SUPREMO',   color:'#8B4513',pattern:'spiral',pts:600},
-  {hp:160,name:'MUTANT SODA',         color:'#8800cc',pattern:'rain',  pts:800},
-  {hp:200,name:'ICE CREAM APOCALYPSE',color:'#ff44aa',pattern:'spread',pts:1000},
-  {hp:260,name:'REI DOS DOCES',       color:'#cc0066',pattern:'spiral',pts:1400},
+  {hp:55, name:'BIG BURGER',          color:'#ff8800',pattern:'spread',pts:400},
+  {hp:80, name:'CHOCOLATE SUPREMO',   color:'#8B4513',pattern:'spiral',pts:600},
+  {hp:110,name:'MUTANT SODA',         color:'#8800cc',pattern:'rain',  pts:800},
+  {hp:140,name:'ICE CREAM APOCALYPSE',color:'#ff44aa',pattern:'spread',pts:1000},
+  {hp:180,name:'REI DOS DOCES',       color:'#cc0066',pattern:'spiral',pts:1400},
 ];
 var NAVE_PHASE_NAMES=['NEBULOSA PROTEICA','CINTURÃO DO AÇÚCAR','NEBULOSA DO CHOCOLATE','GELEIRA PROTEICA','BURACOS NEGROS'];
 
@@ -2000,20 +2024,27 @@ function updateNave(canvas){
   // Boss IA
   if(n.boss){
     var b=n.boss;b.tick++;
-    if(Math.abs(b.x-b.targetX)<20)b.targetX=60+Math.random()*(W-120);
-    b.x+=(b.targetX-b.x)*.02;b.y+=(100-b.y)*.025;
-    b.shootCd++;var sr=Math.max(12,22-n.phase*2);
+    if(Math.abs(b.x-b.targetX)<20)b.targetX=80+Math.random()*(W-160);
+    b.x+=(b.targetX-b.x)*.018;b.y+=(100-b.y)*.025;
+    // shootRate mínimo 22 frames (~1.4 tiros/s) — antes era 12 (~2.5/s)
+    b.shootCd++;var sr=Math.max(22,32-n.phase*2);
     if(b.shootCd>=sr){
       b.shootCd=0;
       if(b.pattern==='spread'){
-        for(var a=-2;a<=2;a++)n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:4,vx:a*1.6,color:'#ff8800'});
+        // 3 balas em leque (era 5) com velocidade reduzida
+        for(var a=-1;a<=1;a++)n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:3.5,vx:a*2.2,color:'#ff8800'});
       } else if(b.pattern==='spiral'){
-        var ang2=b.tick*.18;
-        n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:4.5*Math.sin(ang2)+1.5,vx:4.5*Math.cos(ang2),color:'#8B4513'});
-        n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:4.5*Math.sin(ang2+Math.PI)+1.5,vx:4.5*Math.cos(ang2+Math.PI),color:'#8B4513'});
+        // spiral mais lento
+        var ang2=b.tick*.12;
+        n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:3.5*Math.sin(ang2)+1.5,vx:3.5*Math.cos(ang2),color:'#8B4513'});
+        n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:3.5*Math.sin(ang2+Math.PI)+1.5,vx:3.5*Math.cos(ang2+Math.PI),color:'#8B4513'});
       } else {
-        if(b.tick%45===0)for(var ii=0;ii<8;ii++)n.enemyBullets.push({x:Math.random()*W,y:0,dy:5,vx:0,color:'#cc0066'});
-        n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:6,vx:(n.player.x-b.x)*.07,color:'#ff00aa'});
+        // rain: 5 balas (era 8) em posições previsíveis (não aleatórias) + aviso
+        if(b.tick%60===0){
+          for(var ii=0;ii<5;ii++)n.enemyBullets.push({x:(ii+1)*(W/6),y:0,dy:4,vx:0,color:'#cc0066'});
+        }
+        // tiro mirado com velocidade menor
+        n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:4.5,vx:(n.player.x-b.x)*.05,color:'#ff00aa'});
       }
     }
   }
@@ -2300,8 +2331,15 @@ function tetrisHold(){
   t.holdUsed=true;
   var old=t.hold;
   t.hold=Object.assign({},t.cur,{s:t.cur.s.map(function(r){return r.slice();})});
-  if(old){t.cur=Object.assign({},old,{s:old.s.map(function(r){return r.slice();})});t.cx=Math.floor((t.cols-t.cur.s[0].length)/2);t.cy=0;}
-  else spawnPiece();
+  if(old){
+    t.cur=Object.assign({},old,{s:old.s.map(function(r){return r.slice();})});
+    t.cx=Math.floor((t.cols-t.cur.s[0].length)/2);
+    t.cy=0;
+    t.fallTimer=0;
+    t.lockDelay=0;
+  } else {
+    spawnPiece();
+  }
 }
 function tetrisRotate(){
   var t=gameState.tetris;if(!t||!t.cur)return;
@@ -2485,7 +2523,7 @@ function tetrisRotate(){
   var kicks=[0,-1,1,-2,2];
   for(var k=0;k<kicks.length;k++){
     if(!collision(t.board,rot,t.cx+kicks[k],t.cy)){
-      t.cur={...t.cur,s:rot};
+      t.cur=Object.assign({},t.cur,{s:rot});
       t.cx+=kicks[k];
       return;
     }
@@ -2496,7 +2534,7 @@ function tetrisHardDrop(){
   var pts=0;
   while(!collision(t.board,t.cur.s,t.cx,t.cy+1)){t.cy++;pts++;}
   addScore(pts*2);
-  t.fallTimer=t.fallSpeed; // force lock next frame
+  lockPiece(); // trava imediatamente — não espera fallTimer
 }
 
 // ══ D-PAD ════════════════════════════════════════════
