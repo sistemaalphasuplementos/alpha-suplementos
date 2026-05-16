@@ -507,7 +507,7 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:6px">
-      <button onclick="toggleGame()" id="game-pause-btn" style="background:rgba(30,30,30,.9);border:1px solid #333;color:#fff;border-radius:8px;padding:5px 12px;font-size:13px;cursor:pointer;font-weight:700">⏸</button>
+      <button ontouchstart="toggleGame();event.preventDefault();" onclick="toggleGame()" id="game-pause-btn" style="background:rgba(30,30,30,.9);border:1px solid #333;color:#fff;border-radius:8px;padding:5px 12px;font-size:13px;cursor:pointer;font-weight:700;touch-action:manipulation;-webkit-tap-highlight-color:transparent">⏸</button>
     </div>
     <div class="game-score-bar">
       <div class="game-score-item">
@@ -525,7 +525,7 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
     <!-- Overlay start/pause -->
     <div class="game-overlay-msg" id="game-overlay-msg" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(4,4,4,.95);border:1px solid #222;border-radius:14px;padding:20px 28px;text-align:center;z-index:10;min-width:180px">
       <div id="game-over-txt" style="font-size:13px;color:#aaa;margin-bottom:10px"></div>
-      <button id="game-start-btn" onclick="toggleGame()" style="background:linear-gradient(135deg,#CC0000,#ff4500);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;width:100%">▶ Iniciar</button>
+      <button id="game-start-btn" ontouchstart="toggleGame();event.preventDefault();" onclick="toggleGame()" style="background:linear-gradient(135deg,#CC0000,#ff4500);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;width:100%;touch-action:manipulation;-webkit-tap-highlight-color:transparent">▶ Iniciar</button>
     </div>
     <!-- Botões Tetris dentro do canvas -->
     <div id="tetCtrl" style="display:none;position:absolute;inset:0;pointer-events:none;z-index:2">
@@ -2147,22 +2147,18 @@ function drawNave(canvas){
     ctx.restore();
   });
 
-  // Tiros do jogador
+  // Tiros do jogador — sem shadowBlur (performance)
   n.bullets.forEach(function(b){
-    ctx.save();ctx.shadowColor='#00ffcc';ctx.shadowBlur=8;
     ctx.fillStyle='#00ffcc';ctx.fillRect(b.x-2,b.y-12,4,14);
     ctx.fillStyle='#fff';ctx.fillRect(b.x-.5,b.y-12,1,14);
-    ctx.restore();
   });
 
-  // Tiros inimigos
+  // Tiros inimigos — sem shadowBlur (performance)
   n.enemyBullets.forEach(function(b){
-    ctx.save();ctx.translate(b.x,b.y);
-    ctx.shadowColor=b.color||'#ff4444';ctx.shadowBlur=6;
     ctx.fillStyle=b.color||'#ff4444';
-    ctx.beginPath();ctx.arc(0,0,5,0,Math.PI*2);ctx.fill();
-    ctx.globalAlpha=.3;ctx.beginPath();ctx.arc(0,0,9,0,Math.PI*2);ctx.fill();
-    ctx.restore();
+    ctx.beginPath();ctx.arc(b.x,b.y,5,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=.25;ctx.beginPath();ctx.arc(b.x,b.y,8,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=1;
   });
 
   // Inimigos
@@ -2287,7 +2283,11 @@ var TETRIS_PIECES=[
   {s:[[1,1,0],[0,1,1]],c:'#00CC33',hl:'#66ff88',dk:'#005522',bi:4},
   {s:[[0,1,1],[1,1,0]],c:'#FF2233',hl:'#ff7788',dk:'#880011',bi:5},
 ];
-function randomPiece(){return TETRIS_PIECES[Math.floor(Math.random()*TETRIS_PIECES.length)];}
+function randomPiece(){
+  var p=TETRIS_PIECES[Math.floor(Math.random()*TETRIS_PIECES.length)];
+  // Retorna SEMPRE uma cópia — nunca a referência original do array global
+  return {s:p.s.map(function(r){return r.slice();}),c:p.c,hl:p.hl,dk:p.dk,bi:p.bi};
+}
 function collision(board,shape,cx,cy){
   for(var r=0;r<shape.length;r++)for(var c2=0;c2<shape[r].length;c2++){
     if(!shape[r][c2])continue;
@@ -2305,8 +2305,10 @@ function spawnPiece(){
 }
 function lockPiece(){
   var t=gameState.tetris;if(!t||!t.cur)return;
+  // Snapshot imutável da peça — desvincula do objeto t.cur que vai mudar
+  var snap={s:t.cur.s.map(function(r){return r.slice();}),c:t.cur.c,hl:t.cur.hl,dk:t.cur.dk,bi:t.cur.bi};
   for(var r=0;r<t.cur.s.length;r++)for(var c2=0;c2<t.cur.s[r].length;c2++){
-    if(t.cur.s[r][c2]&&t.cy+r>=0)t.board[t.cy+r][t.cx+c2]=t.cur;
+    if(t.cur.s[r][c2]&&t.cy+r>=0)t.board[t.cy+r][t.cx+c2]=snap;
   }
   var cleared=0;t.flashRows=[];
   for(var row=t.rows-1;row>=0;row--){
