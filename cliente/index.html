@@ -1914,14 +1914,19 @@ function _nDS(ctx,img,x,y,w,h){
   try{ctx.drawImage(img,x-w/2,y-h/2,w,h);return true;}catch(e){return false;}
 }
 
+// Score threshold por fase para aparecer o boss
+var FASE_BOSS_SCORE=[0,2000,2200,2400,2600,3000];
+
 function initNave(canvas){
   var W=canvas.width,H=canvas.height;
   gameState.nave={
     W:W,H:H,
     player:{x:W/2,y:H-80},
     bullets:[],enemyBullets:[],enemies:[],powerups:[],particles:[],stars:[],
-    fireTimer:0,lives:3,shield:0,multishot:0,invincible:0,
-    phase:1,kills:0,killsNeeded:12,
+    fireTimer:0,
+    hp:100,maxHp:100,   // barra de vida 0-100 substituindo lives
+    shield:0,multishot:0,invincible:0,
+    phase:1,kills:0,scorePhase:0, // scorePhase: pontos acumulados na fase atual
     boss:null,bossPhase:false,spawnTimer:50,tick:0,
     touchX:null,touchY:null,
   };
@@ -1997,11 +2002,16 @@ function updateNave(canvas){
       }
     }
     // Boss trigger
-    if(n.kills>=n.killsNeeded&&n.enemies.filter(function(e){return!e._dead;}).length===0){
-      n.bossPhase=true;
-      var bt=NAVE_BOSS_TYPES[Math.min(n.phase-1,4)];
-      n.boss={x:W/2,y:-100,hp:bt.hp,maxHp:bt.hp,type:Math.min(n.phase-1,4),
-        r:62,name:bt.name,pattern:bt.pattern,pts:bt.pts,shootCd:0,tick:0,targetX:W/2};
+    if(!n.bossPhase){
+      // Boss aparece quando scorePhase atinge threshold da fase atual
+      var bossThreshold=FASE_BOSS_SCORE[Math.min(n.phase,5)];
+      if(n.scorePhase>=bossThreshold&&n.enemies.filter(function(e){return!e._dead;}).length===0){
+        n.bossPhase=true;
+        var bt=NAVE_BOSS_TYPES[Math.min(n.phase-1,4)];
+        n.boss={x:W/2,y:-100,hp:bt.hp,maxHp:bt.hp,type:Math.min(n.phase-1,4),
+          r:62,name:bt.name,pattern:bt.pattern,pts:bt.pts,shootCd:0,tick:0,targetX:W/2,
+          attackCount:0}; // contador de ataques para especial a cada 3
+      }
     }
   }
 
@@ -2026,25 +2036,26 @@ function updateNave(canvas){
     var b=n.boss;b.tick++;
     if(Math.abs(b.x-b.targetX)<20)b.targetX=80+Math.random()*(W-160);
     b.x+=(b.targetX-b.x)*.018;b.y+=(100-b.y)*.025;
-    // shootRate mínimo 22 frames (~1.4 tiros/s) — antes era 12 (~2.5/s)
     b.shootCd++;var sr=Math.max(22,32-n.phase*2);
     if(b.shootCd>=sr){
       b.shootCd=0;
-      if(b.pattern==='spread'){
-        // 3 balas em leque (era 5) com velocidade reduzida
-        for(var a=-1;a<=1;a++)n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:3.5,vx:a*2.2,color:'#ff8800'});
+      b.attackCount=(b.attackCount||0)+1;
+      var isSpecial=(b.attackCount%3===0); // especial a cada 3 ataques
+      if(isSpecial){
+        // ATAQUE ESPECIAL: 5 balas em leque amplo + 1 mirada + dano 30%
+        for(var a2=-2;a2<=2;a2++)n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:5,vx:a2*3,color:'#ffffff',special:true,r:7});
+        n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:6,vx:(n.player.x-b.x)*.08,color:'#ff00ff',special:true,r:8});
+      } else if(b.pattern==='spread'){
+        for(var a=-1;a<=1;a++)n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:3.5,vx:a*2.2,color:'#ff8800',special:false});
       } else if(b.pattern==='spiral'){
-        // spiral mais lento
         var ang2=b.tick*.12;
-        n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:3.5*Math.sin(ang2)+1.5,vx:3.5*Math.cos(ang2),color:'#8B4513'});
-        n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:3.5*Math.sin(ang2+Math.PI)+1.5,vx:3.5*Math.cos(ang2+Math.PI),color:'#8B4513'});
+        n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:3.5*Math.sin(ang2)+1.5,vx:3.5*Math.cos(ang2),color:'#8B4513',special:false});
+        n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:3.5*Math.sin(ang2+Math.PI)+1.5,vx:3.5*Math.cos(ang2+Math.PI),color:'#8B4513',special:false});
       } else {
-        // rain: 5 balas (era 8) em posições previsíveis (não aleatórias) + aviso
         if(b.tick%60===0){
-          for(var ii=0;ii<5;ii++)n.enemyBullets.push({x:(ii+1)*(W/6),y:0,dy:4,vx:0,color:'#cc0066'});
+          for(var ii=0;ii<5;ii++)n.enemyBullets.push({x:(ii+1)*(W/6),y:0,dy:4,vx:0,color:'#cc0066',special:false});
         }
-        // tiro mirado com velocidade menor
-        n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:4.5,vx:(n.player.x-b.x)*.05,color:'#ff00aa'});
+        n.enemyBullets.push({x:b.x,y:b.y+b.r*.5,dy:4.5,vx:(n.player.x-b.x)*.05,color:'#ff00aa',special:false});
       }
     }
   }
@@ -2056,7 +2067,7 @@ function updateNave(canvas){
       if(e._dead||Math.abs(bul.x-e.x)>=e.r||Math.abs(bul.y-e.y)>=e.r)return;
       bul._dead=true;e.hp--;
       if(e.hp<=0){
-        e._dead=true;addScore(e.pts);n.kills++;
+        e._dead=true;addScore(e.pts);n.kills++;n.scorePhase=(n.scorePhase||0)+e.pts;
         for(var pi=0;pi<5;pi++){var pa=Math.random()*Math.PI*2,ps=1.5+Math.random()*3;
           n.particles.push({x:e.x,y:e.y,vx:Math.cos(pa)*ps,vy:Math.sin(pa)*ps,life:18,maxLife:18,r:2+Math.random()*2,color:'#ff8800'});}
         if(Math.random()<.25)n.powerups.push({x:e.x,y:e.y,tipo:Math.floor(Math.random()*4)});
@@ -2069,9 +2080,15 @@ function updateNave(canvas){
       if(n.boss.hp<=0){
         for(var pi=0;pi<20;pi++){var pa=Math.random()*Math.PI*2,ps=1+Math.random()*4;
           n.particles.push({x:n.boss.x,y:n.boss.y,vx:Math.cos(pa)*ps,vy:Math.sin(pa)*ps,life:25,maxLife:25,r:3+Math.random()*4,color:pi%2===0?'#ff4400':'#ffcc00'});}
-        addScore(n.boss.pts);n.phase++;n.bossPhase=false;n.boss=null;n.kills=0;n.killsNeeded=12+n.phase*4;
-        n.lives=Math.min(4,n.lives+1);n.tick=0;
-        if(n.phase>5){onGameOver();return;}
+        addScore(n.boss.pts);
+        n.hp=Math.min(n.maxHp,n.hp+20); // recupera 20% ao matar boss
+        if(n.phase>=5){onGameOver();return;}
+        n.phase++;
+        n.scorePhase=0; // zera score da nova fase
+        n.kills=0;
+        n.bossPhase=false;n.boss=null;
+        n.enemies=[];n.enemyBullets=[];
+        n.tick=0;n.spawnTimer=50;
       }
     }
   });
@@ -2085,15 +2102,21 @@ function updateNave(canvas){
       if(Math.abs(b.x-n.player.x)<15&&Math.abs(b.y-n.player.y)<20){
         b._hit=true;
         if(n.shield>0){n.shield=0;return;}
-        n.lives--;n.invincible=90;
-        if(n.lives<=0)onGameOver();
+        // dano: especial=30%, boss normal=10%, inimigo normal=10%
+        var dmg=b.special?30:10;
+        n.hp=Math.max(0,n.hp-dmg);
+        n.invincible=60;
+        if(n.hp<=0)onGameOver();
       }
     });
     n.enemies.forEach(function(e){
       if(e._dead||Math.abs(n.player.x-e.x)>=e.r*.75||Math.abs(n.player.y-e.y)>=e.r*.75)return;
       if(n.shield>0){e._dead=true;n.shield=0;return;}
-      n.lives--;e._dead=true;n.invincible=90;
-      if(n.lives<=0)onGameOver();
+      // inimigo elite=20%, comum=10%
+      var dmg=e.elite?20:10;
+      n.hp=Math.max(0,n.hp-dmg);
+      e._dead=true;n.invincible=60;
+      if(n.hp<=0)onGameOver();
     });
   }
   n.enemyBullets=n.enemyBullets.filter(function(b){return!b._hit;});
@@ -2103,7 +2126,7 @@ function updateNave(canvas){
     if(Math.abs(p.x-n.player.x)<28&&Math.abs(p.y-n.player.y)<28){
       var msgs=['💪 +Score!','🥛 +Vida!','⚡ Escudo!','🔬 Tiro Triplo!'];
       if(p.tipo===0)addScore(50);
-      else if(p.tipo===1)n.lives=Math.min(4,n.lives+1);
+      else if(p.tipo===1){n.hp=Math.min(n.maxHp,n.hp+20);}
       else if(p.tipo===2)n.shield=360;
       else if(p.tipo===3)n.multishot=400;
       if(typeof toast==='function')toast(msgs[p.tipo%4]);
@@ -2155,10 +2178,17 @@ function drawNave(canvas){
 
   // Tiros inimigos — sem shadowBlur (performance)
   n.enemyBullets.forEach(function(b){
+    var radius=b.r||5;
     ctx.fillStyle=b.color||'#ff4444';
-    ctx.beginPath();ctx.arc(b.x,b.y,5,0,Math.PI*2);ctx.fill();
-    ctx.globalAlpha=.25;ctx.beginPath();ctx.arc(b.x,b.y,8,0,Math.PI*2);ctx.fill();
-    ctx.globalAlpha=1;
+    ctx.beginPath();ctx.arc(b.x,b.y,radius,0,Math.PI*2);ctx.fill();
+    if(b.special){
+      // borda branca para tiro especial
+      ctx.strokeStyle='rgba(255,255,255,.8)';ctx.lineWidth=2;
+      ctx.beginPath();ctx.arc(b.x,b.y,radius,0,Math.PI*2);ctx.stroke();
+    } else {
+      ctx.globalAlpha=.25;ctx.beginPath();ctx.arc(b.x,b.y,8,0,Math.PI*2);ctx.fill();
+      ctx.globalAlpha=1;
+    }
   });
 
   // Inimigos
@@ -2245,21 +2275,29 @@ function drawNave(canvas){
   }
 
   // HUD topo
-  ctx.fillStyle='rgba(0,0,12,.85)';ctx.fillRect(0,0,W,28);
+  ctx.fillStyle='rgba(0,0,12,.85)';ctx.fillRect(0,0,W,34);
   ctx.strokeStyle='rgba(60,120,255,.3)';ctx.lineWidth=1;
-  ctx.beginPath();ctx.moveTo(0,28);ctx.lineTo(W,28);ctx.stroke();
-  ctx.font='14px sans-serif';ctx.textBaseline='middle';
-  for(var i=0;i<3;i++){ctx.fillStyle=i<n.lives?'#ff3355':'#333';ctx.fillText('♥',8+i*18,14);}
-  var hx=62;
-  if(n.shield>0){ctx.fillStyle='#4488ff';ctx.font='12px sans-serif';ctx.fillText('🛡',hx,14);hx+=20;}
-  if(n.multishot>0){ctx.fillStyle='#ffdd00';ctx.font='12px sans-serif';ctx.fillText('⚡',hx,14);}
+  ctx.beginPath();ctx.moveTo(0,34);ctx.lineTo(W,34);ctx.stroke();
+  // Barra de vida HP
+  var hpPct=Math.max(0,n.hp/n.maxHp);
+  var hpW=120,hpX=6,hpY=8,hpH=10;
+  ctx.fillStyle='rgba(0,0,0,.6)';ctx.fillRect(hpX,hpY,hpW,hpH);
+  var hpColor=hpPct>0.5?'#00ee44':hpPct>0.25?'#ffcc00':'#ff2222';
+  ctx.fillStyle=hpColor;ctx.fillRect(hpX,hpY,Math.round(hpW*hpPct),hpH);
+  ctx.strokeStyle='rgba(255,255,255,.3)';ctx.lineWidth=1;ctx.strokeRect(hpX,hpY,hpW,hpH);
+  ctx.fillStyle='#fff';ctx.font='bold 8px Barlow,monospace';ctx.textBaseline='middle';
+  ctx.textAlign='left';ctx.fillText('HP '+n.hp+'%',hpX+2,hpY+hpH/2);
+  var hx=hpX+hpW+8;
+  if(n.shield>0){ctx.fillStyle='#4488ff';ctx.font='12px sans-serif';ctx.fillText('🛡',hx,17);hx+=20;}
+  if(n.multishot>0){ctx.fillStyle='#ffdd00';ctx.font='12px sans-serif';ctx.fillText('⚡',hx,17);}
   ctx.fillStyle=n.bossPhase?'#ff4444':'#88aaff';
   ctx.font='bold 10px Barlow,monospace';ctx.textAlign='right';
-  ctx.fillText('F'+n.phase+(n.bossPhase?' ★ BOSS!':'  '+n.kills+'/'+n.killsNeeded),W-8,14);
+  ctx.fillText('F'+n.phase+(n.bossPhase?' ★ BOSS!':'  '+n.scorePhase+'/'+(FASE_BOSS_SCORE[Math.min(n.phase,5)]||'?')),W-8,17);
   ctx.textAlign='left';ctx.textBaseline='alphabetic';
-  // Barra de progresso fase
+  // Barra de progresso fase — baseada em scorePhase
   if(!n.bossPhase){
-    var pct=Math.min(1,n.kills/n.killsNeeded);
+    var bossThresholdDraw=FASE_BOSS_SCORE[Math.min(n.phase,5)]||1;
+    var pct=Math.min(1,(n.scorePhase||0)/bossThresholdDraw);
     ctx.fillStyle='rgba(0,0,0,.55)';ctx.fillRect(0,H-4,W,4);
     var pg=ctx.createLinearGradient(0,0,W*pct,0);
     pg.addColorStop(0,'#0066ff');pg.addColorStop(1,'#00ffaa');
@@ -2274,14 +2312,15 @@ function drawNave(canvas){
 }
 
 // ══ TETRIS — STACK MUSCLE v51 ════════════════════════════════════════════════
+// Shapes no padrão oficial Tetris Guideline (linha de base embaixo)
 var TETRIS_PIECES=[
-  {s:[[1,1,1,1]],      c:'#00CCFF',hl:'#88eeff',dk:'#005577',bi:0},
-  {s:[[1,1],[1,1]],    c:'#FFAA00',hl:'#ffdd66',dk:'#775500',bi:3},
-  {s:[[1,1,1],[0,1,0]],c:'#AA00FF',hl:'#dd88ff',dk:'#550077',bi:6},
-  {s:[[1,1,1],[1,0,0]],c:'#FF6600',hl:'#ffaa44',dk:'#882200',bi:2},
-  {s:[[1,1,1],[0,0,1]],c:'#2255FF',hl:'#6699ff',dk:'#001188',bi:1},
-  {s:[[1,1,0],[0,1,1]],c:'#00CC33',hl:'#66ff88',dk:'#005522',bi:4},
-  {s:[[0,1,1],[1,1,0]],c:'#FF2233',hl:'#ff7788',dk:'#880011',bi:5},
+  {s:[[1,1,1,1]],       c:'#00CCFF',hl:'#88eeff',dk:'#005577',bi:0}, // I
+  {s:[[1,1],[1,1]],     c:'#FFAA00',hl:'#ffdd66',dk:'#775500',bi:3}, // O
+  {s:[[0,1,0],[1,1,1]], c:'#AA00FF',hl:'#dd88ff',dk:'#550077',bi:6}, // T
+  {s:[[1,0,0],[1,1,1]], c:'#2255FF',hl:'#6699ff',dk:'#001188',bi:1}, // J
+  {s:[[0,0,1],[1,1,1]], c:'#FF6600',hl:'#ffaa44',dk:'#882200',bi:2}, // L
+  {s:[[0,1,1],[1,1,0]], c:'#00CC33',hl:'#66ff88',dk:'#005522',bi:4}, // S
+  {s:[[1,1,0],[0,1,1]], c:'#FF2233',hl:'#ff7788',dk:'#880011',bi:5}, // Z
 ];
 function randomPiece(){
   var p=TETRIS_PIECES[Math.floor(Math.random()*TETRIS_PIECES.length)];
