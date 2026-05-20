@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Alpha Suplementos">
 <link rel="apple-touch-icon" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
-<title>Alpha Suplementos — Fidelidade v46</title>
+<title>Alpha Suplementos — Fidelidade v65</title>
 <link rel="manifest" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -3984,7 +3984,7 @@ function pedirPermissaoNotificacao(){if('Notification'in window&&Notification.pe
     var sess=JSON.parse(localStorage.getItem(_CLI_SESSION_KEY)||'null');
     if(sess&&sess.expiry>Date.now()&&sess.user){
       U=sess.user;
-      document.addEventListener('DOMContentLoaded',function(){
+      function _iniciarSessao(){
         iniciar();carregarHistorico();
         verificarStreakLogin();verificarMarcosPontos();
         fetch(WEB_APP_URL+'?acao=listar_clientes_todos&token='+_API_TOKEN+'&funcionario=cliente').then(function(r){return r.json()}).then(function(data){
@@ -3997,7 +3997,12 @@ function pedirPermissaoNotificacao(){if('Notification'in window&&Notification.pe
             renderAll();
           }
         }).catch(function(){});
-      });
+      }
+      if(document.readyState==="loading"){
+        document.addEventListener("DOMContentLoaded",_iniciarSessao);
+      } else {
+        _iniciarSessao();
+      }
     }
   }catch(e){}
 })();
