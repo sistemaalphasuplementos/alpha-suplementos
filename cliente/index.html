@@ -1926,7 +1926,6 @@ function goMostrar(modo, isRecord, score, rewards){
     _iniciarTelaAbertura();
     return;
   } else {
-  } else {
     // gameover ou record
     var nomeJogo={snake:'SNAKE FITNESS',nave:'ALPHA FORCE',tetris:'STACK MUSCLE'}[gameAtivo]||'GAME OVER';
     if(icon)icon.textContent=isRecord?'🏆':'💀';
@@ -3857,8 +3856,6 @@ function pedirPermissaoNotificacao(){if('Notification'in window&&Notification.pe
       b.innerHTML='<span>⚡ <strong>'+promo.titulo+'</strong><br><span style="font-weight:400;font-size:12px">'+promo.mensagem+'</span></span><button onclick="this.parentElement.remove()" style="background:none;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 0 0 10px">×</button>';
       document.body.appendChild(b);setTimeout(function(){if(b.parentElement)b.remove()},10000);
     }
-  });
-
   });
 </script>
 </body>
