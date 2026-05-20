@@ -1275,6 +1275,23 @@ document.addEventListener('DOMContentLoaded',function(){
     }
   },{passive:true});
 
+  // Listeners para tela de abertura pixel art
+  var cv2=document.getElementById('gameCanvas');
+  if(cv2){
+    cv2.addEventListener('click',function(e){
+      if(!_telaAberturaLoop)return;
+      _telaAberturaClick(e);
+    });
+    cv2.addEventListener('touchend',function(e){
+      if(!_telaAberturaLoop)return;
+      e.preventDefault();
+      var now=Date.now();
+      _telaAberturaClick({clientY:(e.changedTouches[0]||{}).clientY,clientX:(e.changedTouches[0]||{}).clientX});
+      if(now-_lastTap<400) snesConfirmar();
+      _lastTap=now;
+    },{passive:false});
+  }
+
 }); // fim DOMContentLoaded
 
 document.addEventListener('keydown',function(e){
@@ -1709,11 +1726,13 @@ function abrirGame(tipo){
   updateHint();
   // Parar jogo anterior e limpar estado
   stopGame();
+  pararMusica();
   gameState={};
-  _sessionRewards=[]; // nova sessão = recompensas zeradas
-  // Mostrar tela inicial com goMostrar
-  goMostrar('start',false,0,[]);
+  _sessionRewards=[];
   var _ot=document.getElementById('game-over-txt');if(_ot)_ot.innerHTML='';
+  window._snesIdx=0;
+  // Aguardar 1 frame para o overlay renderizar, depois iniciar tela animada
+  setTimeout(function(){ _iniciarTelaAbertura(); }, 60);
 }
 
 function fecharGame(){
@@ -1873,6 +1892,21 @@ function gameFrame(){
 // ── TELA GAME OVER ──────────────────────────────────────────────────────────
 // ── Menu SNES ────────────────────────────────────────────────────────────────
 window._snesIdx=0;
+function snesSelect(idx){
+  window._snesIdx=idx;
+  // Não precisa fazer nada mais — o loop de animação redesenha com o novo idx
+}
+function snesConfirmar(){
+  if(window._snesIdx===0){
+    _pararTelaAbertura();
+    iniciarMusicaJogo(gameAtivo); // música aqui — dentro de evento de usuário
+    startGame();
+  } else if(window._snesIdx===2){
+    _pararTelaAbertura();
+    exitPopupAbrir();
+  }
+  // idx===1 (records): menu continua mostrando records
+}
 function _snesAtualizar(){
   var cores={snake:'#00CC33',nave:'#00AAFF',tetris:'#FF8800'};
   var cor=cores[gameAtivo]||'#CC0000';
@@ -1893,15 +1927,6 @@ function _snesAtualizar(){
   if(panel)panel.style.display=window._snesIdx===1?'block':'none';
   if(confirm)confirm.style.display=window._snesIdx===0?'block':'none';
 }
-function snesSelect(idx){
-  window._snesIdx=idx;
-  _snesAtualizar();
-  if(idx===2){setTimeout(function(){exitPopupAbrir();},150);}
-}
-function snesConfirmar(){
-  if(window._snesIdx===0) goAcao('play');
-}
-
 function goMostrar(modo, isRecord, score, rewards){
   // modo: 'start' (início) | 'gameover' (derrota) | 'record' (novo recorde)
   var om=document.getElementById('game-overlay-msg');
@@ -2273,20 +2298,28 @@ var _telaAberturaLoop=null,_telaAberturaFrame=0,_telaAberturaIdx=0;
 function _iniciarTelaAbertura(){
   clearInterval(_telaAberturaLoop);
   _telaAberturaFrame=0;
-  _telaAberturaIdx=0;
+  window._snesIdx=window._snesIdx||0;
   var canvas=document.getElementById('gameCanvas');
   if(!canvas)return;
-  var wrap=canvas.parentElement;
-  var w=wrap.clientWidth||window.innerWidth;
-  var h=wrap.clientHeight||(window.innerHeight-52);
-  canvas.width=w;canvas.height=h;
-  canvas.style.width=w+'px';canvas.style.height=h+'px';
+  // Dimensionar canvas a partir do game-overlay que agora está visível
+  var overlay=document.getElementById('game-overlay');
+  var w=overlay?overlay.clientWidth:window.innerWidth;
+  var h=overlay?overlay.clientHeight:window.innerHeight;
+  if(!w||w<100){w=window.innerWidth;}
+  if(!h||h<100){h=window.innerHeight-52;}
+  canvas.width=w; canvas.height=h;
+  canvas.style.width=w+'px'; canvas.style.height=h+'px';
+  // Desenhar primeiro frame imediatamente
+  if(gameAtivo==='tetris') _drawTelaTetris(canvas);
+  else if(gameAtivo==='nave') _drawTelaAlphaForce(canvas);
+  else _drawTelaSnake(canvas);
+  // Loop de animação
   _telaAberturaLoop=setInterval(function(){
     _telaAberturaFrame++;
     if(gameAtivo==='tetris') _drawTelaTetris(canvas);
     else if(gameAtivo==='nave') _drawTelaAlphaForce(canvas);
     else _drawTelaSnake(canvas);
-  },33); // ~30fps
+  },33);
 }
 
 function _pararTelaAbertura(){
@@ -2711,38 +2744,8 @@ function _telaAberturaDblClick(){
   snesConfirmar();
 }
 
-document.addEventListener('DOMContentLoaded',function(){
-  var cv=document.getElementById('gameCanvas');
-  if(!cv)return;
-  cv.addEventListener('click',_telaAberturaClick);
-  cv.addEventListener('touchstart',function(e){
-    _telaAberturaClick(e);
-    // Double-tap para confirmar
-    var now=Date.now();
-    if(now-(_lastTap||0)<400)_telaAberturaDblClick();
-    _lastTap=now;
-  },{passive:true});
-});
 var _lastTap=0;
-
-// Override snesSelect para parar a tela e iniciar o jogo
-var _snesSelectOrig=snesSelect;
-snesSelect=function(idx){
-  window._snesIdx=idx;
-  _snesAtualizar && _snesAtualizar();
-};
-snesConfirmar=function(){
-  if(window._snesIdx===0){
-    _pararTelaAbertura();
-    goAcao('play');
-  } else if(window._snesIdx===1){
-    // Mostrar records — piscar o painel
-    window._snesIdx=1;
-  } else if(window._snesIdx===2){
-    _pararTelaAbertura();
-    exitPopupAbrir();
-  }
-};
+// Listeners do canvas para tela de abertura — adicionados uma única vez no primeiro DOMContentLoaded
 
 
 function onGameOver(){
