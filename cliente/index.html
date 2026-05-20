@@ -525,14 +525,11 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
     <!-- Overlay start/pause -->
     <!-- ══ TELA GAME OVER / INÍCIO ══════════════════════════════════════ -->
     <div id="game-overlay-msg" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.88);z-index:20;display:none;align-items:center;justify-content:center;">
-      <div id="go-card" style="background:linear-gradient(160deg,#0a0a1a,#14082a);border:1px solid rgba(100,60,255,0.35);border-radius:20px;padding:28px 24px;text-align:center;min-width:260px;max-width:88vw;box-shadow:0 0 40px rgba(100,60,255,0.2);position:relative;overflow:hidden">
-        <!-- Brilho decorativo -->
-        <div style="position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:200px;height:80px;background:radial-gradient(ellipse,rgba(150,80,255,0.15),transparent);pointer-events:none"></div>
-        <!-- Ícone + Título -->
+      <div id="go-card" style="background:linear-gradient(160deg,#0a0a1a,#14082a);border:1px solid rgba(100,60,255,0.35);border-radius:20px;padding:28px 24px;text-align:center;min-width:280px;max-width:92vw;box-shadow:0 0 40px rgba(100,60,255,0.2);position:relative;overflow:hidden">
         <div id="go-icon" style="font-size:42px;margin-bottom:6px">🎮</div>
-        <div id="go-title" style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;letter-spacing:2px;margin-bottom:4px;color:#fff">INICIAR</div>
-        <div id="go-subtitle" style="font-size:12px;color:#666;margin-bottom:18px">Pressione para começar</div>
-        <!-- Placar -->
+        <div id="go-title" style="font-family:'Barlow Condensed',Impact,sans-serif;font-size:32px;font-weight:900;letter-spacing:2px;margin-bottom:2px;color:#fff">INICIAR</div>
+        <div id="go-subtitle" style="font-size:11px;color:#555;margin-bottom:4px;letter-spacing:1px;font-family:monospace">— SELECT MODE —</div>
+        <div id="go-record-line" style="font-size:11px;color:#777;margin-bottom:20px;font-family:monospace">RECORD: <span id="go-record-val" style="color:#FFD700">0</span></div>
         <div id="go-score-block" style="display:none;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px 16px;margin-bottom:14px">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
             <span style="color:#888;font-size:11px">PONTUAÇÃO</span>
@@ -540,29 +537,45 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
           </div>
           <div style="display:flex;justify-content:space-between;align-items:center">
             <span style="color:#888;font-size:11px">RECORDE</span>
-            <span id="go-record-val" style="color:#FFD700;font-size:14px;font-weight:700">0</span>
+            <span id="go-record-val2" style="color:#FFD700;font-size:14px;font-weight:700">0</span>
           </div>
         </div>
-        <!-- Recompensas ganhas -->
         <div id="go-rewards-block" style="display:none;margin-bottom:14px">
           <div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Recompensas da sessão</div>
           <div id="go-rewards-list" style="display:flex;flex-direction:column;gap:4px"></div>
         </div>
-        <!-- Botões -->
-        <button id="game-start-btn"
-          ontouchstart="goAcao('play');event.preventDefault();"
-          onclick="goAcao('play')"
-          style="width:100%;padding:13px 0;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:9px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;background:linear-gradient(135deg,#CC0000,#ff4500);color:#fff;letter-spacing:0.5px">
-          ▶ Iniciar
-        </button>
-        <button id="game-quit-btn"
-          ontouchstart="goAcao('quit');event.preventDefault();"
-          onclick="goAcao('quit')"
-          style="width:100%;padding:10px 0;border:1px solid rgba(255,255,255,0.1);border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;background:rgba(255,255,255,0.05);color:#888">
-          ✕ Sair do Jogo
-        </button>
+        <!-- Menu SNES HTML — simples e confiável -->
+        <div id="snes-html-menu" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+          <div id="snes-btn-0"
+            onclick="snesClick(0)"
+            ontouchstart="snesClick(0);event.preventDefault()"
+            style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.06);touch-action:manipulation;transition:all .15s">
+            <span style="font-size:16px">▶</span>
+            <span style="font-family:'Barlow Condensed',Impact,sans-serif;font-size:19px;font-weight:800;letter-spacing:1px;color:#fff">NOVO JOGO</span>
+          </div>
+          <div id="snes-btn-1"
+            onclick="snesClick(1)"
+            ontouchstart="snesClick(1);event.preventDefault()"
+            style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;cursor:pointer;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.03);touch-action:manipulation;transition:all .15s">
+            <span style="font-size:16px;opacity:0">▶</span>
+            <span style="font-family:'Barlow Condensed',Impact,sans-serif;font-size:19px;font-weight:800;letter-spacing:1px;color:#888">RECORDS</span>
+          </div>
+          <div id="snes-btn-2"
+            onclick="snesClick(2)"
+            ontouchstart="snesClick(2);event.preventDefault()"
+            style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;cursor:pointer;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.03);touch-action:manipulation;transition:all .15s">
+            <span style="font-size:16px;opacity:0">▶</span>
+            <span style="font-family:'Barlow Condensed',Impact,sans-serif;font-size:19px;font-weight:800;letter-spacing:1px;color:#666">SAIR</span>
+          </div>
+        </div>
+        <!-- Painel de records (oculto inicialmente) -->
+        <div id="snes-records-panel" style="display:none;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px 16px;margin-bottom:14px;text-align:left">
+          <div style="font-size:10px;color:#555;letter-spacing:2px;margin-bottom:10px;font-family:monospace">MELHORES PONTUAÇÕES</div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="color:#888;font-size:13px">🐍 Whey Snake</span><span id="rec-snake" style="color:#00CC33;font-weight:700;font-size:13px">0</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="color:#888;font-size:13px">🚀 Alpha Force</span><span id="rec-nave" style="color:#00AAFF;font-weight:700;font-size:13px">0</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:#888;font-size:13px">🧱 Stack Muscle</span><span id="rec-tetris" style="color:#FF8800;font-weight:700;font-size:13px">0</span></div>
+        </div>
       </div>
-    </div>
 
     <!-- ══ POPUP DE GANHOS AO SAIR ════════════════════════════════════════ -->
     <div id="go-exit-popup" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.92);z-index:30;align-items:center;justify-content:center;">
@@ -1731,15 +1744,14 @@ function abrirGame(tipo){
   _sessionRewards=[];
   var _ot=document.getElementById('game-over-txt');if(_ot)_ot.innerHTML='';
   window._snesIdx=0;
-  // Garantir que game-overlay-msg está ESCONDIDO — a tela usa o canvas diretamente
-  var _omA=document.getElementById('game-overlay-msg');if(_omA)_omA.style.display='none';
-  // Aguardar browser renderizar o overlay, depois iniciar animação no canvas
-  setTimeout(function(){ _iniciarTelaAbertura(); }, 80);
+  // Mostrar menu de seleção HTML diretamente — simples e confiável
+  _mostrarMenuInicio();
 }
 
 function fecharGame(){
   stopGame();
   pararMusica();
+  _pararFundoAnimado();
   gameState={};
   _sessionRewards=[];
   document.getElementById('game-overlay').classList.remove('on');
@@ -1797,6 +1809,7 @@ function toggleGame(){
   }
 }
 function startGame(){
+  _pararFundoAnimado(); // parar fundo animado do menu
   gamePausado=false;
   gameScore=0;
   document.getElementById('game-score-display').textContent=0;
@@ -1902,6 +1915,129 @@ function snesSelect(idx){
   window._snesIdx=idx;
   // Não precisa fazer nada mais — o loop de animação redesenha com o novo idx
 }
+// ── Menu de início HTML — simples, confiável, sem canvas ─────────────────────
+function _mostrarMenuInicio(){
+  // Parar animação de canvas se estava rodando
+  _pararTelaAbertura();
+  // Limpar canvas com preto
+  var canvas=document.getElementById('gameCanvas');
+  if(canvas){
+    var gcWrap=document.getElementById('gcWrap');
+    var w=gcWrap?gcWrap.offsetWidth:window.innerWidth;
+    var hdr=document.querySelector('.game-header');
+    var h=gcWrap?gcWrap.offsetHeight:window.innerHeight-(hdr?hdr.offsetHeight:52);
+    if(!w||w<100)w=window.innerWidth;
+    if(!h||h<100)h=window.innerHeight-(hdr?hdr.offsetHeight:52);
+    canvas.width=w;canvas.height=h;
+    var ctx=canvas.getContext('2d');
+    ctx.fillStyle='#000';ctx.fillRect(0,0,w,h);
+    // Desenhar fundo animado no canvas enquanto menu HTML fica na frente
+    _iniciarFundoAnimado(canvas);
+  }
+  // Atualizar records no menu
+  var rs=document.getElementById('rec-snake');if(rs)rs.textContent=gameRecord.snake||0;
+  var rn=document.getElementById('rec-nave');if(rn)rn.textContent=gameRecord.nave||0;
+  var rt=document.getElementById('rec-tetris');if(rt)rt.textContent=gameRecord.tetris||0;
+  var rv=document.getElementById('go-record-val');if(rv)rv.textContent=gameRecord[gameAtivo]||0;
+  // Esconder score block, mostrar menu
+  var sb2=document.getElementById('go-score-block');if(sb2)sb2.style.display='none';
+  var rb=document.getElementById('go-rewards-block');if(rb)rb.style.display='none';
+  var rp=document.getElementById('snes-records-panel');if(rp)rp.style.display='none';
+  var hm=document.getElementById('snes-html-menu');if(hm)hm.style.display='flex';
+  // Atualizar título e cor por jogo
+  var nomes={snake:'WHEY SNAKE',nave:'ALPHA FORCE',tetris:'STACK MUSCLE'};
+  var cores={snake:'#00CC33',nave:'#00AAFF',tetris:'#FF8800'};
+  var icons={snake:'🐍',nave:'🚀',tetris:'🧱'};
+  var cor=cores[gameAtivo]||'#CC0000';
+  var gi=document.getElementById('go-icon');if(gi)gi.textContent=icons[gameAtivo]||'🎮';
+  var gt=document.getElementById('go-title');
+  if(gt){gt.textContent=nomes[gameAtivo]||'JOGO';gt.style.color=cor;gt.style.textShadow='0 0 20px '+cor;}
+  var gs=document.getElementById('go-subtitle');if(gs)gs.textContent='— SELECT MODE —';
+  var sb3=document.getElementById('game-start-btn');if(sb3)sb3.style.display='none';
+  var qb=document.getElementById('game-quit-btn');if(qb)qb.style.display='none';
+  // Destacar item 0
+  window._snesIdx=0;
+  _snesHtmlAtualizar();
+  // Mostrar o overlay
+  var om=document.getElementById('game-overlay-msg');
+  if(om){om.style.display='flex';}
+}
+
+function _snesHtmlAtualizar(){
+  var cores={snake:'#00CC33',nave:'#00AAFF',tetris:'#FF8800'};
+  var cor=cores[gameAtivo]||'#CC0000';
+  for(var i=0;i<3;i++){
+    var btn=document.getElementById('snes-btn-'+i);
+    if(!btn)continue;
+    var ativo=i===window._snesIdx;
+    btn.style.background=ativo?'rgba(255,255,255,0.1)':'rgba(255,255,255,0.03)';
+    btn.style.borderColor=ativo?cor+'66':'rgba(255,255,255,0.06)';
+    btn.style.transform=ativo?'translateX(4px)':'translateX(0)';
+    var arrow=btn.querySelector('span:first-child');
+    if(arrow)arrow.style.opacity=ativo?'1':'0';
+    if(arrow&&ativo)arrow.style.color=cor;
+  }
+  // Mostrar/ocultar painel de records
+  var rp=document.getElementById('snes-records-panel');
+  if(rp)rp.style.display=window._snesIdx===1?'block':'none';
+}
+
+function snesClick(idx){
+  window._snesIdx=idx;
+  _snesHtmlAtualizar();
+  if(idx===0){
+    // NOVO JOGO — iniciar imediatamente com música
+    var om=document.getElementById('game-overlay-msg');
+    if(om)om.style.display='none';
+    _pararTelaAbertura();
+    iniciarMusicaJogo(gameAtivo); // dentro do clique = AudioContext desbloqueado
+    startGame();
+  } else if(idx===2){
+    // SAIR
+    var om=document.getElementById('game-overlay-msg');
+    if(om)om.style.display='none';
+    _pararTelaAbertura();
+    exitPopupAbrir();
+  }
+  // idx===1: records — só atualiza visual
+}
+
+// Fundo animado simples no canvas (estrelas) enquanto menu HTML está na frente
+var _fundoAnimadoLoop=null;
+function _iniciarFundoAnimado(canvas){
+  clearInterval(_fundoAnimadoLoop);
+  var ctx=canvas.getContext('2d');
+  var W=canvas.width,H=canvas.height;
+  var stars=[];
+  for(var i=0;i<80;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+0.3,p:Math.random()*60,sp:Math.random()*0.04+0.01});
+  var frame=0;
+  // Cores por jogo
+  var bgColors={
+    tetris:['#000008','#080010'],
+    nave:['#020410','#050218'],
+    snake:['#010a01','#030f03']
+  };
+  var bg=bgColors[gameAtivo]||bgColors.nave;
+  _fundoAnimadoLoop=setInterval(function(){
+    frame++;
+    if(!document.getElementById('gameCanvas'))return;
+    var grad=ctx.createLinearGradient(0,0,0,H);
+    grad.addColorStop(0,bg[0]);grad.addColorStop(1,bg[1]);
+    ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+    stars.forEach(function(st){
+      st.p+=st.sp;
+      var alpha=0.3+0.7*Math.abs(Math.sin(st.p));
+      ctx.fillStyle='rgba(255,255,255,'+alpha.toFixed(2)+')';
+      ctx.beginPath();ctx.arc(st.x,st.y,st.r,0,Math.PI*2);ctx.fill();
+    });
+  },50);
+}
+
+function _pararFundoAnimado(){
+  clearInterval(_fundoAnimadoLoop);
+  _fundoAnimadoLoop=null;
+}
+
 function snesConfirmar(){
   if(window._snesIdx===0){
     _pararTelaAbertura();
@@ -1989,11 +2125,7 @@ function goMostrar(modo, isRecord, score, rewards){
 
 function goAcao(acao){
   if(acao==='play'){
-    var om=document.getElementById('game-overlay-msg');
-    if(om)om.style.display='none';
-    // Música + iniciar jogo — dentro do evento de clique (AudioContext desbloqueado)
-    iniciarMusicaJogo(gameAtivo);
-    snesConfirmar(); // usa snesConfirmar que chama startGame diretamente
+    snesClick(0); // redirecionar para snesClick
   } else if(acao==='quit'){
     // Mostrar popup de ganhos antes de sair
     exitPopupAbrir();
@@ -2303,6 +2435,9 @@ var _telaAberturaLoop=null,_telaAberturaFrame=0,_telaAberturaIdx=0;
 
 function _iniciarTelaAbertura(){
   clearInterval(_telaAberturaLoop);
+  clearInterval(gameLoop); // parar loop do jogo anterior
+  gameLoop=null;
+  gamePausado=true;
   _telaAberturaFrame=0;
   window._snesIdx=window._snesIdx||0;
   var canvas=document.getElementById('gameCanvas');
@@ -2318,6 +2453,9 @@ function _iniciarTelaAbertura(){
   }
   canvas.width=w; canvas.height=h;
   canvas.style.width=w+'px'; canvas.style.height=h+'px';
+  // Limpar imediatamente com preto — evita frame do jogo anterior aparecer
+  var ctxL=canvas.getContext('2d');
+  ctxL.fillStyle='#000';ctxL.fillRect(0,0,w,h);
   // Desenhar primeiro frame imediatamente
   if(gameAtivo==='tetris') _drawTelaTetris(canvas);
   else if(gameAtivo==='nave') _drawTelaAlphaForce(canvas);
@@ -2365,8 +2503,8 @@ function _iniciarTelaAbertura(){
 }
 
 function _pararTelaAbertura(){
-  clearInterval(_telaAberturaLoop);
-  _telaAberturaLoop=null;
+  clearInterval(_telaAberturaLoop); _telaAberturaLoop=null;
+  clearInterval(_fundoAnimadoLoop); _fundoAnimadoLoop=null;
   var canvas=document.getElementById('gameCanvas');
   if(canvas){
     canvas._aberturaHandler && canvas.removeEventListener('click',canvas._aberturaHandler);
