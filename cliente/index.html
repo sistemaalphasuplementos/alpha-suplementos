@@ -1368,6 +1368,17 @@ function iniciarNave(){
   _jogoLoop=setInterval(tickNave,33);
 }
 function dispararNave(){if(_naveFireCooldown>0)return;_naveBalas.push({x:_naveX,y:_naveY-20,vy:-10});_naveFireCooldown=8;}
+function dispararNaveManual(){
+  // Disparo manual no novo sistema de nave
+  if(gameState.nave){
+    var n=gameState.nave;
+    n.bullets.push({x:n.player.x,y:n.player.y-26,vy:-13,vx:0});
+    if(n.multishot>0){
+      n.bullets.push({x:n.player.x-14,y:n.player.y-20,vy:-12,vx:-1.5});
+      n.bullets.push({x:n.player.x+14,y:n.player.y-20,vy:-12,vx:1.5});
+    }
+  } else dispararNave();
+}
 function tickNave(){
   var canvas=document.getElementById('game-canvas'),W=canvas.width,H=canvas.height;
   _naveTick++;if(_naveFireCooldown>0)_naveFireCooldown--;
@@ -1736,7 +1747,6 @@ function abrirGame(tipo){
   var tc=document.getElementById('tetCtrl');
   if(tc)tc.style.display=tipo==='tetris'?'block':'none';
   var pb=document.getElementById('game-pause-btn');if(pb)pb.textContent='⏸';
-  updateHint();
   // Parar jogo anterior e limpar estado
   stopGame();
   pararMusica();
@@ -3841,7 +3851,7 @@ document.addEventListener('keydown',function(e){
   if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT')return;
   var map={'ArrowUp':'up','ArrowDown':'down','ArrowLeft':'left','ArrowRight':'right','w':'up','s':'down','a':'left','d':'right',' ':'space','z':'rotL','x':'rotR'};
   var d=map[e.key];
-  if(d==='space'){if(gameAtivo){if(gameAtivo==='nave')dispararNaveManual();else toggleGame();e.preventDefault();}}
+  if(d==='space'){if(gameAtivo){if(gameAtivo==='nave')dispararNave();else toggleGame();e.preventDefault();}}
   else if(d==='rotL'||d==='rotR'){if(gameAtivo==='tetris'){tetrisRotate();e.preventDefault();}}
   else if(d){dpadPress(d);e.preventDefault()}
 });
