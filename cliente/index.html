@@ -1257,8 +1257,10 @@ document.addEventListener('DOMContentLoaded',function(){
   },{passive:false});
   cw.addEventListener('touchend',function(e){
     if(gameAtivo==='nave'&&gameState.nave){
-      // Ao soltar o dedo: nave para na posição atual (touchX=null = sem seguir)
-      gameState.nave.touchX=null;gameState.nave.touchY=null;
+      // Ao soltar: manter nave na posição atual (não segue mais o dedo mas não para o jogo)
+      // Setar touchX para a posição atual da nave — ela simplesmente para de se mover
+      gameState.nave.touchX=gameState.nave.player.x;
+      gameState.nave.touchY=gameState.nave.player.y;
       return;
     }
     if(_jogoState!=='running')return;
@@ -1268,7 +1270,8 @@ document.addEventListener('DOMContentLoaded',function(){
   },{passive:true});
   cw.addEventListener('touchcancel',function(){
     if(gameAtivo==='nave'&&gameState.nave){
-      gameState.nave.touchX=null;gameState.nave.touchY=null;
+      gameState.nave.touchX=gameState.nave.player.x;
+      gameState.nave.touchY=gameState.nave.player.y;
     }
   },{passive:true});
 
@@ -1783,8 +1786,6 @@ function startGame(){
     var fps=gameAtivo==='snake'?8:gameAtivo==='nave'?30:30;
     clearInterval(gameLoop);
     gameLoop=setInterval(gameFrame,1000/fps);
-    // Iniciar música do jogo
-    iniciarMusicaJogo(gameAtivo);
   });
 }
 
@@ -1794,41 +1795,57 @@ function mostrarCountdown(cb){
   var ctx=canvas.getContext('2d');
   var W=canvas.width,H=canvas.height;
   var nums=['3','2','1','GO!'];
-  var idx=0;
   var cores=['#FF4444','#FF8800','#FFD700','#00FF88'];
+  var idx=0;
+
   function desenhar(){
-    // Redesenhar frame do jogo como fundo
-    gameFrame();
-    // Overlay escuro semi-transparente
-    ctx.fillStyle='rgba(0,0,0,0.55)';ctx.fillRect(0,0,W,H);
-    var txt=nums[idx];
-    var cor=cores[idx];
-    // Círculo de fundo
+    // Fundo escuro direto — não chama gameFrame para evitar tela preta
+    ctx.fillStyle='#030308';ctx.fillRect(0,0,W,H);
+    // Grade decorativa
+    ctx.strokeStyle='rgba(60,80,180,0.15)';ctx.lineWidth=1;
+    for(var x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(var y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+    var txt=nums[idx], cor=cores[idx];
+    var isGo=txt==='GO!';
+
+    // Círculo pulsante
     ctx.save();
-    ctx.shadowColor=cor;ctx.shadowBlur=40;
-    ctx.beginPath();ctx.arc(W/2,H/2,txt==='GO!'?80:55,0,Math.PI*2);
-    ctx.fillStyle='rgba(0,0,0,0.7)';ctx.fill();
+    ctx.shadowColor=cor;ctx.shadowBlur=50;
+    ctx.beginPath();ctx.arc(W/2,H/2,isGo?85:60,0,Math.PI*2);
+    ctx.fillStyle='rgba(0,0,0,0.75)';ctx.fill();
     ctx.strokeStyle=cor;ctx.lineWidth=3;ctx.stroke();
     ctx.restore();
-    // Número
+
+    // Número / GO!
     ctx.save();
-    ctx.shadowColor=cor;ctx.shadowBlur=30;
+    ctx.shadowColor=cor;ctx.shadowBlur=40;
     ctx.fillStyle=cor;
-    ctx.font='bold '+(txt==='GO!'?'44px':'64px')+' "Barlow Condensed",sans-serif';
+    ctx.font='bold '+(isGo?'46px':'70px')+' "Barlow Condensed",Impact,sans-serif';
     ctx.textAlign='center';ctx.textBaseline='middle';
     ctx.fillText(txt,W/2,H/2);
     ctx.restore();
+
+    // Nome do jogo
+    var nomes={snake:'WHEY SNAKE',nave:'ALPHA FORCE',tetris:'STACK MUSCLE'};
+    ctx.fillStyle='rgba(255,255,255,0.5)';
+    ctx.font='bold 13px "Barlow Condensed",sans-serif';
+    ctx.textAlign='center';ctx.textBaseline='alphabetic';
+    ctx.fillText(nomes[gameAtivo]||'',W/2,H/2-90);
+
     // Instrução
-    ctx.fillStyle='rgba(255,255,255,0.6)';
-    ctx.font='12px monospace';ctx.textAlign='center';ctx.textBaseline='alphabetic';
-    ctx.fillText(gameAtivo==='nave'?'ARRASTE O DEDO PARA MOVER':gameAtivo==='tetris'?'← → MOVER  ↑ GIRAR  DROP':'ARRASTE PARA MOVER',W/2,H/2+80);
+    var hints={snake:'ARRASTE O DEDO PARA MOVER',nave:'TOQUE E ARRASTE A NAVE',tetris:'← → MOVER  ↑ GIRAR  DROP'};
+    ctx.fillStyle='rgba(255,255,255,0.4)';
+    ctx.font='11px monospace';
+    ctx.fillText(hints[gameAtivo]||'',W/2,H/2+90);
   }
+
   var timer=setInterval(function(){
-    desenhar();
     idx++;
-    if(idx>=nums.length){clearInterval(timer);cb();}
-  },700);
-  desenhar();
+    if(idx>=nums.length){clearInterval(timer);cb();return;}
+    desenhar();
+  },750);
+  desenhar(); // desenhar '3' imediatamente
 }
 function pauseGame(){
   gamePausado=true;
@@ -1854,6 +1871,37 @@ function gameFrame(){
 }
 
 // ── TELA GAME OVER ──────────────────────────────────────────────────────────
+// ── Menu SNES ────────────────────────────────────────────────────────────────
+window._snesIdx=0;
+function _snesAtualizar(){
+  var cores={snake:'#00CC33',nave:'#00AAFF',tetris:'#FF8800'};
+  var cor=cores[gameAtivo]||'#CC0000';
+  for(var i=0;i<3;i++){
+    var cur=document.getElementById('snes-cur-'+i);
+    var opt=document.getElementById('sopt-'+i);
+    if(!cur||!opt)continue;
+    var ativo=i===window._snesIdx;
+    cur.style.opacity=ativo?'1':'0';
+    cur.style.color=cor;
+    opt.style.background=ativo?'rgba(255,255,255,0.1)':'rgba(255,255,255,0.04)';
+    opt.style.borderColor=ativo?cor+'55':'rgba(255,255,255,0.08)';
+    opt.style.transform=ativo?'translateX(4px)':'translateX(0)';
+    opt.style.transition='all .15s';
+  }
+  var panel=document.getElementById('snes-records-panel');
+  var confirm=document.getElementById('snes-confirm-btn');
+  if(panel)panel.style.display=window._snesIdx===1?'block':'none';
+  if(confirm)confirm.style.display=window._snesIdx===0?'block':'none';
+}
+function snesSelect(idx){
+  window._snesIdx=idx;
+  _snesAtualizar();
+  if(idx===2){setTimeout(function(){exitPopupAbrir();},150);}
+}
+function snesConfirmar(){
+  if(window._snesIdx===0) goAcao('play');
+}
+
 function goMostrar(modo, isRecord, score, rewards){
   // modo: 'start' (início) | 'gameover' (derrota) | 'record' (novo recorde)
   var om=document.getElementById('game-overlay-msg');
@@ -1871,12 +1919,50 @@ function goMostrar(modo, isRecord, score, rewards){
   var startBtn=document.getElementById('game-start-btn');
 
   if(modo==='start'){
-    if(icon)icon.textContent='🎮';
-    if(title){title.textContent='PRONTO?';title.style.color='#fff';}
-    if(sub)sub.textContent='Toque em Iniciar para começar';
+    if(icon)icon.textContent='';
+    if(title){title.textContent='';title.style.color='#fff';}
+    if(sub)sub.textContent='';
     if(scoreBlock)scoreBlock.style.display='none';
     if(rewardsBlock)rewardsBlock.style.display='none';
-    if(startBtn)startBtn.textContent='▶ Iniciar';
+    // Renderizar menu SNES dentro do card
+    var card=document.getElementById('go-card');
+    if(card){
+      var nomes={snake:'WHEY SNAKE',nave:'ALPHA FORCE',tetris:'STACK MUSCLE'};
+      var cores={snake:'#00CC33',nave:'#00AAFF',tetris:'#FF8800'};
+      var cor=cores[gameAtivo]||'#CC0000';
+      var rec=gameRecord[gameAtivo]||0;
+      card.innerHTML=
+        '<div style="font-size:11px;letter-spacing:3px;color:'+cor+';margin-bottom:6px;font-family:monospace">— SELECT MODE —</div>'
+        +'<div style="font-family:\'Barlow Condensed\',Impact,sans-serif;font-size:32px;font-weight:900;color:#fff;letter-spacing:2px;text-shadow:0 0 20px '+cor+';margin-bottom:4px">'+( nomes[gameAtivo]||'GAME')+'</div>'
+        +'<div style="font-size:10px;color:#555;margin-bottom:22px;font-family:monospace">RECORD: <span style="color:'+cor+'">'+rec+'</span></div>'
+        +'<div id="snes-menu" style="display:flex;flex-direction:column;gap:6px;margin-bottom:18px">'
+          +'<div class="snes-opt" id="sopt-0" data-idx="0" onclick="snesSelect(0)" ontouchstart="snesSelect(0);event.preventDefault()" style="display:flex;align-items:center;gap:10px;padding:11px 16px;border-radius:10px;cursor:pointer;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);touch-action:manipulation">'
+            +'<span id="snes-cur-0" style="font-size:18px;transition:opacity .15s">▶</span>'
+            +'<span style="font-family:\'Barlow Condensed\',Impact,sans-serif;font-size:18px;font-weight:800;letter-spacing:1px;color:#fff">NOVO JOGO</span>'
+          +'</div>'
+          +'<div class="snes-opt" id="sopt-1" data-idx="1" onclick="snesSelect(1)" ontouchstart="snesSelect(1);event.preventDefault()" style="display:flex;align-items:center;gap:10px;padding:11px 16px;border-radius:10px;cursor:pointer;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);touch-action:manipulation">'
+            +'<span id="snes-cur-1" style="font-size:18px;opacity:0;transition:opacity .15s">▶</span>'
+            +'<span style="font-family:\'Barlow Condensed\',Impact,sans-serif;font-size:18px;font-weight:800;letter-spacing:1px;color:#aaa">RECORDS</span>'
+          +'</div>'
+          +'<div class="snes-opt" id="sopt-2" data-idx="2" onclick="snesSelect(2)" ontouchstart="snesSelect(2);event.preventDefault()" style="display:flex;align-items:center;gap:10px;padding:11px 16px;border-radius:10px;cursor:pointer;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);touch-action:manipulation">'
+            +'<span id="snes-cur-2" style="font-size:18px;opacity:0;transition:opacity .15s">▶</span>'
+            +'<span style="font-family:\'Barlow Condensed\',Impact,sans-serif;font-size:18px;font-weight:800;letter-spacing:1px;color:#888">SAIR</span>'
+          +'</div>'
+        +'</div>'
+        +'<div id="snes-records-panel" style="display:none;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px;margin-bottom:14px;text-align:left">'
+          +'<div style="font-size:10px;color:#666;letter-spacing:2px;margin-bottom:8px;font-family:monospace">MELHORES PONTUAÇÕES</div>'
+          +'<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:#888;font-size:12px">🐍 Whey Snake</span><span style="color:#00CC33;font-weight:700;font-size:12px">'+(gameRecord.snake||0)+'</span></div>'
+          +'<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:#888;font-size:12px">🚀 Alpha Force</span><span style="color:#00AAFF;font-weight:700;font-size:12px">'+(gameRecord.nave||0)+'</span></div>'
+          +'<div style="display:flex;justify-content:space-between"><span style="color:#888;font-size:12px">🧱 Stack Muscle</span><span style="color:#FF8800;font-weight:700;font-size:12px">'+(gameRecord.tetris||0)+'</span></div>'
+        +'</div>'
+        +'<div id="snes-confirm-btn" style="display:none">'
+          +'<button onclick="snesConfirmar()" ontouchstart="snesConfirmar();event.preventDefault()" style="width:100%;padding:13px;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;touch-action:manipulation;background:linear-gradient(135deg,#CC0000,#ff4500);color:#fff;letter-spacing:0.5px;font-family:\'Barlow Condensed\',Impact,sans-serif">INICIAR ▶</button>'
+        +'</div>'
+        +'<div style="font-size:10px;color:#333;font-family:monospace;margin-top:8px">© ALPHA SUPLEMENTOS</div>';
+      window._snesIdx=0;
+      _snesAtualizar();
+    }
+    return;
   } else {
     // gameover ou record
     var nomeJogo={snake:'SNAKE FITNESS',nave:'ALPHA FORCE',tetris:'STACK MUSCLE'}[gameAtivo]||'GAME OVER';
@@ -1912,6 +1998,8 @@ function goAcao(acao){
   if(acao==='play'){
     var om=document.getElementById('game-overlay-msg');
     if(om)om.style.display='none';
+    // Iniciar música aqui — dentro do evento de clique do usuário (AudioContext desbloqueado)
+    iniciarMusicaJogo(gameAtivo);
     toggleGame();
   } else if(acao==='quit'){
     // Mostrar popup de ganhos antes de sair
@@ -2316,11 +2404,11 @@ function initNave(canvas){
     player:{x:W/2,y:H-80},
     bullets:[],enemyBullets:[],enemies:[],powerups:[],particles:[],stars:[],
     fireTimer:0,
-    hp:100,maxHp:100,   // barra de vida 0-100 substituindo lives
+    hp:100,maxHp:100,
     shield:0,multishot:0,invincible:0,
-    phase:1,kills:0,scorePhase:0, // scorePhase: pontos acumulados na fase atual
+    phase:1,kills:0,scorePhase:0,
     boss:null,bossPhase:false,spawnTimer:50,tick:0,
-    touchX:null,touchY:null,
+    touchX:W/2,touchY:H-80,  // inicia na posição da nave, não null
   };
   var n=gameState.nave;
   for(var i=0;i<55;i++)n.stars.push({x:Math.random()*W,y:Math.random()*H,s:Math.random()*1.8+.3,sp:.3+Math.random()*.8,b:Math.random()});
