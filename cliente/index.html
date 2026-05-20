@@ -1227,7 +1227,8 @@ document.addEventListener('DOMContentLoaded',function(){
   if(!cw)return;
   // ── Touch da nave: arrastar livremente, nave segue o dedo ──────────────
   function naveTouch(e){
-    if(gameAtivo!=='nave'||gamePausado||!gameState.nave)return;
+    // Não verificar gamePausado aqui — startGame já seta gamePausado=false
+    if(gameAtivo!=='nave'||!gameState.nave)return;
     var touches=e.touches;
     if(!touches||!touches.length)return;
     var rect=cw.getBoundingClientRect();
@@ -1714,6 +1715,7 @@ function abrirGame(tipo){
 
 function fecharGame(){
   stopGame();
+  pararMusica();
   gameState={};
   _sessionRewards=[];
   document.getElementById('game-overlay').classList.remove('on');
@@ -1735,10 +1737,17 @@ function setupCanvas(tipo){
   var h=wrap.clientHeight||(window.innerHeight-52);
   canvas.width=w;canvas.height=h;
   canvas.style.width=w+'px';canvas.style.height=h+'px';
+  // Limpar canvas imediatamente — evita frame anterior aparecer
+  var ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle='#030308';
+  ctx.fillRect(0,0,w,h);
   gameState={};
   if(tipo==='snake')initSnake(canvas);
   else if(tipo==='nave')initNave(canvas);
   else if(tipo==='tetris')initTetris(canvas);
+  // Desenhar 1 frame imediatamente para não ficar tela preta
+  gameFrame();
 }
 
 function toggleGame(){
@@ -1768,10 +1777,58 @@ function startGame(){
   var _om=document.getElementById('game-overlay-msg');if(_om)_om.style.display='none';
   var _ep=document.getElementById('go-exit-popup');if(_ep)_ep.style.display='none';
   var _pb=document.getElementById('game-pause-btn');if(_pb)_pb.textContent='⏸';
-  setupCanvas(gameAtivo); // inicializa estado fresco
-  var fps=gameAtivo==='snake'?8:gameAtivo==='nave'?30:30;
-  clearInterval(gameLoop);
-  gameLoop=setInterval(gameFrame,1000/fps);
+  setupCanvas(gameAtivo);
+  // Countdown animado 3-2-1 GO! antes de iniciar o loop
+  mostrarCountdown(function(){
+    var fps=gameAtivo==='snake'?8:gameAtivo==='nave'?30:30;
+    clearInterval(gameLoop);
+    gameLoop=setInterval(gameFrame,1000/fps);
+    // Iniciar música do jogo
+    iniciarMusicaJogo(gameAtivo);
+  });
+}
+
+function mostrarCountdown(cb){
+  var canvas=document.getElementById('gameCanvas');
+  if(!canvas){cb();return;}
+  var ctx=canvas.getContext('2d');
+  var W=canvas.width,H=canvas.height;
+  var nums=['3','2','1','GO!'];
+  var idx=0;
+  var cores=['#FF4444','#FF8800','#FFD700','#00FF88'];
+  function desenhar(){
+    // Redesenhar frame do jogo como fundo
+    gameFrame();
+    // Overlay escuro semi-transparente
+    ctx.fillStyle='rgba(0,0,0,0.55)';ctx.fillRect(0,0,W,H);
+    var txt=nums[idx];
+    var cor=cores[idx];
+    // Círculo de fundo
+    ctx.save();
+    ctx.shadowColor=cor;ctx.shadowBlur=40;
+    ctx.beginPath();ctx.arc(W/2,H/2,txt==='GO!'?80:55,0,Math.PI*2);
+    ctx.fillStyle='rgba(0,0,0,0.7)';ctx.fill();
+    ctx.strokeStyle=cor;ctx.lineWidth=3;ctx.stroke();
+    ctx.restore();
+    // Número
+    ctx.save();
+    ctx.shadowColor=cor;ctx.shadowBlur=30;
+    ctx.fillStyle=cor;
+    ctx.font='bold '+(txt==='GO!'?'44px':'64px')+' "Barlow Condensed",sans-serif';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(txt,W/2,H/2);
+    ctx.restore();
+    // Instrução
+    ctx.fillStyle='rgba(255,255,255,0.6)';
+    ctx.font='12px monospace';ctx.textAlign='center';ctx.textBaseline='alphabetic';
+    ctx.fillText(gameAtivo==='nave'?'ARRASTE O DEDO PARA MOVER':gameAtivo==='tetris'?'← → MOVER  ↑ GIRAR  DROP':'ARRASTE PARA MOVER',W/2,H/2+80);
+  }
+  var timer=setInterval(function(){
+    desenhar();
+    idx++;
+    if(idx>=nums.length){clearInterval(timer);cb();}
+  },700);
+  desenhar();
 }
 function pauseGame(){
   gamePausado=true;
@@ -1901,8 +1958,169 @@ function exitPopupConfirmar(){
   fecharGame();
 }
 
+// ══ MÚSICA DOS JOGOS — Web Audio API ════════════════════════════════════════
+var _audioCtx=null,_musicNodes=[],_musicAtivo=null;
+
+function getAudioCtx(){
+  if(!_audioCtx){
+    try{_audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}
+  }
+  if(_audioCtx.state==='suspended')_audioCtx.resume();
+  return _audioCtx;
+}
+
+function pararMusica(){
+  _musicNodes.forEach(function(n){try{n.stop&&n.stop();n.disconnect&&n.disconnect();}catch(e){}});
+  _musicNodes=[];_musicAtivo=null;
+}
+
+function iniciarMusicaJogo(tipo){
+  pararMusica();
+  var ctx=getAudioCtx();if(!ctx)return;
+  _musicAtivo=tipo;
+  if(tipo==='nave')tocarRockEspacial(ctx);
+  else if(tipo==='tetris')tocarTetrisTheme(ctx);
+}
+
+// ── Rock Espacial para a Nave ────────────────────────────────────────────────
+function tocarRockEspacial(ctx){
+  var master=ctx.createGain();master.gain.value=0.18;master.connect(ctx.destination);
+  _musicNodes.push(master);
+
+  // Bateria eletrônica — kick + snare + hihat via scheduled buffers
+  var bpm=130, beat=60/bpm, bar=beat*4;
+  var t=ctx.currentTime+0.1;
+
+  function noise(dur){
+    var buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate);
+    var d=buf.getChannelData(0);
+    for(var i=0;i<d.length;i++)d[i]=(Math.random()*2-1);
+    return buf;
+  }
+
+  function scheduleKick(when){
+    var o=ctx.createOscillator(),g=ctx.createGain();
+    o.frequency.setValueAtTime(150,when);
+    o.frequency.exponentialRampToValueAtTime(40,when+0.08);
+    g.gain.setValueAtTime(1.2,when);g.gain.exponentialRampToValueAtTime(0.001,when+0.18);
+    o.connect(g);g.connect(master);o.start(when);o.stop(when+0.2);
+    _musicNodes.push(o,g);
+  }
+  function scheduleSnare(when){
+    var src=ctx.createBufferSource(),g=ctx.createGain(),f=ctx.createBiquadFilter();
+    src.buffer=noise(0.15);f.type='bandpass';f.frequency.value=1800;f.Q.value=0.8;
+    g.gain.setValueAtTime(0.7,when);g.gain.exponentialRampToValueAtTime(0.001,when+0.12);
+    src.connect(f);f.connect(g);g.connect(master);src.start(when);
+    _musicNodes.push(src,g,f);
+  }
+  function scheduleHihat(when,open){
+    var src=ctx.createBufferSource(),g=ctx.createGain(),f=ctx.createBiquadFilter();
+    src.buffer=noise(open?0.15:0.04);f.type='highpass';f.frequency.value=8000;
+    g.gain.setValueAtTime(0.3,when);g.gain.exponentialRampToValueAtTime(0.001,when+(open?0.1:0.03));
+    src.connect(f);f.connect(g);g.connect(master);src.start(when);
+    _musicNodes.push(src,g,f);
+  }
+
+  // Linha de baixo — riff de rock espacial
+  var bassNotes=[55,55,58,55, 55,55,60,58, 53,53,55,53, 50,50,53,50];
+  function hz(midi){return 440*Math.pow(2,(midi-69)/12);}
+
+  function scheduleBeat(when){
+    if(_musicAtivo!=='nave')return;
+    // Kick: 1 e 3
+    scheduleKick(when); scheduleKick(when+beat*2);
+    // Snare: 2 e 4
+    scheduleSnare(when+beat); scheduleSnare(when+beat*3);
+    // Hihat: cada colcheia
+    for(var i=0;i<8;i++) scheduleHihat(when+i*(beat/2),i%4===3);
+    // Baixo
+    for(var b=0;b<4;b++){
+      var note=bassNotes[Math.floor(when/bar*4+b)%bassNotes.length];
+      var o2=ctx.createOscillator(),g2=ctx.createGain(),f2=ctx.createBiquadFilter();
+      o2.type='sawtooth';o2.frequency.value=hz(note-12);
+      f2.type='lowpass';f2.frequency.value=400;f2.Q.value=2;
+      g2.gain.setValueAtTime(0.5,when+b*beat);g2.gain.exponentialRampToValueAtTime(0.001,when+b*beat+beat*0.8);
+      o2.connect(f2);f2.connect(g2);g2.connect(master);
+      o2.start(when+b*beat);o2.stop(when+b*beat+beat);
+      _musicNodes.push(o2,g2,f2);
+    }
+    // Melodia synth lead (guitarra distorcida simulada)
+    var lead=[67,67,69,71,72,71,69,67];
+    for(var m=0;m<4;m++){
+      var on=ctx.createOscillator(),gn=ctx.createGain(),fn=ctx.createWaveShaper();
+      var curve=new Float32Array(256);
+      for(var ci=0;ci<256;ci++){var x=ci/128-1;curve[ci]=x*(Math.PI+3)/(Math.PI+Math.abs(x)*3);}
+      fn.curve=curve;
+      on.type='sawtooth';on.frequency.value=hz(lead[(Math.floor(when/bar)*4+m)%lead.length]);
+      gn.gain.setValueAtTime(0.3,when+m*beat);gn.gain.exponentialRampToValueAtTime(0.001,when+m*beat+beat*0.9);
+      on.connect(fn);fn.connect(gn);gn.connect(master);
+      on.start(when+m*beat);on.stop(when+m*beat+beat);
+      _musicNodes.push(on,gn,fn);
+    }
+    // Agendar próximo compasso
+    setTimeout(function(){if(_musicAtivo==='nave')scheduleBeat(when+bar);},Math.max(0,(when+bar-ctx.currentTime-0.5)*1000));
+  }
+  scheduleBeat(t);
+}
+
+// ── Tema do Tetris (Korobeiniki) ─────────────────────────────────────────────
+function tocarTetrisTheme(ctx){
+  var master=ctx.createGain();master.gain.value=0.2;master.connect(ctx.destination);
+  _musicNodes.push(master);
+
+  var bpm=160, beat=60/bpm;
+  function hz(midi){return 440*Math.pow(2,(midi-69)/12);}
+
+  // Melodia principal — Korobeiniki (Tetris A)
+  var melody=[
+    {n:64,d:1},{n:60,d:0.5},{n:62,d:0.5},{n:64,d:1},{n:62,d:0.5},{n:60,d:0.5},
+    {n:59,d:1},{n:59,d:0.5},{n:62,d:0.5},{n:64,d:1},{n:65,d:0.5},{n:67,d:0.5},
+    {n:69,d:1},{n:65,d:0.5},{n:67,d:0.5},{n:69,d:1},{n:67,d:0.5},{n:65,d:0.5},
+    {n:64,d:1},{n:60,d:0.5},{n:62,d:0.5},{n:64,d:1},{n:62,d:0.5},{n:60,d:0.5},
+    {n:59,d:1.5},{n:59,d:0.5},{n:57,d:1},{n:57,d:1},
+    {n:62,d:1},{n:65,d:0.5},{n:69,d:0.5},{n:67,d:1},{n:65,d:0.5},{n:64,d:0.5},
+    {n:64,d:1},{n:60,d:0.5},{n:62,d:0.5},{n:64,d:1},{n:62,d:0.5},{n:60,d:0.5},
+    {n:59,d:1},{n:59,d:0.5},{n:62,d:0.5},{n:64,d:1},{n:65,d:0.5},{n:67,d:0.5},
+    {n:69,d:1},{n:65,d:0.5},{n:67,d:0.5},{n:69,d:1},{n:67,d:0.5},{n:65,d:0.5},
+    {n:64,d:1},{n:60,d:0.5},{n:62,d:0.5},{n:64,d:1},{n:62,d:0.5},{n:60,d:0.5},
+    {n:59,d:1.5},{n:59,d:0.5},{n:57,d:1},{n:57,d:1},
+  ];
+
+  function scheduleMelody(startTime){
+    if(_musicAtivo!=='tetris')return;
+    var t=startTime, totalDur=0;
+    melody.forEach(function(note){
+      var o=ctx.createOscillator(),g=ctx.createGain();
+      o.type='square';o.frequency.value=hz(note.n);
+      var dur=note.d*beat;
+      g.gain.setValueAtTime(0.5,t);
+      g.gain.setValueAtTime(0.5,t+dur*0.8);
+      g.gain.linearRampToValueAtTime(0,t+dur);
+      o.connect(g);g.connect(master);
+      o.start(t);o.stop(t+dur);
+      _musicNodes.push(o,g);
+      t+=dur;totalDur+=dur;
+    });
+    // Baixo acompanhamento simples
+    var bassPattern=[40,45,43,38,40,45,40,38];
+    var bStep=beat*2;
+    for(var bi=0;bi<bassPattern.length;bi++){
+      var ob=ctx.createOscillator(),gb=ctx.createGain();
+      ob.type='triangle';ob.frequency.value=hz(bassPattern[bi]);
+      gb.gain.setValueAtTime(0.3,startTime+bi*bStep);
+      gb.gain.exponentialRampToValueAtTime(0.001,startTime+bi*bStep+bStep*0.9);
+      ob.connect(gb);gb.connect(master);
+      ob.start(startTime+bi*bStep);ob.stop(startTime+bi*bStep+bStep);
+      _musicNodes.push(ob,gb);
+    }
+    setTimeout(function(){if(_musicAtivo==='tetris')scheduleMelody(startTime+totalDur);},Math.max(0,(startTime+totalDur-ctx.currentTime-0.5)*1000));
+  }
+  scheduleMelody(ctx.currentTime+0.1);
+}
+
 function onGameOver(){
   stopGame();
+  pararMusica();
   gameState={}; // limpar PRIMEIRO
   var era=gameRecord[gameAtivo]||0;
   var isRecord=gameScore>era;
