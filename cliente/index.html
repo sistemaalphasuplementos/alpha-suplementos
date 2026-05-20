@@ -1271,6 +1271,8 @@ document.addEventListener('DOMContentLoaded',function(){
     }
   },{passive:true});
 
+}); // fim DOMContentLoaded
+
 document.addEventListener('keydown',function(e){
   var tag=(document.activeElement||{}).tagName;
   if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT')return;
@@ -3010,3 +3012,8 @@ function pedirPermissaoNotificacao(){if('Notification'in window&&Notification.pe
       document.body.appendChild(b);setTimeout(function(){if(b.parentElement)b.remove()},10000);
     }
   });
+
+  });
+</script>
+</body>
+</html>
