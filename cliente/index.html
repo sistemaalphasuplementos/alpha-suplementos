@@ -1737,12 +1737,12 @@ function abrirGame(tipo){
   loadGameRecords();
   var titulos={snake:'WHEY SNAKE',nave:'ALPHA FORCE',tetris:'STACK MUSCLE'};
   var subs={snake:'Colete wheys e proteínas. Fuja do lixo!',nave:'Destrua inimigos e colete suplementos!',tetris:'Empilhe blocos e complete linhas!'};
-  document.getElementById('game-title-txt').textContent=titulos[tipo];
-  document.getElementById('game-subtitle-txt').textContent=subs[tipo];
-  document.getElementById('game-record-display').textContent=gameRecord[tipo]||0;
-  document.getElementById('game-score-display').textContent=0;
-  document.getElementById('game-start-btn').textContent='▶ Iniciar';
-  document.getElementById('game-overlay').classList.add('on');
+  var _gtt=document.getElementById('game-title-txt');if(_gtt)_gtt.textContent=titulos[tipo];
+  var _gst=document.getElementById('game-subtitle-txt');if(_gst)_gst.textContent=subs[tipo];
+  var _grd=document.getElementById('game-record-display');if(_grd)_grd.textContent=gameRecord[tipo]||0;
+  var _gsd=document.getElementById('game-score-display');if(_gsd)_gsd.textContent=0;
+  var _gsb=document.getElementById('game-start-btn');if(_gsb)_gsb.textContent='▶ Iniciar';
+  var _gov=document.getElementById('game-overlay');if(_gov)_gov.classList.add('on');
   // Controles Tetris
   var ol=document.getElementById('tetOL');
   if(ol)ol.className='tet-ol'+(tipo==='tetris'?' on':'');
