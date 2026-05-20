@@ -767,7 +767,7 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
     <!-- CARDS DOS JOGOS -->
     <div class="games-grid">
 
-      <div class="game-card snake" onclick="abrirGame('snake')">
+      <div class="game-card snake" onclick="abrirGame('snake')" ontouchstart="abrirGame('snake');event.preventDefault()" style="touch-action:manipulation">
         <div class="game-card-ico-wrap">🐍</div>
         <div class="game-card-body">
           <div class="game-card-name">WHEY SNAKE</div>
@@ -779,7 +779,7 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
         </div>
       </div>
 
-      <div class="game-card nave" onclick="abrirGame('nave')">
+      <div class="game-card nave" onclick="abrirGame('nave')" ontouchstart="abrirGame('nave');event.preventDefault()" style="touch-action:manipulation">
         <div class="game-card-ico-wrap">🚀</div>
         <div class="game-card-body">
           <div class="game-card-name">ALPHA FORCE</div>
@@ -791,7 +791,7 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
         </div>
       </div>
 
-      <div class="game-card tetris" onclick="abrirGame('tetris')">
+      <div class="game-card tetris" onclick="abrirGame('tetris')" ontouchstart="abrirGame('tetris');event.preventDefault()" style="touch-action:manipulation">
         <div class="game-card-ico-wrap">💪</div>
         <div class="game-card-body">
           <div class="game-card-name">STACK MUSCLE</div>
@@ -1756,6 +1756,8 @@ function abrirGame(tipo){
   _sessionRewards=[];
   var _ot=document.getElementById('game-over-txt');if(_ot)_ot.innerHTML='';
   window._snesIdx=0;
+  // Pré-desbloquear AudioContext no evento de toque (antes do menu)
+  try{var _ac=new(window.AudioContext||window.webkitAudioContext)();_ac.resume();_ac.close();}catch(e){}
   // Mostrar menu de seleção HTML diretamente — simples e confiável
   _mostrarMenuInicio();
 }
