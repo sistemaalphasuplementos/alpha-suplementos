@@ -523,9 +523,10 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
   <div class="game-canvas-wrap" id="gcWrap" style="position:relative;flex:1;min-height:0;">
     <canvas id="gameCanvas" style="touch-action:none;display:block;width:100%;height:100%"></canvas>
     <!-- Overlay start/pause -->
-    <div class="game-overlay-msg" id="game-overlay-msg" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(4,4,4,.95);border:1px solid #222;border-radius:14px;padding:20px 28px;text-align:center;z-index:10;min-width:180px">
-      <div id="game-over-txt" style="font-size:13px;color:#aaa;margin-bottom:10px"></div>
-      <button id="game-start-btn" ontouchstart="toggleGame();event.preventDefault();" onclick="toggleGame()" style="background:linear-gradient(135deg,#CC0000,#ff4500);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:15px;font-weight:700;cursor:pointer;width:100%;touch-action:manipulation;-webkit-tap-highlight-color:transparent">▶ Iniciar</button>
+    <div class="game-overlay-msg" id="game-overlay-msg" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(4,4,4,.97);border:1px solid #333;border-radius:16px;padding:24px 28px;text-align:center;z-index:10;min-width:220px;max-width:90vw">
+      <div id="game-over-txt" style="font-size:14px;color:#aaa;margin-bottom:14px;line-height:1.6"></div>
+      <button id="game-start-btn" ontouchstart="toggleGame();event.preventDefault();" onclick="toggleGame()" style="background:linear-gradient(135deg,#CC0000,#ff4500);color:#fff;border:none;border-radius:10px;padding:12px 0;font-size:15px;font-weight:700;cursor:pointer;width:100%;touch-action:manipulation;-webkit-tap-highlight-color:transparent;margin-bottom:8px">▶ Iniciar</button>
+      <button id="game-quit-btn" ontouchstart="fecharGame();event.preventDefault();" onclick="fecharGame()" style="background:rgba(40,40,40,.9);color:#888;border:1px solid #333;border-radius:10px;padding:8px 0;font-size:13px;font-weight:600;cursor:pointer;width:100%;touch-action:manipulation;-webkit-tap-highlight-color:transparent">✕ Sair</button>
     </div>
     <!-- Botões Tetris dentro do canvas -->
     <div id="tetCtrl" style="display:none;position:absolute;inset:0;pointer-events:none;z-index:2">
@@ -1729,20 +1730,28 @@ function gameFrame(){
 
 function onGameOver(){
   stopGame();
-  // Verificar novo recorde
+  gameState={}; // limpar PRIMEIRO — evita gameFrame continuar
   var era=gameRecord[gameAtivo]||0;
   var isRecord=gameScore>era;
   if(isRecord){gameRecord[gameAtivo]=gameScore;saveGameRecords();}
-  // Atualizar UI
+  // Atualizar elementos — todos com null-check para não lançar TypeError
   var pb=document.getElementById('game-pause-btn');if(pb)pb.textContent='▶';
   var ot=document.getElementById('game-over-txt');
-  if(ot){ot.innerHTML=isRecord?'<span style="color:#FFD700;font-size:15px">🏆 Novo Recorde!</span><br>':'<span>Game Over!</span><br>';ot.innerHTML+='<small style="color:#666">Score: '+gameScore+'</small>';}
-  document.getElementById('game-record-display').textContent=gameRecord[gameAtivo];
-  document.getElementById('game-over-title').textContent=isRecord?'🏆 NOVO RECORDE!':'GAME OVER';
-  document.getElementById('game-over-title').style.color=isRecord?'#FFD700':'#FF4444';
-  document.getElementById('game-over-score').textContent='Pontuação: '+gameScore+(isRecord?' 🎉':'');
-  document.getElementById('game-start-btn').textContent='▶ Iniciar';
-  // Recompensas — envia ao backend via creditarRecompensa
+  if(ot){
+    ot.innerHTML=(isRecord
+      ?'<span style="color:#FFD700;font-size:16px">🏆 NOVO RECORDE!</span>'
+      :'<span style="color:#FF4444;font-size:16px">💀 GAME OVER</span>');
+    ot.innerHTML+='<br><small style="color:#888;font-size:12px">Score: '+gameScore+'</small>';
+  }
+  var elTitle=document.getElementById('game-over-title');
+  if(elTitle){elTitle.textContent=isRecord?'🏆 NOVO RECORDE!':'GAME OVER';elTitle.style.color=isRecord?'#FFD700':'#FF4444';}
+  var elScore=document.getElementById('game-over-score');
+  if(elScore)elScore.textContent='Pontuação: '+gameScore+(isRecord?' 🎉':'');
+  var elRec=document.getElementById('game-record-display');
+  if(elRec)elRec.textContent=gameRecord[gameAtivo];
+  var sb=document.getElementById('game-start-btn');
+  if(sb)sb.textContent='▶ Jogar Novamente';
+  // Recompensas
   var rewardEl=document.getElementById('game-over-reward');
   var msgs=[];
   if(!ganhouPtsHoje[gameAtivo]){
@@ -1754,17 +1763,18 @@ function onGameOver(){
     msgs.push('+5 pts pelo recorde!');
     creditarRecompensa('pontos','+5 pts — novo recorde em '+gameAtivo+'! 🏅',5,'record_'+gameAtivo);
   }
-  if(msgs.length>0){rewardEl.style.display='block';rewardEl.textContent='🏆 '+msgs.join(' · ');}
-  else{rewardEl.style.display='none';}
-  // Verificar marcos de pontos totais (500 e 1000 pts)
+  if(rewardEl){
+    if(msgs.length>0){rewardEl.style.display='block';rewardEl.textContent='🏆 '+msgs.join(' · ');}
+    else rewardEl.style.display='none';
+  }
   if(U){
     var marcos=[];try{marcos=JSON.parse(localStorage.getItem('alpha_marcos')||'[]');}catch(e){}
     if(U.pontos>=1000&&!marcos.includes('m1000')){marcos.push('m1000');localStorage.setItem('alpha_marcos',JSON.stringify(marcos));creditarRecompensa('cashback','R$20 cashback — 1.000 pontos! 🏆',20,'marco1000');}
     else if(U.pontos>=500&&!marcos.includes('m500')){marcos.push('m500');localStorage.setItem('alpha_marcos',JSON.stringify(marcos));creditarRecompensa('cashback','R$10 cashback — 500 pontos! ⭐',10,'marco500');}
   }
-  var _omGO=document.getElementById('game-overlay-msg');if(_omGO)_omGO.style.display='block';
-  // Limpar estado do jogo — próximo clique em "Iniciar" reinicia do zero
-  gameState={};
+  // Mostrar overlay — SEMPRE, independente de qualquer elemento acima
+  var _omGO=document.getElementById('game-overlay-msg');
+  if(_omGO)_omGO.style.display='block';
 }
 
 function addScore(pts){
@@ -2313,269 +2323,249 @@ function drawNave(canvas){
 
 // ══ TETRIS — STACK MUSCLE v51 ════════════════════════════════════════════════
 // Shapes no padrão oficial Tetris Guideline (linha de base embaixo)
+// ══ TETRIS — STACK MUSCLE ═══════════════════════════════════════════════════
+// Shapes no padrão oficial Tetris Guideline
 var TETRIS_PIECES=[
-  {s:[[1,1,1,1]],       c:'#00CCFF',hl:'#88eeff',dk:'#005577',bi:0}, // I
-  {s:[[1,1],[1,1]],     c:'#FFAA00',hl:'#ffdd66',dk:'#775500',bi:3}, // O
-  {s:[[0,1,0],[1,1,1]], c:'#AA00FF',hl:'#dd88ff',dk:'#550077',bi:6}, // T
-  {s:[[1,0,0],[1,1,1]], c:'#2255FF',hl:'#6699ff',dk:'#001188',bi:1}, // J
-  {s:[[0,0,1],[1,1,1]], c:'#FF6600',hl:'#ffaa44',dk:'#882200',bi:2}, // L
-  {s:[[0,1,1],[1,1,0]], c:'#00CC33',hl:'#66ff88',dk:'#005522',bi:4}, // S
-  {s:[[1,1,0],[0,1,1]], c:'#FF2233',hl:'#ff7788',dk:'#880011',bi:5}, // Z
+  {s:[[1,1,1,1]],       c:'#00CCFF', bi:0}, // I — ciano
+  {s:[[1,1],[1,1]],     c:'#FFAA00', bi:3}, // O — amarelo
+  {s:[[0,1,0],[1,1,1]], c:'#AA00FF', bi:6}, // T — roxo
+  {s:[[1,0,0],[1,1,1]], c:'#2255FF', bi:1}, // J — azul
+  {s:[[0,0,1],[1,1,1]], c:'#FF6600', bi:2}, // L — laranja
+  {s:[[0,1,1],[1,1,0]], c:'#00CC33', bi:4}, // S — verde
+  {s:[[1,1,0],[0,1,1]], c:'#FF2233', bi:5}, // Z — vermelho
 ];
+
 function randomPiece(){
   var p=TETRIS_PIECES[Math.floor(Math.random()*TETRIS_PIECES.length)];
-  // Retorna SEMPRE uma cópia — nunca a referência original do array global
-  return {s:p.s.map(function(r){return r.slice();}),c:p.c,hl:p.hl,dk:p.dk,bi:p.bi};
+  return {s:p.s.map(function(r){return r.slice();}),c:p.c,bi:p.bi};
 }
-function collision(board,shape,cx,cy){
-  for(var r=0;r<shape.length;r++)for(var c2=0;c2<shape[r].length;c2++){
-    if(!shape[r][c2])continue;
-    var nx=cx+c2,ny=cy+r;
-    if(nx<0||nx>=board[0].length||ny>=board.length)return true;
-    if(ny>=0&&board[ny][nx])return true;
-  }return false;
+
+function tCollision(board,shape,cx,cy){
+  for(var r=0;r<shape.length;r++){
+    for(var c=0;c<shape[r].length;c++){
+      if(!shape[r][c])continue;
+      var nx=cx+c, ny=cy+r;
+      if(nx<0||nx>=10||ny>=20)return true;
+      if(ny>=0&&board[ny][nx])return true;
+    }
+  }
+  return false;
 }
+
 function spawnPiece(){
   var t=gameState.tetris;if(!t)return;
-  t.cur=t.next;t.next=randomPiece();
-  t.cx=Math.floor((t.cols-t.cur.s[0].length)/2);t.cy=0;
-  t.lockDelay=0;t.holdUsed=false;
-  if(collision(t.board,t.cur.s,t.cx,t.cy))onGameOver();
+  t.cur=t.next;
+  t.next=randomPiece();
+  t.cx=Math.floor((10-t.cur.s[0].length)/2);
+  t.cy=0;
+  t.lockDelay=0;
+  t.holdUsed=false;
+  if(tCollision(t.board,t.cur.s,t.cx,t.cy))onGameOver();
 }
+
 function lockPiece(){
   var t=gameState.tetris;if(!t||!t.cur)return;
-  // Snapshot imutável da peça — desvincula do objeto t.cur que vai mudar
-  var snap={s:t.cur.s.map(function(r){return r.slice();}),c:t.cur.c,hl:t.cur.hl,dk:t.cur.dk,bi:t.cur.bi};
-  for(var r=0;r<t.cur.s.length;r++)for(var c2=0;c2<t.cur.s[r].length;c2++){
-    if(t.cur.s[r][c2]&&t.cy+r>=0)t.board[t.cy+r][t.cx+c2]=snap;
+  // Snapshot imutável — cada célula do board é independente
+  var snap={s:t.cur.s.map(function(r){return r.slice();}),c:t.cur.c,bi:t.cur.bi};
+  for(var r=0;r<t.cur.s.length;r++){
+    for(var c=0;c<t.cur.s[r].length;c++){
+      if(t.cur.s[r][c]&&t.cy+r>=0)t.board[t.cy+r][t.cx+c]=snap;
+    }
   }
-  var cleared=0;t.flashRows=[];
-  for(var row=t.rows-1;row>=0;row--){
+  // Verificar linhas completas
+  var cleared=0;
+  for(var row=19;row>=0;row--){
     if(t.board[row].every(function(v){return v!==0;})){
-      t.flashRows.push(row);t.board.splice(row,1);
-      t.board.unshift(Array(t.cols).fill(0));cleared++;row++;
+      t.board.splice(row,1);
+      t.board.unshift(Array(10).fill(0));
+      cleared++;row++;
     }
   }
   if(cleared>0){
-    t.flashTimer=10;
+    var pts=[0,100,300,500,800][Math.min(cleared,4)];
+    addScore(pts);
     t.linesCleared=(t.linesCleared||0)+cleared;
-    addScore([0,100,300,500,800][Math.min(cleared,4)]);
-    t.fallSpeed=Math.max(5,28-Math.floor(gameScore/400));
+    t.fallSpeed=Math.max(5,28-Math.floor(t.linesCleared/10)*2);
   }
   t.pieceCount=(t.pieceCount||0)+1;
-  if(!t.powerups)t.powerups=[];
-  if(t.pieceCount%8===0)t.powerups.push({cx:Math.floor(Math.random()*t.cols),y:44,tipo:Math.floor(Math.random()*4)});
   spawnPiece();
 }
+
 function tetrisHold(){
   var t=gameState.tetris;if(!t||!t.cur||t.holdUsed)return;
   t.holdUsed=true;
   var old=t.hold;
-  t.hold=Object.assign({},t.cur,{s:t.cur.s.map(function(r){return r.slice();})});
+  t.hold={s:t.cur.s.map(function(r){return r.slice();}),c:t.cur.c,bi:t.cur.bi};
   if(old){
-    t.cur=Object.assign({},old,{s:old.s.map(function(r){return r.slice();})});
-    t.cx=Math.floor((t.cols-t.cur.s[0].length)/2);
-    t.cy=0;
-    t.fallTimer=0;
-    t.lockDelay=0;
+    t.cur={s:old.s.map(function(r){return r.slice();}),c:old.c,bi:old.bi};
+    t.cx=Math.floor((10-t.cur.s[0].length)/2);
+    t.cy=0; t.fallTimer=0; t.lockDelay=0;
   } else {
     spawnPiece();
   }
 }
+
 function tetrisRotate(){
   var t=gameState.tetris;if(!t||!t.cur)return;
-  var rot=t.cur.s[0].map(function(_,i){return t.cur.s.map(function(r){return r[i];}).reverse();});
-  for(var k=-2;k<=2;k++){
-    if(!collision(t.board,rot,t.cx+k,t.cy)){t.cur=Object.assign({},t.cur,{s:rot});t.cx+=k;return;}
-  }
-}
-function tetrisHardDrop(){
-  var t=gameState.tetris;if(!t||!t.cur)return;
-  var pts=0;while(!collision(t.board,t.cur.s,t.cx,t.cy+1)){t.cy++;pts++;}
-  addScore(pts*2);lockPiece();
-}
-function initTetris(canvas){
-  var cols=10,rows=20;
-  var cs=Math.floor(Math.min(canvas.width/cols,(canvas.height-44)/rows));
-  var offX=Math.floor((canvas.width-cols*cs)/2);
-  gameState.tetris={
-    cols:cols,rows:rows,cs:cs,offX:offX,
-    board:Array.from({length:rows},function(){return Array(cols).fill(0);}),
-    cur:null,cx:0,cy:0,next:randomPiece(),
-    hold:null,holdUsed:false,
-    fallTimer:0,fallSpeed:28,lockDelay:0,
-    flashRows:[],flashTimer:0,
-    powerups:[],pieceCount:0,linesCleared:0,
-  };
-  spawnPiece();
-}
-function updateTetris(canvas){
-  var t=gameState.tetris;if(!t||!t.cur)return;
-  t.fallTimer++;
-  var canFall=!collision(t.board,t.cur.s,t.cx,t.cy+1);
-  if(t.fallTimer>=t.fallSpeed){
-    t.fallTimer=0;
-    if(canFall)t.cy++;
-    else{t.lockDelay++;if(t.lockDelay>=6)lockPiece();}
-  }
-  if(canFall)t.lockDelay=0;
-  drawTetris(canvas);
-}
-function _tBkFb(ctx,x,y,cs,p){
-  var col=p?p.c:'#888',hl=p?p.hl||'#fff':'#fff',dk=p?p.dk||'#000':'#000';
-  var s=cs-2,bv=Math.max(2,(cs*.16)|0);
-  ctx.fillStyle=col;ctx.fillRect(x+1,y+1,s,s);
-  ctx.fillStyle=hl;ctx.fillRect(x+1,y+1,s,bv);ctx.fillRect(x+1,y+1,bv,s);
-  ctx.fillStyle=dk;ctx.fillRect(x+1,y+1+s-bv,s,bv);ctx.fillRect(x+1+s-bv,y+1,bv,s);
-}
-function drawTetrisBlock(ctx,x,y,cs,piece,alpha){
-  if(alpha!==undefined&&alpha<1){ctx.save();ctx.globalAlpha=alpha;}
-  var bi=(piece&&piece.bi!==undefined)?piece.bi:0;
-  var img=(typeof _tBlocks!=='undefined'&&_tBlocks)?_tBlocks[bi%7]:null;
-  if(img&&_nIO(img)){try{ctx.drawImage(img,x,y,cs,cs);}catch(e){_tBkFb(ctx,x,y,cs,piece);}}
-  else _tBkFb(ctx,x,y,cs,piece);
-  if(alpha!==undefined&&alpha<1)ctx.restore();
-}
-function _tBgFb(ctx,W,H){
-  var g=ctx.createLinearGradient(0,0,0,H);
-  g.addColorStop(0,'#0a0a1a');g.addColorStop(1,'#050310');
-  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-}
-function drawTetris(canvas){
-  var ctx=canvas.getContext('2d');
-  var t=gameState.tetris;if(!t)return;
-  var W=canvas.width,H=canvas.height;
-  // Fundo
-  var bgArr=(typeof _tBGs!=='undefined'&&_tBGs)?_tBGs:null;
-  var bgImg=bgArr?bgArr[Math.floor((gameScore||0)/600)%4]:null;
-  if(bgImg&&_nIO(bgImg)){try{ctx.drawImage(bgImg,0,0,W,H);}catch(e){_tBgFb(ctx,W,H);}ctx.fillStyle='rgba(0,0,8,.45)';ctx.fillRect(0,0,W,H);}
-  else _tBgFb(ctx,W,H);
-  // Grade
-  ctx.strokeStyle='rgba(40,80,160,.22)';ctx.lineWidth=.5;
-  for(var r2=0;r2<t.rows;r2++)for(var c3=0;c3<t.cols;c3++)ctx.strokeRect(t.offX+c3*t.cs,44+r2*t.cs,t.cs,t.cs);
-  // Flash
-  if(t.flashTimer>0){
-    t.flashRows.forEach(function(fr){ctx.fillStyle='rgba(255,255,255,'+(t.flashTimer/10)+')';ctx.fillRect(t.offX,44+fr*t.cs,t.cols*t.cs,t.cs);});
-    t.flashTimer--;
-  }
-  // Blocos fixos
-  for(var r=0;r<t.rows;r++)for(var c=0;c<t.cols;c++){var cell=t.board[r][c];if(cell)drawTetrisBlock(ctx,t.offX+c*t.cs,44+r*t.cs,t.cs,cell,1);}
-  // Ghost + peça atual
-  if(t.cur){
-    var gy=t.cy;while(!collision(t.board,t.cur.s,t.cx,gy+1))gy++;
-    if(gy!==t.cy)for(var r=0;r<t.cur.s.length;r++)for(var c=0;c<t.cur.s[r].length;c++){
-      if(t.cur.s[r][c]){ctx.strokeStyle=t.cur.c+'55';ctx.lineWidth=1.5;ctx.strokeRect(t.offX+(t.cx+c)*t.cs+1,44+(gy+r)*t.cs+1,t.cs-2,t.cs-2);ctx.fillStyle=t.cur.c+'10';ctx.fillRect(t.offX+(t.cx+c)*t.cs+1,44+(gy+r)*t.cs+1,t.cs-2,t.cs-2);}
-    }
-    for(var r=0;r<t.cur.s.length;r++)for(var c=0;c<t.cur.s[r].length;c++){if(t.cur.s[r][c]&&t.cy+r>=0)drawTetrisBlock(ctx,t.offX+(t.cx+c)*t.cs,44+(t.cy+r)*t.cs,t.cs,t.cur,1);}
-  }
-  // Painel lateral
-  var px=t.offX+t.cols*t.cs+6,pw=W-px-4;
-  if(pw>=t.cs*2){
-    var ph=t.cs*4+12;
-    ctx.fillStyle='rgba(0,0,20,.8)';ctx.strokeStyle='rgba(60,120,255,.4)';ctx.lineWidth=1;
-    ctx.fillRect(px,44,pw,ph);ctx.strokeRect(px,44,pw,ph);
-    ctx.fillStyle='#88aacc';ctx.font='bold 9px Barlow,monospace';ctx.textAlign='center';ctx.fillText('NEXT',px+pw/2,58);
-    if(t.next){var ns=t.next.s,ncs=Math.min((pw-4)/Math.max(ns[0].length,2),(ph-20)/Math.max(ns.length,2),t.cs-2),nox=px+(pw-ns[0].length*ncs)/2,noy=62+(ph-20-ns.length*ncs)/2;for(var r=0;r<ns.length;r++)for(var c=0;c<ns[r].length;c++){if(ns[r][c])drawTetrisBlock(ctx,nox+c*ncs,noy+r*ncs,ncs,t.next,1);}}
-    var hy=44+ph+8;
-    if(hy+ph<H-40){
-      ctx.fillStyle='rgba(0,0,20,.8)';ctx.strokeStyle='rgba(200,100,40,.4)';
-      ctx.fillRect(px,hy,pw,ph);ctx.strokeRect(px,hy,pw,ph);
-      ctx.fillStyle='#cc8844';ctx.font='bold 9px Barlow,monospace';ctx.textAlign='center';ctx.fillText('HOLD',px+pw/2,hy+14);
-      if(t.hold){var hs=t.hold.s,hcs=Math.min((pw-4)/Math.max(hs[0].length,2),(ph-20)/Math.max(hs.length,2),t.cs-2),hox=px+(pw-hs[0].length*hcs)/2,hoy=hy+16+(ph-20-hs.length*hcs)/2;for(var r=0;r<hs.length;r++)for(var c=0;c<hs[r].length;c++){if(hs[r][c])drawTetrisBlock(ctx,hox+c*hcs,hoy+r*hcs,hcs,t.hold,t.holdUsed?.3:.9);}}
-    }
-  }
-  // Power-ups caindo
-  if(!t.powerups)t.powerups=[];
-  t.powerups=t.powerups.filter(function(p){
-    p.y+=0.8;var bob=Math.sin(p.y*.1)*2;
-    ctx.save();ctx.translate(t.offX+p.cx*t.cs+t.cs/2,p.y+bob);
-    ctx.shadowColor='#ffdd00';ctx.shadowBlur=10;
-    var pArr=(typeof _iPUs!=='undefined'&&_iPUs)?_iPUs:null;
-    var pImg=pArr?pArr[p.tipo%pArr.length]:null;
-    if(!_nDS(ctx,pImg,0,0,t.cs,t.cs)){ctx.fillStyle='#FFD700';ctx.font=Math.round(t.cs*.8)+'px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('⚡',0,0);}
-    ctx.shadowBlur=0;ctx.restore();
-    if(t.cur&&Math.abs(p.cx-t.cx)<2&&p.y>44+t.cy*t.cs&&p.y<44+(t.cy+3)*t.cs){
-      addScore(200);if(typeof toast==='function')toast('⚡ Bônus!');return false;
-    }
-    return p.y<H;
-  });
-  // HUD topo
-  ctx.fillStyle='rgba(2,6,22,.92)';ctx.fillRect(0,0,W,42);
-  ctx.strokeStyle='rgba(60,120,255,.35)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,42);ctx.lineTo(W,42);ctx.stroke();
-  ctx.fillStyle='#FFD700';ctx.font='bold 14px Barlow,sans-serif';ctx.textAlign='left';ctx.fillText('💪 STACK MUSCLE',8,18);
-  ctx.fillStyle='#4466aa';ctx.font='9px Barlow,monospace';ctx.fillText('← → MOVER  ↑ GIRAR  ↓ DESCER',8,32);
-  ctx.fillStyle='#00ff88';ctx.textAlign='right';ctx.font='bold 11px Barlow,monospace';
-  ctx.fillText('L:'+(t.linesCleared||0)+'  V'+(29-t.fallSpeed),W-8,22);ctx.textAlign='left';
-}
-
-
-// ══ JOYPAD SNES ════════════════════════════════════════
-var _snesHeld={up:false,down:false,left:false,right:false};
-var _snesRepeat={};
-function snesDir(dir,down){
-  _snesHeld[dir]=down;
-  var el=document.getElementById('dp-'+dir);
-  if(el)el.classList.toggle('pressed',down);
-  if(down) dpadPress(dir);
-  clearInterval(_snesRepeat[dir]);
-  if(down&&(gameAtivo==='nave')){
-    _snesRepeat[dir]=setInterval(function(){if(_snesHeld[dir])dpadPress(dir);},80);
-  }
-  if(!down) clearInterval(_snesRepeat[dir]);
-}
-function snesBtn(btn,down){
-  var el=document.getElementById('btn-'+btn);
-  if(el)el.classList.toggle('pressed',down);
-  if(!down)return;
-  if(gamePausado||!gameAtivo)return;
-  if(gameAtivo==='nave'){
-    if(btn==='A'||btn==='B')dispararNaveManual();
-  } else if(gameAtivo==='tetris'){
-    var t=gameState.tetris;if(!t||!t.cur)return;
-    if(btn==='A'||btn==='X'){tetrisRotate();}
-    else if(btn==='B'){tetrisHardDrop();}
-    else if(btn==='Y'){tetrisHold();}
-  }
-}
-function updateHint(){
-  var hints={snake:'← → ↑ ↓ MOVER',nave:'ARRASTE O DEDO · A/B ATIRAR',tetris:'↑/A GIRAR · ↓ DESCER · B HARD DROP'};
-  var el=document.getElementById('snes-hint-txt');
-  if(el&&gameAtivo)el.textContent=hints[gameAtivo]||'';
-}
-
-// ══ NAVE: tiro manual ═══════════════════════════════
-var _naveManualFire=false,_naveManualTimer=0;
-function dispararNaveManual(){
-  if(!gameState.nave)return;
-  var n=gameState.nave;
-  if(n.fireManualCd>0)return;
-  n.bullets.push({x:n.player.x,y:n.player.y-20,vy:-14});
-  if(n.multishot){
-    n.bullets.push({x:n.player.x-18,y:n.player.y-10,vy:-13,vx:-1.5});
-    n.bullets.push({x:n.player.x+18,y:n.player.y-10,vy:-13,vx:1.5});
-  }
-  n.fireManualCd=10;
-}
-
-// ══ TETRIS: rotação com wall-kick ══════════════════
-function tetrisRotate(){
-  var t=gameState.tetris;if(!t||!t.cur)return;
-  var rot=t.cur.s[0].map(function(_,i){return t.cur.s.map(function(r){return r[i];}).reverse();});
+  var s=t.cur.s;
+  var rot=s[0].map(function(_,i){return s.map(function(r){return r[i];}).reverse();});
   var kicks=[0,-1,1,-2,2];
   for(var k=0;k<kicks.length;k++){
-    if(!collision(t.board,rot,t.cx+kicks[k],t.cy)){
-      t.cur=Object.assign({},t.cur,{s:rot});
+    if(!tCollision(t.board,rot,t.cx+kicks[k],t.cy)){
+      t.cur={s:rot,c:t.cur.c,bi:t.cur.bi};
       t.cx+=kicks[k];
       return;
     }
   }
 }
+
 function tetrisHardDrop(){
   var t=gameState.tetris;if(!t||!t.cur)return;
   var pts=0;
-  while(!collision(t.board,t.cur.s,t.cx,t.cy+1)){t.cy++;pts++;}
+  while(!tCollision(t.board,t.cur.s,t.cx,t.cy+1)){t.cy++;pts++;}
   addScore(pts*2);
-  lockPiece(); // trava imediatamente — não espera fallTimer
+  lockPiece();
+}
+
+function initTetris(canvas){
+  // cs: cabe o tabuleiro (10 cols) com painel lateral (60px) reservado
+  var boardArea=canvas.width-64;
+  var cs=Math.floor(Math.min(boardArea/10,(canvas.height-50)/20));
+  cs=Math.max(12,Math.min(cs,32)); // limites: 12-32px por célula
+  var offX=0; // sempre começa em x=0, painel à direita
+  gameState.tetris={
+    cols:10,rows:20,cs:cs,offX:offX,
+    board:Array.from({length:20},function(){return Array(10).fill(0);}),
+    cur:null,cx:0,cy:0,next:randomPiece(),
+    hold:null,holdUsed:false,
+    fallTimer:0,fallSpeed:28,lockDelay:0,
+    linesCleared:0,pieceCount:0,
+  };
+  spawnPiece();
+}
+
+function updateTetris(canvas){
+  var t=gameState.tetris;if(!t||!t.cur)return;
+  t.fallTimer++;
+  var canFall=!tCollision(t.board,t.cur.s,t.cx,t.cy+1);
+  if(t.fallTimer>=t.fallSpeed){
+    t.fallTimer=0;
+    if(canFall){t.cy++;}
+    else{t.lockDelay++;if(t.lockDelay>=6)lockPiece();}
+  }
+  if(canFall)t.lockDelay=0;
+  drawTetris(canvas);
+}
+
+function drawTetrisCell(ctx,x,y,cs,color){
+  // Bloco sólido com bevel — sem sprites, sem imagens
+  var s=cs-1;
+  ctx.fillStyle=color;
+  ctx.fillRect(x,y,s,s);
+  // highlight topo/esquerda
+  ctx.fillStyle='rgba(255,255,255,0.35)';
+  ctx.fillRect(x,y,s,2);
+  ctx.fillRect(x,y,2,s);
+  // sombra baixo/direita
+  ctx.fillStyle='rgba(0,0,0,0.4)';
+  ctx.fillRect(x,y+s-2,s,2);
+  ctx.fillRect(x+s-2,y,2,s);
+}
+
+function drawTetris(canvas){
+  var ctx=canvas.getContext('2d');
+  var t=gameState.tetris;if(!t)return;
+  var W=canvas.width,H=canvas.height;
+  var cs=t.cs,ox=t.offX;
+  var boardH=20*cs,boardW=10*cs;
+  var topY=Math.floor((H-boardH)/2);
+  if(topY<44)topY=44; // abaixo do HUD
+
+  // Fundo escuro
+  ctx.fillStyle='#06040f';ctx.fillRect(0,0,W,H);
+  // Área do tabuleiro
+  ctx.fillStyle='rgba(0,0,20,0.8)';
+  ctx.fillRect(ox,topY,boardW,boardH);
+  // Grade
+  ctx.strokeStyle='rgba(40,80,160,0.2)';ctx.lineWidth=0.5;
+  for(var r=0;r<=20;r++){ctx.beginPath();ctx.moveTo(ox,topY+r*cs);ctx.lineTo(ox+boardW,topY+r*cs);ctx.stroke();}
+  for(var c=0;c<=10;c++){ctx.beginPath();ctx.moveTo(ox+c*cs,topY);ctx.lineTo(ox+c*cs,topY+boardH);ctx.stroke();}
+
+  // Blocos fixos no board
+  for(var r=0;r<20;r++){
+    for(var c=0;c<10;c++){
+      var cell=t.board[r][c];
+      if(cell)drawTetrisCell(ctx,ox+c*cs+0.5,topY+r*cs+0.5,cs,cell.c);
+    }
+  }
+
+  // Ghost piece
+  if(t.cur){
+    var gy=t.cy;
+    while(!tCollision(t.board,t.cur.s,t.cx,gy+1))gy++;
+    if(gy!==t.cy){
+      for(var r=0;r<t.cur.s.length;r++)for(var c=0;c<t.cur.s[r].length;c++){
+        if(t.cur.s[r][c]&&gy+r>=0){
+          ctx.strokeStyle=t.cur.c+'55';ctx.lineWidth=1;
+          ctx.strokeRect(ox+((t.cx+c)*cs)+1,topY+(gy+r)*cs+1,cs-2,cs-2);
+        }
+      }
+    }
+    // Peça atual
+    for(var r=0;r<t.cur.s.length;r++)for(var c=0;c<t.cur.s[r].length;c++){
+      if(t.cur.s[r][c]&&t.cy+r>=0)
+        drawTetrisCell(ctx,ox+(t.cx+c)*cs+0.5,topY+(t.cy+r)*cs+0.5,cs,t.cur.c);
+    }
+  }
+
+  // Painel lateral: NEXT e HOLD
+  var px=ox+boardW+6, pw=W-px-4;
+  if(pw>30){
+    var cellP=Math.min(pw/4,cs-2,14); // tamanho das células no painel
+    // Caixa NEXT
+    ctx.fillStyle='rgba(0,0,30,0.85)';ctx.fillRect(px,topY,pw,cs*4+14);
+    ctx.strokeStyle='rgba(60,120,255,0.4)';ctx.lineWidth=1;
+    ctx.strokeRect(px,topY,pw,cs*4+14);
+    ctx.fillStyle='#88aacc';ctx.font='bold 9px monospace';ctx.textAlign='center';
+    ctx.fillText('NEXT',px+pw/2,topY+10);
+    if(t.next){
+      var ns=t.next.s;
+      var nW=ns[0].length*cellP, nH=ns.length*cellP;
+      var nox=px+(pw-nW)/2, noy=topY+14+(cs*4-nH)/2;
+      for(var r=0;r<ns.length;r++)for(var c=0;c<ns[r].length;c++){
+        if(ns[r][c])drawTetrisCell(ctx,nox+c*cellP,noy+r*cellP,cellP,t.next.c);
+      }
+    }
+    // Caixa HOLD
+    var hTop=topY+cs*4+22;
+    ctx.fillStyle='rgba(0,0,30,0.85)';ctx.fillRect(px,hTop,pw,cs*4+14);
+    ctx.strokeStyle='rgba(200,100,40,0.4)';ctx.lineWidth=1;
+    ctx.strokeRect(px,hTop,pw,cs*4+14);
+    ctx.fillStyle='#cc8844';ctx.font='bold 9px monospace';ctx.textAlign='center';
+    ctx.fillText('HOLD',px+pw/2,hTop+10);
+    if(t.hold){
+      var hs=t.hold.s;
+      var hW=hs[0].length*cellP, hH=hs.length*cellP;
+      var hox=px+(pw-hW)/2, hoy=hTop+14+(cs*4-hH)/2;
+      ctx.globalAlpha=t.holdUsed?0.35:1;
+      for(var r=0;r<hs.length;r++)for(var c=0;c<hs[r].length;c++){
+        if(hs[r][c])drawTetrisCell(ctx,hox+c*cellP,hoy+r*cellP,cellP,t.hold.c);
+      }
+      ctx.globalAlpha=1;
+    }
+  }
+
+  // HUD topo
+  ctx.fillStyle='rgba(2,6,22,0.92)';ctx.fillRect(0,0,W,42);
+  ctx.strokeStyle='rgba(60,120,255,0.35)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,42);ctx.lineTo(W,42);ctx.stroke();
+  ctx.fillStyle='#FFD700';ctx.font='bold 14px Barlow,sans-serif';
+  ctx.textAlign='left';ctx.fillText('💪 STACK MUSCLE',8,18);
+  ctx.fillStyle='#4466aa';ctx.font='9px monospace';
+  ctx.fillText('← → MOVER  ↑ GIRAR  ↓ DESCER',8,32);
+  ctx.fillStyle='#00ff88';ctx.textAlign='right';ctx.font='bold 11px monospace';
+  ctx.fillText('L:'+(t.linesCleared||0)+'  V'+Math.floor(gameScore/100),W-8,22);
+  ctx.textAlign='left';
 }
 
 // ══ D-PAD ════════════════════════════════════════════
@@ -2594,11 +2584,11 @@ function dpadPress(dir){
     else if(dir==='down'){n.player.y=Math.min(n.H-30,n.player.y+spd);}
   } else if(gameAtivo==='tetris'){
     var t=gameState.tetris;
-    if(dir==='left'&&!collision(t.board,t.cur.s,t.cx-1,t.cy))t.cx--;
-    else if(dir==='right'&&!collision(t.board,t.cur.s,t.cx+1,t.cy))t.cx++;
+    if(dir==='left'&&!tCollision(t.board,t.cur.s,t.cx-1,t.cy))t.cx--;
+    else if(dir==='right'&&!tCollision(t.board,t.cur.s,t.cx+1,t.cy))t.cx++;
     else if(dir==='down'){
       // soft drop — NUNCA hard drop automático
-      if(!collision(t.board,t.cur.s,t.cx,t.cy+1)){t.cy++;addScore(1);}
+      if(!tCollision(t.board,t.cur.s,t.cx,t.cy+1)){t.cy++;addScore(1);}
       else{t.fallTimer=t.fallSpeed;}
     }
     else if(dir==='up'){tetrisRotate();}
