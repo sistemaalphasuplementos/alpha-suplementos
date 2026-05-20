@@ -523,10 +523,66 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
   <div class="game-canvas-wrap" id="gcWrap" style="position:relative;flex:1;min-height:0;">
     <canvas id="gameCanvas" style="touch-action:none;display:block;width:100%;height:100%"></canvas>
     <!-- Overlay start/pause -->
-    <div class="game-overlay-msg" id="game-overlay-msg" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(4,4,4,.97);border:1px solid #333;border-radius:16px;padding:24px 28px;text-align:center;z-index:10;min-width:220px;max-width:90vw">
-      <div id="game-over-txt" style="font-size:14px;color:#aaa;margin-bottom:14px;line-height:1.6"></div>
-      <button id="game-start-btn" ontouchstart="toggleGame();event.preventDefault();" onclick="toggleGame()" style="background:linear-gradient(135deg,#CC0000,#ff4500);color:#fff;border:none;border-radius:10px;padding:12px 0;font-size:15px;font-weight:700;cursor:pointer;width:100%;touch-action:manipulation;-webkit-tap-highlight-color:transparent;margin-bottom:8px">▶ Iniciar</button>
-      <button id="game-quit-btn" ontouchstart="fecharGame();event.preventDefault();" onclick="fecharGame()" style="background:rgba(40,40,40,.9);color:#888;border:1px solid #333;border-radius:10px;padding:8px 0;font-size:13px;font-weight:600;cursor:pointer;width:100%;touch-action:manipulation;-webkit-tap-highlight-color:transparent">✕ Sair</button>
+    <!-- ══ TELA GAME OVER / INÍCIO ══════════════════════════════════════ -->
+    <div id="game-overlay-msg" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.88);z-index:20;display:none;align-items:center;justify-content:center;">
+      <div id="go-card" style="background:linear-gradient(160deg,#0a0a1a,#14082a);border:1px solid rgba(100,60,255,0.35);border-radius:20px;padding:28px 24px;text-align:center;min-width:260px;max-width:88vw;box-shadow:0 0 40px rgba(100,60,255,0.2);position:relative;overflow:hidden">
+        <!-- Brilho decorativo -->
+        <div style="position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:200px;height:80px;background:radial-gradient(ellipse,rgba(150,80,255,0.15),transparent);pointer-events:none"></div>
+        <!-- Ícone + Título -->
+        <div id="go-icon" style="font-size:42px;margin-bottom:6px">🎮</div>
+        <div id="go-title" style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;letter-spacing:2px;margin-bottom:4px;color:#fff">INICIAR</div>
+        <div id="go-subtitle" style="font-size:12px;color:#666;margin-bottom:18px">Pressione para começar</div>
+        <!-- Placar -->
+        <div id="go-score-block" style="display:none;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px 16px;margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="color:#888;font-size:11px">PONTUAÇÃO</span>
+            <span id="go-score-val" style="color:#fff;font-size:20px;font-weight:800">0</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="color:#888;font-size:11px">RECORDE</span>
+            <span id="go-record-val" style="color:#FFD700;font-size:14px;font-weight:700">0</span>
+          </div>
+        </div>
+        <!-- Recompensas ganhas -->
+        <div id="go-rewards-block" style="display:none;margin-bottom:14px">
+          <div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Recompensas da sessão</div>
+          <div id="go-rewards-list" style="display:flex;flex-direction:column;gap:4px"></div>
+        </div>
+        <!-- Botões -->
+        <button id="game-start-btn"
+          ontouchstart="goAcao('play');event.preventDefault();"
+          onclick="goAcao('play')"
+          style="width:100%;padding:13px 0;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:9px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;background:linear-gradient(135deg,#CC0000,#ff4500);color:#fff;letter-spacing:0.5px">
+          ▶ Iniciar
+        </button>
+        <button id="game-quit-btn"
+          ontouchstart="goAcao('quit');event.preventDefault();"
+          onclick="goAcao('quit')"
+          style="width:100%;padding:10px 0;border:1px solid rgba(255,255,255,0.1);border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;background:rgba(255,255,255,0.05);color:#888">
+          ✕ Sair do Jogo
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ POPUP DE GANHOS AO SAIR ════════════════════════════════════════ -->
+    <div id="go-exit-popup" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.92);z-index:30;align-items:center;justify-content:center;">
+      <div style="background:linear-gradient(160deg,#0a0f1a,#0f1a0a);border:1px solid rgba(0,200,80,0.3);border-radius:20px;padding:28px 24px;text-align:center;min-width:260px;max-width:88vw;box-shadow:0 0 40px rgba(0,200,80,0.15)">
+        <div style="font-size:36px;margin-bottom:8px">🏆</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:#fff;margin-bottom:4px">SEUS GANHOS</div>
+        <div style="font-size:11px;color:#666;margin-bottom:18px">Acumulados nesta sessão</div>
+        <div id="exit-rewards-list" style="margin-bottom:20px;display:flex;flex-direction:column;gap:8px"></div>
+        <div id="exit-no-rewards" style="display:none;color:#555;font-size:13px;margin-bottom:20px">Nenhuma recompensa acumulada ainda.<br><small>Jogue mais para ganhar pontos e cashback!</small></div>
+        <div style="display:flex;gap:8px">
+          <button ontouchstart="exitPopupVoltar();event.preventDefault();" onclick="exitPopupVoltar()"
+            style="flex:1;padding:11px 0;border:1px solid rgba(255,255,255,0.15);border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;touch-action:manipulation;background:rgba(255,255,255,0.06);color:#aaa">
+            ← Voltar
+          </button>
+          <button ontouchstart="exitPopupConfirmar();event.preventDefault();" onclick="exitPopupConfirmar()"
+            style="flex:1;padding:11px 0;border:none;border-radius:12px;font-size:13px;font-weight:800;cursor:pointer;touch-action:manipulation;background:linear-gradient(135deg,#00aa44,#00cc66);color:#fff">
+            Sair ✓
+          </button>
+        </div>
+      </div>
     </div>
     <!-- Botões Tetris dentro do canvas -->
     <div id="tetCtrl" style="display:none;position:absolute;inset:0;pointer-events:none;z-index:2">
@@ -1169,26 +1225,27 @@ function dpad(dir){
 document.addEventListener('DOMContentLoaded',function(){
   var cw=document.getElementById('gcWrap')||document.getElementById('gcWrap')||document.querySelector('.game-canvas-wrap');
   if(!cw)return;
+  // ── Touch da nave: arrastar livremente, nave segue o dedo ──────────────
+  function naveTouch(e){
+    if(gameAtivo!=='nave'||gamePausado||!gameState.nave)return;
+    var touches=e.touches;
+    if(!touches||!touches.length)return;
+    var rect=cw.getBoundingClientRect();
+    var cv=document.getElementById('gameCanvas');
+    var sx=cv.width/rect.width,sy=cv.height/rect.height;
+    gameState.nave.touchX=(touches[0].clientX-rect.left)*sx;
+    gameState.nave.touchY=(touches[0].clientY-rect.top)*sy;
+  }
   cw.addEventListener('touchstart',function(e){
-    _touchX=e.touches[0].clientX;_touchY=e.touches[0].clientY;
-    if(gameAtivo==='nave'&&!gamePausado&&gameState.nave){
-      var rect=cw.getBoundingClientRect();
-      var cv=document.getElementById('gameCanvas');
-      var sx=cv.width/rect.width,sy=cv.height/rect.height;
-      gameState.nave.touchX=(e.touches[0].clientX-rect.left)*sx;
-      gameState.nave.touchY=(e.touches[0].clientY-rect.top)*sy;
-    }
     e.preventDefault();
+    _touchX=e.touches[0].clientX;_touchY=e.touches[0].clientY;
+    naveTouch(e);
   },{passive:false});
   cw.addEventListener('touchmove',function(e){
     e.preventDefault();
     if(gamePausado)return;
-    if(gameAtivo==='nave'&&gameState.nave){
-      var rect=cw.getBoundingClientRect();
-      var cv=document.getElementById('gameCanvas');
-      var sx=cv.width/rect.width,sy=cv.height/rect.height;
-      gameState.nave.touchX=(e.touches[0].clientX-rect.left)*sx;
-      gameState.nave.touchY=(e.touches[0].clientY-rect.top)*sy;
+    if(gameAtivo==='nave'){
+      naveTouch(e);
     } else if(gameAtivo==='snake'&&gameState.snake){
       var dx=e.touches[0].clientX-_touchX,dy=e.touches[0].clientY-_touchY;
       if(Math.abs(dx)>14||Math.abs(dy)>14){
@@ -1197,24 +1254,23 @@ document.addEventListener('DOMContentLoaded',function(){
       }
     }
   },{passive:false});
-  cw.addEventListener('touchmove',function(e){
-    if(gameAtivo==='nave'&&gameState.nave){
-      var rect=cw.getBoundingClientRect();
-      var cv=document.getElementById('gameCanvas');
-      var sx=cv.width/rect.width,sy=cv.height/rect.height;
-      gameState.nave.touchX=(e.touches[0].clientX-rect.left)*sx;
-      gameState.nave.touchY=(e.touches[0].clientY-rect.top)*sy;
-    }
-    e.preventDefault();
-  },{passive:false});
   cw.addEventListener('touchend',function(e){
-    if(gameAtivo==='nave'&&gameState.nave){gameState.nave.touchX=null;gameState.nave.touchY=null;}
-    if(gameAtivo==='nave')return;
+    if(gameAtivo==='nave'&&gameState.nave){
+      // Ao soltar o dedo: nave para na posição atual (touchX=null = sem seguir)
+      gameState.nave.touchX=null;gameState.nave.touchY=null;
+      return;
+    }
     if(_jogoState!=='running')return;
     var dx=e.changedTouches[0].clientX-_touchX,dy=e.changedTouches[0].clientY-_touchY;
-    dpad(Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up'));
+    if(Math.abs(dx)>14||Math.abs(dy)>14)
+      dpad(Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up'));
   },{passive:true});
-});
+  cw.addEventListener('touchcancel',function(){
+    if(gameAtivo==='nave'&&gameState.nave){
+      gameState.nave.touchX=null;gameState.nave.touchY=null;
+    }
+  },{passive:true});
+
 document.addEventListener('keydown',function(e){
   var tag=(document.activeElement||{}).tagName;
   if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT')return;
@@ -1599,6 +1655,11 @@ var gameScore=0;
 var gameRecord={snake:0,nave:0,tetris:0};
 var gameState={};
 var ganhouPtsHoje={snake:false,nave:false,tetris:false};
+// Recompensas acumuladas na sessão atual (para popup ao sair)
+var _sessionRewards=[];
+function _addSessionReward(icon,desc,tipo){
+  _sessionRewards.push({icon:icon,desc:desc,tipo:tipo});
+}
 
 function loadGameRecords(){
   var key='alpha_game_records_'+((U&&U.id)||'x');
@@ -1643,16 +1704,19 @@ function abrirGame(tipo){
   // Parar jogo anterior e limpar estado
   stopGame();
   gameState={};
-  // Mostrar popup "Iniciar" — aguarda clique do usuário (não inicia loop)
-  var _om=document.getElementById('game-overlay-msg');if(_om)_om.style.display='block';
+  _sessionRewards=[]; // nova sessão = recompensas zeradas
+  // Mostrar tela inicial com goMostrar
+  goMostrar('start',false,0,[]);
   var _ot=document.getElementById('game-over-txt');if(_ot)_ot.innerHTML='';
 }
 
 function fecharGame(){
   stopGame();
   gameState={};
+  _sessionRewards=[];
   document.getElementById('game-overlay').classList.remove('on');
   var _om=document.getElementById('game-overlay-msg');if(_om)_om.style.display='none';
+  var _ep=document.getElementById('go-exit-popup');if(_ep)_ep.style.display='none';
   var _ot=document.getElementById('game-over-txt');if(_ot)_ot.innerHTML='';
   var ol=document.getElementById('tetOL');
   if(ol)ol.className='tet-ol';
@@ -1683,6 +1747,7 @@ function toggleGame(){
       // Retomar do pause: não reinicia, só despausa
       gamePausado=false;
       var _om=document.getElementById('game-overlay-msg');if(_om)_om.style.display='none';
+      var _ep=document.getElementById('go-exit-popup');if(_ep)_ep.style.display='none';
       var _pb=document.getElementById('game-pause-btn');if(_pb)_pb.textContent='⏸';
       var fps=gameAtivo==='snake'?8:gameAtivo==='nave'?30:30;
       clearInterval(gameLoop);
@@ -1699,6 +1764,7 @@ function startGame(){
   gameScore=0;
   document.getElementById('game-score-display').textContent=0;
   var _om=document.getElementById('game-overlay-msg');if(_om)_om.style.display='none';
+  var _ep=document.getElementById('go-exit-popup');if(_ep)_ep.style.display='none';
   var _pb=document.getElementById('game-pause-btn');if(_pb)_pb.textContent='⏸';
   setupCanvas(gameAtivo); // inicializa estado fresco
   var fps=gameAtivo==='snake'?8:gameAtivo==='nave'?30:30;
@@ -1728,53 +1794,149 @@ function gameFrame(){
   else if(gameAtivo==='tetris')updateTetris(canvas);
 }
 
+// ── TELA GAME OVER ──────────────────────────────────────────────────────────
+function goMostrar(modo, isRecord, score, rewards){
+  // modo: 'start' (início) | 'gameover' (derrota) | 'record' (novo recorde)
+  var om=document.getElementById('game-overlay-msg');
+  if(!om)return;
+  om.style.display='flex';
+
+  var icon=document.getElementById('go-icon');
+  var title=document.getElementById('go-title');
+  var sub=document.getElementById('go-subtitle');
+  var scoreBlock=document.getElementById('go-score-block');
+  var scoreVal=document.getElementById('go-score-val');
+  var recordVal=document.getElementById('go-record-val');
+  var rewardsBlock=document.getElementById('go-rewards-block');
+  var rewardsList=document.getElementById('go-rewards-list');
+  var startBtn=document.getElementById('game-start-btn');
+
+  if(modo==='start'){
+    if(icon)icon.textContent='🎮';
+    if(title){title.textContent='PRONTO?';title.style.color='#fff';}
+    if(sub)sub.textContent='Toque em Iniciar para começar';
+    if(scoreBlock)scoreBlock.style.display='none';
+    if(rewardsBlock)rewardsBlock.style.display='none';
+    if(startBtn)startBtn.textContent='▶ Iniciar';
+  } else {
+    // gameover ou record
+    var nomeJogo={snake:'SNAKE FITNESS',nave:'ALPHA FORCE',tetris:'STACK MUSCLE'}[gameAtivo]||'GAME OVER';
+    if(icon)icon.textContent=isRecord?'🏆':'💀';
+    if(title){
+      title.textContent=isRecord?'NOVO RECORDE!':'GAME OVER';
+      title.style.color=isRecord?'#FFD700':'#FF4444';
+    }
+    if(sub)sub.textContent=nomeJogo;
+    if(scoreBlock)scoreBlock.style.display='block';
+    if(scoreVal)scoreVal.textContent=score;
+    if(recordVal)recordVal.textContent=gameRecord[gameAtivo]||0;
+    if(startBtn)startBtn.textContent='▶ Jogar Novamente';
+    // Recompensas
+    if(rewardsList)rewardsList.innerHTML='';
+    if(rewards&&rewards.length>0){
+      if(rewardsBlock)rewardsBlock.style.display='block';
+      rewards.forEach(function(r){
+        var d=document.createElement('div');
+        d.style.cssText='display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.05);border-radius:8px;padding:6px 10px;';
+        d.innerHTML='<span style="font-size:14px">'+r.icon+'</span>'
+          +'<span style="color:#ddd;font-size:12px;flex:1;margin:0 8px;text-align:left">'+r.desc+'</span>'
+          +'<span style="color:'+(r.tipo==='cashback'?'#00cc66':'#FFD700')+';font-size:12px;font-weight:700">'+(r.tipo==='cashback'?'💵':'⭐')+'</span>';
+        if(rewardsList)rewardsList.appendChild(d);
+      });
+    } else {
+      if(rewardsBlock)rewardsBlock.style.display='none';
+    }
+  }
+}
+
+function goAcao(acao){
+  if(acao==='play'){
+    var om=document.getElementById('game-overlay-msg');
+    if(om)om.style.display='none';
+    toggleGame();
+  } else if(acao==='quit'){
+    // Mostrar popup de ganhos antes de sair
+    exitPopupAbrir();
+  }
+}
+
+function exitPopupAbrir(){
+  var popup=document.getElementById('go-exit-popup');
+  if(!popup)return;
+  popup.style.display='flex';
+  var lista=document.getElementById('exit-rewards-list');
+  var semRecomp=document.getElementById('exit-no-rewards');
+  if(lista)lista.innerHTML='';
+  var recompensas=_sessionRewards;
+  if(recompensas.length===0){
+    if(semRecomp)semRecomp.style.display='block';
+  } else {
+    if(semRecomp)semRecomp.style.display='none';
+    recompensas.forEach(function(r){
+      var d=document.createElement('div');
+      d.style.cssText='display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.05);border-radius:10px;padding:10px 12px;';
+      var cor=r.tipo==='cashback'?'#00cc66':'#FFD700';
+      var ic=r.tipo==='cashback'?'💵':'⭐';
+      d.innerHTML='<span style="font-size:22px">'+ic+'</span>'
+        +'<div style="flex:1;text-align:left">'
+        +'<div style="color:'+cor+';font-size:13px;font-weight:700">'+r.desc+'</div>'
+        +'<div style="color:#555;font-size:10px;text-transform:uppercase">'+r.tipo+'</div>'
+        +'</div>';
+      if(lista)lista.appendChild(d);
+    });
+  }
+}
+
+function exitPopupVoltar(){
+  var popup=document.getElementById('go-exit-popup');
+  if(popup)popup.style.display='none';
+}
+
+function exitPopupConfirmar(){
+  var popup=document.getElementById('go-exit-popup');
+  if(popup)popup.style.display='none';
+  _sessionRewards=[];
+  fecharGame();
+}
+
 function onGameOver(){
   stopGame();
-  gameState={}; // limpar PRIMEIRO — evita gameFrame continuar
+  gameState={}; // limpar PRIMEIRO
   var era=gameRecord[gameAtivo]||0;
   var isRecord=gameScore>era;
   if(isRecord){gameRecord[gameAtivo]=gameScore;saveGameRecords();}
-  // Atualizar elementos — todos com null-check para não lançar TypeError
   var pb=document.getElementById('game-pause-btn');if(pb)pb.textContent='▶';
-  var ot=document.getElementById('game-over-txt');
-  if(ot){
-    ot.innerHTML=(isRecord
-      ?'<span style="color:#FFD700;font-size:16px">🏆 NOVO RECORDE!</span>'
-      :'<span style="color:#FF4444;font-size:16px">💀 GAME OVER</span>');
-    ot.innerHTML+='<br><small style="color:#888;font-size:12px">Score: '+gameScore+'</small>';
-  }
-  var elTitle=document.getElementById('game-over-title');
-  if(elTitle){elTitle.textContent=isRecord?'🏆 NOVO RECORDE!':'GAME OVER';elTitle.style.color=isRecord?'#FFD700':'#FF4444';}
-  var elScore=document.getElementById('game-over-score');
-  if(elScore)elScore.textContent='Pontuação: '+gameScore+(isRecord?' 🎉':'');
   var elRec=document.getElementById('game-record-display');
   if(elRec)elRec.textContent=gameRecord[gameAtivo];
-  var sb=document.getElementById('game-start-btn');
-  if(sb)sb.textContent='▶ Jogar Novamente';
-  // Recompensas
-  var rewardEl=document.getElementById('game-over-reward');
-  var msgs=[];
+  // Calcular recompensas desta partida
+  var rewards=[];
   if(!ganhouPtsHoje[gameAtivo]){
     ganhouPtsHoje[gameAtivo]=true;saveGanhouHoje();
-    msgs.push('+3 pts no jogo');
+    rewards.push({icon:'🎮',desc:'+3 pts por jogar hoje',tipo:'pontos'});
+    _addSessionReward('🎮','+3 pts por jogar hoje','pontos');
     creditarRecompensa('pontos','+3 pts por jogar hoje ('+gameAtivo+')',3,'jogo_diario_'+gameAtivo);
   }
   if(isRecord){
-    msgs.push('+5 pts pelo recorde!');
+    rewards.push({icon:'🏅',desc:'+5 pts — Novo Recorde!',tipo:'pontos'});
+    _addSessionReward('🏅','+5 pts — Novo Recorde!','pontos');
     creditarRecompensa('pontos','+5 pts — novo recorde em '+gameAtivo+'! 🏅',5,'record_'+gameAtivo);
-  }
-  if(rewardEl){
-    if(msgs.length>0){rewardEl.style.display='block';rewardEl.textContent='🏆 '+msgs.join(' · ');}
-    else rewardEl.style.display='none';
   }
   if(U){
     var marcos=[];try{marcos=JSON.parse(localStorage.getItem('alpha_marcos')||'[]');}catch(e){}
-    if(U.pontos>=1000&&!marcos.includes('m1000')){marcos.push('m1000');localStorage.setItem('alpha_marcos',JSON.stringify(marcos));creditarRecompensa('cashback','R$20 cashback — 1.000 pontos! 🏆',20,'marco1000');}
-    else if(U.pontos>=500&&!marcos.includes('m500')){marcos.push('m500');localStorage.setItem('alpha_marcos',JSON.stringify(marcos));creditarRecompensa('cashback','R$10 cashback — 500 pontos! ⭐',10,'marco500');}
+    if(U.pontos>=1000&&!marcos.includes('m1000')){
+      marcos.push('m1000');localStorage.setItem('alpha_marcos',JSON.stringify(marcos));
+      rewards.push({icon:'🏆',desc:'R$20 cashback — 1.000 pts!',tipo:'cashback'});
+      _addSessionReward('🏆','R$20 cashback — marco de 1.000 pts','cashback');
+      creditarRecompensa('cashback','R$20 cashback — 1.000 pontos! 🏆',20,'marco1000');
+    } else if(U.pontos>=500&&!marcos.includes('m500')){
+      marcos.push('m500');localStorage.setItem('alpha_marcos',JSON.stringify(marcos));
+      rewards.push({icon:'⭐',desc:'R$10 cashback — 500 pts!',tipo:'cashback'});
+      _addSessionReward('⭐','R$10 cashback — marco de 500 pts','cashback');
+      creditarRecompensa('cashback','R$10 cashback — 500 pontos! ⭐',10,'marco500');
+    }
   }
-  // Mostrar overlay — SEMPRE, independente de qualquer elemento acima
-  var _omGO=document.getElementById('game-overlay-msg');
-  if(_omGO)_omGO.style.display='block';
+  // Mostrar tela de Game Over
+  goMostrar(isRecord?'record':'gameover', isRecord, gameScore, rewards);
 }
 
 function addScore(pts){
@@ -2433,6 +2595,15 @@ function initTetris(canvas){
   var cs=Math.floor(Math.min(boardArea/10,(canvas.height-50)/20));
   cs=Math.max(12,Math.min(cs,32)); // limites: 12-32px por célula
   var offX=0; // sempre começa em x=0, painel à direita
+  // Gerar estrelas de fundo uma única vez
+  var stars=[];
+  for(var i=0;i<80;i++)stars.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*1.5+0.3,
+    b:Math.random(),  // brilho base
+    sp:Math.random()*0.02+0.005  // velocidade de pulso
+  });
   gameState.tetris={
     cols:10,rows:20,cs:cs,offX:offX,
     board:Array.from({length:20},function(){return Array(10).fill(0);}),
@@ -2440,6 +2611,7 @@ function initTetris(canvas){
     hold:null,holdUsed:false,
     fallTimer:0,fallSpeed:28,lockDelay:0,
     linesCleared:0,pieceCount:0,
+    stars:stars,tick:0,
   };
   spawnPiece();
 }
@@ -2479,17 +2651,49 @@ function drawTetris(canvas){
   var cs=t.cs,ox=t.offX;
   var boardH=20*cs,boardW=10*cs;
   var topY=Math.floor((H-boardH)/2);
-  if(topY<44)topY=44; // abaixo do HUD
+  if(topY<44)topY=44;
+  t.tick=(t.tick||0)+1;
 
-  // Fundo escuro
-  ctx.fillStyle='#06040f';ctx.fillRect(0,0,W,H);
-  // Área do tabuleiro
-  ctx.fillStyle='rgba(0,0,20,0.8)';
+  // ── FUNDO ESPACIAL ──────────────────────────────────────────────────────
+  var bgGrad=ctx.createLinearGradient(0,0,W,H);
+  bgGrad.addColorStop(0,'#020412');
+  bgGrad.addColorStop(0.4,'#060220');
+  bgGrad.addColorStop(0.7,'#0a0130');
+  bgGrad.addColorStop(1,'#000008');
+  ctx.fillStyle=bgGrad;ctx.fillRect(0,0,W,H);
+
+  // Nebulosa (muda suavemente a cada 600 ticks)
+  var nebHue=((t.tick*0.05)%360);
+  var nebG=ctx.createRadialGradient(W*0.6,H*0.4,0,W*0.6,H*0.4,H*0.6);
+  nebG.addColorStop(0,'hsla('+nebHue+',80%,30%,0.06)');
+  nebG.addColorStop(1,'transparent');
+  ctx.fillStyle=nebG;ctx.fillRect(0,0,W,H);
+
+  // Estrelas pulsantes
+  if(t.stars){
+    t.stars.forEach(function(st){
+      st.b+=st.sp;if(st.b>1||st.b<0){st.sp*=-1;st.b=Math.max(0,Math.min(1,st.b));}
+      var alpha=0.25+st.b*0.75;
+      ctx.fillStyle='rgba(255,255,255,'+alpha.toFixed(2)+')';
+      ctx.beginPath();ctx.arc(st.x,st.y,st.r,0,Math.PI*2);ctx.fill();
+    });
+  }
+
+  // ── TABULEIRO ───────────────────────────────────────────────────────────
+  // Glow sutil nas bordas
+  ctx.shadowColor='rgba(80,120,255,0.3)';ctx.shadowBlur=16;
+  ctx.fillStyle='rgba(0,2,22,0.85)';
   ctx.fillRect(ox,topY,boardW,boardH);
+  ctx.shadowBlur=0;
+
   // Grade
-  ctx.strokeStyle='rgba(40,80,160,0.2)';ctx.lineWidth=0.5;
+  ctx.strokeStyle='rgba(40,80,160,0.18)';ctx.lineWidth=0.5;
   for(var r=0;r<=20;r++){ctx.beginPath();ctx.moveTo(ox,topY+r*cs);ctx.lineTo(ox+boardW,topY+r*cs);ctx.stroke();}
   for(var c=0;c<=10;c++){ctx.beginPath();ctx.moveTo(ox+c*cs,topY);ctx.lineTo(ox+c*cs,topY+boardH);ctx.stroke();}
+
+  // Borda direita separando o painel
+  ctx.strokeStyle='rgba(60,120,255,0.35)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(ox+boardW,topY);ctx.lineTo(ox+boardW,topY+boardH);ctx.stroke();
 
   // Blocos fixos no board
   for(var r=0;r<20;r++){
