@@ -1731,8 +1731,10 @@ function abrirGame(tipo){
   _sessionRewards=[];
   var _ot=document.getElementById('game-over-txt');if(_ot)_ot.innerHTML='';
   window._snesIdx=0;
-  // Aguardar 1 frame para o overlay renderizar, depois iniciar tela animada
-  setTimeout(function(){ _iniciarTelaAbertura(); }, 60);
+  // Garantir que game-overlay-msg está ESCONDIDO — a tela usa o canvas diretamente
+  var _omA=document.getElementById('game-overlay-msg');if(_omA)_omA.style.display='none';
+  // Aguardar browser renderizar o overlay, depois iniciar animação no canvas
+  setTimeout(function(){ _iniciarTelaAbertura(); }, 80);
 }
 
 function fecharGame(){
@@ -1773,6 +1775,8 @@ function setupCanvas(tipo){
 }
 
 function toggleGame(){
+  // Se tela de abertura está ativa — ignorar toggleGame (não pausar)
+  if(_telaAberturaLoop)return;
   // Se está pausado E já há estado de jogo → apenas retomar (sem reiniciar)
   if(gamePausado){
     var temEstado=(gameState.tetris||gameState.nave||gameState.snake);
@@ -1870,6 +1874,8 @@ function pauseGame(){
   gamePausado=true;
   clearInterval(gameLoop);
   var pb=document.getElementById('game-pause-btn');if(pb)pb.textContent='▶';
+  // Se tela de abertura ainda está rodando — não mostrar overlay de pause
+  if(_telaAberturaLoop)return;
   var om=document.getElementById('game-overlay-msg');
   var ot=document.getElementById('game-over-txt');if(ot)ot.textContent='';
   var sb=document.getElementById('game-start-btn');if(sb)sb.textContent='▶ Continuar';
@@ -1985,9 +1991,9 @@ function goAcao(acao){
   if(acao==='play'){
     var om=document.getElementById('game-overlay-msg');
     if(om)om.style.display='none';
-    // Iniciar música aqui — dentro do evento de clique do usuário (AudioContext desbloqueado)
+    // Música + iniciar jogo — dentro do evento de clique (AudioContext desbloqueado)
     iniciarMusicaJogo(gameAtivo);
-    toggleGame();
+    snesConfirmar(); // usa snesConfirmar que chama startGame diretamente
   } else if(acao==='quit'){
     // Mostrar popup de ganhos antes de sair
     exitPopupAbrir();
@@ -2301,18 +2307,54 @@ function _iniciarTelaAbertura(){
   window._snesIdx=window._snesIdx||0;
   var canvas=document.getElementById('gameCanvas');
   if(!canvas)return;
-  // Dimensionar canvas a partir do game-overlay que agora está visível
-  var overlay=document.getElementById('game-overlay');
-  var w=overlay?overlay.clientWidth:window.innerWidth;
-  var h=overlay?overlay.clientHeight:window.innerHeight;
+  // Dimensionar canvas — usar gcWrap (container direto do canvas)
+  var gcWrap=document.getElementById('gcWrap');
+  var w=gcWrap?gcWrap.offsetWidth:window.innerWidth;
+  var h=gcWrap?gcWrap.offsetHeight:0;
   if(!w||w<100){w=window.innerWidth;}
-  if(!h||h<100){h=window.innerHeight-52;}
+  if(!h||h<100){
+    var hdr=document.querySelector('.game-header');
+    h=window.innerHeight-(hdr?hdr.offsetHeight:52);
+  }
   canvas.width=w; canvas.height=h;
   canvas.style.width=w+'px'; canvas.style.height=h+'px';
   // Desenhar primeiro frame imediatamente
   if(gameAtivo==='tetris') _drawTelaTetris(canvas);
   else if(gameAtivo==='nave') _drawTelaAlphaForce(canvas);
   else _drawTelaSnake(canvas);
+  // Handler de clique/touch para seleção de menu (adicionado uma vez por abertura)
+  canvas._aberturaHandler && canvas.removeEventListener('click', canvas._aberturaHandler);
+  canvas._aberturaTouchHandler && canvas.removeEventListener('touchend', canvas._aberturaTouchHandler);
+  canvas._aberturaHandler = function(e){
+    if(!_telaAberturaLoop)return;
+    var rect=canvas.getBoundingClientRect();
+    var scaleY=canvas.height/rect.height;
+    var cy=((e.clientY||0)-rect.top)*scaleY;
+    var mY=canvas._menuY||0, mS=canvas._menuS||2;
+    var itemH=mS*10;
+    var idx=Math.floor((cy-mY)/itemH);
+    if(idx>=0&&idx<=2){
+      window._snesIdx=idx;
+      if(idx===2){_pararTelaAbertura();exitPopupAbrir();}
+    }
+  };
+  canvas._aberturaTouchHandler = function(e){
+    if(!_telaAberturaLoop)return;
+    var now=Date.now();
+    var touch=e.changedTouches[0];
+    var rect=canvas.getBoundingClientRect();
+    var scaleY=canvas.height/rect.height;
+    var cy=(touch.clientY-rect.top)*scaleY;
+    var mY=canvas._menuY||0, mS=canvas._menuS||2;
+    var itemH=mS*10;
+    var idx=Math.floor((cy-mY)/itemH);
+    if(idx>=0&&idx<=2) window._snesIdx=idx;
+    // Duplo toque confirma seleção atual
+    if(now-(canvas._lastTap||0)<400) snesConfirmar();
+    canvas._lastTap=now;
+  };
+  canvas.addEventListener('click', canvas._aberturaHandler);
+  canvas.addEventListener('touchend', canvas._aberturaTouchHandler, {passive:true});
   // Loop de animação
   _telaAberturaLoop=setInterval(function(){
     _telaAberturaFrame++;
@@ -2325,6 +2367,12 @@ function _iniciarTelaAbertura(){
 function _pararTelaAbertura(){
   clearInterval(_telaAberturaLoop);
   _telaAberturaLoop=null;
+  var canvas=document.getElementById('gameCanvas');
+  if(canvas){
+    canvas._aberturaHandler && canvas.removeEventListener('click',canvas._aberturaHandler);
+    canvas._aberturaTouchHandler && canvas.removeEventListener('touchend',canvas._aberturaTouchHandler);
+    canvas._aberturaHandler=null; canvas._aberturaTouchHandler=null;
+  }
 }
 
 // ── PIXEL FONT (5x7) — caracteres básicos ────────────────────────────────────
