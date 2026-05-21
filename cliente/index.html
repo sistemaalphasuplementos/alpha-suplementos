@@ -491,6 +491,10 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
 <div id="promo-banner-modal" class="promo-banner-modal">
   <div class="promo-banner-inner">
     <button class="promo-banner-close" onclick="fecharBanner()">×</button>
+    <div class="promo-banner-title" id="promo-banner-titulo">PROMOÇÃO ALPHA</div>
+    <img id="promo-banner-img" src="" alt="Promoção">
+  </div>
+</div>
 
 <!-- STORY PREMIADO OVERLAY -->
 <div id="story-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9000;overflow-y:auto;-webkit-overflow-scrolling:touch">
@@ -517,7 +521,7 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
       <button onclick="fecharStoryOverlay()" style="display:block;margin:16px auto 0;background:none;border:none;color:#555;font-size:13px;cursor:pointer;font-family:'Barlow',sans-serif">← Voltar ao login</button>
     </div>
 
-    <!-- Tela cadastro rápido (para não cadastrados) -->
+    <!-- Tela cadastro rápido -->
     <div id="story-tela-cadastro" style="display:none;width:100%;max-width:400px">
       <div style="text-align:center;margin-bottom:24px">
         <div style="font-size:40px;margin-bottom:8px">🎉</div>
@@ -550,7 +554,7 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
         <div id="story-par-premio" style="background:#E1306C22;border:1px solid #E1306C44;border-radius:12px;padding:20px;margin-bottom:20px"></div>
         <div id="story-par-retirada" style="display:none;background:#EF9F2711;border:.5px solid #EF9F2744;border-radius:10px;padding:12px;margin-bottom:16px;font-size:13px;color:#EF9F27">
           📍 <strong>Retire seu brinde na loja Alpha Suplementos</strong><br>
-          <span style="font-size:11px;color:#aaa">Rua Padre Cícero, 123 · Tianguá, CE · Apresente esta tela</span>
+          <span style="font-size:11px;color:#aaa">Tianguá, CE · Apresente esta tela</span>
         </div>
         <button onclick="concluirStory()" style="width:100%;background:linear-gradient(135deg,#E1306C,#833AB4);border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:'Barlow',sans-serif">
           💪 IR PARA MINHA CONTA
@@ -558,10 +562,6 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
       </div>
     </div>
 
-  </div>
-</div>
-    <div class="promo-banner-title" id="promo-banner-titulo">PROMOÇÃO ALPHA</div>
-    <img id="promo-banner-img" src="" alt="Promoção">
   </div>
 </div>
 

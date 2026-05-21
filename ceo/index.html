@@ -658,7 +658,7 @@ body{color:#FFFFFF;font-size:15px}
 </div><!-- /app -->
 
 <!-- ══ PAINEL STORY PREMIADO (CEO) ═══════════════════════════════ -->
-<div id="p-story" class="pnl" style="display:none">
+<div id="p-story" class="pnl">
   <div style="margin-bottom:18px">
     <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#E1306C">📸 Story Premiado</div>
     <div style="font-size:13px;color:#aaa;margin-top:4px">Configure a campanha de recompensa por stories no Instagram</div>
@@ -1043,9 +1043,9 @@ el('sbtn').onclick=function(){
 
 // TABS
 function ir(n,b){
-  document.querySelectorAll('.pnl').forEach(function(p){p.classList.remove('on');p.style.display='none';});
+  document.querySelectorAll('.pnl').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.tbt').forEach(function(x){x.classList.remove('on');});
-  var e=el('p-'+n); if(e){e.classList.add('on');e.style.display='block';}
+  var e=el('p-'+n); if(e)e.classList.add('on');
   if(b)b.classList.add('on');
 }
 
@@ -2003,6 +2003,14 @@ async function reativarColab(id) {
 var _storyCfg={ativa:false,tipo:'cashback',valor:10,brinde:'',validade:48};
 var _storyValidadeSel=48;
 
+function toastStory(msg,cor){
+  var d=document.createElement('div');
+  d.textContent=msg;
+  d.style.cssText='position:fixed;bottom:24px;right:20px;background:#1a1a1a;border:1px solid '+(cor||'#E1306C')+';border-radius:10px;padding:13px 20px;font-size:13px;font-weight:700;color:'+(cor||'#E1306C')+';z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.6);transition:opacity .3s';
+  document.body.appendChild(d);
+  setTimeout(function(){d.style.opacity='0';setTimeout(function(){if(d.parentElement)d.remove();},300);},2800);
+}
+
 async function rStory(){
   // Carregar config atual
   try{
@@ -2097,9 +2105,9 @@ async function salvarConfigStory(somenteToggle){
     if(d.sucesso){
       _storyCfg=cfg;aplicarConfigUI();
       var msg=somenteToggle?(cfg.ativa?'✅ Campanha ativada!':'⏸ Campanha pausada!'):'💾 Configurações salvas!';
-      toast(msg,'#E1306C');
-    } else {toast(d.erro||'Erro ao salvar','#FF4444');}
-  }catch(e){toast('Erro de conexão','#FF4444');}
+      toastStory(msg,'#E1306C');
+    } else {toastStory(d.erro||'Erro ao salvar','#FF4444');}
+  }catch(e){toastStory('Erro de conexão','#FF4444');}
 }
 
 function renderStoryHist(codigos){
