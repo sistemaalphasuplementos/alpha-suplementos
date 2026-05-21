@@ -834,6 +834,99 @@ body::before{
   .alpha-func-pro .tab{min-height:50px}
 }
 
+
+
+/* ══ FIX MOBILE FUNCIONÁRIO v71 — logout + bottom nav sem caixas vazias ══ */
+.alpha-mobile-user{display:none}
+@media (max-width:980px){
+  .alpha-func-pro .tb{
+    padding:7px 7px calc(7px + env(safe-area-inset-bottom,0px)) !important;
+    border-radius:24px 24px 0 0 !important;
+  }
+  .alpha-func-pro .tabs{
+    display:grid !important;
+    grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+    gap:6px !important;
+    width:100% !important;
+  }
+  .alpha-func-pro .tab{
+    font-size:0 !important;
+    min-height:62px !important;
+    padding:7px 2px 6px !important;
+    border-radius:16px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:3px !important;
+    overflow:hidden !important;
+    color:#fff !important;
+  }
+  .alpha-func-pro .tab::first-letter{font-size:0 !important}
+  .alpha-func-pro .tab::before{
+    content:attr(data-icon);
+    display:block;
+    font-size:22px;
+    line-height:1;
+    filter:drop-shadow(0 2px 7px rgba(255,23,56,.25));
+  }
+  .alpha-func-pro .tab::after{
+    content:attr(data-short);
+    display:block;
+    font-size:8.5px;
+    line-height:1;
+    font-weight:900;
+    letter-spacing:.25px;
+    text-transform:uppercase;
+    color:#bdbdc6;
+    max-width:100%;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .alpha-func-pro .tab.on::after{color:#fff}
+  .alpha-mobile-user{
+    display:flex;
+    position:sticky;
+    top:0;
+    z-index:70;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin:-12px -12px 12px;
+    padding:10px 12px;
+    background:rgba(8,8,10,.94);
+    border-bottom:1px solid rgba(255,23,56,.22);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+  }
+  .alpha-mobile-user-left{display:flex;align-items:center;gap:8px;min-width:0}
+  .alpha-mobile-user img{width:30px;height:30px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(255,23,56,.3))}
+  .alpha-mobile-user-name{font-size:12px;color:#fff;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
+  .alpha-mobile-user-role{font-size:9px;color:#00e889;text-transform:uppercase;letter-spacing:.8px;font-weight:900}
+  .alpha-mobile-logout{
+    border:1px solid rgba(255,23,56,.46);
+    background:rgba(255,23,56,.12);
+    color:#ff6b80;
+    min-height:36px;
+    padding:0 12px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:900;
+    font-family:'Barlow',sans-serif;
+  }
+  .alpha-func-pro .main{
+    padding:12px 12px calc(98px + env(safe-area-inset-bottom,0px)) !important;
+  }
+  .alpha-func-pro .p{padding-bottom:8px !important}
+}
+@media (max-width:390px){
+  .alpha-func-pro .tab{min-height:58px !important;border-radius:15px !important}
+  .alpha-func-pro .tab::before{font-size:20px}
+  .alpha-func-pro .tab::after{font-size:7.6px;letter-spacing:0}
+  .alpha-mobile-user-name{max-width:135px}
+}
+
 </style>
 </head>
 <body>
@@ -862,12 +955,12 @@ body::before{
       <span class="tbg">🧑‍💼 FUNCIONÁRIO</span>
     </div>
     <div class="tabs" style="-webkit-overflow-scrolling:touch">
-      <button class="tab on" onclick="ir('venda',this)">🛍️ Registrar Venda</button>
-      <button class="tab" onclick="ir('crm',this)">📦 CRM Alertas</button>
-      <button class="tab" onclick="ir('clientes',this)">👥 Clientes</button>
-      <button class="tab" onclick="ir('indicacoes',this)">🎯 Indicações</button>
-      <button class="tab" onclick="ir('resgates',this)">🏆 Resgates</button>
-      <button class="tab" onclick="ir('story',this)">📸 Story Premiado</button>
+      <button class="tab on" data-icon="🛍️" data-short="Venda" onclick="ir('venda',this)">🛍️ Registrar Venda</button>
+      <button class="tab" data-icon="📦" data-short="CRM" onclick="ir('crm',this)">📦 CRM Alertas</button>
+      <button class="tab" data-icon="👥" data-short="Clientes" onclick="ir('clientes',this)">👥 Clientes</button>
+      <button class="tab" data-icon="🎯" data-short="Indicar" onclick="ir('indicacoes',this)">🎯 Indicações</button>
+      <button class="tab" data-icon="🏆" data-short="Resgates" onclick="ir('resgates',this)">🏆 Resgates</button>
+      <button class="tab" data-icon="📸" data-short="Story" onclick="ir('story',this)">📸 Story Premiado</button>
     </div>
     <div class="tbr"><span id="tnome">Funcionário</span><button id="sbtn">Sair</button></div>
   </div>
@@ -1462,46 +1555,23 @@ function renderTudo(){
 }
 
 function renderCRM(){
-  // Usar dados reais da API se disponíveis, senão PRD local
-  var apiData = window._crmApiData || [];
-  var s;
-  if(apiData.length > 0){
-    s = apiData.map(function(a){
-      return {
-        cid:         a.clienteId||'',
-        nome:        a.nomeProduto||'',
-        cat:         a.nivelCliente||'BRONZE',
-        dias:        Number(a.diasRestantes),
-        nomeCliente: a.nomeCliente||'',
-        tel:         a.telefone||'',
-        nivel:       a.nivelCliente||'BRONZE'
-      };
-    }).sort(function(a,b){return a.dias-b.dias;});
-  } else {
-    s = PRD.filter(function(p){return p.dias<=7;}).sort(function(a,b){return a.dias-b.dias;});
-  }
+  var s=PRD.filter(function(p){return p.dias<=7;}).sort(function(a,b){return a.dias-b.dias;});
   var ct={a:0,u:0,p:0,v:0};
   s.forEach(function(x){if(x.dias<=0)ct.a++;else if(x.dias<=2)ct.u++;else if(x.dias<=5)ct.p++;else ct.v++;});
   ['ca','cu','cp','cv'].forEach(function(id,i){var e=el(id);if(e)e.textContent=[ct.a,ct.u,ct.p,ct.v][i];});
   var e=el('crm-lista');if(!e)return;
   window._crmData=s;
   e.innerHTML=s.map(function(a,idx){
-    var nomeC,nivelC,telC;
-    if(a.nomeCliente){
-      nomeC=a.nomeCliente; nivelC=a.nivel||'BRONZE'; telC=a.tel||'—';
-    } else {
-      var c=CL.find(function(x){return x.id===a.cid;});
-      if(!c) c=CL.find(function(x){return x.nome && a.cid && x.nome.toLowerCase().includes(a.cid.toLowerCase());});
-      if(!c) c={nome:'?',nivel:'BRONZE',tel:'—',id:a.cid};
-      nomeC=c.nome; nivelC=c.nivel; telC=c.tel;
-    }
+    var c=CL.find(function(x){return x.id===a.cid;});
+    if(!c) c=CL.find(function(x){return x.nome && a.cid && x.nome.toLowerCase().includes(a.cid.toLowerCase());});
+    if(!c) c={nome:'?',nivel:'BRONZE',tel:'—',id:a.cid};
     var cor=a.dias<=0?'#E24B4A':a.dias<=2?'#EF9F27':a.dias<=5?'#FFD700':'#1D9E75';
     var u=a.dias<=0?'⛔ Acabou':a.dias<=2?'🚨 '+a.dias+'d':a.dias<=5?'⚠️ '+a.dias+'d':'📦 '+a.dias+'d';
     return '<div class="acard" style="background:'+cor+'08;border-color:'+cor+'33;border-left:3px solid '+cor+'">'+
       '<div class="uch" style="background:'+cor+'22;color:'+cor+'">'+u+'</div>'+
-      '<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13px">'+nomeC+' '+nb(nivelC)+'</div>'+
+      '<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13px">'+c.nome+' '+nb(c.nivel)+'</div>'+
       '<div style="font-size:11px;color:var(--text3);margin-top:2px">'+a.nome+' · '+a.cat+'</div>'+
-      '<div style="font-size:11px;color:var(--text3)">📱 '+telC+'</div></div>'+
+      '<div style="font-size:11px;color:var(--text3)">📱 '+c.tel+'</div></div>'+
       '<div style="display:flex;gap:7px;flex-shrink:0">'+
       '<button class="bwa" onclick="waCRM('+idx+',\'reposicao\')" style="background:#25D36622;color:#25D366;border:1px solid #25D36633;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:\"Barlow\",sans-serif">📱 WA</button>'+
       '<button class="bgh" onclick="waCRM('+idx+',\'custom\')" style="background:var(--bg4);color:var(--text2);border:.5px solid var(--border);border-radius:8px;padding:5px 8px;font-size:12px;font-weight:600;cursor:pointer;font-family:\"Barlow\",sans-serif">✏️</button>'+
@@ -2147,10 +2217,7 @@ function mostrarAlertaCRM(nomeFunc) {
     .then(function(r){ return r.json(); })
     .then(function(d){
       if (d.sucesso && d.dados && d.dados.length > 0) {
-        // Salvar dados da API para a tela principal do CRM
-        window._crmApiData = d.dados;
-        renderCRM(); // atualizar cards da tela principal com dados reais
-        // Merge com dados do popup
+        // Merge com dados da API
         d.dados.forEach(function(a) {
           if (!alertas.find(function(x){ return x.nome === a.nomeCliente; })) {
             alertas.push({
@@ -2776,6 +2843,16 @@ async function carregarMeusCodigos(){
     app.dataset.alphaEnhanced = '1';
     app.classList.add('alpha-func-pro');
 
+    if(!$('alpha-mobile-user')){
+      var mobileUser = document.createElement('div');
+      mobileUser.id = 'alpha-mobile-user';
+      mobileUser.className = 'alpha-mobile-user';
+      mobileUser.innerHTML = '<div class="alpha-mobile-user-left"><img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha"><div><div class="alpha-mobile-user-name" id="alpha-mobile-name">Funcionário</div><div class="alpha-mobile-user-role">Painel funcionário</div></div></div><button class="alpha-mobile-logout" type="button">Sair</button>';
+      var main = app.querySelector('.main');
+      if(main) main.insertBefore(mobileUser, main.firstChild);
+      mobileUser.querySelector('.alpha-mobile-logout').onclick = function(){ var b = $('sbtn'); if(b) b.click(); };
+    }
+
     var venda = $('pv');
     if(venda && !$('alpha-func-hero')){
       var head = document.createElement('div');
@@ -2831,6 +2908,7 @@ async function carregarMeusCodigos(){
 
   function updateStats(){
     try{
+      if($('alpha-mobile-name')) $('alpha-mobile-name').textContent = window._funcNome || ($('tnome') ? $('tnome').textContent : 'Funcionário');
       var clientes = window.CL || [];
       var vendas = (window._HIST || []).length || 0;
       var pts = clientes.reduce(function(s,c){return s + (Number(c.pontos)||0)},0);
