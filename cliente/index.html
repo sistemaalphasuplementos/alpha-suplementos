@@ -481,6 +481,9 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
     <div class="login-links">
       <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/ceo/">Sou CEO</a> · <a href="https://sistemaalphasuplementos.github.io/alpha-suplementos/funcionario/">Sou Funcionário</a>
     </div>
+    <div style="margin-top:14px;text-align:center">
+      <button onclick="abrirStoryPremiado()" style="background:linear-gradient(135deg,#E1306C22,#833AB422);border:1px solid #E1306C44;color:#E1306C;border-radius:10px;padding:11px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;width:100%">📸 Tenho um código Story Premiado</button>
+    </div>
   </div>
 </div>
 
@@ -488,6 +491,75 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
 <div id="promo-banner-modal" class="promo-banner-modal">
   <div class="promo-banner-inner">
     <button class="promo-banner-close" onclick="fecharBanner()">×</button>
+
+<!-- STORY PREMIADO OVERLAY -->
+<div id="story-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9000;overflow-y:auto;-webkit-overflow-scrolling:touch">
+  <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px">
+
+    <!-- Tela inserir código -->
+    <div id="story-tela-codigo" style="width:100%;max-width:400px">
+      <div style="text-align:center;margin-bottom:28px">
+        <div style="font-size:48px;margin-bottom:8px">📸</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#E1306C;letter-spacing:.5px">STORY PREMIADO</div>
+        <div style="font-size:13px;color:#aaa;margin-top:6px">Fez story marcando a Alpha? Insira seu código e resgate seu prêmio!</div>
+      </div>
+      <div style="background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:24px">
+        <label style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.7px;display:block;margin-bottom:8px">Seu código</label>
+        <input type="text" id="story-cod-input" placeholder="Ex: SP-A3B4C5D6" maxlength="12"
+          style="width:100%;box-sizing:border-box;background:#111;border:1.5px solid #333;border-radius:10px;padding:14px;font-family:monospace;font-size:22px;font-weight:700;color:#E1306C;letter-spacing:4px;text-align:center;text-transform:uppercase;outline:none;margin-bottom:12px"
+          oninput="this.value=this.value.toUpperCase()">
+        <div id="story-cod-err" style="display:none;color:#FF4444;font-size:12px;margin-bottom:10px;text-align:center"></div>
+        <button onclick="validarCodigoStory()" id="story-cod-btn"
+          style="width:100%;background:linear-gradient(135deg,#E1306C,#833AB4);border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:'Barlow',sans-serif">
+          🎁 RESGATAR PRÊMIO
+        </button>
+      </div>
+      <button onclick="fecharStoryOverlay()" style="display:block;margin:16px auto 0;background:none;border:none;color:#555;font-size:13px;cursor:pointer;font-family:'Barlow',sans-serif">← Voltar ao login</button>
+    </div>
+
+    <!-- Tela cadastro rápido (para não cadastrados) -->
+    <div id="story-tela-cadastro" style="display:none;width:100%;max-width:400px">
+      <div style="text-align:center;margin-bottom:24px">
+        <div style="font-size:40px;margin-bottom:8px">🎉</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:#E1306C">CÓDIGO VÁLIDO!</div>
+        <div style="font-size:13px;color:#aaa;margin-top:6px">Cadastre-se para receber seu prêmio</div>
+      </div>
+      <div style="background:#1a1a1a;border:1px solid #E1306C44;border-radius:16px;padding:24px">
+        <div id="story-premio-preview" style="background:#E1306C11;border:.5px solid #E1306C33;border-radius:10px;padding:12px;margin-bottom:16px;text-align:center;font-size:14px;font-weight:700;color:#E1306C"></div>
+        <label style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.7px;display:block;margin-bottom:6px">Nome completo *</label>
+        <input type="text" id="story-cad-nome" placeholder="Seu nome completo" style="width:100%;box-sizing:border-box;background:#111;border:1px solid #333;border-radius:9px;padding:12px;font-size:14px;color:#f0f0f0;outline:none;margin-bottom:10px;font-family:'Barlow',sans-serif">
+        <label style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.7px;display:block;margin-bottom:6px">Telefone * (só números)</label>
+        <input type="tel" id="story-cad-tel" placeholder="Ex: 88999999999" oninput="this.value=this.value.replace(/[^0-9]/g,'')" style="width:100%;box-sizing:border-box;background:#111;border:1px solid #333;border-radius:9px;padding:12px;font-size:14px;color:#f0f0f0;outline:none;margin-bottom:10px;font-family:'Barlow',sans-serif">
+        <label style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.7px;display:block;margin-bottom:6px">Email (opcional)</label>
+        <input type="email" id="story-cad-email" placeholder="seuemail@email.com" style="width:100%;box-sizing:border-box;background:#111;border:1px solid #333;border-radius:9px;padding:12px;font-size:14px;color:#f0f0f0;outline:none;margin-bottom:12px;font-family:'Barlow',sans-serif">
+        <div id="story-cad-err" style="display:none;color:#FF4444;font-size:12px;margin-bottom:10px;text-align:center"></div>
+        <button onclick="cadastrarViaStory()" id="story-cad-btn"
+          style="width:100%;background:linear-gradient(135deg,#E1306C,#833AB4);border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:'Barlow',sans-serif">
+          ✅ CADASTRAR E RESGATAR
+        </button>
+      </div>
+    </div>
+
+    <!-- Popup de parabéns -->
+    <div id="story-tela-parabens" style="display:none;width:100%;max-width:400px;text-align:center">
+      <div style="background:linear-gradient(135deg,#1a0a10,#0d0a1a);border:1px solid #E1306C66;border-radius:20px;padding:32px 24px;position:relative;overflow:hidden">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,#E1306C11,transparent 70%);pointer-events:none"></div>
+        <div style="font-size:64px;margin-bottom:12px;animation:storypulse 1s ease-in-out infinite alternate">🎉</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:#E1306C;margin-bottom:6px">PARABÉNS!</div>
+        <div id="story-par-nome" style="font-size:16px;color:#f0f0f0;margin-bottom:20px;font-weight:600"></div>
+        <div id="story-par-premio" style="background:#E1306C22;border:1px solid #E1306C44;border-radius:12px;padding:20px;margin-bottom:20px"></div>
+        <div id="story-par-retirada" style="display:none;background:#EF9F2711;border:.5px solid #EF9F2744;border-radius:10px;padding:12px;margin-bottom:16px;font-size:13px;color:#EF9F27">
+          📍 <strong>Retire seu brinde na loja Alpha Suplementos</strong><br>
+          <span style="font-size:11px;color:#aaa">Rua Padre Cícero, 123 · Tianguá, CE · Apresente esta tela</span>
+        </div>
+        <button onclick="concluirStory()" style="width:100%;background:linear-gradient(135deg,#E1306C,#833AB4);border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;font-family:'Barlow',sans-serif">
+          💪 IR PARA MINHA CONTA
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
     <div class="promo-banner-title" id="promo-banner-titulo">PROMOÇÃO ALPHA</div>
     <img id="promo-banner-img" src="" alt="Promoção">
   </div>
@@ -4065,6 +4137,175 @@ function pedirPermissaoNotificacao(){if('Notification'in window&&Notification.pe
       document.body.appendChild(b);setTimeout(function(){if(b.parentElement)b.remove()},10000);
     }
   });
+</script>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+// STORY PREMIADO — Cliente
+// ══════════════════════════════════════════════════════════════════
+var _storyCodAtual = null;
+var _storyDados = null; // config do prêmio + dados do cliente após validação
+
+// Adicionar animação CSS
+(function(){
+  var s=document.createElement('style');
+  s.textContent='@keyframes storypulse{from{transform:scale(1)}to{transform:scale(1.12)}}';
+  document.head.appendChild(s);
+})();
+
+// Verificar parâmetro ?story= na URL ao carregar
+(function(){
+  try{
+    var params=new URLSearchParams(window.location.search);
+    var cod=params.get('story');
+    if(cod){
+      // Aguardar DOM estar pronto
+      var tentarAbrir=function(){
+        var overlay=document.getElementById('story-overlay');
+        if(overlay){
+          var inp=document.getElementById('story-cod-input');
+          if(inp)inp.value=cod.toUpperCase();
+          abrirStoryPremiado();
+        } else {
+          setTimeout(tentarAbrir,200);
+        }
+      };
+      if(document.readyState==='loading'){
+        document.addEventListener('DOMContentLoaded',tentarAbrir);
+      } else {
+        setTimeout(tentarAbrir,300);
+      }
+    }
+  }catch(e){}
+})();
+
+function abrirStoryPremiado(){
+  var overlay=document.getElementById('story-overlay');
+  if(!overlay)return;
+  // Mostrar tela de código
+  document.getElementById('story-tela-codigo').style.display='block';
+  document.getElementById('story-tela-cadastro').style.display='none';
+  document.getElementById('story-tela-parabens').style.display='none';
+  document.getElementById('story-cod-err').style.display='none';
+  overlay.style.display='block';
+  document.body.style.overflow='hidden';
+  // Focar no input
+  setTimeout(function(){
+    var inp=document.getElementById('story-cod-input');
+    if(inp&&!inp.value)inp.focus();
+  },300);
+}
+
+function fecharStoryOverlay(){
+  var overlay=document.getElementById('story-overlay');
+  if(overlay)overlay.style.display='none';
+  document.body.style.overflow='';
+}
+
+async function validarCodigoStory(){
+  var inp=document.getElementById('story-cod-input');
+  var err=document.getElementById('story-cod-err');
+  var btn=document.getElementById('story-cod-btn');
+  var cod=(inp?inp.value:'').trim().toUpperCase();
+  if(!cod){err.textContent='Insira o código recebido.';err.style.display='block';return;}
+  err.style.display='none';
+  btn.textContent='⏳ Validando...';btn.disabled=true;
+  try{
+    var r=await fetch(WEB_APP_URL+'?acao=validar_codigo_story&codigo='+encodeURIComponent(cod),{redirect:'follow'});
+    var d=await r.json();
+    if(d.sucesso){
+      _storyCodAtual=cod;
+      _storyDados=d; // contém config do prêmio
+      if(d.clienteExiste){
+        // Cliente já cadastrado — logar e mostrar parabéns direto
+        if(d.dadosCliente){
+          U=d.dadosCliente;salvarSessaoCli(U);
+        }
+        mostrarParabens(d);
+      } else {
+        // Não cadastrado — mostrar tela de cadastro
+        var prev=document.getElementById('story-premio-preview');
+        if(prev)prev.innerHTML=_premioTexto(d);
+        document.getElementById('story-tela-codigo').style.display='none';
+        document.getElementById('story-tela-cadastro').style.display='block';
+      }
+    } else {
+      err.textContent=d.erro||'Código inválido ou já utilizado.';err.style.display='block';
+    }
+  }catch(e){
+    err.textContent='Erro de conexão. Tente novamente.';err.style.display='block';
+  }
+  btn.textContent='🎁 RESGATAR PRÊMIO';btn.disabled=false;
+}
+
+async function cadastrarViaStory(){
+  var nome=(document.getElementById('story-cad-nome')||{value:''}).value.trim();
+  var tel=(document.getElementById('story-cad-tel')||{value:''}).value.trim().replace(/[^0-9]/g,'');
+  var email=(document.getElementById('story-cad-email')||{value:''}).value.trim();
+  var err=document.getElementById('story-cad-err');
+  var btn=document.getElementById('story-cad-btn');
+  if(!nome){err.textContent='Informe seu nome completo.';err.style.display='block';return;}
+  if(!tel||tel.length<8){err.textContent='Informe um telefone válido.';err.style.display='block';return;}
+  err.style.display='none';
+  btn.textContent='⏳ Cadastrando...';btn.disabled=true;
+  try{
+    var r=await fetch(WEB_APP_URL,{
+      method:'POST',redirect:'follow',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        acao:'cadastrar_cliente_story',
+        nome:nome,telefone:tel,email:email,
+        codigo:_storyCodAtual,
+        token:_API_TOKEN
+      })
+    });
+    var d=await r.json();
+    if(d.sucesso){
+      // Salvar sessão do cliente recém-cadastrado
+      U={id:String(d.id||''),nome:nome,email:email,tel:tel,nivel:'BRONZE',pontos:Number(d.pontos)||0,cashback:Number(d.cashback)||0,gastoMes:0,mesesRec:0,indicacoes:0,ref:String(d.codigoReferral||'')};
+      salvarSessaoCli(U);
+      mostrarParabens(d.premioInfo||_storyDados);
+    } else {
+      err.textContent=d.erro||'Erro ao cadastrar. Tente novamente.';err.style.display='block';
+    }
+  }catch(e){
+    err.textContent='Erro de conexão. Tente novamente.';err.style.display='block';
+  }
+  btn.textContent='✅ CADASTRAR E RESGATAR';btn.disabled=false;
+}
+
+function _premioTexto(d){
+  if(!d)return'🎁 Prêmio especial!';
+  if(d.tipo==='cashback'){
+    return'💰 <strong style="font-size:22px;color:#E1306C">R$'+Number(d.valor||0).toFixed(2).replace('.',',')+'</strong><br><span style="font-size:12px;color:#aaa">de cashback na sua conta</span>';
+  }
+  return'🎁 <strong style="font-size:18px;color:#E1306C">'+(d.brinde||'Brinde especial')+'</strong><br><span style="font-size:12px;color:#aaa">retire na loja Alpha Suplementos</span>';
+}
+
+function mostrarParabens(d){
+  document.getElementById('story-tela-codigo').style.display='none';
+  document.getElementById('story-tela-cadastro').style.display='none';
+  var par=document.getElementById('story-tela-parabens');
+  par.style.display='block';
+  // Nome
+  var nomeEl=document.getElementById('story-par-nome');
+  if(nomeEl)nomeEl.textContent=U?U.nome:'';
+  // Prêmio
+  var premioEl=document.getElementById('story-par-premio');
+  if(premioEl)premioEl.innerHTML=_premioTexto(d);
+  // Info retirada (brinde físico)
+  var retiEl=document.getElementById('story-par-retirada');
+  if(retiEl)retiEl.style.display=(d&&d.tipo==='brinde')?'block':'none';
+}
+
+function concluirStory(){
+  fecharStoryOverlay();
+  // Entrar no app se logado
+  if(U){
+    try{iniciar();carregarHistorico();}catch(e){}
+  }
+}
+// ══════════════════════════════════════════════════════════════════
 </script>
 </body>
 </html>
