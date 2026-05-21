@@ -256,6 +256,7 @@ body{color:#FFFFFF;font-size:15px}
       <button class="tbt" onclick="ir('desempenho',this);rDesemp()">📈 Desempenho</button>
       <button class="tbt" onclick="ir('auditoria',this);rAuditoria()">🔍 Auditoria</button>
       <button class="tbt" onclick="ir('colaboradores',this);rColab()">🧑‍💼 Colaboradores</button>
+      <button class="tbt" onclick="ir('story',this);rStory()">📸 Story Premiado</button>
     </div>
     <div class="tbright"><span id="unome">CEO</span><button id="sbtn">Sair</button></div>
   </div>
@@ -656,6 +657,91 @@ body{color:#FFFFFF;font-size:15px}
   </div><!-- /main -->
 </div><!-- /app -->
 
+<!-- ══ PAINEL STORY PREMIADO (CEO) ═══════════════════════════════ -->
+<div id="p-story" class="pnl" style="display:none">
+  <div style="margin-bottom:18px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#E1306C">📸 Story Premiado</div>
+    <div style="font-size:13px;color:#aaa;margin-top:4px">Configure a campanha de recompensa por stories no Instagram</div>
+  </div>
+
+  <!-- Toggle ativar/pausar -->
+  <div class="card" style="margin-bottom:14px">
+    <div class="ct">⚙️ Status da Campanha</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-size:14px;font-weight:700" id="story-ceo-status-label">Carregando...</div>
+        <div style="font-size:12px;color:#666;margin-top:2px">Quando pausada, funcionários não conseguem gerar códigos</div>
+      </div>
+      <button id="story-toggle-btn" onclick="toggleCampanha()" style="border-radius:10px;padding:11px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;border:none">...</button>
+    </div>
+  </div>
+
+  <!-- Configurações do prêmio -->
+  <div class="card" style="margin-bottom:14px">
+    <div class="ct">🎁 Configurar Prêmio</div>
+
+    <label class="rot">Tipo de recompensa</label>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <button id="story-tipo-cashback" onclick="selTipoStory('cashback')" style="flex:1;padding:10px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;border:1px solid #333;background:#111;color:#aaa">💰 Cashback</button>
+      <button id="story-tipo-brinde" onclick="selTipoStory('brinde')" style="flex:1;padding:10px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;border:1px solid #333;background:#111;color:#aaa">🎁 Brinde Físico</button>
+    </div>
+
+    <div id="story-campo-cashback" style="display:none">
+      <label class="rot">Valor do Cashback (R$)</label>
+      <input type="number" class="campo" id="story-val-cashback" placeholder="Ex: 10.00" min="1" step="0.01" style="margin-bottom:14px">
+    </div>
+    <div id="story-campo-brinde" style="display:none">
+      <label class="rot">Nome do Brinde</label>
+      <input type="text" class="campo" id="story-val-brinde" placeholder="Ex: Coqueteleira Alpha" style="margin-bottom:14px">
+    </div>
+
+    <label class="rot">Validade do código (horas)</label>
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+      <button class="story-val-btn" onclick="selValidadeStory(24)" style="flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;border:1px solid #333;background:#111;color:#aaa;min-width:60px">24h</button>
+      <button class="story-val-btn" onclick="selValidadeStory(48)" style="flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;border:1px solid #333;background:#111;color:#aaa;min-width:60px">48h</button>
+      <button class="story-val-btn" onclick="selValidadeStory(72)" style="flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;border:1px solid #333;background:#111;color:#aaa;min-width:60px">72h</button>
+      <button class="story-val-btn" onclick="selValidadeStory(168)" style="flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;border:1px solid #333;background:#111;color:#aaa;min-width:60px">7 dias</button>
+    </div>
+    <div id="story-validade-sel" style="font-size:12px;color:#666;margin-bottom:14px"></div>
+
+    <div id="story-cfg-err" style="display:none;background:#E24B4A22;border:.5px solid #E24B4A44;border-radius:8px;padding:10px;font-size:12px;color:#E24B4A;margin-bottom:10px"></div>
+    <button class="bverm" style="background:#E1306C22;color:#E1306C;border:1px solid #E1306C44" onclick="salvarConfigStory()">💾 Salvar Configurações</button>
+  </div>
+
+  <!-- Estatísticas -->
+  <div class="card" style="margin-bottom:14px">
+    <div class="ct">📊 Estatísticas da Campanha</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+      <div style="background:#E1306C11;border:1px solid #E1306C33;border-radius:12px;padding:14px;text-align:center">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#E1306C" id="story-stat-total">0</div>
+        <div style="font-size:11px;color:#aaa;margin-top:3px">📋 Total gerados</div>
+      </div>
+      <div style="background:#1D9E7511;border:1px solid #1D9E7533;border-radius:12px;padding:14px;text-align:center">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#1D9E75" id="story-stat-usados">0</div>
+        <div style="font-size:11px;color:#aaa;margin-top:3px">✅ Usados</div>
+      </div>
+      <div style="background:#EF9F2711;border:1px solid #EF9F2733;border-radius:12px;padding:14px;text-align:center">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#EF9F27" id="story-stat-aguardando">0</div>
+        <div style="font-size:11px;color:#aaa;margin-top:3px">🟡 Aguardando</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Histórico de todos os códigos -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="ct" style="margin:0">📋 Todos os Códigos</div>
+      <button onclick="rStory()" style="background:none;border:none;color:#666;font-size:12px;cursor:pointer;font-family:'Barlow',sans-serif">🔄 Atualizar</button>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="tbl">
+        <thead><tr><th>Código</th><th>Funcionário</th><th>Gerado em</th><th>Validade</th><th>Status</th><th>Cliente</th></tr></thead>
+        <tbody id="story-hist-body"><tr><td colspan="6" style="text-align:center;padding:20px;color:#555">Carregando...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 
 <!-- ══ MODAL HISTÓRICO DE COMPRAS (CEO) ══════════════════════════ -->
 <div id="mhist" class="mfundo" onclick="if(event.target===this)fecharHistorico()">
@@ -957,9 +1043,9 @@ el('sbtn').onclick=function(){
 
 // TABS
 function ir(n,b){
-  document.querySelectorAll('.pnl').forEach(function(p){p.classList.remove('on');});
+  document.querySelectorAll('.pnl').forEach(function(p){p.classList.remove('on');p.style.display='none';});
   document.querySelectorAll('.tbt').forEach(function(x){x.classList.remove('on');});
-  var e=el('p-'+n); if(e)e.classList.add('on');
+  var e=el('p-'+n); if(e){e.classList.add('on');e.style.display='block';}
   if(b)b.classList.add('on');
 }
 
@@ -1908,6 +1994,140 @@ async function reativarColab(id) {
       carregarStatusBanner();
     }).catch(function(e){alert('Erro: '+e.message);});
   };
+</script>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+// STORY PREMIADO — CEO
+// ══════════════════════════════════════════════════════════════════
+var _storyCfg={ativa:false,tipo:'cashback',valor:10,brinde:'',validade:48};
+var _storyValidadeSel=48;
+
+async function rStory(){
+  // Carregar config atual
+  try{
+    var r=await fetch(WEB_APP_URL+'?acao=config_story&token='+_API_TOKEN,{redirect:'follow'});
+    var d=await r.json();
+    if(d.sucesso&&d.config){_storyCfg=d.config;aplicarConfigUI();}
+  }catch(e){}
+  // Carregar histórico
+  try{
+    var r2=await fetch(WEB_APP_URL+'?acao=listar_codigos_story&token='+_API_TOKEN+'&todos=1',{redirect:'follow'});
+    var d2=await r2.json();
+    if(d2.sucesso){renderStoryHist(d2.codigos||[]);}
+  }catch(e){}
+}
+
+function aplicarConfigUI(){
+  var ativa=_storyCfg.ativa===true;
+  var lbl=el('story-ceo-status-label');
+  var btn=el('story-toggle-btn');
+  if(lbl){lbl.textContent=ativa?'✅ Campanha ATIVA':'⛔ Campanha PAUSADA';lbl.style.color=ativa?'#1D9E75':'#FF4444';}
+  if(btn){
+    btn.textContent=ativa?'⏸ Pausar Campanha':'▶ Ativar Campanha';
+    btn.style.background=ativa?'#CC000022':'#1D9E7522';
+    btn.style.color=ativa?'#FF4444':'#1D9E75';
+    btn.style.border=ativa?'1px solid #CC000044':'1px solid #1D9E7544';
+  }
+  selTipoStory(_storyCfg.tipo||'cashback');
+  if(_storyCfg.tipo==='cashback'&&el('story-val-cashback'))el('story-val-cashback').value=_storyCfg.valor||'';
+  if(_storyCfg.tipo==='brinde'&&el('story-val-brinde'))el('story-val-brinde').value=_storyCfg.brinde||'';
+  _storyValidadeSel=_storyCfg.validade||48;
+  // Marcar botão de validade ativo
+  document.querySelectorAll('.story-val-btn').forEach(function(b){
+    var v=parseInt(b.textContent);
+    if(b.textContent.indexOf('7')===0)v=168;
+    b.style.background=v===_storyValidadeSel?'#E1306C22':'#111';
+    b.style.color=v===_storyValidadeSel?'#E1306C':'#aaa';
+    b.style.borderColor=v===_storyValidadeSel?'#E1306C44':'#333';
+  });
+  if(el('story-validade-sel'))el('story-validade-sel').textContent='Validade selecionada: '+_storyValidadeSel+'h';
+}
+
+function selTipoStory(tipo){
+  _storyCfg.tipo=tipo;
+  var cb=el('story-tipo-cashback');var br=el('story-tipo-brinde');
+  var fcb=el('story-campo-cashback');var fbr=el('story-campo-brinde');
+  if(cb){cb.style.background=tipo==='cashback'?'#E1306C22':'#111';cb.style.color=tipo==='cashback'?'#E1306C':'#aaa';cb.style.borderColor=tipo==='cashback'?'#E1306C44':'#333';}
+  if(br){br.style.background=tipo==='brinde'?'#E1306C22':'#111';br.style.color=tipo==='brinde'?'#E1306C':'#aaa';br.style.borderColor=tipo==='brinde'?'#E1306C44':'#333';}
+  if(fcb)fcb.style.display=tipo==='cashback'?'block':'none';
+  if(fbr)fbr.style.display=tipo==='brinde'?'block':'none';
+}
+
+function selValidadeStory(h){
+  _storyValidadeSel=h;
+  document.querySelectorAll('.story-val-btn').forEach(function(b){
+    var v=parseInt(b.textContent);
+    if(b.textContent.indexOf('7')===0)v=168;
+    b.style.background=v===h?'#E1306C22':'#111';
+    b.style.color=v===h?'#E1306C':'#aaa';
+    b.style.borderColor=v===h?'#E1306C44':'#333';
+  });
+  if(el('story-validade-sel'))el('story-validade-sel').textContent='Validade selecionada: '+h+'h';
+}
+
+async function toggleCampanha(){
+  _storyCfg.ativa=!_storyCfg.ativa;
+  await salvarConfigStory(true);
+}
+
+async function salvarConfigStory(somenteToggle){
+  var err=el('story-cfg-err');if(err)err.style.display='none';
+  var cfg={ativa:_storyCfg.ativa,tipo:_storyCfg.tipo,validade:_storyValidadeSel};
+  if(!somenteToggle){
+    if(cfg.tipo==='cashback'){
+      var v=parseFloat((el('story-val-cashback')||{value:''}).value);
+      if(!v||v<=0){if(err){err.textContent='Informe um valor de cashback válido.';err.style.display='block';}return;}
+      cfg.valor=v;
+    } else {
+      var b=(el('story-val-brinde')||{value:''}).value.trim();
+      if(!b){if(err){err.textContent='Informe o nome do brinde.';err.style.display='block';}return;}
+      cfg.brinde=b;
+    }
+  } else {
+    cfg.tipo=_storyCfg.tipo;cfg.valor=_storyCfg.valor;cfg.brinde=_storyCfg.brinde;
+  }
+  try{
+    var r=await fetch(WEB_APP_URL,{
+      method:'POST',redirect:'follow',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({acao:'salvar_config_story',token:_API_TOKEN,config:cfg})
+    });
+    var d=await r.json();
+    if(d.sucesso){
+      _storyCfg=cfg;aplicarConfigUI();
+      var msg=somenteToggle?(cfg.ativa?'✅ Campanha ativada!':'⏸ Campanha pausada!'):'💾 Configurações salvas!';
+      toast(msg,'#E1306C');
+    } else {toast(d.erro||'Erro ao salvar','#FF4444');}
+  }catch(e){toast('Erro de conexão','#FF4444');}
+}
+
+function renderStoryHist(codigos){
+  var total=codigos.length;
+  var usados=codigos.filter(function(c){return c.status==='usado';}).length;
+  var aguardando=codigos.filter(function(c){return c.status==='aguardando';}).length;
+  if(el('story-stat-total'))el('story-stat-total').textContent=total;
+  if(el('story-stat-usados'))el('story-stat-usados').textContent=usados;
+  if(el('story-stat-aguardando'))el('story-stat-aguardando').textContent=aguardando;
+  var tbody=el('story-hist-body');
+  if(!tbody)return;
+  if(!codigos.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:#555">Nenhum código gerado ainda</td></tr>';return;}
+  var html='';
+  codigos.slice().reverse().forEach(function(c){
+    var sc=c.status==='usado'?'#1D9E75':c.status==='expirado'?'#555':'#E1306C';
+    var sl=c.status==='usado'?'✅ Usado':c.status==='expirado'?'❌ Expirado':'🟡 Aguardando';
+    html+='<tr>'
+      +'<td style="font-family:monospace;letter-spacing:2px;font-weight:700;color:#E1306C">'+c.codigo+'</td>'
+      +'<td>'+( c.funcionario||'—')+'</td>'
+      +'<td style="font-size:11px">'+( c.dataGerado||'—')+'</td>'
+      +'<td style="font-size:11px">'+( c.validade||48)+'h</td>'
+      +'<td><span style="color:'+sc+';font-weight:700;font-size:11px">'+sl+'</span></td>'
+      +'<td style="font-size:12px">'+( c.clienteUsado||'—')+'</td>'
+      +'</tr>';
+  });
+  tbody.innerHTML=html;
+}
+// ══════════════════════════════════════════════════════════════════
 </script>
 </body>
 </html>
