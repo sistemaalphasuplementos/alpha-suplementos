@@ -4251,7 +4251,7 @@ async function cadastrarViaStory(){
   try{
     var r=await fetch(WEB_APP_URL,{
       method:'POST',redirect:'follow',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'text/plain'},
       body:JSON.stringify({
         acao:'cadastrar_cliente_story',
         nome:nome,telefone:tel,email:email,
