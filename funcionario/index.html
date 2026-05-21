@@ -1462,23 +1462,46 @@ function renderTudo(){
 }
 
 function renderCRM(){
-  var s=PRD.filter(function(p){return p.dias<=7;}).sort(function(a,b){return a.dias-b.dias;});
+  // Usar dados reais da API se disponíveis, senão PRD local
+  var apiData = window._crmApiData || [];
+  var s;
+  if(apiData.length > 0){
+    s = apiData.map(function(a){
+      return {
+        cid:         a.clienteId||'',
+        nome:        a.nomeProduto||'',
+        cat:         a.nivelCliente||'BRONZE',
+        dias:        Number(a.diasRestantes),
+        nomeCliente: a.nomeCliente||'',
+        tel:         a.telefone||'',
+        nivel:       a.nivelCliente||'BRONZE'
+      };
+    }).sort(function(a,b){return a.dias-b.dias;});
+  } else {
+    s = PRD.filter(function(p){return p.dias<=7;}).sort(function(a,b){return a.dias-b.dias;});
+  }
   var ct={a:0,u:0,p:0,v:0};
   s.forEach(function(x){if(x.dias<=0)ct.a++;else if(x.dias<=2)ct.u++;else if(x.dias<=5)ct.p++;else ct.v++;});
   ['ca','cu','cp','cv'].forEach(function(id,i){var e=el(id);if(e)e.textContent=[ct.a,ct.u,ct.p,ct.v][i];});
   var e=el('crm-lista');if(!e)return;
   window._crmData=s;
   e.innerHTML=s.map(function(a,idx){
-    var c=CL.find(function(x){return x.id===a.cid;});
-    if(!c) c=CL.find(function(x){return x.nome && a.cid && x.nome.toLowerCase().includes(a.cid.toLowerCase());});
-    if(!c) c={nome:'?',nivel:'BRONZE',tel:'—',id:a.cid};
+    var nomeC,nivelC,telC;
+    if(a.nomeCliente){
+      nomeC=a.nomeCliente; nivelC=a.nivel||'BRONZE'; telC=a.tel||'—';
+    } else {
+      var c=CL.find(function(x){return x.id===a.cid;});
+      if(!c) c=CL.find(function(x){return x.nome && a.cid && x.nome.toLowerCase().includes(a.cid.toLowerCase());});
+      if(!c) c={nome:'?',nivel:'BRONZE',tel:'—',id:a.cid};
+      nomeC=c.nome; nivelC=c.nivel; telC=c.tel;
+    }
     var cor=a.dias<=0?'#E24B4A':a.dias<=2?'#EF9F27':a.dias<=5?'#FFD700':'#1D9E75';
     var u=a.dias<=0?'⛔ Acabou':a.dias<=2?'🚨 '+a.dias+'d':a.dias<=5?'⚠️ '+a.dias+'d':'📦 '+a.dias+'d';
     return '<div class="acard" style="background:'+cor+'08;border-color:'+cor+'33;border-left:3px solid '+cor+'">'+
       '<div class="uch" style="background:'+cor+'22;color:'+cor+'">'+u+'</div>'+
-      '<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13px">'+c.nome+' '+nb(c.nivel)+'</div>'+
+      '<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13px">'+nomeC+' '+nb(nivelC)+'</div>'+
       '<div style="font-size:11px;color:var(--text3);margin-top:2px">'+a.nome+' · '+a.cat+'</div>'+
-      '<div style="font-size:11px;color:var(--text3)">📱 '+c.tel+'</div></div>'+
+      '<div style="font-size:11px;color:var(--text3)">📱 '+telC+'</div></div>'+
       '<div style="display:flex;gap:7px;flex-shrink:0">'+
       '<button class="bwa" onclick="waCRM('+idx+',\'reposicao\')" style="background:#25D36622;color:#25D366;border:1px solid #25D36633;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:\"Barlow\",sans-serif">📱 WA</button>'+
       '<button class="bgh" onclick="waCRM('+idx+',\'custom\')" style="background:var(--bg4);color:var(--text2);border:.5px solid var(--border);border-radius:8px;padding:5px 8px;font-size:12px;font-weight:600;cursor:pointer;font-family:\"Barlow\",sans-serif">✏️</button>'+
@@ -2124,7 +2147,10 @@ function mostrarAlertaCRM(nomeFunc) {
     .then(function(r){ return r.json(); })
     .then(function(d){
       if (d.sucesso && d.dados && d.dados.length > 0) {
-        // Merge com dados da API
+        // Salvar dados da API para a tela principal do CRM
+        window._crmApiData = d.dados;
+        renderCRM(); // atualizar cards da tela principal com dados reais
+        // Merge com dados do popup
         d.dados.forEach(function(a) {
           if (!alertas.find(function(x){ return x.nome === a.nomeCliente; })) {
             alertas.push({
