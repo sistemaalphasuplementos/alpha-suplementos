@@ -412,6 +412,161 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font
 .vsug-empty{padding:20px;text-align:center;color:#555;font-size:13px}
 .vsug-header{padding:8px 14px 6px;font-size:10px;color:#444;text-transform:uppercase;letter-spacing:.6px;font-weight:700;border-bottom:1px solid #1a1a1a}
 #vbusca.selecionado{border-color:#1D9E7544 !important;background:#1D9E7508 !important}
+
+
+/* ══════════════════════════════════════════════════════
+   ALPHA UI REFRESH — visual premium + acesso rápido
+   ══════════════════════════════════════════════════════ */
+:root{
+  --alpha-red:#E10600;
+  --alpha-red2:#8F0000;
+  --alpha-gold:#FFC83D;
+  --alpha-green:#26D38C;
+  --alpha-card:rgba(255,255,255,.055);
+  --alpha-card2:rgba(255,255,255,.085);
+  --alpha-line:rgba(255,255,255,.10);
+  --alpha-soft:rgba(225,6,0,.14);
+}
+body{
+  background:
+    radial-gradient(circle at top left, rgba(225,6,0,.20), transparent 34%),
+    radial-gradient(circle at 90% 8%, rgba(255,200,61,.11), transparent 28%),
+    linear-gradient(180deg,#050505 0%,#0A0A0C 46%,#080808 100%);
+  letter-spacing:.1px;
+}
+#app{background:transparent}
+.tb{
+  height:68px;
+  background:rgba(8,8,10,.78);
+  border-bottom:1px solid var(--alpha-line);
+  box-shadow:0 10px 35px rgba(0,0,0,.35);
+}
+.tbl2{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:999px;
+  padding:7px 11px 7px 8px;
+}
+.tbl2 img{height:30px;border-radius:50%;box-shadow:0 0 0 3px rgba(225,6,0,.12)}
+.tbs{font-size:16px;color:#fff}.tbs span{color:var(--alpha-red)}
+.tbg{background:rgba(38,211,140,.12);border-color:rgba(38,211,140,.28);color:var(--alpha-green)}
+.tabs{
+  gap:8px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:999px;
+  padding:6px;
+}
+.tab{
+  border:0;
+  border-radius:999px;
+  padding:10px 14px;
+  color:#aaa;
+}
+.tab:hover{background:rgba(255,255,255,.06);color:#fff}
+.tab.on{
+  color:#fff;
+  border-bottom-color:transparent;
+  background:linear-gradient(135deg,var(--alpha-red2),var(--alpha-red));
+  box-shadow:0 8px 24px rgba(225,6,0,.28);
+}
+#sbtn{border-color:rgba(255,255,255,.10);border-radius:999px;padding:7px 12px;background:rgba(255,255,255,.045)}
+.main{max-width:1180px;margin:0 auto;padding:20px 18px 90px;background:transparent}
+.alpha-hero{
+  position:relative;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:14px;
+  align-items:stretch;
+  margin-bottom:18px;
+}
+.alpha-welcome,.alpha-shortcuts{
+  background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.035));
+  border:1px solid var(--alpha-line);
+  border-radius:22px;
+  box-shadow:0 18px 50px rgba(0,0,0,.34);
+}
+.alpha-welcome{padding:22px;position:relative;overflow:hidden}
+.alpha-welcome:after{
+  content:'ALPHA';position:absolute;right:-10px;bottom:-28px;
+  font-family:'Barlow Condensed',sans-serif;font-size:90px;font-weight:900;
+  color:rgba(255,255,255,.035);letter-spacing:4px;
+}
+.alpha-kicker{color:var(--alpha-gold);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px}
+.alpha-title{font-family:'Barlow Condensed',sans-serif;font-size:36px;line-height:.95;font-weight:900;text-transform:uppercase}
+.alpha-sub{color:#b6b6b6;font-size:13px;margin-top:8px;max-width:430px;line-height:1.45}
+.alpha-shortcuts{padding:14px}
+.alpha-shortcuts-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#777;margin-bottom:10px}
+.alpha-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.alpha-action{
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(255,255,255,.055);
+  color:#fff;border-radius:16px;padding:12px 9px;
+  cursor:pointer;font-family:'Barlow',sans-serif;text-align:left;
+  min-height:76px;transition:.18s ease;
+}
+.alpha-action:hover{transform:translateY(-2px);background:rgba(255,255,255,.085);border-color:rgba(225,6,0,.35)}
+.alpha-action:active{transform:scale(.98)}
+.alpha-action b{display:block;font-size:13px;margin-top:7px;line-height:1.05}
+.alpha-action span{font-size:24px;display:block}
+.card{
+  background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.035));
+  border:1px solid var(--alpha-line);
+  border-radius:18px;
+  box-shadow:0 12px 35px rgba(0,0,0,.28);
+}
+.ct{color:#8d8d8d;letter-spacing:1.2px}.ct::before{background:linear-gradient(var(--alpha-red),var(--alpha-gold));height:14px}
+.inp,.li{
+  background:rgba(255,255,255,.06);
+  border-color:rgba(255,255,255,.10);
+  border-radius:12px;
+}
+.inp:focus,.li:focus{border-color:rgba(225,6,0,.55);box-shadow:0 0 0 4px rgba(225,6,0,.12)}
+.bv,.bg,#lbtn{
+  border-radius:13px;
+  text-transform:uppercase;
+  box-shadow:0 12px 28px rgba(225,6,0,.22);
+}
+.bg{box-shadow:0 12px 28px rgba(38,211,140,.16)}
+.big-card{border-radius:18px;border:1px solid rgba(255,255,255,.08)}
+.tbl th{color:#777}.tbl td{border-bottom-color:rgba(255,255,255,.055)}
+.lbox{
+  background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.035));
+  border-color:rgba(255,255,255,.10);
+  border-radius:24px;
+}
+.alpha-bottom-nav{display:none}
+@media (max-width:768px){
+  .tb{border-radius:0 0 20px 20px;padding:10px 12px;gap:10px}
+  .tbl2{max-width:100%;width:100%;justify-content:center}
+  .tabs{display:none}
+  .tbr{width:100%;justify-content:space-between;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:8px 10px}
+  .main{padding:12px 10px 94px}
+  .alpha-hero{grid-template-columns:1fr;gap:10px;margin-bottom:12px}
+  .alpha-welcome{padding:18px;border-radius:20px}
+  .alpha-title{font-size:30px}
+  .alpha-sub{font-size:12px}
+  .alpha-grid{grid-template-columns:repeat(3,1fr);gap:7px}
+  .alpha-action{min-height:72px;padding:10px 7px;border-radius:15px;text-align:center}
+  .alpha-action span{font-size:22px}.alpha-action b{font-size:11px}
+  .card{border-radius:16px}
+  .alpha-bottom-nav{
+    position:fixed;left:10px;right:10px;bottom:10px;z-index:120;
+    display:grid;grid-template-columns:repeat(6,1fr);gap:5px;
+    padding:7px;background:rgba(10,10,12,.92);
+    border:1px solid rgba(255,255,255,.10);border-radius:22px;
+    box-shadow:0 12px 45px rgba(0,0,0,.55);
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  }
+  .alpha-bottom-nav button{
+    background:transparent;border:0;color:#858585;font-family:'Barlow',sans-serif;
+    font-size:9px;font-weight:800;padding:7px 2px;border-radius:15px;line-height:1.1;
+  }
+  .alpha-bottom-nav button span{display:block;font-size:18px;margin-bottom:2px}
+  .alpha-bottom-nav button.on{background:linear-gradient(135deg,var(--alpha-red2),var(--alpha-red));color:#fff}
+}
+
 </style>
 </head>
 <body>
@@ -450,6 +605,25 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font
     <div class="tbr"><span id="tnome">Funcionário</span><button id="sbtn">Sair</button></div>
   </div>
   <div class="main">
+
+    <section class="alpha-hero">
+      <div class="alpha-welcome">
+        <div class="alpha-kicker">Painel do funcionário</div>
+        <div class="alpha-title">Tudo rápido.<br>Venda sem enrolação.</div>
+        <div class="alpha-sub">Acesse venda, clientes, CRM, resgates e story premiado em poucos toques. Visual atualizado no estilo premium da Alpha.</div>
+      </div>
+      <div class="alpha-shortcuts">
+        <div class="alpha-shortcuts-title">Acesso rápido</div>
+        <div class="alpha-grid">
+          <button class="alpha-action" onclick="alphaGo('venda')"><span>🛍️</span><b>Registrar venda</b></button>
+          <button class="alpha-action" onclick="alphaGo('clientes')"><span>👥</span><b>Clientes</b></button>
+          <button class="alpha-action" onclick="alphaGo('crm')"><span>🚨</span><b>Alertas CRM</b></button>
+          <button class="alpha-action" onclick="alphaGo('resgates')"><span>🏆</span><b>Resgates</b></button>
+          <button class="alpha-action" onclick="alphaGo('indicacoes')"><span>🎯</span><b>Indicações</b></button>
+          <button class="alpha-action" onclick="alphaGo('story')"><span>📸</span><b>Story premiado</b></button>
+        </div>
+      </div>
+    </section>
 
     <!-- VENDA -->
     <div id="pv" class="p on">
@@ -680,6 +854,16 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font
 
   </div>
 </div>
+
+  <div class="alpha-bottom-nav" id="alphaBottomNav">
+    <button data-go="venda" class="on" onclick="alphaGo('venda')"><span>🛍️</span>Venda</button>
+    <button data-go="crm" onclick="alphaGo('crm')"><span>🚨</span>CRM</button>
+    <button data-go="clientes" onclick="alphaGo('clientes')"><span>👥</span>Clientes</button>
+    <button data-go="indicacoes" onclick="alphaGo('indicacoes')"><span>🎯</span>Ind.</button>
+    <button data-go="resgates" onclick="alphaGo('resgates')"><span>🏆</span>Resg.</button>
+    <button data-go="story" onclick="alphaGo('story')"><span>📸</span>Story</button>
+  </div>
+
 
 <!-- MODAL WA -->
 <div id="mwa" class="mov" onclick="if(event.target===this)fMWA()">
@@ -963,6 +1147,22 @@ function ir(n,b){
   if(e)e.classList.add('on');
   if(b)b.classList.add('on');
   if(n==='story'){iniciarStory();}
+}
+
+
+
+// Navegação premium: atualiza abas superiores e menu inferior
+function alphaGo(n){
+  var labels={venda:'Registrar Venda',crm:'CRM Alertas',clientes:'Clientes',indicacoes:'Indicações',resgates:'Resgates',story:'Story Premiado'};
+  var btn=null;
+  document.querySelectorAll('.tab').forEach(function(t){
+    if((t.textContent||'').indexOf(labels[n]||'')>-1){ btn=t; }
+  });
+  ir(n,btn);
+  document.querySelectorAll('.alpha-bottom-nav button').forEach(function(b){
+    b.classList.toggle('on', b.getAttribute('data-go')===n);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 // RENDER
