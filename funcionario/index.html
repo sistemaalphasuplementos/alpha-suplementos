@@ -412,6 +412,428 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font
 .vsug-empty{padding:20px;text-align:center;color:#555;font-size:13px}
 .vsug-header{padding:8px 14px 6px;font-size:10px;color:#444;text-transform:uppercase;letter-spacing:.6px;font-weight:700;border-bottom:1px solid #1a1a1a}
 #vbusca.selecionado{border-color:#1D9E7544 !important;background:#1D9E7508 !important}
+
+/* ══════════════════════════════════════════════════════
+   ALPHA FUNCIONÁRIO — PREMIUM MOCKUP v70
+   Visual gamer/16-bits + mobile fluido
+   ══════════════════════════════════════════════════════ */
+:root{
+  --alpha-red:#ff1738;
+  --alpha-red2:#cc001f;
+  --alpha-green:#00e889;
+  --alpha-blue:#23b7ff;
+  --alpha-gold:#ffd34e;
+  --alpha-pink:#e1306c;
+  --alpha-purple:#8b5cff;
+  --alpha-panel:rgba(18,18,24,.92);
+  --alpha-panel2:rgba(29,18,23,.94);
+  --alpha-line:rgba(255,255,255,.08);
+}
+body{
+  background:
+    radial-gradient(circle at 18% 8%,rgba(255,23,56,.18),transparent 28%),
+    radial-gradient(circle at 84% 18%,rgba(0,232,137,.10),transparent 28%),
+    linear-gradient(135deg,#050507 0%,#0d080b 42%,#09090e 100%) !important;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+  background-size:22px 22px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.8),rgba(0,0,0,.18));
+}
+#app{position:relative;z-index:1;min-height:100dvh}
+#app.alpha-func-pro{
+  display:grid !important;
+  grid-template-columns:268px minmax(0,1fr);
+  gap:18px;
+  padding:16px;
+  min-height:100dvh;
+}
+.alpha-func-pro .tb{
+  height:auto !important;
+  min-height:calc(100dvh - 32px);
+  position:sticky !important;
+  top:16px !important;
+  align-self:start;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  justify-content:flex-start;
+  gap:14px;
+  padding:16px;
+  border:1px solid rgba(255,23,56,.24);
+  border-radius:24px;
+  background:
+    radial-gradient(circle at top left,rgba(255,23,56,.22),transparent 34%),
+    linear-gradient(180deg,rgba(19,15,20,.97),rgba(9,9,12,.97));
+  box-shadow:0 20px 60px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.05);
+  overflow:hidden;
+}
+.alpha-func-pro .tb::before{
+  content:"";
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(255,23,56,.45),transparent 20%,transparent 80%,rgba(255,23,56,.16));
+  opacity:.28;
+}
+.alpha-func-pro .tbl2{
+  position:relative;z-index:1;
+  padding:8px 6px 14px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  display:grid;
+  grid-template-columns:44px 1fr;
+  gap:10px;
+}
+.alpha-func-pro .tbl2 img{height:44px;width:44px;object-fit:contain;filter:drop-shadow(0 0 16px rgba(255,23,56,.35))}
+.alpha-func-pro .tbs{font-size:18px;line-height:.95}
+.alpha-func-pro .tbg{
+  grid-column:1/3;
+  width:max-content;
+  margin-top:4px;
+  color:#00e889;
+  background:rgba(0,232,137,.09);
+  border-color:rgba(0,232,137,.24);
+}
+.alpha-func-pro .tabs{
+  position:relative;z-index:1;
+  flex:none;width:100%;
+  display:flex;flex-direction:column;
+  gap:9px;overflow:visible;
+}
+.alpha-func-pro .tab{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  min-height:50px;
+  padding:12px 14px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;
+  background:rgba(255,255,255,.035);
+  color:#aaa;
+  font-size:13px;
+  text-align:left;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+.alpha-func-pro .tab:hover{background:rgba(255,255,255,.06);color:#fff}
+.alpha-func-pro .tab.on{
+  color:#fff !important;
+  border-color:rgba(255,23,56,.55) !important;
+  background:
+    linear-gradient(135deg,rgba(255,23,56,.28),rgba(255,23,56,.10)),
+    rgba(255,255,255,.05);
+  box-shadow:0 0 26px rgba(255,23,56,.14),inset 3px 0 0 var(--alpha-red);
+  text-shadow:none !important;
+}
+.alpha-func-pro .tbr{
+  position:relative;z-index:1;
+  margin-top:auto;
+  padding:12px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.04);
+  display:grid;
+  gap:9px;
+  color:#ddd;
+}
+.alpha-func-pro #tnome{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:20px;font-weight:900;
+  color:#fff;
+}
+.alpha-func-pro #sbtn{
+  width:100%;
+  min-height:42px;
+  border-radius:12px;
+  border-color:rgba(255,23,56,.26);
+  background:rgba(255,23,56,.08);
+  color:#ff6b80;
+  font-weight:800;
+}
+.alpha-func-pro .main{
+  min-height:calc(100dvh - 32px);
+  padding:0 !important;
+  background:transparent !important;
+  overflow:hidden;
+}
+.alpha-func-pro .p{
+  min-height:calc(100dvh - 32px);
+  padding:0;
+  animation:alphaFade .22s ease-out;
+}
+@keyframes alphaFade{from{opacity:.55;transform:translateY(5px)}to{opacity:1;transform:none}}
+.alpha-page-head{
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 280px;
+  gap:16px;
+  margin-bottom:16px;
+}
+.alpha-hero{
+  min-height:188px;
+  border-radius:26px;
+  padding:22px;
+  border:1px solid rgba(255,23,56,.30);
+  background:
+    radial-gradient(circle at 82% 26%,rgba(255,23,56,.32),transparent 31%),
+    radial-gradient(circle at 18% 82%,rgba(0,232,137,.11),transparent 24%),
+    linear-gradient(135deg,rgba(30,10,14,.96),rgba(11,12,18,.97));
+  box-shadow:0 18px 48px rgba(0,0,0,.48), inset 0 1px 0 rgba(255,255,255,.06);
+  overflow:hidden;
+}
+.alpha-hero::after{
+  content:"🛍️";
+  position:absolute;right:30px;bottom:8px;
+  font-size:92px;line-height:1;opacity:.16;
+  filter:drop-shadow(0 0 20px rgba(255,23,56,.5));
+}
+.alpha-eyebrow{
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1.3px;
+  color:#ff6b7e;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.alpha-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:38px;
+  font-weight:900;
+  letter-spacing:.3px;
+  line-height:.94;
+  color:#fff;
+  text-transform:uppercase;
+  max-width:620px;
+}
+.alpha-sub{
+  margin-top:10px;
+  max-width:560px;
+  color:#aaa;
+  font-size:13px;
+  line-height:1.5;
+}
+.alpha-quick{
+  border-radius:24px;
+  padding:16px;
+  border:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg,rgba(22,22,29,.96),rgba(12,12,16,.96));
+  box-shadow:0 18px 48px rgba(0,0,0,.38);
+}
+.alpha-quick-title{
+  font-size:10px;
+  color:#777;
+  font-weight:900;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+.alpha-quick-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+.alpha-qbtn{
+  min-height:78px;
+  border:none;
+  border-radius:18px;
+  cursor:pointer;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.08);
+  color:#fff;
+  font-family:'Barlow',sans-serif;
+  text-align:left;
+  padding:12px;
+  transition:transform .12s, border-color .12s, background .12s;
+}
+.alpha-qbtn:active{transform:scale(.96)}
+.alpha-qbtn:hover{border-color:rgba(255,23,56,.34);background:rgba(255,23,56,.08)}
+.alpha-qico{display:block;font-size:24px;margin-bottom:6px}
+.alpha-qlbl{display:block;font-size:11px;font-weight:900;letter-spacing:.3px;text-transform:uppercase}
+.alpha-stat-row{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+  margin-bottom:16px;
+}
+.alpha-stat{
+  position:relative;
+  overflow:hidden;
+  border-radius:22px;
+  padding:16px 16px 15px;
+  min-height:120px;
+  border:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
+  box-shadow:0 14px 32px rgba(0,0,0,.32);
+}
+.alpha-stat::after{
+  content:"";
+  position:absolute;right:-20px;bottom:-26px;
+  width:92px;height:92px;border-radius:50%;
+  background:currentColor;opacity:.12;filter:blur(2px);
+}
+.alpha-stat.red{color:#ff3150}.alpha-stat.green{color:#00e889}.alpha-stat.gold{color:#ffd34e}.alpha-stat.blue{color:#23b7ff}
+.alpha-stat-ico{font-size:26px;margin-bottom:10px}
+.alpha-stat-val{
+  color:#fff;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:30px;
+  font-weight:900;
+  line-height:1;
+}
+.alpha-stat-lbl{
+  margin-top:5px;
+  color:#9a9a9a;
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+}
+.alpha-func-pro .card{
+  border-radius:22px !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  background:
+    linear-gradient(180deg,rgba(22,22,29,.94),rgba(13,13,18,.94)) !important;
+  box-shadow:0 15px 36px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.045) !important;
+}
+.alpha-func-pro .ct{
+  color:#8f8f99 !important;
+  font-size:10px !important;
+  letter-spacing:1px !important;
+}
+.alpha-func-pro .ct::before{
+  width:4px;height:14px;
+  background:linear-gradient(180deg,#ff1738,#ff8a00) !important;
+  box-shadow:0 0 16px rgba(255,23,56,.65) !important;
+}
+.alpha-func-pro .inp,.alpha-func-pro .li{
+  border-radius:14px !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  background:rgba(255,255,255,.055) !important;
+  min-height:48px;
+}
+.alpha-func-pro .inp:focus,.alpha-func-pro .li:focus{
+  border-color:rgba(255,23,56,.55) !important;
+  box-shadow:0 0 0 3px rgba(255,23,56,.10) !important;
+}
+.alpha-func-pro .bv,.alpha-func-pro .bg{
+  border-radius:15px !important;
+  min-height:50px;
+  font-size:14px !important;
+  box-shadow:0 14px 28px rgba(0,0,0,.28),0 0 24px rgba(255,23,56,.14) !important;
+}
+.alpha-func-pro .bg{box-shadow:0 14px 28px rgba(0,0,0,.28),0 0 24px rgba(0,232,137,.12) !important}
+.alpha-func-pro .tbl th{
+  background:rgba(255,255,255,.035);
+  color:#85858d !important;
+}
+.alpha-func-pro .tbl td{border-bottom-color:rgba(255,255,255,.055) !important}
+.alpha-func-pro .tbl tr:hover td{background:rgba(255,23,56,.055) !important}
+.alpha-func-pro .big-card{
+  border-radius:20px !important;
+  border:1px solid rgba(255,255,255,.08);
+}
+.alpha-chipline{
+  margin-top:15px;
+  display:flex;gap:8px;flex-wrap:wrap;
+}
+.alpha-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 11px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.05);
+  color:#ddd;
+  font-size:11px;
+  font-weight:800;
+}
+.alpha-mobile-nav{display:none}
+.alpha-func-pro .mov{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.alpha-func-pro .mbox{
+  border-radius:24px !important;
+  background:linear-gradient(180deg,rgba(20,20,28,.98),rgba(9,9,12,.98)) !important;
+  border-color:rgba(255,23,56,.45) !important;
+  box-shadow:0 24px 70px rgba(0,0,0,.65);
+}
+@media (max-width: 980px){
+  #app.alpha-func-pro{
+    display:block !important;
+    padding:0;
+    min-height:100dvh;
+  }
+  .alpha-func-pro .tb{
+    position:fixed !important;
+    left:0;right:0;bottom:0;top:auto !important;
+    z-index:80;
+    min-height:auto !important;
+    height:auto !important;
+    border-radius:22px 22px 0 0;
+    padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));
+    border-left:none;border-right:none;border-bottom:none;
+    flex-direction:column;
+    gap:6px;
+    box-shadow:0 -16px 50px rgba(0,0,0,.65);
+  }
+  .alpha-func-pro .tbl2,.alpha-func-pro .tbr{display:none !important}
+  .alpha-func-pro .tabs{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:5px;
+  }
+  .alpha-func-pro .tab{
+    min-height:54px;
+    justify-content:center;
+    text-align:center;
+    padding:7px 4px;
+    border-radius:14px;
+    font-size:0;
+    line-height:1.05;
+  }
+  .alpha-func-pro .tab::first-letter{font-size:20px}
+  .alpha-func-pro .tab.on{box-shadow:0 0 18px rgba(255,23,56,.18);inset:0 2px 0 var(--alpha-red)}
+  .alpha-func-pro .main{
+    min-height:100dvh;
+    padding:12px 12px calc(88px + env(safe-area-inset-bottom,0px)) !important;
+  }
+  .alpha-func-pro .p{min-height:auto}
+  .alpha-page-head{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+  .alpha-hero{
+    border-radius:24px;
+    min-height:168px;
+    padding:20px 17px;
+  }
+  .alpha-hero::after{font-size:72px;right:16px;bottom:6px}
+  .alpha-title{font-size:31px;max-width:78%}
+  .alpha-sub{font-size:12px;max-width:82%}
+  .alpha-quick{border-radius:22px;padding:13px}
+  .alpha-quick-grid{grid-template-columns:repeat(4,1fr);gap:7px}
+  .alpha-qbtn{min-height:72px;padding:9px 6px;text-align:center}
+  .alpha-qico{font-size:22px}
+  .alpha-qlbl{font-size:9px}
+  .alpha-stat-row{grid-template-columns:1fr 1fr;gap:9px}
+  .alpha-stat{border-radius:18px;min-height:104px;padding:14px}
+  .alpha-stat-val{font-size:25px}
+  .alpha-func-pro .card{border-radius:20px !important;padding:14px !important}
+  .venda-grid,.g2,.g2-stack{display:block !important}
+  .cards-grid-4,.crm-kpis{grid-template-columns:1fr 1fr !important}
+}
+@media (max-width: 390px){
+  .alpha-func-pro .main{padding:9px 9px calc(88px + env(safe-area-inset-bottom,0px)) !important}
+  .alpha-title{font-size:27px}
+  .alpha-quick-grid{grid-template-columns:1fr 1fr}
+  .alpha-qbtn{min-height:62px}
+  .alpha-stat-val{font-size:23px}
+  .alpha-func-pro .tab{min-height:50px}
+}
+
 </style>
 </head>
 <body>
@@ -2311,6 +2733,96 @@ async function carregarMeusCodigos(){
   }
 }
 // ══════════════════════════════════════════════════════════════════
+</script>
+
+
+<script>
+/* ══ ALPHA FUNC PREMIUM UI v70 — não altera regras de negócio ══ */
+(function(){
+  function $(id){return document.getElementById(id)}
+  function ready(fn){ if(document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+  function fmtMoney(v){
+    try{return 'R$' + Number(v||0).toFixed(2).replace('.', ',');}catch(e){return 'R$0,00'}
+  }
+  function enhance(){
+    var app = $('app');
+    if(!app || app.dataset.alphaEnhanced === '1') return;
+    app.dataset.alphaEnhanced = '1';
+    app.classList.add('alpha-func-pro');
+
+    var venda = $('pv');
+    if(venda && !$('alpha-func-hero')){
+      var head = document.createElement('div');
+      head.className = 'alpha-page-head';
+      head.id = 'alpha-func-hero';
+      head.innerHTML =
+        '<div class="alpha-hero">' +
+          '<div class="alpha-eyebrow">PAINEL OPERACIONAL · FUNCIONÁRIO</div>' +
+          '<div class="alpha-title">Venda rápido, acompanhe clientes e mantenha o CRM quente.</div>' +
+          '<div class="alpha-sub">Uma central premium para registrar vendas, consultar clientes, aplicar resgates, gerar códigos de story e agir nos alertas sem perder tempo.</div>' +
+          '<div class="alpha-chipline">' +
+            '<span class="alpha-chip">⚡ venda em poucos toques</span>' +
+            '<span class="alpha-chip">📦 alertas CRM</span>' +
+            '<span class="alpha-chip">🏆 resgates</span>' +
+            '<span class="alpha-chip">📸 story premiado</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="alpha-quick">' +
+          '<div class="alpha-quick-title">Acesso rápido</div>' +
+          '<div class="alpha-quick-grid">' +
+            '<button class="alpha-qbtn" data-go="venda"><span class="alpha-qico">🛍️</span><span class="alpha-qlbl">Venda</span></button>' +
+            '<button class="alpha-qbtn" data-go="clientes"><span class="alpha-qico">👥</span><span class="alpha-qlbl">Clientes</span></button>' +
+            '<button class="alpha-qbtn" data-go="crm"><span class="alpha-qico">📦</span><span class="alpha-qlbl">CRM</span></button>' +
+            '<button class="alpha-qbtn" data-go="story"><span class="alpha-qico">📸</span><span class="alpha-qlbl">Story</span></button>' +
+          '</div>' +
+        '</div>';
+      venda.insertBefore(head, venda.firstChild);
+
+      var stats = document.createElement('div');
+      stats.className = 'alpha-stat-row';
+      stats.id = 'alpha-func-stats';
+      stats.innerHTML =
+        '<div class="alpha-stat red"><div class="alpha-stat-ico">🛍️</div><div class="alpha-stat-val" id="alpha-stat-vendas">0</div><div class="alpha-stat-lbl">vendas registradas</div></div>' +
+        '<div class="alpha-stat green"><div class="alpha-stat-ico">👥</div><div class="alpha-stat-val" id="alpha-stat-clientes">0</div><div class="alpha-stat-lbl">clientes na base</div></div>' +
+        '<div class="alpha-stat gold"><div class="alpha-stat-ico">⭐</div><div class="alpha-stat-val" id="alpha-stat-pontos">0</div><div class="alpha-stat-lbl">pontos ativos</div></div>' +
+        '<div class="alpha-stat blue"><div class="alpha-stat-ico">💰</div><div class="alpha-stat-val" id="alpha-stat-cash">R$0</div><div class="alpha-stat-lbl">cashback disponível</div></div>';
+      if(head.nextSibling) venda.insertBefore(stats, head.nextSibling); else venda.appendChild(stats);
+    }
+
+    document.querySelectorAll('.alpha-qbtn[data-go]').forEach(function(btn){
+      btn.onclick = function(){
+        var go = btn.getAttribute('data-go');
+        var tab = Array.prototype.find.call(document.querySelectorAll('.tab'), function(t){
+          return (t.getAttribute('onclick')||'').indexOf("'" + go + "'") > -1;
+        });
+        if(typeof ir === 'function') ir(go, tab);
+      };
+    });
+
+    updateStats();
+    setInterval(updateStats, 1500);
+  }
+
+  function updateStats(){
+    try{
+      var clientes = window.CL || [];
+      var vendas = (window._HIST || []).length || 0;
+      var pts = clientes.reduce(function(s,c){return s + (Number(c.pontos)||0)},0);
+      var cb = clientes.reduce(function(s,c){return s + (Number(c.cashback)||0)},0);
+      if($('alpha-stat-clientes')) $('alpha-stat-clientes').textContent = clientes.length || 0;
+      if($('alpha-stat-vendas')) $('alpha-stat-vendas').textContent = vendas || '—';
+      if($('alpha-stat-pontos')) $('alpha-stat-pontos').textContent = pts.toLocaleString('pt-BR');
+      if($('alpha-stat-cash')) $('alpha-stat-cash').textContent = fmtMoney(cb);
+    }catch(e){}
+  }
+
+  ready(function(){
+    enhance();
+    var oldDisplayApp = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style');
+    setTimeout(enhance, 300);
+    setTimeout(enhance, 1200);
+  });
+})();
 </script>
 
 </body>

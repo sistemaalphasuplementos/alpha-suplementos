@@ -459,6 +459,30 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
 .tbt:active{transform:scale(.82);box-shadow:0 2px 8px rgba(0,0,0,.5),0 0 14px rgba(80,150,255,.35);}
 .tbt-sm{height:40px;font-size:11px;font-weight:900;letter-spacing:.5px;border-radius:10px;}
 
+
+
+/* ═══════════════════════════════════════════════════════
+   ALPHA CLIENTE — PREMIUM MOCKUP REAL v69
+   Layout inspirado no painel gamer/16-bits enviado
+   Mantém IDs e funções originais do app cliente
+═══════════════════════════════════════════════════════ */
+:root{--alpha-red:#e10600;--alpha-red2:#ff2a20;--alpha-gold:#ffd84a;--alpha-green:#36f06b;--alpha-purple:#8f45ff;--alpha-card:rgba(16,16,17,.92);--alpha-line:rgba(225,6,0,.38);--alpha-soft:rgba(255,255,255,.075)}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-2;background:radial-gradient(circle at 24% 8%,rgba(225,6,0,.22),transparent 28%),radial-gradient(circle at 78% 0%,rgba(255,196,0,.08),transparent 30%),linear-gradient(180deg,#050505 0%,#090909 45%,#020202 100%)}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.12;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:24px 24px;mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent)}
+#app{background:transparent!important}
+.header{height:74px;padding:0 18px;border:1px solid rgba(255,255,255,.12);border-left:0;border-right:0;background:linear-gradient(180deg,rgba(7,7,8,.98),rgba(5,5,5,.95))!important;box-shadow:0 10px 38px rgba(0,0,0,.45)}
+.hdr-logo img{height:45px;width:45px;object-fit:contain;filter:drop-shadow(0 0 12px rgba(225,6,0,.35));image-rendering:auto}.hdr-logo-txt{font-size:21px;line-height:.9;text-shadow:0 0 10px rgba(225,6,0,.34)}
+.hdr-logo::after{content:'👤 CLIENTE';margin-left:18px;border:1px solid rgba(54,240,107,.35);border-radius:9px;padding:8px 18px;color:#36f06b;background:rgba(54,240,107,.08);font-size:12px;font-weight:900;letter-spacing:.7px;box-shadow:inset 0 0 12px rgba(54,240,107,.08)}
+.hdr-right{gap:14px}.hdr-right button{display:none!important}.hdr-av{width:42px;height:42px;border:1.5px solid var(--alpha-red)!important;color:#fff!important;background:radial-gradient(circle at 35% 25%,rgba(255,255,255,.12),transparent 30%),#090909!important;box-shadow:0 0 0 3px rgba(225,6,0,.08),0 0 20px rgba(225,6,0,.18);font-size:15px!important}
+.client-top-actions{display:flex;align-items:center;gap:28px;margin-left:auto;margin-right:16px}.client-top-actions button{background:none;border:none;color:#d9d9d9;font-size:14px;font-weight:700;letter-spacing:.15px;cursor:pointer;font-family:'Barlow',sans-serif;display:flex;align-items:center;gap:8px;padding:14px 4px;border-bottom:2px solid transparent}.client-top-actions button:hover{color:#fff}.client-top-actions button.is-hot{background:linear-gradient(180deg,#e10600,#9b0700);border:1px solid #ff2a20;border-radius:9px;padding:11px 24px;color:#fff;box-shadow:0 0 22px rgba(225,6,0,.34)}
+.client-sidebar{display:none}.client-sidebar .side-section{border-bottom:1px solid rgba(255,255,255,.13);padding:0 0 14px;margin-bottom:14px}.side-btn{width:100%;border:0;background:transparent;color:#fff;display:flex;align-items:center;gap:14px;padding:11px 14px;border-radius:8px;cursor:pointer;text-align:left;font-family:'Barlow',sans-serif;position:relative}.side-btn:hover,.side-btn.on{background:linear-gradient(90deg,rgba(225,6,0,.32),rgba(225,6,0,.05));box-shadow:inset 0 0 0 1px rgba(225,6,0,.75),0 0 14px rgba(225,6,0,.15)}.side-ico{width:34px;text-align:center;font-size:26px;filter:drop-shadow(0 2px 0 #000) drop-shadow(0 0 6px rgba(255,216,74,.25))}.side-title{font-weight:900;font-size:14px}.side-sub{font-size:11px;color:#aaa;margin-top:2px}.side-new{margin-left:auto;background:#d90700;color:#fff;border:1px solid #ff4d4d;border-radius:7px;padding:2px 6px;font-size:9px;font-weight:900}.side-level-card{margin:14px;border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:14px;background:radial-gradient(circle at 80% 45%,rgba(225,6,0,.4),transparent 42%),linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))}.side-level-label{font-size:10px;color:#bdbdbd;text-transform:uppercase;letter-spacing:.7px}.side-level-name{font-family:'Barlow Condensed';font-size:24px;font-weight:900;color:#ff2a20;letter-spacing:1px;margin:5px 0}.side-level-bar{height:7px;border-radius:20px;background:#171717;overflow:hidden;margin-top:14px}.side-level-fill{height:100%;width:68%;background:linear-gradient(90deg,#ff1919,#ffb000);border-radius:20px}.side-exit{margin:0 14px;width:calc(100% - 28px);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:#eee;border-radius:9px;padding:12px 14px;display:flex;gap:12px;align-items:center;font-family:'Barlow';cursor:pointer}.side-exit b{font-size:14px}.side-exit small{display:block;color:#999;font-size:11px;margin-top:2px}
+.client-home{padding:22px 16px 22px;max-width:1280px;margin:0 auto;width:100%}.client-hero-grid{display:grid;grid-template-columns:1.75fr 1.05fr;gap:14px;margin-bottom:14px}.client-hero{min-height:236px;border:1px solid var(--alpha-line);border-radius:10px;background:linear-gradient(90deg,rgba(0,0,0,.18),rgba(0,0,0,.82) 44%,rgba(0,0,0,.96)),radial-gradient(circle at 28% 18%,rgba(255,32,25,.35),transparent 18%),linear-gradient(135deg,#170708,#080808);position:relative;overflow:hidden;display:grid;grid-template-columns:300px 1fr;align-items:center}.client-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0 65%,rgba(225,6,0,.09)),repeating-linear-gradient(0deg,rgba(255,255,255,.02) 0 1px,transparent 1px 5px);pointer-events:none}.client-pixel-man{height:100%;display:flex;align-items:flex-end;justify-content:center;position:relative}.client-pixel-man::before{content:'💪';position:absolute;left:50%;bottom:22px;transform:translateX(-50%) scale(4.1);font-size:52px;filter:drop-shadow(0 10px 0 #000) drop-shadow(0 0 16px rgba(225,6,0,.4));image-rendering:pixelated}.client-pixel-man::after{content:'ALPHA';position:absolute;bottom:52px;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed';font-size:28px;font-weight:900;color:#fff;text-shadow:3px 3px #900,0 0 10px #e10600}.hero-copy{position:relative;z-index:1;padding:20px 28px 20px 0}.hero-eyebrow{font-family:'Barlow Condensed';font-size:15px;font-weight:900;color:#ff2a20;letter-spacing:1.4px;text-transform:uppercase}.hero-title{font-family:'Barlow Condensed';font-size:48px;line-height:.93;font-weight:900;text-transform:uppercase;margin:14px 0;color:#fff;text-shadow:4px 4px 0 #000,0 0 14px rgba(255,255,255,.18)}.hero-title span{display:block;color:#ff1717;text-shadow:4px 4px 0 #000,0 0 18px rgba(225,6,0,.55)}.hero-text{max-width:430px;font-size:15px;line-height:1.75;color:#ddd}.quick-panel{border:1px solid rgba(255,255,255,.11);border-radius:10px;background:rgba(12,12,13,.86);padding:16px 18px}.panel-title{font-family:'Barlow Condensed';font-size:17px;font-weight:900;color:#ff1919;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.quick-tile{min-height:90px;border:1px solid rgba(255,255,255,.11);background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border-radius:8px;color:#fff;font-weight:900;font-family:'Barlow';cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;position:relative}.quick-tile:hover{border-color:rgba(225,6,0,.8);box-shadow:0 0 18px rgba(225,6,0,.22)}.quick-tile .qico{font-size:32px;filter:drop-shadow(0 3px 0 #000)}.quick-tile small{font-size:13px}.quick-tile .tag{position:absolute;top:8px;right:8px;background:#d90700;border:1px solid #ff6060;border-radius:6px;padding:1px 6px;font-size:9px}.client-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}.client-kpi{border:1px solid var(--alpha-line);border-radius:9px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012));padding:16px 18px;display:flex;align-items:center;gap:16px;min-height:98px}.client-kpi .kico{font-size:38px;width:48px;text-align:center;filter:drop-shadow(0 3px 0 #000)}.client-kpi .klbl{font-size:11px;text-transform:uppercase;letter-spacing:.9px;color:#d7d7d7;font-weight:900}.client-kpi .kval{font-family:'Barlow Condensed';font-size:27px;font-weight:900;margin-top:5px;color:#fff;text-shadow:2px 2px #000}.client-kpi .ksub{font-size:12px;color:#48f56d;margin-top:3px}.client-main-grid{display:grid;grid-template-columns:1.1fr 1.15fr 1.35fr;gap:14px;margin-bottom:14px}.premium-card{border:1px solid var(--alpha-line);border-radius:9px;background:linear-gradient(180deg,rgba(14,14,15,.95),rgba(5,5,5,.95));padding:14px 16px;box-shadow:0 12px 26px rgba(0,0,0,.24)}.premium-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.premium-head h3{font-family:'Barlow Condensed';font-size:19px;color:#ff1919;font-weight:900;letter-spacing:1px;text-transform:uppercase}.mini-btn{background:transparent;border:1px solid rgba(255,255,255,.18);color:#ddd;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:800;cursor:pointer}.reward-list{display:flex;flex-direction:column;gap:9px}.reward-row,.buy-row{display:flex;align-items:center;gap:12px;border:1px solid rgba(255,255,255,.09);border-radius:7px;padding:10px;background:rgba(255,255,255,.025)}.reward-img,.buy-img{width:54px;height:54px;border-radius:7px;background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.13),transparent 36%),linear-gradient(140deg,#271010,#050505);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}.reward-info,.buy-info{flex:1;min-width:0}.reward-info b,.buy-info b{display:block;font-size:13px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.reward-info small,.buy-info small{display:block;color:#9a9a9a;font-size:11px;margin-top:4px}.reward-bar{height:8px;background:#1d1d1d;border-radius:20px;margin-top:8px;overflow:hidden}.reward-fill{height:100%;background:linear-gradient(90deg,#ff1111,#ff8a00);border-radius:20px}.reward-points{font-size:11px;color:#ffe05c;font-weight:900;margin-left:6px}.ok-dot{color:#4dff64;font-weight:900}.buy-price{text-align:right;font-weight:900;color:#fff;font-size:13px}.buy-pts{color:#45f46a;font-size:12px;margin-top:4px}.catalog-btn{width:100%;margin-top:12px;border:none;border-radius:8px;background:linear-gradient(180deg,#e10600,#9b0700);color:#fff;font-size:15px;font-weight:900;padding:13px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 0 20px rgba(225,6,0,.22)}.game-promo{display:flex;flex-direction:column;gap:12px}.game-banner{min-height:118px;border:1px solid rgba(225,6,0,.72);border-radius:9px;position:relative;overflow:hidden;padding:15px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}.game-banner.snakex{background:radial-gradient(circle at 70% 35%,rgba(255,172,0,.15),transparent 25%),linear-gradient(120deg,#201109,#080808)}.game-banner.stackx{background:radial-gradient(circle at 70% 40%,rgba(31,255,82,.13),transparent 25%),linear-gradient(120deg,#0d210f,#080808)}.game-logo{font-family:'Barlow Condensed';font-size:37px;line-height:.8;font-weight:900;text-transform:uppercase;text-shadow:3px 3px #000}.snakex .game-logo{color:#ffb21a}.stackx .game-logo{color:#6aff5d}.game-copy{font-size:11px;color:#ffe56a;font-weight:900;text-transform:uppercase;margin-top:9px}.game-art{font-size:48px;filter:drop-shadow(0 5px 0 #000)}.play-btn{background:linear-gradient(180deg,#f01712,#a00700);border:1px solid #ff453e;color:#fff;border-radius:7px;padding:11px 17px;font-size:13px;font-weight:900;box-shadow:0 0 18px rgba(225,6,0,.28)}.stackx .play-btn{background:linear-gradient(180deg,#35b83d,#0a7621);border-color:#78ff85}.client-bottom-mission{border:1px solid rgba(225,6,0,.45);border-radius:9px;background:rgba(6,6,6,.82);display:grid;grid-template-columns:1.25fr .6fr .72fr .65fr 1.1fr;gap:12px;padding:12px 16px;align-items:center}.mission-user{display:flex;align-items:center;gap:12px}.mission-avatar{width:54px;height:54px;border-radius:7px;background:linear-gradient(135deg,#32100c,#090909);display:flex;align-items:center;justify-content:center;font-size:28px;border:1px solid rgba(255,255,255,.12)}.mission-name{font-family:'Barlow Condensed';font-size:20px;font-weight:900}.mission-level{color:#ff2a20;font-family:'Barlow Condensed';font-size:21px;font-weight:900}.mission-bar{height:10px;background:#1b1b1b;border-radius:20px;overflow:hidden}.mission-fill{height:100%;width:68%;background:linear-gradient(90deg,#ff1616,#ffb000);border-radius:20px}.mission-stat{display:flex;align-items:center;gap:10px;border-left:1px solid rgba(255,255,255,.1);padding-left:16px}.mission-stat .mico{font-size:30px}.mission-stat b{display:block;color:#fff}.mission-stat small{color:#aaa}.mission-day{border:1px solid rgba(225,6,0,.65);border-radius:8px;background:linear-gradient(180deg,rgba(225,6,0,.18),rgba(225,6,0,.04));padding:10px 14px}.mission-day b{color:#ff2a20;font-family:'Barlow Condensed';font-size:18px}.mission-day small{display:block;color:#ddd;margin:4px 0}.mission-progress{height:7px;background:#191919;border-radius:20px;overflow:hidden}.mission-progress span{display:block;width:66%;height:100%;background:linear-gradient(90deg,#ff1515,#ffb000)}
+/* melhorar telas internas no mesmo padrão */.pg-title{color:#ff1919;text-shadow:2px 2px #000;font-size:34px!important}.screen:not(#sc-home) .card,.screen:not(#sc-home) .pc,.screen:not(#sc-home) .ref-card{border-color:rgba(225,6,0,.32)!important;background:linear-gradient(180deg,rgba(16,16,17,.96),rgba(6,6,6,.96))!important;border-radius:10px!important}.pc{min-height:126px}.bnav{box-shadow:0 -10px 28px rgba(0,0,0,.62)}
+@media(min-width:901px){.client-sidebar{display:block;position:fixed;left:0;top:74px;bottom:0;width:248px;background:linear-gradient(180deg,rgba(10,10,11,.98),rgba(5,5,5,.98));border-right:1px solid rgba(255,255,255,.13);padding:20px 12px 16px;overflow-y:auto;z-index:11}.screen{padding-left:248px!important;padding-bottom:18px!important}.bnav{display:none!important}.client-home{padding-left:18px;padding-right:18px}.header{position:relative!important;top:auto!important}.app{position:relative!important;min-height:100vh;height:auto!important;overflow:visible!important}.screen{overflow:visible!important}.login-screen + *{}} 
+@media(max-width:1120px) and (min-width:901px){.client-hero-grid{grid-template-columns:1fr}.client-main-grid{grid-template-columns:1fr 1fr}.client-main-grid .premium-card:last-child{grid-column:1/-1}.client-kpis{grid-template-columns:repeat(2,1fr)}.client-top-actions{gap:12px}.client-top-actions button{font-size:12px}.client-hero{grid-template-columns:240px 1fr}.hero-title{font-size:40px}}
+@media(max-width:900px){.header{height:62px;padding:0 12px}.hdr-logo::after{display:none}.hdr-logo img{height:34px;width:34px}.hdr-logo-txt{font-size:17px}.client-top-actions{display:none}.client-home{padding:12px 10px 96px}.client-hero-grid{grid-template-columns:1fr}.client-hero{min-height:230px;grid-template-columns:120px 1fr;border-radius:14px}.client-pixel-man::before{transform:translateX(-50%) scale(2.2);font-size:44px;bottom:55px}.client-pixel-man::after{font-size:18px;bottom:62px}.hero-copy{padding:20px 16px 20px 0}.hero-title{font-size:33px}.hero-text{font-size:13px;line-height:1.55}.quick-panel{padding:13px}.quick-grid{grid-template-columns:repeat(3,1fr);gap:8px}.quick-tile{min-height:76px}.quick-tile .qico{font-size:25px}.quick-tile small{font-size:11px}.client-kpis{grid-template-columns:1fr 1fr;gap:9px}.client-kpi{padding:12px;min-height:88px;gap:10px}.client-kpi .kico{font-size:29px;width:34px}.client-kpi .kval{font-size:22px}.client-kpi .ksub{font-size:10px}.client-main-grid{grid-template-columns:1fr;gap:10px}.premium-card{padding:12px}.client-bottom-mission{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}.mission-user{grid-column:1/-1}.mission-day{grid-column:1/-1}.mission-stat{border-left:0;padding-left:0}.game-banner{min-height:105px}.game-logo{font-size:32px}.game-art{font-size:36px}.play-btn{padding:9px 12px;font-size:12px}}
+@media(max-width:420px){.client-hero{grid-template-columns:1fr;min-height:auto}.client-pixel-man{height:115px;align-items:center}.client-pixel-man::before{bottom:20px;transform:translateX(-50%) scale(1.9)}.client-pixel-man::after{bottom:39px}.hero-copy{padding:0 16px 18px}.hero-title{font-size:31px}.quick-grid{grid-template-columns:1fr 1fr}.client-kpis{grid-template-columns:1fr}.client-bottom-mission{grid-template-columns:1fr}.mission-stat{border-top:1px solid rgba(255,255,255,.09);padding-top:8px}.bnav .bn{padding:4px 5px}.bn-lbl{font-size:8px}}
+
 </style>
 </head>
 <body>
@@ -696,105 +720,110 @@ canvas#gameCanvas{display:block;image-rendering:pixelated;width:100%;height:100%
       <img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha">
       <span class="hdr-logo-txt">ALPHA <span>SUPLEMENTOS</span></span>
     </div>
+    <div class="client-top-actions">
+      <button class="is-hot" onclick="goScreen('historico')">🛒 Minhas Compras</button>
+      <button onclick="goScreen('indicar')">👥 Indicações</button>
+      <button onclick="goScreen('premios')">🏆 Resgates</button>
+      <button onclick="goScreen('historico')">☷ Histórico</button>
+      <button onclick="goScreen('games')">🎮 Games</button>
+      <button onclick="toast('🎧 Suporte Alpha: chame nossa equipe no WhatsApp')">🎧 Suporte</button>
+    </div>
     <div class="hdr-right">
       <button style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3);position:relative" onclick="toast('🔔 Sem novas notificações')">🔔<span style="position:absolute;top:0;right:0;width:7px;height:7px;background:var(--red);border-radius:50%;border:1.5px solid var(--bg)"></span></button>
       <div class="hdr-av" id="hdr-av" onclick="fazerLogout()"></div>
     </div>
   </div>
 
+  <aside class="client-sidebar">
+    <div class="side-section">
+      <button class="side-btn on" id="side-home" onclick="goScreen('home')"><span class="side-ico">🏠</span><span><span class="side-title">Painel</span><span class="side-sub">Início</span></span></button>
+      <button class="side-btn" id="side-premios" onclick="goScreen('premios')"><span class="side-ico">⭐</span><span><span class="side-title">Meus Pontos</span><span class="side-sub">Saldo e cashback</span></span></button>
+      <button class="side-btn" onclick="goScreen('premios')"><span class="side-ico">🎁</span><span><span class="side-title">Resgates</span><span class="side-sub">Prêmios disponíveis</span></span></button>
+      <button class="side-btn" id="side-indicar" onclick="goScreen('indicar')"><span class="side-ico">👥</span><span><span class="side-title">Indicações</span><span class="side-sub">Convide e ganhe</span></span></button>
+      <button class="side-btn" id="side-historico" onclick="goScreen('historico')"><span class="side-ico">🎯</span><span><span class="side-title">Histórico</span><span class="side-sub">Compras e resgates</span></span></button>
+      <button class="side-btn" id="side-games" onclick="goScreen('games')"><span class="side-ico">🎮</span><span><span class="side-title">Games</span><span class="side-sub">Jogue e ganhe</span></span><span class="side-new">NOVO</span></button>
+      <button class="side-btn" onclick="toast('🏆 Ranking disponível na tela inicial')"><span class="side-ico">🏆</span><span><span class="side-title">Ranking</span><span class="side-sub">Colocação geral</span></span></button>
+      <button class="side-btn" onclick="toast('🎧 Fale com a equipe Alpha pelo WhatsApp')"><span class="side-ico">🎧</span><span><span class="side-title">Suporte</span><span class="side-sub">Fale conosco</span></span></button>
+    </div>
+    <div class="side-level-card">
+      <div class="side-level-label">Seu nível atual</div>
+      <div class="side-level-name" id="side-level-name">LENDA</div>
+      <div class="side-level-label">Próximo: Supremo</div>
+      <div class="side-level-bar"><div class="side-level-fill"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:#ffd84a"><span></span><span id="side-level-points">0 / 1200 pts</span></div>
+    </div>
+    <button class="side-exit" onclick="fazerLogout()"><span style="font-size:24px;color:#ff2a20">↪</span><span><b>Sair do sistema</b><small>Encerrar sessão</small></span></button>
+  </aside>
+
   <!-- HOME -->
   <div id="sc-home" class="screen on">
-    <div class="lcard">
-      <div class="lcard-stripe"></div>
-      <div class="lcard-body">
-        <div class="lcard-top">
-          <div class="lcard-brand"><img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha"></div>
-          <div class="nivel-pill"><span class="np-e" id="lc-e">🥇</span><span class="np-t" id="lc-nt" style="color:#FFD700">OURO</span></div>
-        </div>
-        <div class="lcard-name" id="lc-nm">JOÃO SILVA</div>
-        <div class="lcard-email" id="lc-em">---</div>
-      </div>
-    </div>
-
-    <div class="big-card bc-red" style="margin:12px 12px 10px">
-      <div class="bc-icon">⭐</div>
-      <div class="bc-body">
-        <div class="bc-label">Pontos Acumulados</div>
-        <div class="bc-value" id="lc-pts">0</div>
-        <div class="bc-sub">Use para resgatar prêmios</div>
-      </div>
-    </div>
-    <div class="big-card bc-green" style="margin:0 12px 10px">
-      <div class="bc-icon">💰</div>
-      <div class="bc-body">
-        <div class="bc-label">Cashback Disponível</div>
-        <div class="bc-value" id="lc-cb">R$0,00</div>
-        <div class="bc-sub">Desconto na próxima compra</div>
-      </div>
-    </div>
-    <div class="big-card bc-gold" style="margin:0 12px 10px">
-      <div class="bc-icon">🛍️</div>
-      <div class="bc-body">
-        <div class="bc-label">Gasto Este Mês</div>
-        <div class="bc-value" id="lc-gasto">R$0,00</div>
-        <div class="bc-sub" id="prog-msg">Continue comprando!</div>
-      </div>
-    </div>
-    <div class="big-card bc-purple" style="margin:0 12px 10px">
-      <div class="bc-icon">🎯</div>
-      <div class="bc-body">
-        <div class="bc-label">Indicações Realizadas</div>
-        <div class="bc-value" id="lc-ind">0</div>
-        <div class="bc-sub">+100 pts + R$10 cashback</div>
-      </div>
-    </div>
-
-    <div style="padding:0 12px">
-      <div class="nivel-cards">
-        <div class="nivel-card" id="pl-b" style="background:linear-gradient(135deg,#3D2000,#8B4513)">
-          <span class="nc-emoji">🥉</span>
-          <div class="nc-nome" style="color:#CD7F32">Bronze</div>
-          <div class="nc-pts">1pt/R$ · 2%CB</div>
-        </div>
-        <div class="nivel-card" id="pl-p" style="background:linear-gradient(135deg,#1a1a2e,#333366)">
-          <span class="nc-emoji">🥈</span>
-          <div class="nc-nome" style="color:#C8C8C8">Prata</div>
-          <div class="nc-pts">1,5pt/R$ · 5%CB</div>
-        </div>
-        <div class="nivel-card" id="pl-o" style="background:linear-gradient(135deg,#2a1a00,#665500)">
-          <span class="nc-emoji">🥇</span>
-          <div class="nc-nome" style="color:#FFD700">Ouro</div>
-          <div class="nc-pts">2pt/R$ · 7%CB</div>
-        </div>
+    <div class="client-home">
+      <div class="client-hero-grid">
+        <section class="client-hero">
+          <div class="client-pixel-man" aria-hidden="true"></div>
+          <div class="hero-copy">
+            <div class="hero-eyebrow">BEM-VINDO DE VOLTA, <span id="hero-first-name">ALPHA</span>!</div>
+            <div class="hero-title">ACUMULE PONTOS.<span>RESGATE PRÊMIOS.</span></div>
+            <div class="hero-text">A cada compra você acumula pontos que podem ser trocados por prêmios exclusivos, cashback e vantagens especiais da Alpha.</div>
+          </div>
+        </section>
+        <section class="quick-panel">
+          <div class="panel-title">ACESSO RÁPIDO</div>
+          <div class="quick-grid">
+            <button class="quick-tile" onclick="goScreen('premios')"><span class="qico">⭐</span><small>Meus Pontos</small></button>
+            <button class="quick-tile" onclick="goScreen('premios')"><span class="qico">🎁</span><small>Resgates</small></button>
+            <button class="quick-tile" onclick="goScreen('indicar')"><span class="qico">👥</span><small>Indicações</small></button>
+            <button class="quick-tile" onclick="goScreen('historico')"><span class="qico">🎯</span><small>Histórico</small></button>
+            <button class="quick-tile" onclick="goScreen('games')"><span class="tag">NOVO</span><span class="qico">🎮</span><small>Games</small></button>
+            <button class="quick-tile" onclick="toast('🎧 Suporte Alpha: fale com nossa equipe na loja ou WhatsApp')"><span class="qico">🎧</span><small>Suporte</small></button>
+          </div>
+        </section>
       </div>
 
-      <div style="background:#1a1a1a;border-radius:12px;padding:14px;margin-bottom:14px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-          <span style="font-size:12px;font-weight:700;color:#fff">Progresso de Nível</span>
-          <span style="font-size:11px;color:#aaa" id="prog-meta"></span>
+      <section class="client-kpis">
+        <div class="client-kpi"><div class="kico">⭐</div><div><div class="klbl">Meus pontos</div><div class="kval"><span id="lc-pts">0</span> pts</div><div class="ksub">Nível: <span id="lc-nt">BRONZE</span></div><span id="lc-e" style="display:none">🥉</span></div></div>
+        <div class="client-kpi"><div class="kico">💵</div><div><div class="klbl">Cashback disponível</div><div class="kval" id="lc-cb">R$0,00</div><div class="ksub">Resgate a partir de R$20,00</div></div></div>
+        <div class="client-kpi"><div class="kico">🛍️</div><div><div class="klbl">Total de compras</div><div class="kval" id="lc-gasto">R$0,00</div><div class="ksub" id="prog-msg">Continue comprando!</div></div></div>
+        <div class="client-kpi"><div class="kico">🔥</div><div><div class="klbl">Sequência</div><div class="kval"><span id="home-streak-days">7</span> dias</div><div class="ksub">Continue assim!</div></div></div>
+      </section>
+
+      <section class="client-main-grid">
+        <div class="premium-card">
+          <div class="premium-head"><h3>Próximos Prêmios</h3><button class="mini-btn" onclick="goScreen('premios')">Ver todos</button></div>
+          <div class="reward-list">
+            <div class="reward-row"><div class="reward-img">🥤</div><div class="reward-info"><b>Coqueteleira Alpha</b><small>300 pts</small><div class="reward-bar"><div class="reward-fill" style="width:100%"></div></div></div><span class="reward-points">OK</span><span class="ok-dot">●</span></div>
+            <div class="reward-row"><div class="reward-img">🎒</div><div class="reward-info"><b>Bolsa Alpha</b><small>600 pts</small><div class="reward-bar"><div class="reward-fill" style="width:72%"></div></div></div><span class="reward-points"><span id="reward-mini-pts">0</span>/600</span></div>
+            <div class="reward-row"><div class="reward-img">👕</div><div class="reward-info"><b>Camiseta Alpha</b><small>1.200 pts</small><div class="reward-bar"><div class="reward-fill" style="width:45%"></div></div></div><span class="reward-points"><span id="reward-mini-pts2">0</span>/1200</span></div>
+          </div>
+          <button class="catalog-btn" onclick="goScreen('premios')">🎁 VER CATÁLOGO COMPLETO</button>
         </div>
-        <div class="bar-bg"><div class="bar-fill" id="prog-bar" style="width:0%"></div></div>
-        <div style="display:flex;justify-content:space-between;margin-top:6px">
-          <span style="font-size:10px;color:#888" id="prog-gasto"></span>
-          <span style="font-size:10px;color:#CC0000;font-weight:700" id="prog-falta"></span>
+
+        <div class="premium-card">
+          <div class="premium-head"><h3>Últimas Compras</h3><button class="mini-btn" onclick="goScreen('historico')">Ver todas</button></div>
+          <div id="home-buy-list">
+            <div class="buy-row"><div class="buy-img">🧴</div><div class="buy-info"><b>Suas compras aparecerão aqui</b><small>Histórico atualizado pela loja</small></div><div class="buy-price">—<div class="buy-pts">+0 pts</div></div></div>
+          </div>
+          <button class="catalog-btn" onclick="goScreen('historico')" style="background:linear-gradient(180deg,rgba(225,6,0,.48),rgba(95,5,3,.85));border:1px solid rgba(225,6,0,.65)">☷ VER HISTÓRICO COMPLETO</button>
         </div>
-      </div>
-    </div>
 
-    <div class="readonly-banner">🔒 Compras e resgates são processados pelo funcionário na loja</div>
+        <div class="premium-card">
+          <div class="premium-head"><h3>Jogue e ganhe pontos</h3><button class="mini-btn" onclick="goScreen('games')">Saiba mais</button></div>
+          <div class="game-promo">
+            <div class="game-banner snakex" onclick="abrirJogo('snake')"><div><div class="game-logo">WHEY<br>SNAKE</div><div class="game-copy">Coma wheys e ganhe pontos!</div></div><div class="game-art">🐍🧴</div><button class="play-btn">JOGAR AGORA ▶</button></div>
+            <div class="game-banner stackx" onclick="abrirJogo('tetris')"><div><div class="game-logo">STACK<br>MUSCLE</div><div class="game-copy">Empilhe pesos e supere seus limites!</div></div><div class="game-art">🏋️‍♂️</div><button class="play-btn">JOGAR AGORA ▶</button></div>
+          </div>
+        </div>
+      </section>
 
-    <div class="qa-row">
-      <button class="qa" onclick="goScreen('premios')"><div class="qa-ico" style="background:#FFD70022">🏆</div><div class="qa-lbl">Prêmios</div></button>
-      <button class="qa" onclick="goScreen('games')"><div class="qa-ico" style="background:#00FF6622">🎮</div><div class="qa-lbl">Games</div></button>
-      <button class="qa" onclick="goScreen('indicar')"><div class="qa-ico" style="background:#CC000022">🎯</div><div class="qa-lbl">Indicar</div></button>
-      <button class="qa" onclick="goScreen('historico')"><div class="qa-ico" style="background:#00CC6622">📋</div><div class="qa-lbl">Histórico</div></button>
-    </div>
+      <section class="client-bottom-mission">
+        <div class="mission-user"><div class="mission-avatar">💪</div><div><div class="mission-name" id="lc-nm">CLIENTE ALPHA</div><div class="mission-level">NÍVEL <span id="bottom-level">BRONZE</span></div></div></div>
+        <div><div class="mission-bar"><div class="mission-fill" id="prog-bar" style="width:0%"></div></div><div style="display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:#ffd84a"><span id="prog-gasto"></span><span id="prog-meta"></span></div><div id="prog-falta" style="font-size:10px;color:#ff2a20;margin-top:2px"></div></div>
+        <div class="mission-stat"><span class="mico">🏆</span><span><small>Ranking</small><b id="home-rank-pos">12º</b></span></div>
+        <div class="mission-stat"><span class="mico">🛡️</span><span><small>Indicações</small><b id="lc-ind">0</b></span></div>
+        <div class="mission-day"><b>MISSÃO DO DIA</b><small>Realize 3 compras</small><div style="display:flex;align-items:center;gap:8px"><div class="mission-progress" style="flex:1"><span></span></div><span style="font-size:11px;color:#fff">2/3</span></div></div>
+      </section>
 
-    <div style="padding:0 12px 12px">
-      <div style="background:#1a1a1a;border-radius:12px;padding:14px">
-        <div style="font-size:12px;font-weight:700;color:#FFD700;margin-bottom:10px">🏆 RANKING — MINHA POSIÇÃO</div>
-        <div id="rk-list"></div>
-      </div>
+      <div style="display:none" id="rk-list"></div><div style="display:none" id="lc-em"></div>
     </div>
   </div><!-- end sc-home -->
 
@@ -4307,5 +4336,37 @@ function concluirStory(){
 }
 // ══════════════════════════════════════════════════════════════════
 </script>
+
+<script>
+(function(){
+  var oldGo=window.goScreen;
+  window.goScreen=function(name){
+    if(typeof oldGo==='function') oldGo(name);
+    document.querySelectorAll('.side-btn').forEach(function(b){b.classList.remove('on')});
+    var s=document.getElementById('side-'+name); if(s)s.classList.add('on');
+    if(name==='premios'){var sp=document.getElementById('side-premios'); if(sp)sp.classList.add('on')}
+    if(name==='home'){var sh=document.getElementById('side-home'); if(sh)sh.classList.add('on')}
+  };
+  function alphaClientPremiumSync(){
+    try{
+      var nm=document.getElementById('lc-nm');
+      var first=(nm&&nm.textContent||'Cliente').trim().split(/\s+/)[0]||'Cliente';
+      var hero=document.getElementById('hero-first-name'); if(hero)hero.textContent=first.toUpperCase();
+      var nivel=document.getElementById('lc-nt'); var nv=(nivel&&nivel.textContent||'BRONZE').trim();
+      var bottom=document.getElementById('bottom-level'); if(bottom)bottom.textContent=nv;
+      var side=document.getElementById('side-level-name'); if(side)side.textContent=nv;
+      var ptsEl=document.getElementById('lc-pts'); var pts=parseInt(String(ptsEl&&ptsEl.textContent||'0').replace(/\D/g,''),10)||0;
+      ['reward-mini-pts','reward-mini-pts2'].forEach(function(id){var e=document.getElementById(id); if(e)e.textContent=pts});
+      var sidePts=document.getElementById('side-level-points'); if(sidePts)sidePts.textContent=pts+' / 1200 pts';
+      var streak=document.getElementById('streak-count-num'); var hd=document.getElementById('home-streak-days'); if(streak&&hd)hd.textContent=(streak.textContent||'7').replace(/\D/g,'')||'7';
+    }catch(e){}
+  }
+  window.alphaClientPremiumSync=alphaClientPremiumSync;
+  var oldRender=window.renderAll;
+  window.renderAll=function(){ if(typeof oldRender==='function') oldRender(); setTimeout(alphaClientPremiumSync,30); };
+  setInterval(alphaClientPremiumSync,1200);
+})();
+</script>
+
 </body>
 </html>
