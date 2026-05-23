@@ -374,25 +374,25 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
         <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">Clientes</div></div>
         <div style="display:flex;gap:8px">
-          <select id="ffunc" onchange="rClientes()" class="campo" style="width:150px;margin:0"><option value="">Todos</option><option value="sabina">👁️ Sabina</option><option value="andre">André</option><option value="hesllen">Hesllen</option><option value="erica">Érica</option></select>
+          <select id="ffunc" onchange="rClientes()" class="campo" style="width:150px;margin:0"><option value="">Todos</option><option value="ledaiane">👁️ Ledaiane</option><option value="andre">André</option><option value="hesllen">Hesllen</option><option value="erica">Érica</option></select>
           <select id="fnivel" onchange="rClientes()" class="campo" style="width:140px;margin:0"><option value="">Todos níveis</option><option value="OURO">🥇 Ouro</option><option value="PRATA">🥈 Prata</option><option value="BRONZE">🥉 Bronze</option></select>
           <input id="fbusca" placeholder="🔍 Buscar..." class="campo" style="width:160px;margin:0" oninput="rClientes()">
         </div>
       </div>
-      <!-- Painel Sabina: reatribuição -->
-      <div id="sabina-panel" style="display:none;background:#EF9F2711;border:1px solid #EF9F2744;border-radius:12px;padding:16px;margin-bottom:14px">
-        <div style="font-size:13px;font-weight:700;color:#EF9F27;margin-bottom:10px">⚠️ Gestão de Clientes da Sabina</div>
-        <div style="font-size:12px;color:#aaa;margin-bottom:12px">Caso a Sabina saia da empresa, os clientes podem ser reatribuídos a outro vendedor. Esta ação atualiza o campo "Cadastrado por" na planilha.</div>
+      <!-- Painel Ledaiane: reatribuição -->
+      <div id="ledaiane-panel" style="display:none;background:#EF9F2711;border:1px solid #EF9F2744;border-radius:12px;padding:16px;margin-bottom:14px">
+        <div style="font-size:13px;font-weight:700;color:#EF9F27;margin-bottom:10px">⚠️ Gestão de Clientes da Ledaiane</div>
+        <div style="font-size:12px;color:#aaa;margin-bottom:12px">Caso a Ledaiane saia da empresa, os clientes podem ser reatribuídos a outro vendedor. Esta ação atualiza o campo "Cadastrado por" na planilha.</div>
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-          <select id="sabina-novo-vendedor" class="campo" style="width:180px;margin:0">
+          <select id="ledaiane-novo-vendedor" class="campo" style="width:180px;margin:0">
             <option value="">Escolha o novo vendedor...</option>
             <option value="André">André</option>
             <option value="Hesllen">Hesllen</option>
             <option value="Érica">Érica</option>
           </select>
-          <button onclick="reatribuirSabina()" style="background:#EF9F2722;color:#EF9F27;border:1px solid #EF9F2744;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">🔄 Reatribuir Clientes</button>
+          <button onclick="reatribuirLedaiane()" style="background:#EF9F2722;color:#EF9F27;border:1px solid #EF9F2744;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">🔄 Reatribuir Clientes</button>
         </div>
-        <div id="sabina-resultado" style="display:none;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:8px"></div>
+        <div id="ledaiane-resultado" style="display:none;margin-top:10px;font-size:12px;padding:8px 12px;border-radius:8px"></div>
       </div>
       <div class="card"><table class="tbl"><thead><tr><th>#</th><th>Cliente</th><th>Cadastrado por</th><th>Nível</th><th>Pontos</th><th>Cashback</th><th>Gasto/mês</th><th>Última compra</th><th>Ações</th></tr></thead><tbody id="tcorp"></tbody></table></div>
     </div>
@@ -618,7 +618,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
         <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#FF2244" id="aud-total">0</div><div style="font-size:11px;color:#888;margin-top:3px">👥 Total</div></div>
         <div style="background:#1a1a1a;border:1px solid #FFD70033;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#FFD700" id="aud-andre">0</div><div style="font-size:11px;color:#888;margin-top:3px">📋 André</div></div>
         <div style="background:#1a1a1a;border:1px solid #00CCFF33;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#00CCFF" id="aud-hesllen">0</div><div style="font-size:11px;color:#888;margin-top:3px">📋 Hesllen</div></div>
-        <div style="background:#1a1a1a;border:1px solid #EF9F2733;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#EF9F27" id="aud-sabina">0</div><div style="font-size:11px;color:#888;margin-top:3px">📋 Sabina</div></div>
+        <div style="background:#1a1a1a;border:1px solid #EF9F2733;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#EF9F27" id="aud-ledaiane">0</div><div style="font-size:11px;color:#888;margin-top:3px">📋 Ledaiane</div></div>
         <div style="background:#1a1a1a;border:1px solid #CC88FF33;border-radius:12px;padding:14px;text-align:center"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#CC88FF" id="aud-erica">0</div><div style="font-size:11px;color:#888;margin-top:3px">📋 Érica</div></div>
       </div>
       <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
@@ -627,7 +627,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
           <option value="">Todos funcionários</option>
           <option value="andré">André</option>
           <option value="hesllen">Hesllen</option>
-          <option value="sabina">Sabina</option>
+          <option value="ledaiane">Ledaiane</option>
           <option value="érica">Érica</option>
           <option value="(sem">Sem atribuição</option>
         </select>
@@ -1163,7 +1163,7 @@ async function rDesemp(){
   } catch(err) {
     console.log('Desempenho erro:', err);
     // Fallback: calcular localmente com dados já carregados (CL + CP)
-    var funcNomes = ['André','Hesllen','Sabina','Érica'];
+    var funcNomes = ['André','Hesllen','Ledaiane','Érica'];
     var statsLocal = {};
     funcNomes.forEach(function(f){ statsLocal[f]={nome:f,vendas:0,numVendas:0,cadastros:0,ticket:0}; });
     var totalV=0, totalN=0, totalCads=0;
@@ -1223,11 +1223,11 @@ function rClientes(){
   var b=(el('fbusca')||{value:''}).value.toLowerCase();
   var f=(el('fnivel')||{value:''}).value;
   var ff=(el('ffunc')||{value:''}).value.toLowerCase();
-  var painelSabina=el('sabina-panel');
-  if(painelSabina) painelSabina.style.display=(ff==='sabina'?'block':'none');
+  var painelLedaiane=el('ledaiane-panel');
+  if(painelLedaiane) painelLedaiane.style.display=(ff==='ledaiane'?'block':'none');
 
   function normF(s){return String(s||'').toLowerCase().replace(/[áàãâä]/g,'a').replace(/[éêë]/g,'e').replace(/[íîï]/g,'i').replace(/[óôõö]/g,'o').replace(/[úûü]/g,'u').replace(/[ç]/g,'c');}
-  var funcCores={'andre':'#FFD700','hesllen':'#00CCFF','sabina':'#EF9F27','erica':'#CC88FF'};
+  var funcCores={'andre':'#FFD700','hesllen':'#00CCFF','ledaiane':'#EF9F27','erica':'#CC88FF'};
   function funcBadge(raw){
     var n=normF(raw||'');
     var cor=funcCores[n]||'#888';
@@ -1259,22 +1259,22 @@ function rClientes(){
   }).join(''));
 }
 
-// v41: reatribuir clientes da Sabina para outro vendedor
-async function reatribuirSabina(){
-  var novoVendedor=(el('sabina-novo-vendedor')||{value:''}).value;
-  var res=el('sabina-resultado');
+// v41: reatribuir clientes da Ledaiane para outro vendedor
+async function reatribuirLedaiane(){
+  var novoVendedor=(el('ledaiane-novo-vendedor')||{value:''}).value;
+  var res=el('ledaiane-resultado');
   if(!novoVendedor){if(res){res.style.display='block';res.style.background='#E24B4A22';res.style.color='#E24B4A';res.textContent='Selecione um vendedor para reatribuir.';}return;}
-  if(!confirm('Confirma reatribuir TODOS os clientes da Sabina para '+novoVendedor+'?\nEsta ação NÃO pode ser desfeita.')){return;}
+  if(!confirm('Confirma reatribuir TODOS os clientes da Ledaiane para '+novoVendedor+'?\nEsta ação NÃO pode ser desfeita.')){return;}
   if(res){res.style.display='block';res.style.background='#33333322';res.style.color='#aaa';res.textContent='⏳ Processando...';}
   try{
     var resp=await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
-      body:JSON.stringify({token:_API_TOKEN,acao:'reatribuir_clientes_sabina',dados:{novoVendedor:novoVendedor,operador:'CEO'}}),
+      body:JSON.stringify({token:_API_TOKEN,acao:'reatribuir_clientes_ledaiane',dados:{novoVendedor:novoVendedor,operador:'CEO'}}),
       redirect:'follow'});
     var txt=await resp.text();
     var data=JSON.parse(txt);
     if(data.sucesso){
       if(res){res.style.display='block';res.style.background='#1D9E7522';res.style.color='#1D9E75';res.textContent='✅ '+data.dados.mensagem;}
-      CL=CL.map(function(c){return (normStr(c.cadastradoPor||'')).includes('sabina')?Object.assign({},c,{cadastradoPor:novoVendedor}):c;});
+      CL=CL.map(function(c){return (normStr(c.cadastradoPor||'')).includes('ledaiane')?Object.assign({},c,{cadastradoPor:novoVendedor}):c;});
       rClientes(); rAuditoria();
     } else {
       if(res){res.style.display='block';res.style.background='#E24B4A22';res.style.color='#E24B4A';res.textContent='❌ '+data.erro;}
@@ -1291,18 +1291,18 @@ var _audDados=[];
 
 function rAuditoria(){
   set('aud-total',CL.length);
-  var ct={andre:0,hesllen:0,sabina:0,erica:0,outros:0};
+  var ct={andre:0,hesllen:0,ledaiane:0,erica:0,outros:0};
   CL.forEach(function(c){
     var n=normStr(c.cadastradoPor||'');
     if(n==='andré'||n==='andre') ct.andre++;
     else if(n==='hesllen') ct.hesllen++;
-    else if(n==='sabina') ct.sabina++;
+    else if(n==='ledaiane') ct.ledaiane++;
     else if(n==='érica'||n==='erica') ct.erica++;
     else ct.outros++;
   });
   set('aud-andre',ct.andre);
   set('aud-hesllen',ct.hesllen);
-  set('aud-sabina',ct.sabina);
+  set('aud-ledaiane',ct.ledaiane);
   set('aud-erica',ct.erica);
 
   // Detectar anomalias
@@ -1364,7 +1364,7 @@ function renderAuditoria(){
     var n=normStr(raw||'');
     if(n==='andré'||n==='andre') return '#FFD700';
     if(n==='hesllen') return '#00CCFF';
-    if(n==='sabina') return '#EF9F27';
+    if(n==='ledaiane') return '#EF9F27';
     if(n==='érica'||n==='erica') return '#CC88FF';
     return '#666';
   }
@@ -1796,7 +1796,7 @@ async function rColab() {
   _COLABS = [
     {id:'COLAB_001',nome:'André',  usuario:'andre',  ativo:true},
     {id:'COLAB_002',nome:'Hesllen',usuario:'hesllen',ativo:true},
-    {id:'COLAB_003',nome:'Sabina', usuario:'sabina', ativo:true},
+    {id:'COLAB_003',nome:'Ledaiane', usuario:'ledaiane', ativo:true},
     {id:'COLAB_004',nome:'Érica',  usuario:'erica',  ativo:true},
   ];
   renderColab();
