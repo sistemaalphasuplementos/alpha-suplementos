@@ -1229,7 +1229,7 @@ body::before{
         <option value="">Selecione o funcionário...</option>
         <option value="André">André</option>
         <option value="Hesllen">Hesllen</option>
-        <option value="Sabina">Sabina</option>
+        <option value="Ledaiane">Ledaiane</option>
         <option value="Érica">Érica</option>
       </select>
       <div id="cad-err" style="display:none;background:#E24B4A22;border:.5px solid #E24B4A33;border-radius:8px;padding:10px;font-size:12px;color:#E24B4A;margin-bottom:10px"></div>
@@ -1266,7 +1266,7 @@ var _SESSION_EXPIRY = 12 * 60 * 60 * 1000; // 12 horas
 var _USERS = {
   'andre':   { nome:'André',   hash:'70ff798d8f2492481203476ecf67814c28c18cddf786031b5398f24eb6ae6970' },
   'hesllen': { nome:'Hesllen', hash:'e5bba646579cd3a690f5d597309db731e4204cd356e9d11c917054aeeb3f39f1' },
-  'sabina':  { nome:'Sabina',  hash:'6db67afc515b3deeeb80a7a29bdc80ffd1868f5d0fe6ec127cdd7da0e8c5a73a' },
+  'ledaiane': { nome:'Ledaiane', hash:'cd33e9b6f84bc7091198bcd0f33aea2b9fe275f29ea634fc0a7da1e97e4071c4' },
   'erica':   { nome:'Érica',   hash:'1135965b644f6f589b7f1989d4f45e3f3a635a758fad5225a271ea2a2879e0c0' },
 };
 
@@ -1483,7 +1483,7 @@ function ir(n,b){
 // RENDER
 async function carregarClientes(){
   // GAS cold start pode demorar até 15s — tenta 2 vezes com timeout generoso
-  // v41: passa o nome do funcionário logado para o GAS filtrar clientes da Sabina
+  // v41: passa o nome do funcionário logado para o GAS filtrar clientes da Ledaiane
   var funcParam = encodeURIComponent(window._funcNome || '');
   for(var tentativa=1; tentativa<=2; tentativa++){
     try{
@@ -1555,23 +1555,45 @@ function renderTudo(){
 }
 
 function renderCRM(){
-  var s=PRD.filter(function(p){return p.dias<=7;}).sort(function(a,b){return a.dias-b.dias;});
+  var apiData = window._crmApiData || [];
+  var s;
+  if(apiData.length > 0){
+    s = apiData.map(function(a){
+      return {
+        cid:         a.clienteId||'',
+        nome:        a.nomeProduto||'',
+        cat:         a.nivelCliente||'BRONZE',
+        dias:        Number(a.diasRestantes),
+        nomeCliente: a.nomeCliente||'',
+        tel:         a.telefone||'',
+        nivel:       a.nivelCliente||'BRONZE'
+      };
+    }).sort(function(a,b){return a.dias-b.dias;});
+  } else {
+    s = PRD.filter(function(p){return p.dias<=7;}).sort(function(a,b){return a.dias-b.dias;});
+  }
   var ct={a:0,u:0,p:0,v:0};
   s.forEach(function(x){if(x.dias<=0)ct.a++;else if(x.dias<=2)ct.u++;else if(x.dias<=5)ct.p++;else ct.v++;});
   ['ca','cu','cp','cv'].forEach(function(id,i){var e=el(id);if(e)e.textContent=[ct.a,ct.u,ct.p,ct.v][i];});
   var e=el('crm-lista');if(!e)return;
   window._crmData=s;
   e.innerHTML=s.map(function(a,idx){
-    var c=CL.find(function(x){return x.id===a.cid;});
-    if(!c) c=CL.find(function(x){return x.nome && a.cid && x.nome.toLowerCase().includes(a.cid.toLowerCase());});
-    if(!c) c={nome:'?',nivel:'BRONZE',tel:'—',id:a.cid};
+    var nomeC,nivelC,telC;
+    if(a.nomeCliente){
+      nomeC=a.nomeCliente; nivelC=a.nivel||'BRONZE'; telC=a.tel||'—';
+    } else {
+      var c=CL.find(function(x){return x.id===a.cid;});
+      if(!c) c=CL.find(function(x){return x.nome && a.cid && x.nome.toLowerCase().includes(a.cid.toLowerCase());});
+      if(!c) c={nome:'?',nivel:'BRONZE',tel:'—',id:a.cid};
+      nomeC=c.nome; nivelC=c.nivel; telC=c.tel;
+    }
     var cor=a.dias<=0?'#E24B4A':a.dias<=2?'#EF9F27':a.dias<=5?'#FFD700':'#1D9E75';
     var u=a.dias<=0?'⛔ Acabou':a.dias<=2?'🚨 '+a.dias+'d':a.dias<=5?'⚠️ '+a.dias+'d':'📦 '+a.dias+'d';
     return '<div class="acard" style="background:'+cor+'08;border-color:'+cor+'33;border-left:3px solid '+cor+'">'+
       '<div class="uch" style="background:'+cor+'22;color:'+cor+'">'+u+'</div>'+
-      '<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13px">'+c.nome+' '+nb(c.nivel)+'</div>'+
+      '<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13px">'+nomeC+' '+nb(nivelC)+'</div>'+
       '<div style="font-size:11px;color:var(--text3);margin-top:2px">'+a.nome+' · '+a.cat+'</div>'+
-      '<div style="font-size:11px;color:var(--text3)">📱 '+c.tel+'</div></div>'+
+      '<div style="font-size:11px;color:var(--text3)">📱 '+telC+'</div></div>'+
       '<div style="display:flex;gap:7px;flex-shrink:0">'+
       '<button class="bwa" onclick="waCRM('+idx+',\'reposicao\')" style="background:#25D36622;color:#25D366;border:1px solid #25D36633;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:\"Barlow\",sans-serif">📱 WA</button>'+
       '<button class="bgh" onclick="waCRM('+idx+',\'custom\')" style="background:var(--bg4);color:var(--text2);border:.5px solid var(--border);border-radius:8px;padding:5px 8px;font-size:12px;font-weight:600;cursor:pointer;font-family:\"Barlow\",sans-serif">✏️</button>'+
@@ -2217,7 +2239,10 @@ function mostrarAlertaCRM(nomeFunc) {
     .then(function(r){ return r.json(); })
     .then(function(d){
       if (d.sucesso && d.dados && d.dados.length > 0) {
-        // Merge com dados da API
+        // Salvar dados reais da API e atualizar tela principal
+        window._crmApiData = d.dados;
+        renderCRM();
+        // Merge com popup
         d.dados.forEach(function(a) {
           if (!alertas.find(function(x){ return x.nome === a.nomeCliente; })) {
             alertas.push({
