@@ -1,86 +1,234 @@
-importScripts('https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js');
+/**
+ * ALPHA SUPLEMENTOS — Service Worker v70
+ * Push notifications + Background sync + Precache de assets
+ *
+ * DEPLOY: substituir firebase-sw.js na pasta shared/
+ * Versão: v70
+ */
 
-firebase.initializeApp({
-  apiKey: "AIzaSyBUZaER1-J4-sui90-lHW56P7JTBvfAQHE",
-  authDomain: "sistema-alpha-b12d0.firebaseapp.com",
-  projectId: "sistema-alpha-b12d0",
-  storageBucket: "sistema-alpha-b12d0.firebasestorage.app",
-  messagingSenderId: "714388410138",
-  appId: "1:714388410138:web:c42c2391931d25acc0e6a3",
-  databaseURL: "https://sistema-alpha-b12d0-default-rtdb.firebaseio.com"
+const SW_VERSION   = 'alpha-v70';
+const CACHE_STATIC = SW_VERSION + '-static';
+const CACHE_API    = SW_VERSION + '-api';
+
+// Assets que sempre devem estar disponíveis offline
+const PRECACHE_ASSETS = [
+  '/alpha-suplementos/cliente/',
+  '/alpha-suplementos/cliente/index.html',
+  '/alpha-suplementos/shared/logo.png',
+  '/alpha-suplementos/shared/manifest.json',
+  // Adicione aqui outros assets estáticos (CSS, ícones, fontes)
+];
+
+// ─── Instalação ────────────────────────────────────────────────────────────
+self.addEventListener('install', (event) => {
+  console.log('[SW v70] Instalando...');
+  event.waitUntil(
+    caches.open(CACHE_STATIC).then((cache) => {
+      return cache.addAll(PRECACHE_ASSETS).catch(err => {
+        // Não falha a instalação por assets ausentes
+        console.warn('[SW v70] Alguns assets não cacheados:', err);
+      });
+    }).then(() => self.skipWaiting())
+  );
 });
 
-const messaging = firebase.messaging();
+// ─── Ativação ──────────────────────────────────────────────────────────────
+self.addEventListener('activate', (event) => {
+  console.log('[SW v70] Ativando...');
+  event.waitUntil(
+    caches.keys().then((chaves) => {
+      return Promise.all(
+        chaves
+          .filter(c => c !== CACHE_STATIC && c !== CACHE_API)
+          .map(c => {
+            console.log('[SW v70] Removendo cache antigo:', c);
+            return caches.delete(c);
+          })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
 
-// Push quando app está em BACKGROUND ou FECHADO
-messaging.onBackgroundMessage(function(payload) {
-  console.log('Push background recebido:', payload);
+// ─── Fetch: Estratégia por tipo de recurso ─────────────────────────────────
+self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
 
-  var n = payload.notification || {};
-  var titulo = n.title || 'Alpha Suplementos 💪';
-  var corpo  = n.body  || '';
-  var dados  = payload.data || {};
-
-  // Ícone e badge
-  var opcoes = {
-    body: corpo,
-    icon: '/alpha-suplementos/shared/logo.png',
-    badge: '/alpha-suplementos/shared/logo.png',
-    vibrate: [200, 100, 200, 100, 200],
-    requireInteraction: true, // mantém na tela até o usuário interagir
-    data: dados,
-    actions: [
-      { action: 'ver', title: '👀 Ver oferta' },
-      { action: 'fechar', title: '✕ Fechar' }
-    ]
-  };
-
-  // Cor de fundo dependendo do tipo
-  if(dados.tipo === 'PROMOCAO') {
-    opcoes.tag = 'promo-alpha';
-    opcoes.renotify = true;
-  } else if(dados.tipo === 'REPOSICAO') {
-    opcoes.tag = 'reposicao-' + (dados.produtoId || 'produto');
-  } else if(dados.tipo === 'COMPRA') {
-    opcoes.tag = 'compra-alpha';
+  // GAS API: Network First (sem cache — dados ao vivo)
+  if (url.hostname === 'script.google.com') {
+    event.respondWith(fetch(event.request).catch(() => {
+      return new Response(JSON.stringify({ erro: 'offline', cached: false }), {
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }));
+    return;
   }
 
-  return self.registration.showNotification(titulo, opcoes);
-});
+  // Firebase: Network First com fallback local
+  if (url.hostname.includes('firebaseio.com')) {
+    event.respondWith(
+      fetch(event.request).catch(() => {
+        return new Response('null', { headers: { 'Content-Type': 'application/json' } });
+      })
+    );
+    return;
+  }
 
-// Clique na notificação
-self.addEventListener('notificationclick', function(event) {
-  event.notification.close();
+  // Assets estáticos: Cache First
+  if (
+    event.request.destination === 'image' ||
+    event.request.destination === 'font'  ||
+    event.request.url.match(/\.(png|jpg|svg|woff2?|ico)$/)
+  ) {
+    event.respondWith(
+      caches.match(event.request).then(cached => {
+        return cached || fetch(event.request).then(res => {
+          const clone = res.clone();
+          caches.open(CACHE_STATIC).then(c => c.put(event.request, clone));
+          return res;
+        });
+      })
+    );
+    return;
+  }
 
-  var url = 'https://sistemaalphasuplementos.github.io/alpha-suplementos/cliente/';
-
-  if(event.action === 'fechar') return;
-
-  event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clientList) {
-      // Se o app já está aberto, foca nele
-      for(var i = 0; i < clientList.length; i++) {
-        var client = clientList[i];
-        if(client.url.includes('/cliente/') && 'focus' in client) {
-          return client.focus();
-        }
-      }
-      // Senão abre o app
-      if(clients.openWindow) {
-        return clients.openWindow(url);
-      }
+  // HTML/JS/CSS: Stale While Revalidate
+  event.respondWith(
+    caches.match(event.request).then(cached => {
+      const network = fetch(event.request).then(res => {
+        const clone = res.clone();
+        caches.open(CACHE_STATIC).then(c => c.put(event.request, clone));
+        return res;
+      }).catch(() => cached);
+      return cached || network;
     })
   );
 });
 
-// Instalação do service worker
-self.addEventListener('install', function(event) {
-  console.log('Alpha SW instalado!');
-  self.skipWaiting();
+// ─── Background Sync ───────────────────────────────────────────────────────
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'alpha-sync-queue') {
+    console.log('[SW v70] Background sync disparado');
+    event.waitUntil(
+      // Notifica o cliente para processar a fila
+      self.clients.matchAll({ type: 'window' }).then(clients => {
+        clients.forEach(client => {
+          client.postMessage({ tipo: 'PROCESSAR_FILA' });
+        });
+      })
+    );
+  }
 });
 
-self.addEventListener('activate', function(event) {
-  console.log('Alpha SW ativado!');
-  event.waitUntil(clients.claim());
+// ─── Push Notifications ────────────────────────────────────────────────────
+self.addEventListener('push', (event) => {
+  if (!event.data) return;
+
+  let payload;
+  try {
+    payload = event.data.json();
+  } catch {
+    payload = { titulo: 'Alpha Suplementos', corpo: event.data.text() };
+  }
+
+  const {
+    titulo    = 'Alpha Suplementos 💪',
+    corpo     = 'Você tem uma novidade!',
+    icone     = '/alpha-suplementos/shared/logo.png',
+    badge     = '/alpha-suplementos/shared/logo.png',
+    url       = '/alpha-suplementos/cliente/',
+    tag       = 'alpha-geral',
+    tipo      = 'geral'
+  } = payload;
+
+  // Personalização por tipo
+  const opcoesPorTipo = {
+    treino_ausente: {
+      actions: [
+        { action: 'registrar', title: '💪 Registrar treino' },
+        { action: 'dispensar', title: 'Mais tarde' }
+      ]
+    },
+    novo_pr: {
+      actions: [
+        { action: 'ver', title: '🏆 Ver meu PR' }
+      ]
+    },
+    voucher: {
+      requireInteraction: true,
+      actions: [
+        { action: 'resgatar', title: '🎁 Resgatar voucher' }
+      ]
+    },
+    streak_risco: {
+      actions: [
+        { action: 'registrar', title: '🔥 Manter streak' }
+      ]
+    }
+  };
+
+  const opcoesExtra = opcoesPorTipo[tipo] || {};
+
+  const opcoes = {
+    body: corpo,
+    icon: icone,
+    badge,
+    tag,
+    data: { url, tipo, timestamp: Date.now() },
+    vibrate: [200, 100, 200],
+    ...opcoesExtra
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(titulo, opcoes)
+  );
+});
+
+// ─── Clique em notificação ─────────────────────────────────────────────────
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  const { url, tipo } = event.notification.data || {};
+  const acao = event.action;
+
+  // Mapeamento de ações específicas
+  const destinos = {
+    registrar : '/alpha-suplementos/cliente/#treino',
+    resgatar  : '/alpha-suplementos/cliente/#premios',
+    ver       : '/alpha-suplementos/cliente/#ranking',
+  };
+
+  const destino = destinos[acao] || url || '/alpha-suplementos/cliente/';
+
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clients => {
+      // Se já tem uma aba aberta, foca e navega
+      for (const client of clients) {
+        if (client.url.includes('/alpha-suplementos/') && 'focus' in client) {
+          client.focus();
+          client.postMessage({ tipo: 'NAVEGAR', destino });
+          return;
+        }
+      }
+      // Se não tem aba aberta, abre
+      return self.clients.openWindow(destino);
+    })
+  );
+});
+
+// ─── Mensagens do cliente ──────────────────────────────────────────────────
+self.addEventListener('message', (event) => {
+  const { tipo, dados } = event.data || {};
+
+  if (tipo === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+
+  if (tipo === 'REGISTRAR_SYNC') {
+    // Registra background sync para quando voltar online
+    self.registration.sync?.register('alpha-sync-queue');
+  }
+
+  if (tipo === 'LIMPAR_CACHE') {
+    caches.keys().then(chaves => chaves.forEach(c => caches.delete(c)));
+  }
 });
