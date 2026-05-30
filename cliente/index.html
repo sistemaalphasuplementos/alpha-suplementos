@@ -1308,10 +1308,10 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;opa
       <button class="side-btn" onclick="goScreen('premios')"><span class="side-ico">🎁</span><span><span class="side-title">Resgates</span><span class="side-sub">Prêmios disponíveis</span></span></button>
       <button class="side-btn" id="side-indicar" onclick="goScreen('indicar')"><span class="side-ico">👥</span><span><span class="side-title">Indicações</span><span class="side-sub">Convide e ganhe</span></span></button>
       <button class="side-btn" id="side-historico" onclick="goScreen('historico')"><span class="side-ico">🎯</span><span><span class="side-title">Histórico</span><span class="side-sub">Compras e resgates</span></span></button>
-      <button class="side-btn" id="side-treino" onclick="goScreen('treino')"><span class="side-ico">💪</span><span><span class="side-title">Treino & Saúde</span><span class="side-sub">Diário e nutrição</span></span><span class="side-new">v66</span></button>
+      <button class="side-btn" id="side-treino" onclick="goScreen('treino')"><span class="side-ico">💪</span><span><span class="side-title">Treino & Saúde</span><span class="side-sub">Diário e nutrição</span></span></button>
       <button class="side-btn" id="side-games" onclick="goScreen('games')"><span class="side-ico">🎮</span><span><span class="side-title">Games</span><span class="side-sub">Jogue e ganhe</span></span><span class="side-new">NOVO</span></button>
-      <button class="side-btn" id="side-ranking" onclick="goScreen('ranking')"><span class="side-ico">🏆</span><span><span class="side-title">Ranking</span><span class="side-sub">Top treinos</span></span><span class="side-new">v67</span></button>
-      <button class="side-btn" id="side-missoes" onclick="goScreen('missoes')"><span class="side-ico">🎯</span><span><span class="side-title">Missões</span><span class="side-sub">Desafios e vouchers</span></span><span class="side-new">v68</span></button>
+      <button class="side-btn" id="side-ranking" onclick="goScreen('ranking')"><span class="side-ico">🏆</span><span><span class="side-title">Ranking</span><span class="side-sub">Top treinos</span></span></button>
+      <button class="side-btn" id="side-missoes" onclick="goScreen('missoes')"><span class="side-ico">🎯</span><span><span class="side-title">Missões</span><span class="side-sub">Desafios e vouchers</span></span></button>
       <button class="side-btn" onclick="toast('🎧 Fale com a equipe Alpha pelo WhatsApp')"><span class="side-ico">🎧</span><span><span class="side-title">Suporte</span><span class="side-sub">Fale conosco</span></span></button>
     </div>
     <div class="side-level-card">
@@ -1343,9 +1343,9 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;opa
             <button class="quick-tile" onclick="goScreen('premios')"><span class="qico">🎁</span><small>Resgates</small></button>
             <button class="quick-tile" onclick="goScreen('indicar')"><span class="qico">👥</span><small>Indicações</small></button>
             <button class="quick-tile" onclick="goScreen('historico')"><span class="qico">🎯</span><small>Histórico</small></button>
-            <button class="quick-tile" onclick="goScreen('treino')"><span class="tag">v66</span><span class="qico">💪</span><small>Treino</small></button>
-            <button class="quick-tile" onclick="goScreen('ranking')"><span class="tag">v67</span><span class="qico">🏆</span><small>Ranking</small></button>
-            <button class="quick-tile" onclick="goScreen('missoes')"><span class="tag">v68</span><span class="qico">🎯</span><small>Missões</small></button>
+            <button class="quick-tile" onclick="goScreen('treino')"><span class="qico">💪</span><small>Treino</small></button>
+            <button class="quick-tile" onclick="goScreen('ranking')"><span class="qico">🏆</span><small>Ranking</small></button>
+            <button class="quick-tile" onclick="goScreen('missoes')"><span class="qico">🎯</span><small>Missões</small></button>
             <button class="quick-tile" onclick="goScreen('games')"><span class="tag">NOVO</span><span class="qico">🎮</span><small>Games</small></button>
             <button class="quick-tile" onclick="toast('🎧 Suporte Alpha: fale com nossa equipe na loja ou WhatsApp')"><span class="qico">🎧</span><small>Suporte</small></button>
           </div>
@@ -5289,14 +5289,16 @@ function concluirStory(){
 
 // ── Biblioteca de exercícios ──────────────────────────────────────
 var TS_GRUPOS = [
-  {id:'peito',  nome:'Peito',   ico:'🫀', cor:'#EE3333', rgb:'238,51,51'},
-  {id:'costas', nome:'Costas',  ico:'🦈', cor:'#3388FF', rgb:'51,136,255'},
-  {id:'pernas', nome:'Pernas',  ico:'🦵', cor:'#AA44FF', rgb:'170,68,255'},
-  {id:'ombro',  nome:'Ombro',   ico:'💠', cor:'#33CCFF', rgb:'51,204,255'},
-  {id:'biceps', nome:'Bíceps',  ico:'💪', cor:'#FF8833', rgb:'255,136,51'},
-  {id:'triceps',nome:'Tríceps', ico:'🔱', cor:'#FFCC33', rgb:'255,204,51'},
-  {id:'abdomen',nome:'Abdômen', ico:'🔥', cor:'#FF4488', rgb:'255,68,136'},
-  {id:'cardio', nome:'Cardio',  ico:'🏃', cor:'#33FF99', rgb:'51,255,153'}
+  {id:'peito',    nome:'Peito',     ico:'🫀', cor:'#EE3333', rgb:'238,51,51'},
+  {id:'costas',   nome:'Costas',    ico:'🦈', cor:'#3388FF', rgb:'51,136,255'},
+  {id:'pernas',   nome:'Pernas',    ico:'🦵', cor:'#AA44FF', rgb:'170,68,255'},
+  {id:'gluteo',   nome:'Glúteo',    ico:'🍑', cor:'#FF6699', rgb:'255,102,153'},
+  {id:'posterior',nome:'Posterior', ico:'🦿', cor:'#CC7722', rgb:'204,119,34'},
+  {id:'ombro',    nome:'Ombro',     ico:'💠', cor:'#33CCFF', rgb:'51,204,255'},
+  {id:'biceps',   nome:'Bíceps',    ico:'💪', cor:'#FF8833', rgb:'255,136,51'},
+  {id:'triceps',  nome:'Tríceps',   ico:'🔱', cor:'#FFCC33', rgb:'255,204,51'},
+  {id:'abdomen',  nome:'Abdômen',   ico:'🔥', cor:'#FF4488', rgb:'255,68,136'},
+  {id:'cardio',   nome:'Cardio',    ico:'🏃', cor:'#33FF99', rgb:'51,255,153'}
 ];
 
 var TS_EXERCICIOS = {
@@ -5387,6 +5389,34 @@ var TS_EXERCICIOS = {
     {nome:'Caminhada',tipo:'Cardio',peso:false},
     {nome:'HIIT',tipo:'Cardio',peso:false},
     {nome:'Pular Corda',tipo:'Cardio',peso:false}
+  ],
+  gluteo:[
+    {nome:'Agachamento Sumô',tipo:'Composto',peso:true},
+    {nome:'Hip Thrust com Barra',tipo:'Composto',peso:true},
+    {nome:'Hip Thrust com Haltere',tipo:'Composto',peso:true},
+    {nome:'Elevação Pélvica',tipo:'Composto',peso:false},
+    {nome:'Agachamento Búlgaro',tipo:'Composto',peso:true},
+    {nome:'Afundo com Halteres',tipo:'Composto',peso:true},
+    {nome:'Cadeira Abdutora',tipo:'Isolado',peso:true},
+    {nome:'Glúteo no Cabo (4 apoios)',tipo:'Isolado',peso:true},
+    {nome:'Glúteo na Máquina',tipo:'Isolado',peso:true},
+    {nome:'Agachamento Sumo com Haltere',tipo:'Composto',peso:true},
+    {nome:'Step Up com Haltere',tipo:'Composto',peso:true},
+    {nome:'Extensão de Quadril na Polia',tipo:'Isolado',peso:true}
+  ],
+  posterior:[
+    {nome:'Stiff com Barra',tipo:'Composto',peso:true},
+    {nome:'Stiff com Halteres',tipo:'Composto',peso:true},
+    {nome:'Levantamento Terra Romeno',tipo:'Composto',peso:true},
+    {nome:'Flexora Deitada',tipo:'Isolado',peso:true},
+    {nome:'Flexora em Pé',tipo:'Isolado',peso:true},
+    {nome:'Flexora Sentada',tipo:'Isolado',peso:true},
+    {nome:'Mesa Flexora',tipo:'Isolado',peso:true},
+    {nome:'Leg Curl no Cabo',tipo:'Isolado',peso:true},
+    {nome:'Hiperextensão',tipo:'Composto',peso:false},
+    {nome:'Hiperextensão com Peso',tipo:'Composto',peso:true},
+    {nome:'Good Morning',tipo:'Composto',peso:true},
+    {nome:'Ponte com Bola',tipo:'Composto',peso:false}
   ]
 };
 
@@ -5939,6 +5969,28 @@ var TS_SUGESTOES = {
       {nome:'Abdominal Crunch',vol:'3×20'},
       {nome:'Prancha',vol:'3×30s'},
       {nome:'Elevação de Pernas',vol:'3×15'}
+    ]},
+    {titulo:'Glúteo Iniciante',grupos:['Glúteo'],exercicios:[
+      {nome:'Elevação Pélvica',vol:'4×15'},
+      {nome:'Agachamento Sumô',vol:'3×15'},
+      {nome:'Cadeira Abdutora',vol:'3×20'},
+      {nome:'Afundo com Halteres',vol:'3×12'},
+      {nome:'Glúteo na Máquina',vol:'3×15'}
+    ]},
+    {titulo:'Posterior Iniciante',grupos:['Posterior'],exercicios:[
+      {nome:'Stiff com Halteres',vol:'3×12'},
+      {nome:'Flexora Deitada',vol:'3×15'},
+      {nome:'Hiperextensão',vol:'3×15'},
+      {nome:'Ponte com Bola',vol:'3×15'},
+      {nome:'Flexora em Pé',vol:'3×12'}
+    ]},
+    {titulo:'Glúteo + Posterior',grupos:['Glúteo','Posterior'],exercicios:[
+      {nome:'Hip Thrust com Haltere',vol:'3×12'},
+      {nome:'Stiff com Halteres',vol:'3×12'},
+      {nome:'Agachamento Sumô',vol:'3×15'},
+      {nome:'Flexora Deitada',vol:'3×15'},
+      {nome:'Cadeira Abdutora',vol:'3×20'},
+      {nome:'Hiperextensão',vol:'3×12'}
     ]}
   ],
   intermediario:[
@@ -5964,6 +6016,31 @@ var TS_SUGESTOES = {
       {nome:'Extensora',vol:'3×15'},
       {nome:'Flexora',vol:'3×15'},
       {nome:'Panturrilha',vol:'5×20'}
+    ]},
+    {titulo:'Glúteo Intermediário',grupos:['Glúteo'],exercicios:[
+      {nome:'Hip Thrust com Barra',vol:'4×10'},
+      {nome:'Agachamento Búlgaro',vol:'3×12'},
+      {nome:'Agachamento Sumô',vol:'4×12'},
+      {nome:'Glúteo no Cabo (4 apoios)',vol:'3×15'},
+      {nome:'Cadeira Abdutora',vol:'4×20'},
+      {nome:'Step Up com Haltere',vol:'3×12'}
+    ]},
+    {titulo:'Posterior Intermediário',grupos:['Posterior'],exercicios:[
+      {nome:'Levantamento Terra Romeno',vol:'4×8'},
+      {nome:'Stiff com Barra',vol:'3×10'},
+      {nome:'Flexora Sentada',vol:'4×12'},
+      {nome:'Mesa Flexora',vol:'3×12'},
+      {nome:'Hiperextensão com Peso',vol:'3×12'},
+      {nome:'Good Morning',vol:'3×10'}
+    ]},
+    {titulo:'Glúteo + Posterior Intermediário',grupos:['Glúteo','Posterior'],exercicios:[
+      {nome:'Hip Thrust com Barra',vol:'4×10'},
+      {nome:'Levantamento Terra Romeno',vol:'4×8'},
+      {nome:'Agachamento Búlgaro',vol:'3×12'},
+      {nome:'Flexora Sentada',vol:'3×12'},
+      {nome:'Glúteo no Cabo (4 apoios)',vol:'3×15'},
+      {nome:'Hiperextensão com Peso',vol:'3×12'},
+      {nome:'Cadeira Abdutora',vol:'3×20'}
     ]}
   ],
   avancado:[
@@ -5989,6 +6066,34 @@ var TS_SUGESTOES = {
       {nome:'Flexora',vol:'4×12'},
       {nome:'Stiff',vol:'4×8'},
       {nome:'Panturrilha',vol:'5×20'}
+    ]},
+    {titulo:'Glúteo Avançado',grupos:['Glúteo'],exercicios:[
+      {nome:'Hip Thrust com Barra',vol:'5×8'},
+      {nome:'Agachamento Búlgaro',vol:'4×10'},
+      {nome:'Agachamento Sumô',vol:'4×10'},
+      {nome:'Extensão de Quadril na Polia',vol:'4×15'},
+      {nome:'Step Up com Haltere',vol:'4×12'},
+      {nome:'Cadeira Abdutora',vol:'4×20'},
+      {nome:'Glúteo no Cabo (4 apoios)',vol:'4×15'}
+    ]},
+    {titulo:'Posterior Avançado',grupos:['Posterior'],exercicios:[
+      {nome:'Levantamento Terra Romeno',vol:'5×6'},
+      {nome:'Stiff com Barra',vol:'4×8'},
+      {nome:'Mesa Flexora',vol:'4×10'},
+      {nome:'Flexora Sentada',vol:'4×12'},
+      {nome:'Good Morning',vol:'3×10'},
+      {nome:'Hiperextensão com Peso',vol:'4×12'},
+      {nome:'Leg Curl no Cabo',vol:'3×15'}
+    ]},
+    {titulo:'Glúteo + Posterior Avançado',grupos:['Glúteo','Posterior'],exercicios:[
+      {nome:'Hip Thrust com Barra',vol:'5×8'},
+      {nome:'Levantamento Terra Romeno',vol:'4×6'},
+      {nome:'Agachamento Búlgaro',vol:'4×10'},
+      {nome:'Mesa Flexora',vol:'4×10'},
+      {nome:'Extensão de Quadril na Polia',vol:'4×15'},
+      {nome:'Good Morning',vol:'3×10'},
+      {nome:'Cadeira Abdutora',vol:'4×20'},
+      {nome:'Leg Curl no Cabo',vol:'3×12'}
     ]}
   ]
 };
@@ -6580,6 +6685,7 @@ var _msAtivas = [];      // missões ativas vindas do CEO/Firebase
 var _msSemanais = [];    // missões semanais configuradas CEO
 var _msEspeciais = [];   // missões especiais/secretas
 var _msConcluidas = {};  // {missionId: {data, recompensa}}
+var _msAceitas = {};     // {missionId: dataAceite} — missões que o cliente aceitou
 
 // ── localStorage ───────────────────────────────────────────────
 function msGetKey(k){ return 'alpha_ms_'+k+'_'+((U&&U.id)||'x'); }
@@ -6587,10 +6693,20 @@ function msGetConcluidas(){ try{return JSON.parse(localStorage.getItem(msGetKey(
 function msSetConcluidas(d){ localStorage.setItem(msGetKey('concluidas'),JSON.stringify(d)); try{AlphaSync.salvar('missoes_concluidas',d);}catch(_){} }
 function msGetProgresso(){ try{return JSON.parse(localStorage.getItem(msGetKey('prog'))||'{}')}catch(e){return{}} }
 function msSetProgresso(d){ localStorage.setItem(msGetKey('prog'),JSON.stringify(d)); try{AlphaSync.salvar('missoes_progresso',d);}catch(_){} }
+function msGetAceitas(){ try{return JSON.parse(localStorage.getItem(msGetKey('aceitas'))||'{}')}catch(e){return{}} }
+function msSetAceitas(d){ localStorage.setItem(msGetKey('aceitas'),JSON.stringify(d)); try{AlphaSync.salvar('missoes_aceitas',d);}catch(_){} }
+
+function msAceitarMissao(mid){
+  _msAceitas[mid] = new Date().toLocaleDateString('pt-BR');
+  msSetAceitas(_msAceitas);
+  // Re-renderiza a lista completa para mostrar estado atualizado
+  msRenderAtivas(); msRenderSemanais(); msRenderEspeciais();
+}
 
 // ── Init missões ───────────────────────────────────────────────
 function msInit(){
   _msConcluidas = msGetConcluidas();
+  _msAceitas    = msGetAceitas();
   msCarregarDoFirebase();
   msCalcularProgressoAuto();
   msTrocaTab('ativas');
@@ -6755,12 +6871,14 @@ function msRenderLista(missoes, containerId, vazia){
   }
   var html = '';
   missoes.forEach(function(m){
-    var p = msProgresso(m);
+    var aceita    = !!_msAceitas[m.id];
+    var concluida = !!_msConcluidas[m.id];
+    var p = aceita ? msProgresso(m) : {atual:0, meta:m.meta||1, pct:0, concluida:false};
     var diasRestantes = m.prazo ? Math.ceil((new Date(m.prazo) - Date.now()) / 86400000) : null;
     var urgente = diasRestantes !== null && diasRestantes <= 2;
-    html += '<div class="missao-card'+(p.concluida?' completa':'')+(m.especial?' especial':'')+'">';
+    html += '<div class="missao-card'+(concluida?' completa':'')+(m.especial?' especial':'')+(aceita?'':' nao-aceita')+'">';
     html += '<div class="missao-header">';
-    html += '<div class="missao-ico">'+(p.concluida?'\u2705':m.ico||'\ud83c\udfaf')+'</div>';
+    html += '<div class="missao-ico">'+(concluida?'\u2705':m.ico||'\ud83c\udfaf')+'</div>';
     html += '<div class="missao-body">';
     html += '<div class="missao-titulo">'+m.titulo+'</div>';
     html += '<div class="missao-desc">'+m.desc+'</div>';
@@ -6770,8 +6888,13 @@ function msRenderLista(missoes, containerId, vazia){
     html += '<span class="ms-cat-badge">'+m.cat+'</span>';
     html += '</div></div></div>';
     html += '<div class="missao-progresso">';
-    if(p.concluida){
+    if(concluida){
       html += '<div class="ms-completa-badge">\u2705 Conclu\u00edda em '+(_msConcluidas[m.id]&&_msConcluidas[m.id].data||'\u2014')+'</div>';
+    } else if(!aceita){
+      html += '<button class="ms-btn-aceitar" data-mid="'+m.id+'" style="width:100%;padding:10px;background:linear-gradient(135deg,#CC0000,#EE1111);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:Barlow,sans-serif;margin-top:4px">\ud83c\udfaf Aceitar miss\u00e3o</button>';
+      if(diasRestantes !== null){
+        html += '<div style="text-align:center;font-size:11px;color:#666;margin-top:6px">\u23f0 '+(diasRestantes<=0?'Expira hoje':diasRestantes+'d para aceitar')+'</div>';
+      }
     } else {
       var barClass = p.pct >= 100 ? 'completa' : '';
       html += '<div class="ms-bar-bg"><div class="ms-bar-fill '+barClass+'" style="width:'+p.pct+'%"></div></div>';
@@ -6789,6 +6912,9 @@ function msRenderLista(missoes, containerId, vazia){
     html += '</div></div>';
   });
   el.innerHTML = html;
+  el.querySelectorAll('.ms-btn-aceitar').forEach(function(btn){
+    btn.addEventListener('click', function(){ msAceitarMissao(this.getAttribute('data-mid')); });
+  });
   el.querySelectorAll('.ms-btn-resgatar').forEach(function(btn){
     btn.style.cssText = 'width:100%;margin-top:8px;padding:9px;background:linear-gradient(135deg,#007733,#00CC55);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:Barlow,sans-serif';
     btn.addEventListener('click', function(){ msConcluir(this.getAttribute('data-mid')); });
