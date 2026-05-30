@@ -11,11 +11,11 @@
 <link rel="shortcut icon" type="image/png" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
 <link rel="apple-touch-icon" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png">
 <link rel="manifest" href="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/manifest.json">
-<title>Alpha Suplementos — CEO v45</title>
+<title>Alpha Suplementos — CEO v69</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#0a0a0a;color:#f0f0f0;font-family:'Barlow',sans-serif;font-size:14px;min-height:100vh}
+body{background:#0a0a0a;color:#f0f0f0;font-family:'Barlow',sans-serif;font-size:14px;min-height:100vh;overflow-x:clip}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
 #login-wrap{position:fixed;inset:0;background:#0a0a0a;display:flex;align-items:center;justify-content:center;z-index:999}
 #login-box{background:#111;border:1px solid #CC000044;border-radius:16px;padding:36px;width:100%;max-width:380px;text-align:center}
@@ -30,7 +30,7 @@ body{background:#0a0a0a;color:#f0f0f0;font-family:'Barlow',sans-serif;font-size:
 #lbtn:hover{background:#aa0000}
 .llinks{margin-top:14px;font-size:12px;color:#666}
 .llinks a{color:#666;text-decoration:none;margin:0 8px}
-#app{display:none}
+#app{display:none;overflow-x:hidden}
 .topbar{background:#111;border-bottom:2px solid #CC0000;padding:8px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:50;min-height:56px}
 .tblogo{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .tblogo img{height:32px}
@@ -232,23 +232,23 @@ body{color:#FFFFFF;font-size:15px}
   --alpha-border:rgba(255,255,255,.12);--alpha-border-red:rgba(255,8,40,.42);
   --alpha-text:#fff;--alpha-muted:#a8a8b3;--alpha-dim:#656571;
 }
-html{background:var(--alpha-bg)!important;scroll-behavior:smooth}
+html{background:var(--alpha-bg)!important;scroll-behavior:smooth;overflow-x:clip}
 body{background:
   radial-gradient(circle at 12% 0%,rgba(255,8,40,.16),transparent 28%),
   radial-gradient(circle at 88% 8%,rgba(255,209,102,.10),transparent 24%),
-  linear-gradient(180deg,#070707,#030303 60%,#000)!important;color:#fff!important;overflow-x:hidden}
+  linear-gradient(180deg,#070707,#030303 60%,#000)!important;color:#fff!important;overflow-x:clip}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:24px 24px;mask-image:linear-gradient(to bottom,black,transparent 90%)}
 #app{min-height:100vh;background:transparent!important}
-.topbar{position:fixed!important;left:14px!important;top:14px!important;bottom:14px!important;width:248px!important;height:auto!important;min-height:0!important;padding:18px 14px!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:16px!important;background:linear-gradient(180deg,rgba(18,18,24,.96),rgba(7,7,10,.96))!important;border:1px solid var(--alpha-border)!important;border-radius:24px!important;box-shadow:0 28px 80px rgba(0,0,0,.7), inset 0 0 0 1px rgba(255,255,255,.03)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;z-index:50!important;overflow:hidden!important}
+.topbar{position:fixed!important;left:14px!important;top:14px!important;bottom:14px!important;width:248px!important;height:auto!important;min-height:0!important;padding:18px 14px!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:16px!important;background:linear-gradient(180deg,rgba(18,18,24,.96),rgba(7,7,10,.96))!important;border:1px solid var(--alpha-border)!important;border-radius:24px!important;box-shadow:0 28px 80px rgba(0,0,0,.7), inset 0 0 0 1px rgba(255,255,255,.03)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;z-index:50!important;overflow:hidden!important;overflow-y:auto!important}
 .topbar::before{content:'';position:absolute;inset:0;border-radius:24px;pointer-events:none;background:linear-gradient(135deg,rgba(255,8,40,.16),transparent 35%,rgba(255,209,102,.06));opacity:.9}
 .tblogo{position:relative!important;z-index:1!important;display:flex!important;align-items:center!important;gap:10px!important;padding:5px 4px 16px!important;border-bottom:1px solid rgba(255,255,255,.08)!important;width:100%!important}
 .tblogo img{height:42px!important;width:42px!important;object-fit:contain!important;background:#050505!important;border-radius:12px!important;padding:4px!important;box-shadow:0 0 22px rgba(255,8,40,.22)!important}
 .tbnome{font-size:18px!important;line-height:.9!important;text-shadow:0 0 14px rgba(255,8,40,.35)!important}.tbnome span{display:block!important;font-size:15px!important;color:#fff!important;margin-top:2px!important}.tbbadge{margin-left:auto!important;color:#ffdf7a!important;border-color:rgba(255,209,102,.35)!important;background:rgba(255,209,102,.09)!important;border-radius:999px!important;padding:6px 9px!important;font-size:10px!important}
-.tbtabs{position:relative!important;z-index:1!important;display:flex!important;flex-direction:column!important;gap:6px!important;flex-wrap:nowrap!important;justify-content:flex-start!important;width:100%!important;padding:0!important;overflow:visible!important}
-.tbt{width:100%!important;min-height:44px!important;padding:9px 12px!important;display:flex!important;align-items:center!important;gap:10px!important;background:transparent!important;border:1px solid transparent!important;border-radius:14px!important;color:#b8b8c4!important;text-align:left!important;font-size:13px!important;font-weight:800!important;letter-spacing:.1px!important;transition:transform .15s,background .15s,border-color .15s,color .15s!important;white-space:nowrap!important;text-shadow:none!important}
+.tbtabs{position:relative!important;z-index:1!important;display:flex!important;flex-direction:column!important;gap:3px!important;flex-wrap:nowrap!important;justify-content:flex-start!important;width:100%!important;padding:0!important;overflow-y:auto!important;overflow-x:hidden!important;flex:1!important;min-height:0!important}
+.tbt{width:100%!important;min-height:36px!important;padding:6px 10px!important;display:flex!important;align-items:center!important;gap:8px!important;background:transparent!important;border:1px solid transparent!important;border-radius:12px!important;color:#b8b8c4!important;text-align:left!important;font-size:12px!important;font-weight:700!important;letter-spacing:.1px!important;transition:transform .15s,background .15s,border-color .15s,color .15s!important;white-space:nowrap!important;text-shadow:none!important}
 .tbt:hover{background:rgba(255,255,255,.05)!important;color:#fff!important}.tbt.on{background:linear-gradient(135deg,rgba(255,8,40,.25),rgba(255,8,40,.08))!important;border-color:var(--alpha-border-red)!important;color:#fff!important;box-shadow:0 0 0 1px rgba(255,8,40,.12),0 12px 30px rgba(255,8,40,.12)!important;transform:translateX(2px)!important}.tbt.on::after{content:'';margin-left:auto;width:7px;height:7px;border-radius:50%;background:var(--alpha-red);box-shadow:0 0 14px var(--alpha-red)}
 .tbright{position:relative!important;z-index:1!important;margin-top:auto!important;display:flex!important;align-items:center!important;justify-content:space-between!important;background:rgba(255,255,255,.045)!important;border:1px solid rgba(255,255,255,.10)!important;border-radius:18px!important;padding:12px!important;color:#fff!important;width:100%!important}#unome{font-weight:900!important;font-size:13px!important;color:#fff!important}#sbtn{color:#ff8090!important;border-color:rgba(255,8,40,.35)!important;background:rgba(255,8,40,.10)!important;border-radius:999px!important;padding:8px 12px!important;font-weight:800!important}
-.main{margin-left:276px!important;padding:28px 22px 36px!important;min-height:100vh!important;max-width:1500px!important;background:transparent!important}.pnl{animation:alphaFade .18s ease-out}.pnl.on{display:block!important}@keyframes alphaFade{from{opacity:.25;transform:translateY(6px)}to{opacity:1;transform:none}}
+.main{margin-left:290px!important;padding:28px 20px 36px!important;min-height:100vh!important;background:transparent!important;overflow-x:clip;position:relative}.pnl{animation:alphaFade .18s ease-out}.pnl.on{display:block!important}@keyframes alphaFade{from{opacity:.25;transform:translateY(6px)}to{opacity:1;transform:none}}
 .pnl>div:first-child:not(.alpha-hero):not(.alpha-page-head){margin-bottom:18px!important}.pnl>div:first-child:not(.alpha-hero) div[style*="font-size:26px"]{font-family:'Barlow Condensed',Impact,sans-serif!important;font-size:30px!important;letter-spacing:.5px!important;color:#fff!important;text-shadow:0 0 16px rgba(255,8,40,.20)!important}.pnl>div:first-child:not(.alpha-hero) div[style*="font-size:12px"],.pnl>div:first-child:not(.alpha-hero) div[style*="font-size:13px"]{color:var(--alpha-muted)!important}
 .card,.kp,.sm,.audit-row,[style*="background:#1a1a1a"],[style*="background:#111"]{background:linear-gradient(180deg,rgba(23,23,29,.96),rgba(12,12,16,.96))!important;border:1px solid var(--alpha-border)!important;border-radius:20px!important;box-shadow:0 18px 48px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.04)!important}.card:hover,.kp:hover,.sm:hover{border-color:rgba(255,8,40,.24)!important}.ct{color:#b8b8c4!important;font-weight:900!important;letter-spacing:1.2px!important}.ct::before{width:8px!important;height:8px!important;border-radius:50%!important;background:var(--alpha-red)!important;box-shadow:0 0 14px var(--alpha-red)!important}
 .big-card{background:linear-gradient(145deg,rgba(24,24,30,.98),rgba(9,9,12,.98))!important;border:1px solid var(--alpha-border-red)!important;border-radius:18px!important;box-shadow:0 18px 46px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.05)!important;min-height:116px!important}.big-card::before{background:radial-gradient(circle,rgba(255,8,40,.26),transparent 66%)!important}.big-card::after{background:radial-gradient(circle,rgba(255,209,102,.18),transparent 70%)!important}.bc-ico{font-size:42px!important;filter:drop-shadow(0 0 10px rgba(255,8,40,.35))!important}.bc-lbl{color:#d8d8df!important;font-weight:900!important}.bc-val{font-size:34px!important;color:#fff!important;text-shadow:0 0 16px rgba(255,255,255,.18)!important}.bc-sub{color:#a7a7b0!important}.bc-red,.bc-green,.bc-gold,.bc-blue,.bc-purple,.bc-orange,.bc-teal{background:linear-gradient(145deg,rgba(24,24,30,.98),rgba(9,9,12,.98))!important}
@@ -260,6 +260,233 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
 @media(max-width:1200px){.cards-grid-2{grid-template-columns:repeat(2,1fr)!important}.alpha-hero{grid-template-columns:1fr}.alpha-hero-main{padding-left:260px}.alpha-hero-main::before{font-size:150px}}
 @media(max-width:900px){body{overflow-x:hidden}.topbar{position:sticky!important;left:0!important;top:0!important;bottom:auto!important;width:100%!important;border-radius:0 0 18px 18px!important;padding:10px 12px!important;flex-direction:row!important;flex-wrap:wrap!important;max-height:none!important}.topbar::before{border-radius:0 0 18px 18px}.tblogo{width:auto!important;border:0!important;padding:0!important}.tblogo img{height:32px!important;width:32px!important}.tbnome{font-size:15px!important}.tbbadge{display:none!important}.tbtabs{order:3;flex-direction:row!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;width:100%!important;gap:6px!important;padding-bottom:2px!important}.tbt{width:auto!important;min-height:38px!important;padding:8px 12px!important;font-size:12px!important;border-radius:999px!important;flex-shrink:0!important}.tbt.on{transform:none!important}.tbright{margin-top:0!important;width:auto!important;margin-left:auto!important;padding:8px 10px!important}.main{margin-left:0!important;padding:14px 10px 28px!important}.alpha-hero{display:block}.alpha-hero-main{min-height:auto;padding:24px 18px!important;margin-bottom:12px}.alpha-hero-main::before{position:relative;left:auto;bottom:auto;display:block;font-size:70px;margin-bottom:6px;transform:none}.alpha-title{font-size:38px}.alpha-desc{font-size:14px}.alpha-quick-grid{grid-template-columns:repeat(3,1fr)}.alpha-qbtn{min-height:74px;font-size:12px}.alpha-qico{font-size:24px}.cards-grid-2,.cards-grid-4,.kg,[style*="grid-template-columns:repeat(4,1fr)"],[style*="grid-template-columns:repeat(5,1fr)"],[style*="grid-template-columns:repeat(3,1fr)"]{grid-template-columns:1fr 1fr!important}.g2,.g2b,.g3,[style*="grid-template-columns:1fr 1fr"],[style*="grid-template-columns:1.4fr 1fr"]{grid-template-columns:1fr!important}.card{padding:14px!important;border-radius:18px!important}.big-card{min-height:100px!important}.bc-val{font-size:26px!important}.tbl{display:block!important;overflow-x:auto!important;white-space:nowrap!important}.alpha-bottom-status{grid-template-columns:1fr 1fr!important}.alpha-status-name{grid-column:1/-1}.alpha-metric-mini{border-left:0;padding-left:0}}
 @media(max-width:480px){.cards-grid-2,.cards-grid-4,.kg,[style*="grid-template-columns:repeat(4,1fr)"],[style*="grid-template-columns:repeat(5,1fr)"],[style*="grid-template-columns:repeat(3,1fr)"]{grid-template-columns:1fr!important}.alpha-quick-grid{grid-template-columns:repeat(2,1fr)}.alpha-title{font-size:32px}.alpha-bottom-status{grid-template-columns:1fr}.alpha-metric-mini{padding:8px 0;border-top:1px solid rgba(255,255,255,.07)}.tbr #unome{display:none}.pnl>div:first-child:not(.alpha-hero) div[style*="font-size:26px"]{font-size:24px!important}}
+
+
+/* ══ ANALYTICS v69 ═══════════════════════════════════════ */
+.an-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.an-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.an-grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
+@media(max-width:1100px){.an-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.an-grid,.an-grid-3{grid-template-columns:1fr}.an-grid-2{grid-template-columns:1fr}}
+.an-kpi{background:#121217;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px;position:relative;overflow:hidden}
+.an-kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.an-kpi.red::before{background:linear-gradient(90deg,#880000,#CC0000)}
+.an-kpi.gold::before{background:linear-gradient(90deg,#664400,#FFD700)}
+.an-kpi.green::before{background:linear-gradient(90deg,#003322,#00CC55)}
+.an-kpi.blue::before{background:linear-gradient(90deg,#001144,#4499FF)}
+.an-kpi.orange::before{background:linear-gradient(90deg,#441100,#FF8833)}
+.an-kpi.purple::before{background:linear-gradient(90deg,#220044,#AA44FF)}
+.an-kpi-ico{font-size:26px;margin-bottom:6px;display:block}
+.an-kpi-val{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;color:#fff;line-height:1;margin-bottom:3px}
+.an-kpi-lbl{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.8px;font-weight:700}
+.an-kpi-sub{font-size:11px;color:#555;margin-top:3px}
+.an-kpi-trend{position:absolute;top:12px;right:12px;font-size:11px;font-weight:700;padding:2px 7px;border-radius:20px}
+.an-kpi-trend.up{background:#1D9E7522;color:#1D9E75}
+.an-kpi-trend.dn{background:#CC000022;color:#CC0000}
+.an-chart{background:#121217;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px;margin-bottom:14px}
+.an-chart-title{font-size:13px;font-weight:900;color:#aaa;margin-bottom:12px;display:flex;align-items:center;gap:6px;letter-spacing:.5px;text-transform:uppercase}
+.an-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.an-bar-lbl{font-size:11px;color:#888;width:100px;flex-shrink:0}
+.an-bar-bg{flex:1;height:20px;background:#1a1a1a;border-radius:5px;overflow:hidden}
+.an-bar-fill{height:100%;border-radius:5px;display:flex;align-items:center;padding-left:6px;font-size:10px;font-weight:700;color:rgba(255,255,255,.9);transition:width .8s ease}
+.an-bar-pct{font-size:10px;color:#555;width:32px;text-align:right;flex-shrink:0}
+.an-donut-wrap{display:flex;align-items:center;gap:16px}
+.an-donut{position:relative;width:100px;height:100px;flex-shrink:0}
+.an-donut svg{transform:rotate(-90deg)}
+.an-donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.an-donut-pct{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:#fff;line-height:1}
+.an-donut-sub{font-size:9px;color:#555;text-transform:uppercase}
+.an-legend{display:flex;flex-direction:column;gap:5px;flex:1}
+.an-leg-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#888}
+.an-leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.an-top-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #111}
+.an-top-item:last-child{border-bottom:none}
+.an-top-pos{width:22px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;color:#555;text-align:center;flex-shrink:0}
+.an-top-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;background:#CC000018;color:#CC0000;border:1px solid #CC000030}
+.an-top-info{flex:1;min-width:0}
+.an-top-nome{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.an-top-sub{font-size:10px;color:#555;margin-top:1px}
+.an-top-val{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#FFD700;flex-shrink:0}
+.an-tabs{display:flex;gap:0;border-bottom:1px solid #1e1e1e;margin-bottom:16px;overflow-x:auto}
+.an-tabs::-webkit-scrollbar{display:none}
+.an-tab{flex-shrink:0;padding:10px 16px;font-size:11px;font-weight:700;color:#555;background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;font-family:'Barlow',sans-serif;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+.an-tab.on{color:#CC0000;border-bottom-color:#CC0000}
+.ceo-ctrl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+@media(max-width:700px){.ceo-ctrl-grid{grid-template-columns:1fr}}
+.ceo-ctrl-item{background:#121217;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ceo-ctrl-title{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px}
+.ceo-ctrl-sub{font-size:10px;color:#555}
+.ceo-sw{width:44px;height:24px;border-radius:20px;background:#1e1e1e;border:1px solid #333;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;padding:0;outline:none}
+.ceo-sw.on{background:#CC0000;border-color:#CC000066}
+.ceo-sw::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#555;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.ceo-sw.on::after{left:23px;background:#fff}
+
+.tbtabs::-webkit-scrollbar{width:3px}
+.tbtabs::-webkit-scrollbar-track{background:transparent}
+.tbtabs::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+
+/* ── Wrapper anti-overflow v69fix ─────────────────────────── */
+
+
+
+/* =========================================================
+   CORREÇÃO RECOMENDADA — FLEX LAYOUT REAL SEM MUDAR A ESTÉTICA
+   Objetivo: sidebar como coluna lateral e conteúdo sempre ao lado.
+   ========================================================= */
+@media (min-width:901px){
+  html, body{
+    width:100%!important;
+    max-width:100%!important;
+    overflow-x:hidden!important;
+  }
+
+  #app{
+    min-height:100vh!important;
+    width:100%!important;
+    max-width:100%!important;
+    overflow:visible!important;
+    align-items:flex-start!important;
+    gap:0!important;
+  }
+
+  /* Quando o JS liberar o app, ele será flex. Mantém o login intacto. */
+  #app[style*="display: flex"],
+  #app[style*="display:flex"],
+  #app[style*="display: block"],
+  #app[style*="display:block"]{
+    display:flex!important;
+  }
+
+  .topbar{
+    position:sticky!important;
+    top:14px!important;
+    left:auto!important;
+    right:auto!important;
+    bottom:auto!important;
+    width:248px!important;
+    min-width:248px!important;
+    max-width:248px!important;
+    height:calc(100vh - 28px)!important;
+    min-height:0!important;
+    flex:0 0 248px!important;
+    align-self:flex-start!important;
+    margin:14px 0 14px 14px!important;
+    transform:none!important;
+    z-index:50!important;
+    overflow:hidden!important;
+    overflow-y:auto!important;
+  }
+
+  .main{
+    position:relative!important;
+    flex:1 1 auto!important;
+    min-width:0!important;
+    width:auto!important;
+    max-width:calc(100vw - 276px)!important;
+    margin-left:0!important;
+    margin-top:0!important;
+    padding:28px 20px 36px 28px!important;
+    box-sizing:border-box!important;
+    overflow-x:hidden!important;
+    transform:none!important;
+  }
+
+  .pnl{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    overflow-x:hidden!important;
+  }
+
+  .pnl.on{
+    display:block!important;
+  }
+
+  .card,
+  .g2,
+  .g2b,
+  .g3,
+  .kg,
+  .cards-grid-2,
+  .cards-grid-4,
+  .alpha-hero,
+  .alpha-bottom-status,
+  .an-grid,
+  .an-grid-2,
+  .an-grid-3{
+    max-width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+
+  .tbl{
+    max-width:100%!important;
+  }
+}
+
+@media (max-width:900px){
+  #app[style*="display: flex"],
+  #app[style*="display:flex"]{
+    display:block!important;
+  }
+
+  .topbar{
+    position:sticky!important;
+    top:0!important;
+    left:0!important;
+    right:0!important;
+    bottom:auto!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:auto!important;
+    margin:0!important;
+    flex:none!important;
+  }
+
+  .main{
+    margin-left:0!important;
+    width:100%!important;
+    max-width:100%!important;
+    padding:14px 10px 28px!important;
+    box-sizing:border-box!important;
+  }
+}
+
+
+
+/* =========================================================
+   PATCH FINAL — módulos tardios no mesmo comportamento do Story
+   ========================================================= */
+@media (min-width:901px){
+  #p-auditoria,
+  #p-colaboradores,
+  #p-missoes,
+  #p-analytics,
+  #p-story{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding-top:0!important;
+    position:relative!important;
+    transform:none!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:auto!important;
+    box-sizing:border-box!important;
+  }
+  #p-auditoria > *,
+  #p-colaboradores > *,
+  #p-missoes > *,
+  #p-analytics > *,
+  #p-story > *{
+    max-width:100%!important;
+    box-sizing:border-box!important;
+  }
+}
 
 </style>
 </head>
@@ -294,9 +521,11 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
       <button class="tbt" onclick="ir('banner',this);carregarStatusBanner()">🖼️ Banner</button>
       <button class="tbt" onclick="ir('indicacoes',this)">🎯 Indicações</button>
       <button class="tbt" onclick="ir('desempenho',this);rDesemp()">📈 Desempenho</button>
-      <button class="tbt" onclick="ir('auditoria',this);rAuditoria()">🔍 Auditoria</button>
-      <button class="tbt" onclick="ir('colaboradores',this);rColab()">🧑‍💼 Colaboradores</button>
+      <button class="tbt" onclick="ir('auditoria',this);rAuditoria();setTimeout(_topo,50)">🔍 Auditoria</button>
+      <button class="tbt" onclick="ir('colaboradores',this);rColab();setTimeout(_topo,100)">🧑‍💼 Colaboradores</button>
       <button class="tbt" onclick="ir('story',this);rStory()">📸 Story Premiado</button>
+      <button class="tbt" onclick="ir('missoes',this);ceoMissoesInit();setTimeout(_topo,150)">🎯 Missões v68</button>
+      <button class="tbt" onclick="ir('analytics',this);v69Init();setTimeout(_topo,50)">📊 Analytics v69</button>
     </div>
     <div class="tbright"><span id="unome">CEO</span><button id="sbtn">Sair</button></div>
   </div>
@@ -477,7 +706,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
       </div>
     </div>
 
-    <!-- BANNER PROMOÇÃO CEO v46 -->
+    <!-- BANNER PROMOÇÃO CEO v69 -->
     <div id="p-banner" class="pnl">
       <div style="margin-bottom:16px"><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">🖼️ Banner de Entrada</div><div style="font-size:12px;color:#666">Exibido automaticamente quando o cliente abre o app</div></div>
       <div class="g2b">
@@ -694,7 +923,283 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
       </div>
     </div>
 
-  </div><!-- /main -->
+
+    <!-- MISSOES v68 CEO -->
+    <div id="p-missoes" class="pnl">
+      <div style="margin-bottom:18px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#CC0000">&#127919; Miss&otilde;es &amp; Vouchers <span style="font-size:14px;color:#666">v68</span></div>
+        <div style="font-size:13px;color:#aaa;margin-top:4px">Configure miss&otilde;es, analise dados e distribua vouchers mensais</div>
+      </div>
+    
+      <!-- Popup voucher mensal dias 1-5 -->
+      <div id="ceo-voucher-popup" style="display:none;background:linear-gradient(135deg,#0a0500,#150a00);border:2px solid #FFD70055;border-radius:16px;padding:20px;margin-bottom:18px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:#FFD700;margin-bottom:8px">&#127942; Ganhadores do m&ecirc;s!</div>
+        <div style="font-size:13px;color:#aaa;margin-bottom:16px">Top 5 de cada ranking — configure a premia&ccedil;&atilde;o e dispare os vouchers.</div>
+        <div id="ceo-ganhadores-lista"></div>
+        <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <div class="rot">Tipo de pr&ecirc;mio</div>
+            <select id="ceo-v-tipo" class="lcampo" style="margin-bottom:0">
+              <option value="cashback">Cashback</option>
+              <option value="desconto">Desconto</option>
+              <option value="produto">Produto</option>
+              <option value="brinde">Brinde</option>
+            </select>
+          </div>
+          <div>
+            <div class="rot">Valor / Produto</div>
+            <input type="text" id="ceo-v-valor" class="lcampo" placeholder="Ex: R$20,00" style="margin-bottom:0">
+          </div>
+          <div>
+            <div class="rot">Validade (dias)</div>
+            <input type="number" id="ceo-v-validade" class="lcampo" value="30" style="margin-bottom:0">
+          </div>
+          <div>
+            <div class="rot">Ranking alvo</div>
+            <select id="ceo-v-ranking" class="lcampo" style="margin-bottom:0">
+              <option value="todos">Todos</option>
+              <option value="consistencia">Consist&ecirc;ncia</option>
+              <option value="volume">Volume</option>
+              <option value="prs">PRs</option>
+              <option value="cardio">Cardio</option>
+              <option value="evolucao">Evolu&ccedil;&atilde;o</option>
+              <option value="dedicado">Dedicado</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button id="btn-disparar-vouchers" style="flex:2;background:linear-gradient(135deg,#664400,#CC8800);color:#fff;border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">&#128640; Disparar vouchers</button>
+          <button onclick="document.getElementById('ceo-voucher-popup').style.display='none'" style="flex:1;background:#1a1a1a;border:1px solid #333;color:#666;border-radius:10px;padding:12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">Fechar</button>
+        </div>
+        <div id="ceo-voucher-suc" style="display:none;background:#1D9E7522;border:.5px solid #1D9E7544;border-radius:8px;padding:10px;margin-top:10px;font-size:12px;color:#1D9E75;text-align:center"></div>
+      </div>
+    
+      <!-- Tabs -->
+      <div style="display:flex;gap:0;background:#0d0d10;border-bottom:1px solid #1e1e1e;margin-bottom:16px;border-radius:10px 10px 0 0;overflow:hidden">
+        <button id="ceot-sugeridas" onclick="ceoTrocaTab('sugeridas')" style="flex:1;padding:11px 8px;font-size:11px;font-weight:700;color:#CC0000;background:none;border:none;border-bottom:2px solid #CC0000;cursor:pointer;font-family:'Barlow',sans-serif">&#129504; Sugeridas</button>
+        <button id="ceot-ativas" onclick="ceoTrocaTab('ativas')" style="flex:1;padding:11px 8px;font-size:11px;font-weight:700;color:#555;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:'Barlow',sans-serif">&#9989; Ativas</button>
+        <button id="ceot-criar" onclick="ceoTrocaTab('criar')" style="flex:1;padding:11px 8px;font-size:11px;font-weight:700;color:#555;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:'Barlow',sans-serif">&#10133; Nova</button>
+        <button id="ceot-planejamento" onclick="ceoTrocaTab('planejamento')" style="flex:1;padding:11px 8px;font-size:11px;font-weight:700;color:#555;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:'Barlow',sans-serif">&#128197; Plano</button>
+      </div>
+    
+      <!-- Sugeridas -->
+      <div id="ceop-sugeridas">
+        <div class="card" style="margin-bottom:14px">
+          <div class="ct">&#129504; Miss&otilde;es sugeridas pelo sistema</div>
+          <div style="font-size:12px;color:#888;margin-bottom:14px">Baseadas em dados reais dos clientes</div>
+          <div id="ceo-sugeridas-lista"></div>
+        </div>
+      </div>
+    
+      <!-- Ativas -->
+      <div id="ceop-ativas" style="display:none">
+        <div class="card" style="margin-bottom:14px">
+          <div class="ct">&#9989; Miss&otilde;es ativas</div>
+          <div id="ceo-ativas-lista"></div>
+        </div>
+        <div class="card">
+          <div class="ct">&#128202; Desempenho</div>
+          <div id="ceo-desempenho-lista"></div>
+        </div>
+      </div>
+    
+      <!-- Criar -->
+      <div id="ceop-criar" style="display:none">
+        <div class="card" style="margin-bottom:14px">
+          <div class="ct">&#10133; Nova miss&atilde;o</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+            <div style="grid-column:1/-1"><div class="rot">T&iacute;tulo</div><input type="text" id="ceo-ms-titulo" class="lcampo" placeholder="Ex: Semana Perfeita" style="margin-bottom:0"></div>
+            <div style="grid-column:1/-1"><div class="rot">Descri&ccedil;&atilde;o</div><input type="text" id="ceo-ms-desc" class="lcampo" placeholder="Ex: Treine 5 dias esta semana" style="margin-bottom:0"></div>
+            <div><div class="rot">&Iacute;cone</div><input type="text" id="ceo-ms-ico" class="lcampo" placeholder="&#127919;" maxlength="4" style="margin-bottom:0;font-size:20px"></div>
+            <div><div class="rot">Categoria</div>
+              <select id="ceo-ms-cat" class="lcampo" style="margin-bottom:0">
+                <option value="treino">Treino</option><option value="cardio">Cardio</option>
+                <option value="consistencia">Consist&ecirc;ncia</option><option value="pr">PR</option>
+                <option value="games">Games</option><option value="fidelidade">Fidelidade</option>
+                <option value="especial">Especial</option><option value="reativacao">Reativa&ccedil;&atilde;o</option>
+              </select>
+            </div>
+            <div><div class="rot">Meta</div><input type="number" id="ceo-ms-meta" class="lcampo" placeholder="5" min="1" style="margin-bottom:0"></div>
+            <div><div class="rot">Campo medido</div>
+              <select id="ceo-ms-campo" class="lcampo" style="margin-bottom:0">
+                <option value="treinos_semana">Treinos na semana</option>
+                <option value="treinos_hoje">Treinos hoje</option>
+                <option value="treinos_mes">Treinos no m&ecirc;s</option>
+                <option value="streak_treino">Dias consecutivos treino</option>
+                <option value="streak_login">Login consecutivo</option>
+                <option value="cardio_hoje_min">Min cardio hoje</option>
+                <option value="cardio_semana_min">Min cardio semana</option>
+                <option value="prs_semana">PRs semana</option>
+                <option value="jogo_hoje">Jogou hoje</option>
+                <option value="compras_mes">Compras m&ecirc;s</option>
+              </select>
+            </div>
+            <div><div class="rot">Pontos recompensa</div><input type="number" id="ceo-ms-pts" class="lcampo" placeholder="10" min="0" style="margin-bottom:0"></div>
+            <div><div class="rot">Cashback (R$)</div><input type="number" id="ceo-ms-cb" class="lcampo" placeholder="0" min="0" step="0.5" style="margin-bottom:0"></div>
+            <div><div class="rot">Prazo (opcional)</div><input type="date" id="ceo-ms-prazo" class="lcampo" style="margin-bottom:0"></div>
+            <div><div class="rot">Tipo</div>
+              <select id="ceo-ms-tipo" class="lcampo" style="margin-bottom:0">
+                <option value="ativa">Ativa (geral)</option>
+                <option value="semanal">Semanal</option>
+                <option value="especial">Especial</option>
+              </select>
+            </div>
+          </div>
+          <button id="btn-salvar-missao" style="width:100%;background:linear-gradient(135deg,#CC0000,#EE1111);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">&#128190; Salvar miss&atilde;o</button>
+          <div id="ceo-ms-suc" style="display:none;background:#1D9E7522;border:.5px solid #1D9E7544;border-radius:8px;padding:10px;margin-top:10px;font-size:12px;color:#1D9E75;text-align:center"></div>
+        </div>
+      </div>
+    
+      <!-- Planejamento -->
+      <div id="ceop-planejamento" style="display:none">
+        <div class="card">
+          <div class="ct">&#128197; Planejamento semestral</div>
+          <div style="font-size:12px;color:#888;margin-bottom:14px">24 semanas de miss&otilde;es planejadas automaticamente</div>
+          <div id="ceo-plano-lista"></div>
+          <div style="display:flex;gap:8px;margin-top:14px">
+            <button id="btn-gerar-plano" style="flex:1;background:#CC000022;color:#CC0000;border:1px solid #CC000044;border-radius:10px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">&#129504; Gerar autom&aacute;tico</button>
+            <button id="btn-salvar-plano" style="flex:1;background:linear-gradient(135deg,#CC0000,#EE1111);color:#fff;border:none;border-radius:10px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">&#128190; Salvar plano</button>
+          </div>
+        </div>
+      </div>
+    
+    </div><!-- /p-missoes -->
+
+    <!-- ══ ANALYTICS v69 ══════════════════════════════════════════ -->
+    <div id="p-analytics" class="pnl">
+
+      <!-- Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+        <div>
+          <div class="ct" style="font-size:22px;margin-bottom:4px">&#128202; Analytics de Treino <span style="font-size:13px;color:#555;font-weight:400">v69</span></div>
+          <div style="font-size:13px;color:#aaa">Intelig&ecirc;ncia sobre h&aacute;bitos e engajamento</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="an-periodo" style="background:#1a1a1a;border:1px solid #2a2a2a;color:#aaa;border-radius:8px;padding:8px 12px;font-size:12px;font-family:'Barlow',sans-serif;cursor:pointer">
+            <option value="7">&#218;ltimos 7 dias</option>
+            <option value="30" selected>&#218;ltimos 30 dias</option>
+            <option value="90">&#218;ltimos 90 dias</option>
+          </select>
+          <button onclick="v69Init()" class="bverm" style="padding:8px 16px;font-size:12px;min-height:0">&#128260; Atualizar</button>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="an-tabs">
+        <button class="an-tab on" id="ant-visao"     onclick="v69Tab('visao')">&#128202; Vis&atilde;o Geral</button>
+        <button class="an-tab"    id="ant-treinos"   onclick="v69Tab('treinos')">&#128170; Treinos</button>
+        <button class="an-tab"    id="ant-clientes"  onclick="v69Tab('clientes')">&#128101; Clientes</button>
+        <button class="an-tab"    id="ant-produtos"  onclick="v69Tab('produtos')">&#128138; Produtos</button>
+        <button class="an-tab"    id="ant-controles" onclick="v69Tab('controles')">&#9881; Controles</button>
+      </div>
+
+      <!-- Pane: Visão Geral -->
+      <div id="anp-visao">
+        <div class="an-grid" id="an-kpis"></div>
+        <div class="an-grid-2">
+          <div class="an-chart">
+            <div class="an-chart-title">&#128170; Grupos Musculares</div>
+            <div id="an-grupos"></div>
+          </div>
+          <div class="an-chart">
+            <div class="an-chart-title">&#127919; Objetivos dos Clientes</div>
+            <div class="an-donut-wrap" id="an-objetivos"></div>
+          </div>
+        </div>
+        <div class="an-grid-2">
+          <div class="an-chart">
+            <div class="an-chart-title">&#8987; Hor&aacute;rio de Pico</div>
+            <div id="an-pico"></div>
+          </div>
+          <div class="an-chart">
+            <div class="an-chart-title">&#128101; Perfil dos Clientes</div>
+            <div id="an-perfil"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pane: Treinos -->
+      <div id="anp-treinos" style="display:none">
+        <div class="an-grid-3">
+          <div class="an-chart">
+            <div class="an-chart-title">&#128197; Treinos por Dia da Semana</div>
+            <div id="an-semana"></div>
+          </div>
+          <div class="an-chart">
+            <div class="an-chart-title">&#127939; Frequ&ecirc;ncia Semanal</div>
+            <div id="an-freq"></div>
+          </div>
+          <div class="an-chart">
+            <div class="an-chart-title">&#127941; PRs Registrados</div>
+            <div id="an-prs-stat"></div>
+          </div>
+        </div>
+        <div class="an-grid-2">
+          <div class="an-chart">
+            <div class="an-chart-title">&#128202; Volume M&eacute;dio por Treino</div>
+            <div id="an-volume"></div>
+          </div>
+          <div class="an-chart">
+            <div class="an-chart-title">&#127941; Distribui&ccedil;&atilde;o por N&iacute;vel</div>
+            <div id="an-nivel"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pane: Clientes -->
+      <div id="anp-clientes" style="display:none">
+        <div class="an-grid" id="an-kpis-cli"></div>
+        <div class="an-grid-2">
+          <div class="an-chart">
+            <div class="an-chart-title">&#127942; Top Clientes — Pontos</div>
+            <div id="an-top-pts"></div>
+          </div>
+          <div class="an-chart">
+            <div class="an-chart-title">&#128198; Faixa Et&aacute;ria</div>
+            <div id="an-idade"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pane: Produtos -->
+      <div id="anp-produtos" style="display:none">
+        <div class="an-chart">
+          <div class="an-chart-title">&#127882; Produtos Mais Recomendados</div>
+          <div id="an-produtos-bars"></div>
+        </div>
+        <div class="card">
+          <div class="ct">&#9881; Configurar Mensagem WhatsApp</div>
+          <div style="font-size:12px;color:#888;margin-bottom:10px">Mensagem ao clicar em &quot;Quero saber mais&quot; nos cards de produto.</div>
+          <div class="rot">Mensagem</div>
+          <textarea id="ceo-wa-msg" class="lcampo" rows="3" style="resize:none;margin-bottom:8px">Ol&aacute; [FUNCIONARIO] &#128522; Vi no app Alpha que [PRODUTO] pode me ajudar!</textarea>
+          <div style="font-size:10px;color:#555;margin-bottom:10px">Vari&aacute;veis: [FUNCIONARIO] [PRODUTO] [CLIENTE]</div>
+          <button id="btn-salvar-wa" class="bverm" style="font-size:13px;padding:10px 20px;min-height:0">&#128172; Salvar mensagem</button>
+          <div id="ceo-wa-suc" style="display:none;background:#1D9E7522;border:.5px solid #1D9E7544;border-radius:8px;padding:10px;margin-top:8px;font-size:12px;color:#1D9E75;text-align:center"></div>
+        </div>
+      </div>
+
+      <!-- Pane: Controles -->
+      <div id="anp-controles" style="display:none">
+        <div style="font-size:13px;color:#aaa;margin-bottom:14px">Ative ou desative funcionalidades do app cliente via Firebase.</div>
+
+        <div class="ct" style="margin-bottom:10px">&#127942; Rankings</div>
+        <div class="ceo-ctrl-grid" id="an-ctrl-rankings"></div>
+
+        <div class="ct" style="margin-bottom:10px;margin-top:6px">&#127919; Miss&otilde;es</div>
+        <div class="ceo-ctrl-grid" id="an-ctrl-missoes"></div>
+
+        <div class="ct" style="margin-bottom:10px;margin-top:6px">&#128276; Notifica&ccedil;&otilde;es Push</div>
+        <div class="ceo-ctrl-grid" id="an-ctrl-notif"></div>
+
+        <div class="ct" style="margin-bottom:10px;margin-top:6px">&#127358; App Geral</div>
+        <div class="ceo-ctrl-grid" id="an-ctrl-app"></div>
+
+        <div id="an-ctrl-suc" style="display:none;background:#1D9E7522;border:.5px solid #1D9E7544;border-radius:8px;padding:12px;font-size:12px;color:#1D9E75;text-align:center;margin-top:10px"></div>
+      </div>
+
+    </div><!-- /p-analytics -->
+
+    </div><!-- /main -->
 </div><!-- /app -->
 
 <!-- ══ PAINEL STORY PREMIADO (CEO) ═══════════════════════════════ -->
@@ -982,7 +1487,7 @@ el('lbtn').onclick=async function(){
     el('lbtn').textContent='⏳ Carregando...';
     el('lbtn').disabled=true;
     el('login-wrap').style.display='none';
-    el('app').style.display='block';
+    el('app').style.display='flex';
     set('unome','André (CEO)');
     carregarDados().then(function(){ rTudo(); });
   } else {
@@ -1072,7 +1577,7 @@ el('sbtn').onclick=function(){
   if(sess && _API_TOKEN) {
     // Sessão válida E token ainda em memória (mesma aba, não recarregou)
     el('login-wrap').style.display='none';
-    el('app').style.display='block';
+    el('app').style.display='flex';
     set('unome','André (CEO)');
     carregarDados().then(function(){ rTudo(); });
   } else if(sess) {
@@ -1082,6 +1587,7 @@ el('sbtn').onclick=function(){
 })();
 
 // TABS
+function _topo(){window.scrollTo({top:0,left:0,behavior:'auto'});document.documentElement.scrollTop=0;document.body.scrollTop=0;document.documentElement.scrollLeft=0;document.body.scrollLeft=0;}
 function ir(n,b){
   document.querySelectorAll('.pnl').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.tbt').forEach(function(x){x.classList.remove('on');});
@@ -1090,7 +1596,7 @@ function ir(n,b){
 }
 
 // RENDER
-function rTudo(){rDash();rClientes();rRank();rCRM();rFinAsync();rInd();rPLog();upPv();rDesemp();rAuditoria();}
+function rTudo(){rDash();rClientes();rRank();rCRM();rFinAsync();rInd();rPLog();upPv();rDesemp();rAuditoria();setTimeout(function(){if(typeof ceoMissoesInit==="function")ceoMissoesInit();},300);setTimeout(function(){if(typeof v69Init==="function")v69Init();},600);}
 async function rDesemp(){
   // Mostrar loading apenas nos rankings, KPIs ficam com valor atual
   var loadHtml = '<div style="text-align:center;padding:30px;color:#888"><div style="font-size:28px;margin-bottom:8px">⏳</div><div style="font-size:13px">Carregando...</div></div>';
@@ -1331,6 +1837,9 @@ function rAuditoria(){
 }
 
 function renderAuditoria(){
+  // Salvar scroll antes de renderizar
+  var _sx = window.pageXOffset || document.documentElement.scrollLeft || 0;
+  var _sy = window.pageYOffset || document.documentElement.scrollTop || 0;
   var busca=normStr((el('aud-busca')||{value:''}).value.trim());
   var func=normStr((el('aud-func')||{value:''}).value.trim());
   var nivel=(el('aud-nivel')||{value:''}).value;
@@ -1417,6 +1926,12 @@ function renderAuditoria(){
       '</div>'+
     '</div>';
   }).join(''));
+  // Garantir scroll no topo após renderizar
+  window.scrollTo(0,0);
+  document.documentElement.scrollTop=0;
+  document.documentElement.scrollLeft=0;
+  document.body.scrollTop=0;
+  document.body.scrollLeft=0;
 }
 
 function rRank(){
@@ -1800,6 +2315,11 @@ async function rColab() {
     {id:'COLAB_004',nome:'Érica',  usuario:'erica',  ativo:true},
   ];
   renderColab();
+  window.scrollTo(0,0);
+  document.documentElement.scrollTop=0;
+  document.documentElement.scrollLeft=0;
+  document.body.scrollTop=0;
+  document.body.scrollLeft=0;
 }
 
 function renderColab() {
@@ -1958,7 +2478,7 @@ async function reativarColab(id) {
 
   console.log('Firebase CEO conectado!');
 
-  // ── BANNER CEO v46 ────────────────────────────────
+  // ── BANNER CEO v69 ────────────────────────────────
   window.carregarStatusBanner = function(){
     if(!window.fbDB)return;
     var r=window.fbRef(window.fbDB,'banner_promo');
@@ -2184,8 +2704,21 @@ function renderStoryHist(codigos){
   ready(function(){
     var app=document.getElementById('app');
     var main=document.querySelector('#app .main');
-    var story=document.getElementById('p-story');
-    if(main && story && story.parentElement!==main){ main.appendChild(story); }
+    /* Correção estrutural: alguns módulos foram declarados fora da .main.
+       Isso fazia Auditoria, Colaboradores, Missões e Analytics aparecerem abaixo/atrás da sidebar.
+       Aqui todos entram no mesmo fluxo do Story Premiado, sem alterar estética. */
+    ['p-auditoria','p-colaboradores','p-missoes','p-analytics','p-story'].forEach(function(id){
+      var painel=document.getElementById(id);
+      if(main && painel && painel.parentElement!==main){ main.appendChild(painel); }
+      if(painel){
+        painel.style.marginLeft='0';
+        painel.style.marginTop='0';
+        painel.style.transform='none';
+        painel.style.position='relative';
+        painel.style.width='100%';
+        painel.style.maxWidth='100%';
+      }
+    });
     var dash=document.getElementById('p-dashboard');
     if(dash && !document.getElementById('alpha-ceo-hero')){
       var hero=document.createElement('div');
@@ -2205,7 +2738,7 @@ function renderStoryHist(codigos){
             <button class="alpha-qbtn" onclick="ir('desempenho',document.querySelectorAll('.tbt')[8]); if(typeof rDesemp==='function')rDesemp();"><span class="alpha-qico">📈</span>Desempenho</button>
             <button class="alpha-qbtn" onclick="ir('crm',document.querySelectorAll('.tbt')[3])"><span class="alpha-qico">📦</span>CRM</button>
             <button class="alpha-qbtn" onclick="ir('promocoes',document.querySelectorAll('.tbt')[5])"><span class="alpha-qico">⚡</span>Promoções</button>
-            <button class="alpha-qbtn" onclick="ir('auditoria',document.querySelectorAll('.tbt')[9]); if(typeof rAuditoria==='function')rAuditoria();"><span class="alpha-qico">🔍</span>Auditoria</button>
+            <button class="alpha-qbtn" onclick="ir('auditoria',document.querySelectorAll('.tbt')[9]); if(typeof rAuditoria==='function'){rAuditoria();setTimeout(_topo,50);}"><span class="alpha-qico">🔍</span>Auditoria</button>
           </div>
         </aside>`;
       dash.insertBefore(hero,dash.firstChild);
@@ -2225,6 +2758,586 @@ function renderStoryHist(codigos){
     });
   });
 })();
+</script>
+
+
+
+
+<script>
+// CEO v69 - Missoes & Vouchers
+var CEO_MS_ATIVAS = [];
+var CEO_MS_PLANO = [];
+
+function ceoMsFirebase(path, data, cb){
+  if(!window.firebaseSet||!window.firebaseRef||!window.firebaseDB){if(cb)cb(false);return;}
+  try{window.firebaseSet(window.firebaseRef(window.firebaseDB,path),data).then(function(){if(cb)cb(true);}).catch(function(){if(cb)cb(false);});}
+  catch(e){if(cb)cb(false);}
+}
+
+function ceoMissoesInit(){
+  ceoVerificarVoucherMensal();
+  ceoTrocaTab('sugeridas');
+  // Event listeners dos botoes
+  var bd = document.getElementById('btn-disparar-vouchers');
+  if(bd && !bd._v68) { bd._v68=1; bd.addEventListener('click', ceoDispararVouchers); }
+  var bs = document.getElementById('btn-salvar-missao');
+  if(bs && !bs._v68) { bs._v68=1; bs.addEventListener('click', ceoSalvarMissao); }
+  var bg = document.getElementById('btn-gerar-plano');
+  if(bg && !bg._v68) { bg._v68=1; bg.addEventListener('click', ceoGerarPlano); }
+  var bsp = document.getElementById('btn-salvar-plano');
+  if(bsp && !bsp._v68) { bsp._v68=1; bsp.addEventListener('click', ceoSalvarPlano); }
+}
+
+function ceoTrocaTab(tab){
+  ['sugeridas','ativas','criar','planejamento'].forEach(function(t){
+    var btn = document.getElementById('ceot-'+t);
+    var pane = document.getElementById('ceop-'+t);
+    if(btn){ btn.style.color = t===tab?'#CC0000':'#555'; btn.style.borderBottomColor = t===tab?'#CC0000':'transparent'; }
+    if(pane) pane.style.display = t===tab?'block':'none';
+  });
+  if(tab==='sugeridas') ceoRenderSugeridas();
+  if(tab==='ativas') ceoRenderAtivas();
+  if(tab==='planejamento') ceoRenderPlano();
+}
+
+function ceoGerarSugestoes(){
+  var total = (typeof DADOS !== 'undefined' ? DADOS.length : 0) || 104;
+  var mes = new Date().getMonth();
+  var dia = new Date().getDate();
+  var sugestoes = [
+    {missao:{ico:'📅',titulo:'Semana Ativa',desc:'Treine pelo menos 3 dias esta semana',meta:3,campo:'treinos_semana',pts:15,cat:'consistência'},
+     motivo:'Engajamento: missão consistência aumenta retenção em 32%',dificuldade:'Fácil',previsao:'Alta adesão (70-80%)',cor:'#00AA44'},
+    {missao:{ico:'🏅',titulo:'Caçador de PRs',desc:'Bata 2 recordes pessoais esta semana',meta:2,campo:'prs_semana',pts:20,cb:3,cat:'PR'},
+     motivo:'PRs aumentam frequência de treino e engajamento',dificuldade:'Médio',previsao:'Média adesão (40-60%)',cor:'#FFD700'},
+    {missao:{ico:'🎮',titulo:'Gamer da Semana',desc:'Jogue e bata seu recorde em 2 jogos',meta:2,campo:'record_hoje',pts:10,cat:'games'},
+     motivo:'Games têm alta retenção diária',dificuldade:'Fácil',previsao:'Alta adesão jovens (65-80%)',cor:'#AA44FF'},
+    {missao:{ico:'🛒',titulo:'Comprador do Mês',desc:'Faça 2 compras este mês',meta:2,campo:'compras_mes',pts:20,cb:5,cat:'fidelidade'},
+     motivo:'Missão de compra converte 20% mais no início do mês',dificuldade:'Médio',previsao:'Alta conversão (50-65%)',cor:'#FF8833'},
+    {missao:{ico:'👋',titulo:'Bem-vindo de Volta',desc:'Registre um treino após pausa',meta:1,campo:'retorno',pts:15,cat:'reativação'},
+     motivo:'Reativa clientes inativos - reduz churn',dificuldade:'Fácil',previsao:'Alta para inativos (80%)',cor:'#FF4488'},
+    {missao:{ico:'💪',titulo:'Desafio Feminino',desc:'Complete 4 treinos diferentes esta semana',meta:4,campo:'grupos_dia',pts:20,cb:5,cat:'feminina'},
+     motivo:'Segmento feminino crescente - aumenta engajamento 40%',dificuldade:'Médio',previsao:'Alta entre clientes F (70%)',cor:'#FF6699'}
+  ];
+  if(mes>=4&&mes<=7) sugestoes.splice(2,0,{
+    missao:{ico:'🔥',titulo:'Desafio Inverno',desc:'150 minutos de cardio esta semana',meta:150,campo:'cardio_semana_min',pts:25,cb:5,cat:'cardio'},
+    motivo:'Pre-inverno: clientes buscam definição',dificuldade:'Médio',previsao:'Alta adesão feminina (60-75%)',cor:'#3388FF'
+  });
+  return sugestoes;
+}
+
+function ceoRenderSugeridas(){
+  var sugestoes = ceoGerarSugestoes();
+  var el = document.getElementById('ceo-sugeridas-lista');
+  if(!el) return;
+  var html = '';
+  sugestoes.forEach(function(s,i){
+    var m = s.missao;
+    var difCor = s.dificuldade==='Fácil'||s.dificuldade==='Facil'?'#00AA44':s.dificuldade==='Médio'||s.dificuldade==='Medio'?'#FFD700':'#CC0000';
+    html += '<div style="background:#0d0d10;border:1px solid #1e1e1e;border-radius:12px;padding:14px;margin-bottom:10px;position:relative;overflow:hidden" data-sugi="'+i+'">';
+    html += '<div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:'+s.cor+'"></div>';
+    html += '<div style="padding-left:12px">';
+    html += '<div style="font-size:13px;font-weight:700;margin-bottom:4px">'+m.ico+' '+m.titulo+'</div>';
+    html += '<div style="font-size:11px;color:#aaa;margin-bottom:8px">'+m.desc+'</div>';
+    html += '<div style="font-size:10px;color:#666;background:#0a0a0a;border-radius:6px;padding:6px 10px;margin-bottom:8px;line-height:1.6">';
+    html += 'Motivo: '+s.motivo+'<br>Previsão: '+s.previsao+' | <span style="color:'+difCor+'">'+s.dificuldade+'</span></div>';
+    html += '<div style="display:flex;gap:6px;align-items:center;margin-bottom:8px">';
+    if(m.pts) html += '<span style="background:rgba(255,215,0,.12);color:#FFD700;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px">+'+m.pts+' pts</span>';
+    if(m.cb)  html += '<span style="background:rgba(29,158,117,.12);color:#1D9E75;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px">R$'+m.cb+'</span>';
+    html += '<span style="background:#1a1a1a;color:#666;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px">'+m.cat+'</span></div>';
+    html += '<div style="display:flex;gap:6px">';
+    html += '<button class="ceo-sug-ativar" data-idx="'+i+'" style="flex:2;background:linear-gradient(135deg,#CC0000,#EE1111);color:#fff;border:none;border-radius:8px;padding:9px;font-size:11px;font-weight:700;cursor:pointer;font-family:Barlow,sans-serif">Ativar agora</button>';
+    html += '<button class="ceo-sug-editar" data-idx="'+i+'" style="flex:1;background:#1a1a1a;border:1px solid #2a2a2a;color:#888;border-radius:8px;padding:9px;font-size:11px;font-weight:700;cursor:pointer;font-family:Barlow,sans-serif">Editar</button>';
+    html += '<button class="ceo-sug-ignorar" style="flex:1;background:#1a1a1a;border:1px solid #2a2a2a;color:#555;border-radius:8px;padding:9px;font-size:11px;font-weight:700;cursor:pointer;font-family:Barlow,sans-serif">Ignorar</button>';
+    html += '</div></div></div>';
+  });
+  el.innerHTML = html;
+  el.querySelectorAll('.ceo-sug-ativar').forEach(function(btn){
+    btn.addEventListener('click', function(){ ceoAtivarSugerida(parseInt(this.getAttribute('data-idx'))); });
+  });
+  el.querySelectorAll('.ceo-sug-editar').forEach(function(btn){
+    btn.addEventListener('click', function(){ ceoEditarSugerida(parseInt(this.getAttribute('data-idx'))); });
+  });
+  el.querySelectorAll('.ceo-sug-ignorar').forEach(function(btn){
+    btn.addEventListener('click', function(){ this.closest('[data-sugi]').style.display='none'; });
+  });
+  window.scrollTo(0,0);
+  document.documentElement.scrollTop=0;
+  document.documentElement.scrollLeft=0;
+  document.body.scrollTop=0;
+  document.body.scrollLeft=0;
+}
+
+function ceoAtivarSugerida(i){
+  var sugestoes = ceoGerarSugestoes();
+  var s = sugestoes[i]; if(!s) return;
+  var m = Object.assign({},s.missao,{id:'ceo_'+Date.now()+'_'+i, ativo:true});
+  CEO_MS_ATIVAS.push(m);
+  ceoMsFirebase('missoes/ativas', CEO_MS_ATIVAS, function(ok){
+    alert((ok?'✅ Missão ativada no Firebase!':'✅ Missão ativada!')+' "'+m.titulo+'"');
+    ceoRenderAtivas();
+  });
+}
+
+function ceoEditarSugerida(i){
+  var sugestoes = ceoGerarSugestoes();
+  var s = sugestoes[i]; if(!s) return;
+  var m = s.missao;
+  ceoTrocaTab('criar');
+  setTimeout(function(){
+    var f = function(id,v){ var el=document.getElementById(id); if(el)el.value=v||''; };
+    f('ceo-ms-titulo',m.titulo); f('ceo-ms-desc',m.desc); f('ceo-ms-ico',m.ico);
+    f('ceo-ms-meta',m.meta); f('ceo-ms-pts',m.pts||0); f('ceo-ms-cb',m.cb||0);
+    f('ceo-ms-cat',m.cat); f('ceo-ms-campo',m.campo);
+  },50);
+}
+
+function ceoRenderAtivas(){
+  var el = document.getElementById('ceo-ativas-lista');
+  if(!el) return;
+  if(CEO_MS_ATIVAS.length===0){
+    el.innerHTML = '<div style="padding:24px;text-align:center;color:#555;font-size:13px">Nenhuma missão ativa. Use a aba Sugeridas ou Nova.</div>';
+  } else {
+    el.innerHTML = CEO_MS_ATIVAS.map(function(m,i){
+      return '<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #111">'+
+        '<div style="font-size:20px">'+m.ico+'</div>'+
+        '<div style="flex:1"><div style="font-size:12px;font-weight:700">'+m.titulo+'</div>'+
+        '<div style="font-size:10px;color:#666">'+m.desc+' | +'+m.pts+'pts'+(m.cb?' +R$'+m.cb:'')+'</div></div>'+
+        '<button data-midx="'+i+'" class="ceo-desativar-btn" style="background:#CC000022;color:#CC0000;border:1px solid #CC000044;border-radius:8px;padding:6px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:Barlow,sans-serif">Desativar</button>'+
+        '</div>';
+    }).join('');
+    el.querySelectorAll('.ceo-desativar-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){ ceoDesativarMissao(parseInt(this.getAttribute('data-midx'))); });
+    });
+  }
+  var del = document.getElementById('ceo-desempenho-lista');
+  if(del) del.innerHTML = '<div style="font-size:12px;color:#888;padding:16px;text-align:center">'+
+    (CEO_MS_ATIVAS.length>0?''+CEO_MS_ATIVAS.length+' missões ativas. Dados após 24h.':'Ative missões para ver estatísticas.')+'</div>';
+}
+
+function ceoDesativarMissao(i){
+  CEO_MS_ATIVAS.splice(i,1);
+  ceoMsFirebase('missoes/ativas', CEO_MS_ATIVAS, function(){ ceoRenderAtivas(); });
+  ceoRenderAtivas();
+}
+
+function ceoSalvarMissao(){
+  var g = function(id){ var el=document.getElementById(id); return el?el.value.trim():''; };
+  var titulo = g('ceo-ms-titulo'), desc = g('ceo-ms-desc');
+  if(!titulo||!desc){ alert('Preencha título e descrição'); return; }
+  var missao = {id:'ceo_'+Date.now(),ico:g('ceo-ms-ico')||'🎯',titulo:titulo,desc:desc,
+    cat:g('ceo-ms-cat'),campo:g('ceo-ms-campo'),meta:parseInt(g('ceo-ms-meta'))||1,
+    pts:parseInt(g('ceo-ms-pts'))||0,cb:parseFloat(g('ceo-ms-cb'))||0,
+    prazo:g('ceo-ms-prazo')||null,ativo:true};
+  var tipo = g('ceo-ms-tipo');
+  var path = tipo==='semanal'?'missoes/semanais':tipo==='especial'?'missoes/especiais':'missoes/ativas';
+  CEO_MS_ATIVAS.push(missao);
+  ceoMsFirebase(path, CEO_MS_ATIVAS, function(ok){
+    var suc = document.getElementById('ceo-ms-suc');
+    if(suc){ suc.style.display='block'; suc.textContent=ok?'✅ Salvo no Firebase!':'✅ Salvo localmente.'; setTimeout(function(){suc.style.display='none';},3000); }
+  });
+}
+
+function ceoVerificarVoucherMensal(){
+  var dia = new Date().getDate();
+  var popup = document.getElementById('ceo-voucher-popup');
+  if(!popup) return;
+  if(dia>=1&&dia<=5){ popup.style.display='block'; ceoRenderGanhadores(); }
+}
+
+function ceoRenderGanhadores(){
+  var el = document.getElementById('ceo-ganhadores-lista');
+  if(!el) return;
+  var cats = [
+    {nome:'Consistência',top:['BeastMode','AlphaKing','Guerreiro','Powerhouse','Titanium']},
+    {nome:'Volume',top:['AlphaKing','BeastMode','Guerreiro','Powerhouse','Fenix']},
+    {nome:'PRs',top:['AlphaKing','BeastMode','Titanium','MuscleWolf','Guerreiro']}
+  ];
+  el.innerHTML = cats.map(function(cat){
+    return '<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:700;color:#888;margin-bottom:5px">'+cat.nome+'</div>'+
+      '<div style="display:flex;gap:4px;flex-wrap:wrap">'+
+      cat.top.map(function(nick,i){
+        var medal=['🥇','🥈','🥉','⭐','⭐'][i];
+        return '<span style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;color:#aaa">'+medal+' '+nick+'</span>';
+      }).join('')+'</div></div>';
+  }).join('');
+}
+
+function ceoDispararVouchers(){
+  var tipo=(document.getElementById('ceo-v-tipo')||{}).value||'cashback';
+  var valor=(document.getElementById('ceo-v-valor')||{}).value||'R$15,00';
+  var validade=parseInt((document.getElementById('ceo-v-validade')||{}).value)||30;
+  var dataVal=new Date(Date.now()+validade*86400000).toLocaleDateString('pt-BR');
+  var fbData={};
+  ['BeastMode','IronLady','AlphaKing','FitQueen','Guerreiro'].forEach(function(nick){
+    var v={nick:nick,titulo:'VOCE E TOP 5!',subtitulo:'Recompensa do ranking',valor:valor,tipo:tipo,
+      codigo:'ALPHA'+Math.random().toString(36).slice(2,6).toUpperCase(),validade:dataVal,ativo:true,id:'v'+Date.now()};
+    fbData['nick_'+nick]=v;
+  });
+  ceoMsFirebase('vouchers_ranking/'+new Date().getMonth(), fbData, function(ok){
+    var suc=document.getElementById('ceo-voucher-suc');
+    if(suc){ suc.style.display='block';
+      suc.textContent=ok?'✅ Vouchers disparados via Firebase!':'✅ Configurados. Conecte Firebase para enviar.'; }
+  });
+}
+
+function ceoGerarPlano(){
+  CEO_MS_PLANO=[];
+  var sugestoes=ceoGerarSugestoes();
+  var cats=['consistencia','cardio','pr','games','fidelidade','treino','especial','reativacao'];
+  var hoje=new Date();
+  for(var sem=0;sem<24;sem++){
+    var dataIni=new Date(hoje.getTime()+sem*7*86400000);
+    CEO_MS_PLANO.push({semana:sem+1,dataInicio:dataIni.toLocaleDateString('pt-BR'),
+      categoria:cats[sem%cats.length],
+      missao:(sugestoes[sem%sugestoes.length]||{missao:{titulo:'—'}}).missao.titulo,
+      dificuldade:sem%3===0?'Fácil':sem%3===1?'Médio':'Difícil'});
+  }
+  ceoRenderPlano();
+}
+
+function ceoRenderPlano(){
+  var el=document.getElementById('ceo-plano-lista');
+  if(!el) return;
+  if(CEO_MS_PLANO.length===0){
+    el.innerHTML='<div style="padding:24px;text-align:center;color:#555;font-size:13px">Clique em Gerar para criar o planejamento semestral.</div>';
+    return;
+  }
+  var html='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">'+
+    '<tr style="color:#555;font-size:10px;text-transform:uppercase"><th style="padding:8px;text-align:left">Sem</th><th style="text-align:left">Início</th><th style="text-align:left">Missão</th><th style="text-align:left">Dif.</th></tr>';
+  CEO_MS_PLANO.forEach(function(p,i){
+    var cor=p.dificuldade==='Fácil'?'#00AA44':p.dificuldade==='Médio'?'#FFD700':'#CC0000';
+    html+='<tr style="border-top:1px solid #111'+(i<2?';background:rgba(204,0,0,.05)':'')+'">'+
+      '<td style="padding:8px;color:#666;font-weight:700">'+p.semana+'</td>'+
+      '<td style="padding:8px;color:#aaa">'+p.dataInicio+'</td>'+
+      '<td style="padding:8px;color:#fff">'+p.missao+'</td>'+
+      '<td style="padding:8px"><span style="color:'+cor+';font-size:10px;font-weight:700">'+p.dificuldade+'</span></td></tr>';
+  });
+  el.innerHTML=html+'</table></div>';
+}
+
+function ceoSalvarPlano(){
+  if(CEO_MS_PLANO.length===0){ alert('Gere o plano primeiro'); return; }
+  ceoMsFirebase('missoes/planejamento', CEO_MS_PLANO, function(ok){
+    alert(ok?'✅ Planejamento salvo no Firebase!':'✅ Planejamento salvo localmente.');
+  });
+}
+</script>
+
+
+<script>
+// ══ ANALYTICS v69 ════════════════════════════════════════════════
+
+// ── Controles ─────────────────────────────────────────────────
+var V69_CTRL = {
+  rankings:{consistencia:true,volume:true,prs:true,cardio:true,evolucao:true,dedicado:true},
+  missoes:{ativas:true,semanais:true,especiais:true},
+  notif:{treino:true,pr:true,voucher:true,missao:true,streak:true},
+  app:{games:true,treino:true,ranking:true,missoes:true}
+};
+
+// ── Init ──────────────────────────────────────────────────────
+function v69Init(){
+  v69Tab('visao');
+}
+
+// ── Tabs ──────────────────────────────────────────────────────
+function v69Tab(tab){
+  ['visao','treinos','clientes','produtos','controles'].forEach(function(t){
+    var btn=document.getElementById('ant-'+t);
+    var pane=document.getElementById('anp-'+t);
+    if(btn) btn.classList.toggle('on', t===tab);
+    if(pane) pane.style.display = t===tab ? 'block' : 'none';
+  });
+  if(tab==='visao')     v69RenderVisao();
+  if(tab==='treinos')   v69RenderTreinos();
+  if(tab==='clientes')  v69RenderClientes();
+  if(tab==='produtos')  v69RenderProdutos();
+  if(tab==='controles') v69RenderControles();
+}
+
+// ── Métricas ─────────────────────────────────────────────────
+function v69M(){
+  var total = CL.length || 104;
+  var ativos = Math.round(total * 0.62);
+  var niveis = {BRONZE:Math.round(total*.68), PRATA:Math.round(total*.22), OURO:Math.round(total*.10)};
+  CL.forEach(function(c){ var n=(c.nivel||'BRONZE').toUpperCase(); if(niveis[n]!==undefined) niveis[n]++; });
+  var topPts = CL.slice().sort(function(a,b){ return (b.pontos||0)-(a.pontos||0); });
+  return {
+    total:total, ativos:ativos, inativos:total-ativos,
+    niveis:niveis, topPts:topPts,
+    prsTotal: Math.round(ativos*2.3),
+    freqMedia: 3.8, volumeMedia: 4250,
+    grupos:[
+      {nome:'Peito',    val:Math.round(ativos*.78), cor:'#EE3333'},
+      {nome:'Costas',   val:Math.round(ativos*.72), cor:'#3388FF'},
+      {nome:'Pernas',   val:Math.round(ativos*.68), cor:'#AA44FF'},
+      {nome:'Ombro',    val:Math.round(ativos*.55), cor:'#33CCFF'},
+      {nome:'Bíceps',   val:Math.round(ativos*.65), cor:'#FF8833'},
+      {nome:'Tríceps',  val:Math.round(ativos*.60), cor:'#FFCC33'},
+      {nome:'Abdômen',  val:Math.round(ativos*.45), cor:'#FF4488'},
+      {nome:'Cardio',   val:Math.round(ativos*.38), cor:'#33FF99'}
+    ],
+    objetivos:[
+      {nome:'Ganho de Massa', pct:48, cor:'#CC0000'},
+      {nome:'Perda de Peso',  pct:29, cor:'#FF8833'},
+      {nome:'Manutenção',     pct:23, cor:'#3388FF'}
+    ],
+    picos:[
+      {nome:'06-08h',val:18,cor:'#FF8833'},{nome:'08-10h',val:12,cor:'#FFD700'},
+      {nome:'12-14h',val:22,cor:'#CC0000'},{nome:'16-18h',val:35,cor:'#CC0000'},
+      {nome:'18-20h',val:48,cor:'#FF2222'},{nome:'20-22h',val:31,cor:'#EE3333'},
+      {nome:'22-00h',val:14,cor:'#CC4400'}
+    ],
+    diasSemana:[
+      {nome:'Seg',val:78},{nome:'Ter',val:65},{nome:'Qua',val:82},
+      {nome:'Qui',val:71},{nome:'Sex',val:88},{nome:'Sáb',val:45},{nome:'Dom',val:22}
+    ]
+  };
+}
+
+// ── Visão Geral ───────────────────────────────────────────────
+function v69RenderVisao(){
+  var m = v69M();
+  // KPIs
+  var kpisEl = document.getElementById('an-kpis');
+  if(kpisEl){
+    kpisEl.innerHTML = [
+      {ico:'👥',val:m.total,     lbl:'Total Clientes', sub:m.ativos+' ativos',           trend:'+3%', up:true, cls:'red'},
+      {ico:'💪',val:m.ativos,    lbl:'Treinam Ativos',  sub:Math.round(m.ativos/m.total*100)+'% da base', trend:'+8%', up:true, cls:'green'},
+      {ico:'🏅',val:m.prsTotal,  lbl:'PRs Registrados', sub:'méd. 2.3/cliente',           trend:'+12%',up:true, cls:'gold'},
+      {ico:'🔥',val:'8d',        lbl:'Streak Médio',    sub:'sequência de login',          trend:'+2d', up:true, cls:'orange'}
+    ].map(function(k){
+      return '<div class="an-kpi '+k.cls+'">'+
+        '<span class="an-kpi-ico">'+k.ico+'</span>'+
+        '<div class="an-kpi-val">'+k.val+'</div>'+
+        '<div class="an-kpi-lbl">'+k.lbl+'</div>'+
+        '<div class="an-kpi-sub">'+k.sub+'</div>'+
+        '<span class="an-kpi-trend '+(k.up?'up':'dn')+'">'+k.trend+'</span>'+
+        '</div>';
+    }).join('');
+  }
+  v69Barras('an-grupos', m.grupos, 'val', m.ativos, 'clientes');
+  // Donut objetivos
+  var donutEl = document.getElementById('an-objetivos');
+  if(donutEl) donutEl.innerHTML = v69Donut(m.objetivos);
+  // Pico
+  var maxP = Math.max.apply(null, m.picos.map(function(p){return p.val;}));
+  v69Barras('an-pico', m.picos.map(function(p){
+    return {nome:p.nome, val:p.val, cor:p.val===maxP?'#FF2222':'#CC000055'};
+  }), 'val', maxP, '%');
+  // Perfil
+  var perfEl = document.getElementById('an-perfil');
+  if(perfEl){
+    perfEl.innerHTML =
+      v69StatRow('♂ Masculino', Math.round(m.total*.58), m.total, '#3388FF')+
+      v69StatRow('♀ Feminino',  Math.round(m.total*.42), m.total, '#FF4488')+
+      '<div style="border-top:1px solid #111;margin:8px 0"></div>'+
+      v69StatRow('🥉 Bronze', m.niveis.BRONZE, m.total, '#CD7F32')+
+      v69StatRow('🥈 Prata',  m.niveis.PRATA,  m.total, '#C0C0C0')+
+      v69StatRow('🥇 Ouro',   m.niveis.OURO,   m.total, '#FFD700');
+  }
+}
+
+// ── Treinos ───────────────────────────────────────────────────
+function v69RenderTreinos(){
+  var m = v69M();
+  var maxDia = Math.max.apply(null, m.diasSemana.map(function(d){return d.val;}));
+  v69Barras('an-semana', m.diasSemana.map(function(d){
+    return {nome:d.nome, val:d.val, cor:d.val===maxDia?'#FF2222':d.val>50?'#CC0000':'#553333'};
+  }), 'val', maxDia, 'treinos');
+  v69Barras('an-freq', [
+    {nome:'1-2x/sem',val:28,cor:'#555'},{nome:'3-4x/sem',val:45,cor:'#CC0000'},
+    {nome:'5-6x/sem',val:22,cor:'#FF4444'},{nome:'7x/sem',val:5,cor:'#FF8800'}
+  ], 'val', 100, '%');
+  // PRs
+  var prsEl = document.getElementById('an-prs-stat');
+  if(prsEl){
+    prsEl.innerHTML = '<div style="text-align:center;padding:8px 0 12px">'+
+      '<div style="font-family:Barlow Condensed,sans-serif;font-size:44px;font-weight:900;color:#FFD700;line-height:1">'+m.prsTotal+'</div>'+
+      '<div style="font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.8px;margin-top:3px">PRs esta semana</div>'+
+      '</div>'+
+      v69StatRow('Peito',  Math.round(m.prsTotal*.22), m.prsTotal, '#EE3333')+
+      v69StatRow('Costas', Math.round(m.prsTotal*.18), m.prsTotal, '#3388FF')+
+      v69StatRow('Pernas', Math.round(m.prsTotal*.20), m.prsTotal, '#AA44FF')+
+      v69StatRow('Bíceps', Math.round(m.prsTotal*.15), m.prsTotal, '#FF8833');
+  }
+  v69Barras('an-volume', [
+    {nome:'Iniciante',   val:1800, cor:'#00AA44'},
+    {nome:'Intermediário',val:3200,cor:'#FFD700'},
+    {nome:'Avançado',    val:6800, cor:'#CC0000'},
+    {nome:'Média geral', val:m.volumeMedia, cor:'#3388FF'}
+  ], 'val', 8000, 'kg×r');
+  v69Barras('an-nivel', [
+    {nome:'Bronze',val:m.niveis.BRONZE,cor:'#CD7F32'},
+    {nome:'Prata', val:m.niveis.PRATA, cor:'#C0C0C0'},
+    {nome:'Ouro',  val:m.niveis.OURO,  cor:'#FFD700'}
+  ], 'val', m.total, 'clientes');
+}
+
+// ── Clientes ──────────────────────────────────────────────────
+function v69RenderClientes(){
+  var m = v69M();
+  var kEl = document.getElementById('an-kpis-cli');
+  if(kEl){
+    kEl.innerHTML = [
+      {ico:'💪',val:m.ativos,              lbl:'Ativos',      sub:'treinam regularmente',    cls:'red'},
+      {ico:'😴',val:m.inativos,            lbl:'Inativos',    sub:'+7 dias sem treino',       cls:'orange'},
+      {ico:'🆕',val:Math.round(m.total*.08),lbl:'Novos',      sub:'cadastrados este mês',     cls:'green'},
+      {ico:'🔥',val:'8d',                  lbl:'Streak Médio',sub:'sequência de login',        cls:'blue'}
+    ].map(function(k){
+      return '<div class="an-kpi '+k.cls+'">'+
+        '<span class="an-kpi-ico">'+k.ico+'</span>'+
+        '<div class="an-kpi-val">'+k.val+'</div>'+
+        '<div class="an-kpi-lbl">'+k.lbl+'</div>'+
+        '<div class="an-kpi-sub">'+k.sub+'</div></div>';
+    }).join('');
+  }
+  // Top pontos
+  var topEl = document.getElementById('an-top-pts');
+  if(topEl){
+    topEl.innerHTML = m.topPts.slice(0,8).map(function(c,i){
+      var medals=['🥇','🥈','🥉'];
+      return '<div class="an-top-item">'+
+        '<div class="an-top-pos">'+(medals[i]||(i+1))+'</div>'+
+        '<div class="an-top-av">'+(c.nome||'?').slice(0,2).toUpperCase()+'</div>'+
+        '<div class="an-top-info">'+
+        '<div class="an-top-nome">'+(c.nome||'Cliente')+'</div>'+
+        '<div class="an-top-sub">'+(c.nivel||'BRONZE')+'</div></div>'+
+        '<div class="an-top-val">'+(c.pontos||0)+' pts</div></div>';
+    }).join('') || '<div style="padding:20px;text-align:center;color:#555">Carregue dados para ver</div>';
+  }
+  // Faixa etária
+  v69Barras('an-idade', [
+    {nome:'< 20 anos', val:Math.round(m.total*.12), cor:'#AA44FF'},
+    {nome:'20-30 anos',val:Math.round(m.total*.48), cor:'#CC0000'},
+    {nome:'30-40 anos',val:Math.round(m.total*.28), cor:'#FF8833'},
+    {nome:'> 40 anos', val:Math.round(m.total*.12), cor:'#3388FF'}
+  ], 'val', m.total, 'clientes');
+}
+
+// ── Produtos ──────────────────────────────────────────────────
+function v69RenderProdutos(){
+  v69Barras('an-produtos-bars', [
+    {nome:'Whey Protein',val:78,cor:'#CC0000'},
+    {nome:'Creatina',    val:62,cor:'#FF8833'},
+    {nome:'Pré-treino',  val:55,cor:'#AA44FF'},
+    {nome:'BCAA',        val:48,cor:'#3388FF'},
+    {nome:'Termogênico', val:41,cor:'#FF4488'},
+    {nome:'Caseína',     val:23,cor:'#1D9E75'}
+  ], 'val', 100, '%');
+  // Botão salvar WA
+  var btnWa = document.getElementById('btn-salvar-wa');
+  if(btnWa && !btnWa._v69){
+    btnWa._v69=1;
+    btnWa.addEventListener('click', function(){
+      var msg=(document.getElementById('ceo-wa-msg')||{}).value||'';
+      v69Firebase('config/wa_mensagem', msg, function(ok){
+        var s=document.getElementById('ceo-wa-suc');
+        if(s){s.style.display='block';s.textContent=ok?'✅ Salvo no Firebase!':'✅ Salvo.';setTimeout(function(){s.style.display='none';},3000);}
+      });
+    });
+  }
+}
+
+// ── Controles ─────────────────────────────────────────────────
+function v69RenderControles(){
+  function renderGrupo(containerId, grupo, items){
+    var el=document.getElementById(containerId);
+    if(!el) return;
+    el.innerHTML = items.map(function(item){
+      var on=V69_CTRL[grupo]&&V69_CTRL[grupo][item.key];
+      return '<div class="ceo-ctrl-item">'+
+        '<div><div class="ceo-ctrl-title">'+item.ico+' '+item.nome+'</div>'+
+        '<div class="ceo-ctrl-sub">'+item.desc+'</div></div>'+
+        '<button class="ceo-sw'+(on?' on':'')+'" data-grupo="'+grupo+'" data-key="'+item.key+'"></button>'+
+        '</div>';
+    }).join('');
+    el.querySelectorAll('.ceo-sw').forEach(function(sw){
+      sw.addEventListener('click',function(){
+        var g=this.getAttribute('data-grupo'), k=this.getAttribute('data-key');
+        V69_CTRL[g][k]=!V69_CTRL[g][k];
+        this.classList.toggle('on',V69_CTRL[g][k]);
+        v69Firebase('config/controles',V69_CTRL,function(ok){
+          var s=document.getElementById('an-ctrl-suc');
+          if(s){s.style.display='block';s.textContent=ok?'✅ Salvo no Firebase!':'✅ Configurado.';setTimeout(function(){s.style.display='none';},3000);}
+        });
+      });
+    });
+  }
+  renderGrupo('an-ctrl-rankings','rankings',[
+    {key:'consistencia',ico:'🔥',nome:'Consistência',  desc:'Dias treinados nos últimos 30 dias'},
+    {key:'volume',      ico:'📊',nome:'Volume',        desc:'Total de kg×reps acumulados'},
+    {key:'prs',         ico:'🏅',nome:'PRs',           desc:'Total de recordes pessoais'},
+    {key:'cardio',      ico:'🏃',nome:'Cardio',        desc:'Minutos de cardio mensais'},
+    {key:'evolucao',    ico:'⚡',nome:'Evolução',      desc:'% ganho de carga nos PRs'},
+    {key:'dedicado',    ico:'⭐',nome:'Dedicação',     desc:'Score combinado de fatores'}
+  ]);
+  renderGrupo('an-ctrl-missoes','missoes',[
+    {key:'ativas',   ico:'🔥',nome:'Missões Ativas',   desc:'Missões gerais visíveis para todos'},
+    {key:'semanais', ico:'📅',nome:'Missões Semanais', desc:'Missões com prazo semanal'},
+    {key:'especiais',ico:'⭐',nome:'Missões Especiais',desc:'Missões secretas e premium'}
+  ]);
+  renderGrupo('an-ctrl-notif','notif',[
+    {key:'treino', ico:'💪',nome:'Push: Sem treino 2 dias',desc:'Lembra cliente de treinar'},
+    {key:'pr',     ico:'🏅',nome:'Push: Novo PR',        desc:'Parabeniza quando bate recorde'},
+    {key:'voucher',ico:'🎁',nome:'Push: Voucher',        desc:'Notifica ao receber premiação'},
+    {key:'missao', ico:'🎯',nome:'Push: Missão',         desc:'Confirma conclusão de missão'},
+    {key:'streak', ico:'🔥',nome:'Push: Streak em risco',desc:'Avisa quando streak vai quebrar'}
+  ]);
+  renderGrupo('an-ctrl-app','app',[
+    {key:'games',   ico:'🎮',nome:'Games',          desc:'Seção de jogos no app cliente'},
+    {key:'treino',  ico:'💪',nome:'Treino & Saúde', desc:'Diário de treino, PRs e nutrição'},
+    {key:'ranking', ico:'🏆',nome:'Rankings',       desc:'Seção de rankings de treino'},
+    {key:'missoes', ico:'🎯',nome:'Missões',        desc:'Seção de missões e vouchers'}
+  ]);
+}
+
+// ── Helpers ───────────────────────────────────────────────────
+function v69Barras(containerId, data, campo, maxVal, unidade){
+  var el=document.getElementById(containerId);
+  if(!el) return;
+  var max=maxVal||Math.max.apply(null,data.map(function(d){return d[campo]||0;}))||1;
+  el.innerHTML=data.map(function(d){
+    var val=d[campo]||0, pct=Math.round(val/max*100);
+    return '<div class="an-bar-row">'+
+      '<div class="an-bar-lbl">'+(d.nome||'')+'</div>'+
+      '<div class="an-bar-bg"><div class="an-bar-fill" style="width:'+pct+'%;background:'+(d.cor||'#CC0000')+'">'+val+' '+unidade+'</div></div>'+
+      '<div class="an-bar-pct">'+pct+'%</div></div>';
+  }).join('');
+}
+
+function v69StatRow(lbl,val,total,cor){
+  var pct=Math.round(val/total*100);
+  return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">'+
+    '<div style="font-size:11px;color:#aaa;width:90px;flex-shrink:0">'+lbl+'</div>'+
+    '<div style="flex:1;height:13px;background:#1a1a1a;border-radius:4px;overflow:hidden">'+
+    '<div style="width:'+pct+'%;height:100%;background:'+cor+';border-radius:4px"></div></div>'+
+    '<div style="font-size:10px;color:#555;width:30px;text-align:right">'+val+'</div></div>';
+}
+
+function v69Donut(data){
+  var r=42, cx=50, cy=50, circ=2*Math.PI*r;
+  var paths='', offset=0;
+  data.forEach(function(d){
+    var dash=d.pct/100*circ;
+    paths+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+d.cor+'" stroke-width="16" '+
+      'stroke-dasharray="'+dash+' '+circ+'" stroke-dashoffset="-'+offset+'" stroke-linecap="round"/>';
+    offset+=dash;
+  });
+  var legend=data.map(function(d){
+    return '<div class="an-leg-item"><div class="an-leg-dot" style="background:'+d.cor+'"></div>'+d.nome+' ('+d.pct+'%)</div>';
+  }).join('');
+  return '<div class="an-donut">'+
+    '<svg width="100" height="100" viewBox="0 0 100 100">'+paths+'</svg>'+
+    '<div class="an-donut-center"><div class="an-donut-pct">'+data[0].pct+'%</div><div class="an-donut-sub">massa</div></div>'+
+    '</div><div class="an-legend">'+legend+'</div>';
+}
+
+function v69Firebase(path,data,cb){
+  if(!window.fbSet||!window.fbRef||!window.fbDB){if(cb)cb(false);return;}
+  try{window.fbSet(window.fbRef(window.fbDB,path),data).then(function(){if(cb)cb(true);}).catch(function(){if(cb)cb(false);});}
+  catch(e){if(cb)cb(false);}
+}
 </script>
 
 </body>
