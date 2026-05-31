@@ -375,7 +375,29 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .card-title{font-size:9px;color:#666;text-transform:uppercase;letter-spacing:.8px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .card-title::before{content:'';width:2px;height:10px;background:var(--red);border-radius:2px;box-shadow:0 0 8px rgba(204,0,0,.4)}
 
-/* RANKING */
+/* ── PERFIL v70 ──────────────────────────────────────────── */
+.perfil-stat-card{background:#111;border-radius:10px;padding:14px 12px;text-align:center}
+.perfil-stat-ico{font-size:22px;margin-bottom:4px}
+.perfil-stat-val{font-size:22px;font-weight:800;color:#fff;font-family:'Barlow Condensed',sans-serif}
+.perfil-stat-lbl{font-size:11px;color:#666;font-family:'Barlow',sans-serif;margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+.perfil-bar{flex:1;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#CC0000,#881100);min-height:4px;transition:height .3s}
+.perfil-bar-lbl{font-size:10px;color:#555;font-family:'Barlow',sans-serif;text-align:center;flex:1}
+.perfil-pr-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a1a1a}
+.perfil-pr-item:last-child{border-bottom:none}
+.perfil-pr-nome{font-size:13px;color:#ccc;font-family:'Barlow',sans-serif}
+.perfil-pr-carga{font-size:15px;font-weight:700;color:#CC0000;font-family:'Barlow Condensed',sans-serif}
+.perfil-pr-evolucao{font-size:11px;color:#44bb44;font-family:'Barlow',sans-serif}
+.perfil-ms-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #1a1a1a}
+.perfil-ms-item:last-child{border-bottom:none}
+.perfil-ms-ico{font-size:20px}
+.perfil-ms-titulo{font-size:13px;color:#ccc;font-family:'Barlow',sans-serif}
+.perfil-ms-data{font-size:11px;color:#555;font-family:'Barlow',sans-serif}
+.perfil-vazio{text-align:center;color:#444;font-size:13px;padding:12px 0;font-family:'Barlow',sans-serif}
+/* Nível badges */
+.badge-bronze{background:#cd7f32;color:#fff}
+.badge-prata{background:#c0c0c0;color:#111}
+.badge-ouro{background:linear-gradient(135deg,#FFD700,#FFA500);color:#111}
+
 .rk{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #1a1a1a}
 .rk:last-child{border-bottom:none}
 .rk-pos{width:22px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;text-align:center}
@@ -1308,6 +1330,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;opa
       <button class="side-btn" onclick="goScreen('premios')"><span class="side-ico">🎁</span><span><span class="side-title">Resgates</span><span class="side-sub">Prêmios disponíveis</span></span></button>
       <button class="side-btn" id="side-indicar" onclick="goScreen('indicar')"><span class="side-ico">👥</span><span><span class="side-title">Indicações</span><span class="side-sub">Convide e ganhe</span></span></button>
       <button class="side-btn" id="side-historico" onclick="goScreen('historico')"><span class="side-ico">🎯</span><span><span class="side-title">Histórico</span><span class="side-sub">Compras e resgates</span></span></button>
+      <button class="side-btn" id="side-perfil" onclick="goScreen('perfil')"><span class="side-ico">👤</span><span><span class="side-title">Meu Perfil</span><span class="side-sub">Evolução e conquistas</span></span></button>
       <button class="side-btn" id="side-treino" onclick="goScreen('treino')"><span class="side-ico">💪</span><span><span class="side-title">Treino & Saúde</span><span class="side-sub">Diário e nutrição</span></span></button>
       <button class="side-btn" id="side-games" onclick="goScreen('games')"><span class="side-ico">🎮</span><span><span class="side-title">Games</span><span class="side-sub">Jogue e ganhe</span></span><span class="side-new">NOVO</span></button>
       <button class="side-btn" id="side-ranking" onclick="goScreen('ranking')"><span class="side-ico">🏆</span><span><span class="side-title">Ranking</span><span class="side-sub">Top treinos</span></span></button>
@@ -1558,6 +1581,52 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;opa
     <div class="pg-hdr"><div class="pg-title">HISTÓRICO</div><div class="pg-sub">Compras e resgates</div></div>
     <div class="sec"><div class="card"><div id="hist-list"></div></div></div>
   </div>
+
+  <!-- PERFIL DO CLIENTE v70 -->
+  <div id="sc-perfil" class="screen">
+    <div class="pnl" style="padding:0 0 80px">
+
+      <!-- Avatar + nome + nível -->
+      <div id="perfil-hero" style="background:linear-gradient(135deg,#1a0000,#2d0000);padding:28px 20px 20px;text-align:center;position:relative">
+        <div id="perfil-avatar" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#CC0000,#FF4444);display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 12px;border:3px solid #CC000066;cursor:pointer" onclick="perfilTrocarEmoji()">
+          <span id="perfil-emoji">💪</span>
+        </div>
+        <div id="perfil-nome" style="font-size:20px;font-weight:800;color:#fff;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px"></div>
+        <div id="perfil-nivel-badge" style="display:inline-block;margin-top:6px;padding:3px 14px;border-radius:20px;font-size:12px;font-weight:700;font-family:'Barlow',sans-serif"></div>
+        <div style="position:absolute;top:12px;right:12px">
+          <button onclick="perfilEditarEmoji()" style="background:rgba(255,255,255,.08);border:none;color:#fff;padding:6px 10px;border-radius:8px;font-size:12px;cursor:pointer">✏️ Avatar</button>
+        </div>
+      </div>
+
+      <!-- Números rápidos -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 16px 0">
+        <div class="perfil-stat-card"><div class="perfil-stat-ico">⭐</div><div id="perfil-pontos" class="perfil-stat-val">—</div><div class="perfil-stat-lbl">Pontos</div></div>
+        <div class="perfil-stat-card"><div class="perfil-stat-ico">💰</div><div id="perfil-cashback" class="perfil-stat-val">—</div><div class="perfil-stat-lbl">Cashback</div></div>
+        <div class="perfil-stat-card"><div class="perfil-stat-ico">🔥</div><div id="perfil-streak" class="perfil-stat-val">—</div><div class="perfil-stat-lbl">Streak atual</div></div>
+        <div class="perfil-stat-card"><div class="perfil-stat-ico">🏋️</div><div id="perfil-treinos" class="perfil-stat-val">—</div><div class="perfil-stat-lbl">Treinos totais</div></div>
+      </div>
+
+      <!-- Gráfico de treinos — últimas 4 semanas -->
+      <div style="margin:16px 16px 0;background:#111;border-radius:12px;padding:16px">
+        <div style="font-size:13px;font-weight:700;color:#aaa;margin-bottom:14px;font-family:'Barlow',sans-serif">TREINOS — ÚLTIMAS 4 SEMANAS</div>
+        <div id="perfil-grafico" style="display:flex;align-items:flex-end;gap:6px;height:70px;justify-content:space-around"></div>
+        <div id="perfil-grafico-labels" style="display:flex;gap:6px;justify-content:space-around;margin-top:6px"></div>
+      </div>
+
+      <!-- Últimos PRs -->
+      <div style="margin:16px 16px 0;background:#111;border-radius:12px;padding:16px">
+        <div style="font-size:13px;font-weight:700;color:#aaa;margin-bottom:12px;font-family:'Barlow',sans-serif">🏅 ÚLTIMOS PRs</div>
+        <div id="perfil-prs"></div>
+      </div>
+
+      <!-- Últimas missões concluídas -->
+      <div style="margin:16px 16px 0;background:#111;border-radius:12px;padding:16px">
+        <div style="font-size:13px;font-weight:700;color:#aaa;margin-bottom:12px;font-family:'Barlow',sans-serif">🎯 MISSÕES RECENTES</div>
+        <div id="perfil-missoes"></div>
+      </div>
+
+    </div>
+  </div><!-- end sc-perfil -->
 
   <!-- BENEFÍCIOS -->
   <div id="sc-beneficios" class="screen">
@@ -5005,6 +5074,184 @@ function fazerLogout(){
   var ls=document.getElementById('login-screen');if(ls)ls.style.display='';
 }
 
+// ══ PERFIL DO CLIENTE v70 ══════════════════════════════════════
+
+var _perfilEmojis = ['💪','🔥','⚡','🦁','🐺','🦊','🐉','🏋️','🥊','🎯','🏆','💎','👑','🚀','⭐'];
+var _perfilEmojiIdx = 0;
+
+function perfilInit(){
+  if(!U) return;
+  _perfilCarregarEmoji();
+  _perfilRenderHero();
+  _perfilRenderStats();
+  _perfilRenderGrafico();
+  _perfilRenderPRs();
+  _perfilRenderMissoes();
+}
+
+function _perfilCarregarEmoji(){
+  try{
+    var salvo = localStorage.getItem('alpha_perfil_emoji_'+(U.id||'x'));
+    if(salvo) document.getElementById('perfil-emoji').textContent = salvo;
+  }catch(_){}
+}
+
+function perfilTrocarEmoji(){
+  _perfilEmojiIdx = (_perfilEmojiIdx + 1) % _perfilEmojis.length;
+  var emoji = _perfilEmojis[_perfilEmojiIdx];
+  document.getElementById('perfil-emoji').textContent = emoji;
+  try{ localStorage.setItem('alpha_perfil_emoji_'+(U.id||'x'), emoji); }catch(_){}
+}
+
+function perfilEditarEmoji(){
+  var atual = document.getElementById('perfil-emoji').textContent;
+  var html = '<div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:8px">';
+  _perfilEmojis.forEach(function(e){
+    html += '<button onclick="perfilSelecionarEmoji(\''+e+'\')" style="font-size:28px;background:'+(e===atual?'#CC0000':'#1a1a1a')+';border:2px solid '+(e===atual?'#CC0000':'#333')+';border-radius:8px;padding:6px;cursor:pointer;width:48px;height:48px">'+e+'</button>';
+  });
+  html += '</div>';
+  // Reusa o toast como mini-popup
+  var c = document.getElementById('alpha-toasts');
+  if(!c){ c=document.createElement('div'); c.id='alpha-toasts';
+    Object.assign(c.style,{position:'fixed',bottom:'82px',left:'50%',transform:'translateX(-50%)',zIndex:'9995',pointerEvents:'auto'});
+    document.body.appendChild(c);
+  }
+  var popup = document.createElement('div');
+  popup.style.cssText = 'background:#0f0f0f;border:1px solid #333;border-radius:12px;padding:12px;max-width:320px;width:90vw';
+  popup.innerHTML = '<div style="font-size:12px;color:#aaa;text-align:center;margin-bottom:8px;font-family:Barlow,sans-serif">Escolha seu avatar</div>' + html +
+    '<button onclick="this.parentElement.remove()" style="width:100%;margin-top:8px;padding:8px;background:#222;color:#aaa;border:none;border-radius:8px;cursor:pointer;font-family:Barlow,sans-serif">Fechar</button>';
+  c.innerHTML = '';
+  c.appendChild(popup);
+}
+
+function perfilSelecionarEmoji(emoji){
+  document.getElementById('perfil-emoji').textContent = emoji;
+  try{ localStorage.setItem('alpha_perfil_emoji_'+(U.id||'x'), emoji); }catch(_){}
+  var c = document.getElementById('alpha-toasts');
+  if(c) c.innerHTML = '';
+}
+
+function _perfilRenderHero(){
+  var nomeEl  = document.getElementById('perfil-nome');
+  var badgeEl = document.getElementById('perfil-nivel-badge');
+  if(!nomeEl || !badgeEl) return;
+  nomeEl.textContent = (U.nome||'').toUpperCase();
+  var nivel = (U.nivel||'BRONZE').toUpperCase();
+  var cls   = nivel==='OURO'?'badge-ouro':nivel==='PRATA'?'badge-prata':'badge-bronze';
+  var ico   = nivel==='OURO'?'🥇':nivel==='PRATA'?'🥈':'🥉';
+  badgeEl.textContent = ico + ' ' + nivel;
+  badgeEl.className = cls;
+}
+
+function _perfilRenderStats(){
+  var hist   = (typeof tsGetHist  === 'function') ? tsGetHist()  : [];
+  var streak = (typeof getStreakData === 'function') ? getStreakData() : {streak:0};
+
+  var pontosEl   = document.getElementById('perfil-pontos');
+  var cashbackEl = document.getElementById('perfil-cashback');
+  var streakEl   = document.getElementById('perfil-streak');
+  var treinosEl  = document.getElementById('perfil-treinos');
+
+  if(pontosEl)   pontosEl.textContent   = (U.pontos||0).toLocaleString('pt-BR');
+  if(cashbackEl) cashbackEl.textContent = 'R$' + parseFloat(U.cashback||0).toFixed(2).replace('.',',');
+  if(streakEl)   streakEl.textContent   = (streak.streak||streak.dias||0) + 'd';
+  if(treinosEl)  treinosEl.textContent  = Array.isArray(hist) ? hist.length : 0;
+}
+
+function _perfilRenderGrafico(){
+  var grafEl  = document.getElementById('perfil-grafico');
+  var lblEl   = document.getElementById('perfil-grafico-labels');
+  if(!grafEl || !lblEl) return;
+
+  var hist = (typeof tsGetHist === 'function') ? tsGetHist() : [];
+  if(!Array.isArray(hist)){ grafEl.innerHTML = '<div class="perfil-vazio">Nenhum treino ainda</div>'; return; }
+
+  // Agrupa por semana (últimas 4)
+  var semanas = [{lbl:'Sem 1',count:0},{lbl:'Sem 2',count:0},{lbl:'Sem 3',count:0},{lbl:'Sem 4',count:0}];
+  var agora   = Date.now();
+  hist.forEach(function(t){
+    var ts   = t._ts || (t.data ? new Date(t.data).getTime() : 0);
+    if(!ts) return;
+    var dias = Math.floor((agora - ts) / 86400000);
+    if(dias < 7)       semanas[3].count++;
+    else if(dias < 14) semanas[2].count++;
+    else if(dias < 21) semanas[1].count++;
+    else if(dias < 28) semanas[0].count++;
+  });
+
+  var max = Math.max(1, Math.max.apply(null, semanas.map(function(s){ return s.count; })));
+
+  grafEl.innerHTML = semanas.map(function(s){
+    var h = Math.round((s.count / max) * 60);
+    return '<div class="perfil-bar" style="height:'+h+'px" title="'+s.count+' treino(s)"></div>';
+  }).join('');
+
+  lblEl.innerHTML = semanas.map(function(s){
+    return '<div class="perfil-bar-lbl">'+s.lbl+'<br><span style="color:#CC0000;font-weight:700">'+s.count+'</span></div>';
+  }).join('');
+}
+
+function _perfilRenderPRs(){
+  var el = document.getElementById('perfil-prs');
+  if(!el) return;
+  var prs = (typeof tsGetPRs === 'function') ? tsGetPRs() : {};
+  if(typeof prs !== 'object' || !prs){ el.innerHTML = '<div class="perfil-vazio">Nenhum PR ainda</div>'; return; }
+
+  var lista = Object.entries(prs)
+    .filter(function(e){ return e[1] && (e[1].carga||e[1].peso); })
+    .sort(function(a,b){ return ((b[1]._ts||0)-(a[1]._ts||0)); })
+    .slice(0, 5);
+
+  if(!lista.length){ el.innerHTML = '<div class="perfil-vazio">Nenhum PR ainda 🏋️</div>'; return; }
+
+  el.innerHTML = lista.map(function(e){
+    var nome  = e[0];
+    var pr    = e[1];
+    var carga = pr.carga || pr.peso || 0;
+    var evo   = pr.cargaAnterior && pr.cargaAnterior > 0
+      ? '+' + Math.round(((carga - pr.cargaAnterior) / pr.cargaAnterior)*100) + '%'
+      : 'Primeiro PR';
+    return '<div class="perfil-pr-item">'+
+      '<div><div class="perfil-pr-nome">'+nome+'</div><div class="perfil-pr-evolucao">'+evo+'</div></div>'+
+      '<div class="perfil-pr-carga">'+carga+'kg</div>'+
+      '</div>';
+  }).join('');
+}
+
+function _perfilRenderMissoes(){
+  var el = document.getElementById('perfil-missoes');
+  if(!el) return;
+  var concluidas = (typeof msGetConcluidas === 'function') ? msGetConcluidas() : {};
+  var aceitas    = (typeof msGetAceitas    === 'function') ? msGetAceitas()    : {};
+
+  var lista = Object.entries(concluidas)
+    .filter(function(e){ return e[1]; })
+    .sort(function(a,b){
+      var da = a[1].data||''; var db = b[1].data||'';
+      return db.localeCompare(da);
+    })
+    .slice(0, 5);
+
+  if(!lista.length){ el.innerHTML = '<div class="perfil-vazio">Nenhuma missão concluída ainda 🎯</div>'; return; }
+
+  // Busca detalhes da missão para pegar ícone e título
+  var todasMissoes = (_msAtivas||[]).concat(_msSemanais||[]).concat(_msEspeciais||[]);
+
+  el.innerHTML = lista.map(function(e){
+    var mid   = e[0];
+    var dados = e[1];
+    var missao = todasMissoes.find(function(m){ return m.id === mid; });
+    var ico    = missao ? (missao.ico||'🎯') : '🎯';
+    var titulo = missao ? missao.titulo : mid;
+    var data   = dados.data || '';
+    return '<div class="perfil-ms-item">'+
+      '<div class="perfil-ms-ico">'+ico+'</div>'+
+      '<div><div class="perfil-ms-titulo">'+titulo+'</div><div class="perfil-ms-data">'+data+'</div></div>'+
+      '<span style="color:#44bb44;font-size:16px">✅</span>'+
+      '</div>';
+  }).join('');
+}
+
 function goScreen(name){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on')});
   document.querySelectorAll('.bn').forEach(function(b){b.classList.remove('on')});
@@ -5013,6 +5260,7 @@ function goScreen(name){
   var bn=document.getElementById('bn-'+name);if(bn)bn.classList.add('on');
   if(name==='historico')carregarHistorico();
   if(name==='games'){renderStreak();renderGameRanking();atualizarDisplayRecords()}
+  if(name==='perfil')perfilInit();
   try{renderAll()}catch(e){}
 }
 
