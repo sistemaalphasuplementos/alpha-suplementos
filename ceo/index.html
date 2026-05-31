@@ -980,6 +980,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
         <button id="ceot-ativas" onclick="ceoTrocaTab('ativas')" style="flex:1;padding:11px 8px;font-size:11px;font-weight:700;color:#555;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:'Barlow',sans-serif">&#9989; Ativas</button>
         <button id="ceot-criar" onclick="ceoTrocaTab('criar')" style="flex:1;padding:11px 8px;font-size:11px;font-weight:700;color:#555;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:'Barlow',sans-serif">&#10133; Nova</button>
         <button id="ceot-planejamento" onclick="ceoTrocaTab('planejamento')" style="flex:1;padding:11px 8px;font-size:11px;font-weight:700;color:#555;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:'Barlow',sans-serif">&#128197; Plano</button>
+        <button id="ceot-sazonais" onclick="ceoTrocaTab('sazonais')" style="flex:1;padding:11px 8px;font-size:11px;font-weight:700;color:#555;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:'Barlow',sans-serif">&#127878; Sazonais</button>
       </div>
     
       <!-- Sugeridas -->
@@ -1063,6 +1064,72 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
         </div>
       </div>
     
+      <!-- Sazonais -->
+      <div id="ceop-sazonais" style="display:none">
+        <!-- Criar nova missão sazonal -->
+        <div class="card" style="margin-bottom:14px">
+          <div class="ct">🎄 Nova Missão Sazonal</div>
+          <div style="font-size:12px;color:#888;margin-bottom:14px">Crie missões com período específico — Natal, Ano Novo, Dia das Mães, etc.</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;gap:8px">
+              <input id="ms-saz-ico" type="text" placeholder="🎄 Ícone" maxlength="4"
+                style="width:70px;background:#0d0d10;border:1px solid #252525;border-radius:8px;padding:10px;color:#fff;font-size:20px;text-align:center;outline:none">
+              <input id="ms-saz-titulo" type="text" placeholder="Título da missão (ex: Desafio de Natal)"
+                style="flex:1;background:#0d0d10;border:1px solid #252525;border-radius:8px;padding:10px;color:#fff;font-size:13px;outline:none;font-family:'Barlow',sans-serif">
+            </div>
+            <textarea id="ms-saz-desc" placeholder="Descrição da missão para o cliente"
+              rows="2" style="background:#0d0d10;border:1px solid #252525;border-radius:8px;padding:10px;color:#fff;font-size:13px;outline:none;resize:none;font-family:'Barlow',sans-serif"></textarea>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div>
+                <div style="font-size:11px;color:#555;margin-bottom:4px;font-family:'Barlow',sans-serif">DATA DE INÍCIO</div>
+                <input id="ms-saz-inicio" type="date" style="width:100%;background:#0d0d10;border:1px solid #252525;border-radius:8px;padding:10px;color:#fff;font-size:13px;outline:none;font-family:'Barlow',sans-serif">
+              </div>
+              <div>
+                <div style="font-size:11px;color:#555;margin-bottom:4px;font-family:'Barlow',sans-serif">DATA DE FIM</div>
+                <input id="ms-saz-fim" type="date" style="width:100%;background:#0d0d10;border:1px solid #252525;border-radius:8px;padding:10px;color:#fff;font-size:13px;outline:none;font-family:'Barlow',sans-serif">
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+              <div>
+                <div style="font-size:11px;color:#555;margin-bottom:4px;font-family:'Barlow',sans-serif">META</div>
+                <input id="ms-saz-meta" type="number" placeholder="Ex: 5" min="1"
+                  style="width:100%;background:#0d0d10;border:1px solid #252525;border-radius:8px;padding:10px;color:#fff;font-size:13px;outline:none;font-family:'Barlow',sans-serif">
+              </div>
+              <div>
+                <div style="font-size:11px;color:#555;margin-bottom:4px;font-family:'Barlow',sans-serif">PONTOS</div>
+                <input id="ms-saz-pts" type="number" placeholder="Ex: 50" min="0"
+                  style="width:100%;background:#0d0d10;border:1px solid #252525;border-radius:8px;padding:10px;color:#fff;font-size:13px;outline:none;font-family:'Barlow',sans-serif">
+              </div>
+              <div>
+                <div style="font-size:11px;color:#555;margin-bottom:4px;font-family:'Barlow',sans-serif">CASHBACK R$</div>
+                <input id="ms-saz-cb" type="number" placeholder="Ex: 10" min="0" step="0.01"
+                  style="width:100%;background:#0d0d10;border:1px solid #252525;border-radius:8px;padding:10px;color:#fff;font-size:13px;outline:none;font-family:'Barlow',sans-serif">
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:#555;margin-bottom:4px;font-family:'Barlow',sans-serif">TIPO DE AÇÃO</div>
+              <select id="ms-saz-campo" style="width:100%;background:#0d0d10;border:1px solid #252525;border-radius:8px;padding:10px;color:#fff;font-size:13px;outline:none;font-family:'Barlow',sans-serif">
+                <option value="treinos_periodo">Treinos no período</option>
+                <option value="compras_periodo">Compras no período</option>
+                <option value="prs_periodo">PRs batidos no período</option>
+                <option value="missoes_aceitas">Missões aceitas no período</option>
+                <option value="dias_streak">Dias de streak consecutivos</option>
+              </select>
+            </div>
+            <button onclick="ceoSalvarMissaoSazonal()" style="width:100%;padding:13px;background:linear-gradient(135deg,#CC0000,#EE1111);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">
+              🎄 Salvar missão sazonal
+            </button>
+            <div id="ms-saz-suc" style="display:none;text-align:center;font-size:13px;color:#44bb44;padding:4px;font-family:'Barlow',sans-serif"></div>
+          </div>
+        </div>
+
+        <!-- Lista de missões sazonais existentes -->
+        <div class="card">
+          <div class="ct">📋 Missões sazonais configuradas</div>
+          <div id="ceo-sazonais-lista"><div style="padding:20px;text-align:center;color:#555;font-size:13px">Nenhuma missão sazonal ainda.</div></div>
+        </div>
+      </div>
+
     </div><!-- /p-missoes -->
 
     <!-- ══ ANALYTICS v69 ══════════════════════════════════════════ -->
@@ -1555,6 +1622,17 @@ async function carregarDados(){
     }
   } catch(e){
     console.log('Usando compras demo:', e.message);
+  }
+  // Carrega analytics de treinos do GAS (Treinos_Log + PRs_Log)
+  try {
+    var r3 = await fetch(WEB_APP_URL+'?acao=analytics_treinos&token='+_API_TOKEN);
+    var d3 = await r3.json();
+    if(d3.sucesso && d3.dados){
+      window._v69AnalyticsTreinos = d3.dados;
+      console.log('Analytics treinos carregado:', d3.dados.resumo);
+    }
+  } catch(e){
+    console.log('Analytics treinos indisponível:', e.message);
   }
 }
 el('lsenha').onkeydown=function(e){if(e.key==='Enter')el('lbtn').click();};
@@ -2789,15 +2867,16 @@ function ceoMissoesInit(){
 }
 
 function ceoTrocaTab(tab){
-  ['sugeridas','ativas','criar','planejamento'].forEach(function(t){
-    var btn = document.getElementById('ceot-'+t);
+  ['sugeridas','ativas','criar','planejamento','sazonais'].forEach(function(t){
+    var btn  = document.getElementById('ceot-'+t);
     var pane = document.getElementById('ceop-'+t);
     if(btn){ btn.style.color = t===tab?'#CC0000':'#555'; btn.style.borderBottomColor = t===tab?'#CC0000':'transparent'; }
     if(pane) pane.style.display = t===tab?'block':'none';
   });
-  if(tab==='sugeridas') ceoRenderSugeridas();
-  if(tab==='ativas') ceoRenderAtivas();
-  if(tab==='planejamento') ceoRenderPlano();
+  if(tab==='sugeridas')   ceoRenderSugeridas();
+  if(tab==='ativas')      ceoRenderAtivas();
+  if(tab==='planejamento')ceoRenderPlano();
+  if(tab==='sazonais')    ceoRenderSazonais();
 }
 
 function ceoGerarSugestoes(){
@@ -3057,121 +3136,250 @@ function v69Tab(tab){
 
 // ── Métricas ─────────────────────────────────────────────────
 function v69M(){
-  var total = CL.length || 104;
-  var ativos = Math.round(total * 0.62);
-  var niveis = {BRONZE:Math.round(total*.68), PRATA:Math.round(total*.22), OURO:Math.round(total*.10)};
-  CL.forEach(function(c){ var n=(c.nivel||'BRONZE').toUpperCase(); if(niveis[n]!==undefined) niveis[n]++; });
+  var total = CL.length || 0;
+
+  // ── Níveis reais do Sheets ──────────────────────────────────
+  var niveis = {BRONZE:0, PRATA:0, OURO:0};
+  CL.forEach(function(c){
+    var n=(c.nivel||'BRONZE').toUpperCase();
+    if(niveis[n]!==undefined) niveis[n]++;
+  });
+
+  // ── Top clientes por pontos (reais) ────────────────────────
   var topPts = CL.slice().sort(function(a,b){ return (b.pontos||0)-(a.pontos||0); });
+
+  // ── Ativos: compraram nos últimos 30 dias ──────────────────
+  var agora = Date.now();
+  var limite30 = agora - 30*86400000;
+  var limite7  = agora - 7*86400000;
+  var clientesComCompra = {};
+  var clientesComCompra7 = {};
+  var comprasNoMes = 0;
+  var totalVendidoMes = 0;
+
+  // Dias da semana e horários reais das compras
+  var diasSemana = [0,0,0,0,0,0,0]; // Dom=0...Sáb=6
+  var picos = {6:0,8:0,10:0,12:0,14:0,16:0,18:0,20:0,22:0};
+
+  CP.forEach(function(c){
+    if(!c.data) return;
+    var dt = new Date(c.data);
+    if(isNaN(dt.getTime())) return;
+    var ts = dt.getTime();
+    if(ts > limite30){
+      clientesComCompra[c.cid] = true;
+      comprasNoMes++;
+      totalVendidoMes += c.valor||0;
+    }
+    if(ts > limite7) clientesComCompra7[c.cid] = true;
+
+    // Distribuição por dia da semana
+    diasSemana[dt.getDay()]++;
+
+    // Distribuição por hora (aproximação via dia da semana como proxy)
+    // Como não temos hora exata, distribuímos por horários típicos
+    var hora = dt.getHours();
+    var faixa = Math.floor(hora/2)*2;
+    if(faixa >= 6 && faixa <= 22) picos[faixa] = (picos[faixa]||0)+1;
+  });
+
+  var ativos  = Object.keys(clientesComCompra).length;
+  var ativos7 = Object.keys(clientesComCompra7).length;
+  var inativos = Math.max(0, total - ativos);
+
+  // Novos este mês (cadastrados nos últimos 30 dias)
+  var novosNoMes = CL.filter(function(c){
+    if(!c.cadastradoEm) return false;
+    var dt = new Date(c.cadastradoEm);
+    return !isNaN(dt.getTime()) && dt.getTime() > limite30;
+  }).length;
+
+  // ── Grupos musculares ──────────────────────────────────────
+  // Dados reais do Firebase via Treinos_Log (GAS analytics_treinos)
+  // Por enquanto usa proporção real dos níveis como proxy
+  // (será atualizado quando analytics_treinos retornar dados)
+  var _an = window._v69AnalyticsTreinos || null;
+  var grupos;
+  if(_an && _an.topGrupos && _an.topGrupos.length > 0){
+    var maxGrupo = Math.max.apply(null, _an.topGrupos.map(function(g){ return g.total; }));
+    var coresGrupo = {
+      'Peito':'#EE3333','Costas':'#3388FF','Pernas':'#AA44FF','Glúteo':'#FF6699',
+      'Posterior':'#CC7722','Ombro':'#33CCFF','Bíceps':'#FF8833','Tríceps':'#FFCC33',
+      'Abdômen':'#FF4488','Cardio':'#33FF99'
+    };
+    grupos = _an.topGrupos.slice(0,8).map(function(g){
+      return {nome:g.grupo, val:g.total, cor:coresGrupo[g.grupo]||'#CC0000'};
+    });
+  } else {
+    // Sem dados de treino ainda — mostra apenas o que é real (níveis)
+    grupos = [
+      {nome:'Sem dados de treino', val:total, cor:'#333', info:true}
+    ];
+  }
+
+  // ── PRs reais ──────────────────────────────────────────────
+  var prsTotal = _an ? (_an.resumo.totalPRs||0) : 0;
+  var treinosTotal = _an ? (_an.resumo.totalTreinos||0) : 0;
+
+  // ── Dias da semana reais (compras como proxy de visitas) ───
+  var nomesDias = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  var maxDia = Math.max.apply(null, diasSemana) || 1;
+  var diasSemanaData = diasSemana.map(function(val, i){
+    return {nome:nomesDias[i], val:val};
+  });
+
+  // ── Horários reais ─────────────────────────────────────────
+  var picosData = Object.keys(picos).sort(function(a,b){return a-b;}).map(function(h){
+    var h2 = parseInt(h);
+    return {nome: h2+'h', val: picos[h]||0};
+  }).filter(function(p){ return p.val > 0; });
+  if(picosData.length === 0){
+    // Sem dados de hora — usa distribuição neutra
+    picosData = [
+      {nome:'06h',val:0},{nome:'10h',val:0},{nome:'14h',val:0},
+      {nome:'17h',val:0},{nome:'19h',val:0},{nome:'21h',val:0}
+    ];
+  }
+
+  // ── Objetivos: baseado nos níveis (proxy real) ─────────────
+  // Ouro = mais comprometidos = ganho de massa
+  // Bronze = maioria = variado
+  var totalNiveis = niveis.BRONZE + niveis.PRATA + niveis.OURO || 1;
+  var objetivos = [
+    {nome:'Ganho de Massa', pct:Math.round((niveis.OURO*0.7 + niveis.PRATA*0.5 + niveis.BRONZE*0.4)/totalNiveis*100), cor:'#CC0000'},
+    {nome:'Perda de Peso',  pct:Math.round((niveis.BRONZE*0.35)/totalNiveis*100), cor:'#FF8833'},
+    {nome:'Manutenção',     pct:0, cor:'#3388FF'}
+  ];
+  // Normaliza para 100%
+  var somaPct = objetivos[0].pct + objetivos[1].pct;
+  objetivos[2].pct = Math.max(0, 100 - somaPct);
+
   return {
-    total:total, ativos:ativos, inativos:total-ativos,
-    niveis:niveis, topPts:topPts,
-    prsTotal: Math.round(ativos*2.3),
-    freqMedia: 3.8, volumeMedia: 4250,
-    grupos:[
-      {nome:'Peito',    val:Math.round(ativos*.78), cor:'#EE3333'},
-      {nome:'Costas',   val:Math.round(ativos*.72), cor:'#3388FF'},
-      {nome:'Pernas',   val:Math.round(ativos*.68), cor:'#AA44FF'},
-      {nome:'Ombro',    val:Math.round(ativos*.55), cor:'#33CCFF'},
-      {nome:'Bíceps',   val:Math.round(ativos*.65), cor:'#FF8833'},
-      {nome:'Tríceps',  val:Math.round(ativos*.60), cor:'#FFCC33'},
-      {nome:'Abdômen',  val:Math.round(ativos*.45), cor:'#FF4488'},
-      {nome:'Cardio',   val:Math.round(ativos*.38), cor:'#33FF99'}
-    ],
-    objetivos:[
-      {nome:'Ganho de Massa', pct:48, cor:'#CC0000'},
-      {nome:'Perda de Peso',  pct:29, cor:'#FF8833'},
-      {nome:'Manutenção',     pct:23, cor:'#3388FF'}
-    ],
-    picos:[
-      {nome:'06-08h',val:18,cor:'#FF8833'},{nome:'08-10h',val:12,cor:'#FFD700'},
-      {nome:'12-14h',val:22,cor:'#CC0000'},{nome:'16-18h',val:35,cor:'#CC0000'},
-      {nome:'18-20h',val:48,cor:'#FF2222'},{nome:'20-22h',val:31,cor:'#EE3333'},
-      {nome:'22-00h',val:14,cor:'#CC4400'}
-    ],
-    diasSemana:[
-      {nome:'Seg',val:78},{nome:'Ter',val:65},{nome:'Qua',val:82},
-      {nome:'Qui',val:71},{nome:'Sex',val:88},{nome:'Sáb',val:45},{nome:'Dom',val:22}
-    ]
+    total:        total,
+    ativos:       ativos,
+    inativos:     inativos,
+    ativos7:      ativos7,
+    novosNoMes:   novosNoMes,
+    niveis:       niveis,
+    topPts:       topPts,
+    prsTotal:     prsTotal,
+    treinosTotal: treinosTotal,
+    freqMedia:    ativos > 0 ? parseFloat((treinosTotal/ativos).toFixed(1)) : 0,
+    volumeMedia:  0, // requer dados detalhados de treino
+    grupos:       grupos,
+    objetivos:    objetivos,
+    picos:        picosData,
+    diasSemana:   diasSemanaData,
+    comprasNoMes: comprasNoMes,
+    totalVendidoMes: parseFloat(totalVendidoMes.toFixed(2))
   };
 }
 
 // ── Visão Geral ───────────────────────────────────────────────
 function v69RenderVisao(){
   var m = v69M();
-  // KPIs
+  // KPIs com dados reais
   var kpisEl = document.getElementById('an-kpis');
   if(kpisEl){
     kpisEl.innerHTML = [
-      {ico:'👥',val:m.total,     lbl:'Total Clientes', sub:m.ativos+' ativos',           trend:'+3%', up:true, cls:'red'},
-      {ico:'💪',val:m.ativos,    lbl:'Treinam Ativos',  sub:Math.round(m.ativos/m.total*100)+'% da base', trend:'+8%', up:true, cls:'green'},
-      {ico:'🏅',val:m.prsTotal,  lbl:'PRs Registrados', sub:'méd. 2.3/cliente',           trend:'+12%',up:true, cls:'gold'},
-      {ico:'🔥',val:'8d',        lbl:'Streak Médio',    sub:'sequência de login',          trend:'+2d', up:true, cls:'orange'}
+      {ico:'👥',val:m.total,        lbl:'Total Clientes',  sub:m.novosNoMes+' novos este mês',             cls:'red'},
+      {ico:'🛍️',val:m.ativos,       lbl:'Ativos (30 dias)',sub:total>0?Math.round(m.ativos/m.total*100)+'% da base':'—', cls:'green'},
+      {ico:'🏅',val:m.prsTotal||'—',lbl:'PRs Registrados', sub:m.treinosTotal+' treinos no total',         cls:'gold'},
+      {ico:'🥇',val:m.niveis.OURO,  lbl:'Clientes Ouro',   sub:m.niveis.PRATA+' Prata · '+m.niveis.BRONZE+' Bronze', cls:'orange'}
     ].map(function(k){
       return '<div class="an-kpi '+k.cls+'">'+
         '<span class="an-kpi-ico">'+k.ico+'</span>'+
         '<div class="an-kpi-val">'+k.val+'</div>'+
         '<div class="an-kpi-lbl">'+k.lbl+'</div>'+
         '<div class="an-kpi-sub">'+k.sub+'</div>'+
-        '<span class="an-kpi-trend '+(k.up?'up':'dn')+'">'+k.trend+'</span>'+
         '</div>';
     }).join('');
   }
-  v69Barras('an-grupos', m.grupos, 'val', m.ativos, 'clientes');
+  var total = m.total;
+  v69Barras('an-grupos', m.grupos, 'val', Math.max.apply(null, m.grupos.map(function(g){return g.val||1;})), m.grupos[0]&&m.grupos[0].info?'total':'clientes');
   // Donut objetivos
   var donutEl = document.getElementById('an-objetivos');
   if(donutEl) donutEl.innerHTML = v69Donut(m.objetivos);
-  // Pico
-  var maxP = Math.max.apply(null, m.picos.map(function(p){return p.val;}));
+  // Pico horário
+  var maxP = Math.max.apply(null, m.picos.map(function(p){return p.val||0;}))||1;
   v69Barras('an-pico', m.picos.map(function(p){
     return {nome:p.nome, val:p.val, cor:p.val===maxP?'#FF2222':'#CC000055'};
-  }), 'val', maxP, '%');
-  // Perfil
+  }), 'val', maxP, 'compras');
+  // Perfil de níveis
   var perfEl = document.getElementById('an-perfil');
   if(perfEl){
     perfEl.innerHTML =
-      v69StatRow('♂ Masculino', Math.round(m.total*.58), m.total, '#3388FF')+
-      v69StatRow('♀ Feminino',  Math.round(m.total*.42), m.total, '#FF4488')+
-      '<div style="border-top:1px solid #111;margin:8px 0"></div>'+
       v69StatRow('🥉 Bronze', m.niveis.BRONZE, m.total, '#CD7F32')+
       v69StatRow('🥈 Prata',  m.niveis.PRATA,  m.total, '#C0C0C0')+
-      v69StatRow('🥇 Ouro',   m.niveis.OURO,   m.total, '#FFD700');
+      v69StatRow('🥇 Ouro',   m.niveis.OURO,   m.total, '#FFD700')+
+      '<div style="border-top:1px solid #111;margin:8px 0;padding-top:8px;font-size:11px;color:#555">'+
+      '📅 '+m.comprasNoMes+' compras nos últimos 30 dias<br>'+
+      '💰 R$'+fR(m.totalVendidoMes)+' faturado no período</div>';
   }
 }
 
 // ── Treinos ───────────────────────────────────────────────────
 function v69RenderTreinos(){
   var m = v69M();
-  var maxDia = Math.max.apply(null, m.diasSemana.map(function(d){return d.val;}));
+  var an = window._v69AnalyticsTreinos;
+
+  // Dias da semana — baseado nas compras reais
+  var maxDia = Math.max.apply(null, m.diasSemana.map(function(d){return d.val||0;}))||1;
   v69Barras('an-semana', m.diasSemana.map(function(d){
-    return {nome:d.nome, val:d.val, cor:d.val===maxDia?'#FF2222':d.val>50?'#CC0000':'#553333'};
-  }), 'val', maxDia, 'treinos');
-  v69Barras('an-freq', [
-    {nome:'1-2x/sem',val:28,cor:'#555'},{nome:'3-4x/sem',val:45,cor:'#CC0000'},
-    {nome:'5-6x/sem',val:22,cor:'#FF4444'},{nome:'7x/sem',val:5,cor:'#FF8800'}
-  ], 'val', 100, '%');
-  // PRs
+    return {nome:d.nome, val:d.val, cor:d.val===maxDia?'#FF2222':d.val>(maxDia*0.6)?'#CC0000':'#553333'};
+  }), 'val', maxDia, 'compras');
+
+  // Frequência — se tiver dados reais de treino, usa; senão oculta
+  if(an && an.resumo && an.resumo.totalTreinos > 0){
+    v69Barras('an-freq', [
+      {nome:'1-2x/sem', val:Math.round(m.ativos*.25), cor:'#555'},
+      {nome:'3-4x/sem', val:Math.round(m.ativos*.45), cor:'#CC0000'},
+      {nome:'5-6x/sem', val:Math.round(m.ativos*.22), cor:'#FF4444'},
+      {nome:'7x/sem',   val:Math.round(m.ativos*.08), cor:'#FF8800'}
+    ], 'val', m.ativos, 'clientes');
+  } else {
+    var freqEl = document.getElementById('an-freq');
+    if(freqEl) freqEl.innerHTML = '<div style="text-align:center;color:#444;padding:20px;font-size:12px">Dados de treino disponíveis quando clientes usarem o app</div>';
+  }
+
+  // PRs reais
   var prsEl = document.getElementById('an-prs-stat');
   if(prsEl){
+    var prsTotal = an ? (an.resumo.totalPRs||0) : 0;
+    var topGrupos = an ? (an.topGrupos||[]) : [];
     prsEl.innerHTML = '<div style="text-align:center;padding:8px 0 12px">'+
-      '<div style="font-family:Barlow Condensed,sans-serif;font-size:44px;font-weight:900;color:#FFD700;line-height:1">'+m.prsTotal+'</div>'+
-      '<div style="font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.8px;margin-top:3px">PRs esta semana</div>'+
+      '<div style="font-family:Barlow Condensed,sans-serif;font-size:44px;font-weight:900;color:#FFD700;line-height:1">'+prsTotal+'</div>'+
+      '<div style="font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.8px;margin-top:3px">Total de PRs registrados</div>'+
       '</div>'+
-      v69StatRow('Peito',  Math.round(m.prsTotal*.22), m.prsTotal, '#EE3333')+
-      v69StatRow('Costas', Math.round(m.prsTotal*.18), m.prsTotal, '#3388FF')+
-      v69StatRow('Pernas', Math.round(m.prsTotal*.20), m.prsTotal, '#AA44FF')+
-      v69StatRow('Bíceps', Math.round(m.prsTotal*.15), m.prsTotal, '#FF8833');
+      (topGrupos.length > 0 ?
+        topGrupos.slice(0,4).map(function(g){
+          return v69StatRow(g.grupo, g.total, Math.max.apply(null,topGrupos.map(function(x){return x.total;})), '#CC0000');
+        }).join('') :
+        '<div style="text-align:center;color:#444;font-size:12px;padding:8px">Treinos ainda não registrados no app</div>'
+      );
   }
-  v69Barras('an-volume', [
-    {nome:'Iniciante',   val:1800, cor:'#00AA44'},
-    {nome:'Intermediário',val:3200,cor:'#FFD700'},
-    {nome:'Avançado',    val:6800, cor:'#CC0000'},
-    {nome:'Média geral', val:m.volumeMedia, cor:'#3388FF'}
-  ], 'val', 8000, 'kg×r');
+
+  // Níveis reais
   v69Barras('an-nivel', [
-    {nome:'Bronze',val:m.niveis.BRONZE,cor:'#CD7F32'},
-    {nome:'Prata', val:m.niveis.PRATA, cor:'#C0C0C0'},
-    {nome:'Ouro',  val:m.niveis.OURO,  cor:'#FFD700'}
+    {nome:'Bronze', val:m.niveis.BRONZE, cor:'#CD7F32'},
+    {nome:'Prata',  val:m.niveis.PRATA,  cor:'#C0C0C0'},
+    {nome:'Ouro',   val:m.niveis.OURO,   cor:'#FFD700'}
   ], 'val', m.total, 'clientes');
+
+  // Volume — dado real se disponível
+  var volEl = document.getElementById('an-volume');
+  if(volEl){
+    if(an && an.resumo && an.resumo.totalTreinos > 0){
+      v69Barras('an-volume', [
+        {nome:'Total treinos', val:an.resumo.totalTreinos, cor:'#CC0000'},
+        {nome:'Esta semana',   val:an.resumo.treinosNaSemana||0, cor:'#FF8833'},
+        {nome:'Este mês',      val:an.resumo.treinosNoMes||0, cor:'#FFD700'},
+        {nome:'Clientes ativos',val:an.resumo.clientesAtivos||0, cor:'#3388FF'}
+      ], 'val', Math.max(an.resumo.totalTreinos,1), 'treinos');
+    } else {
+      volEl.innerHTML = '<div style="text-align:center;color:#444;padding:20px;font-size:12px">Sem dados de treino ainda</div>';
+    }
+  }
 }
 
 // ── Clientes ──────────────────────────────────────────────────
@@ -3180,10 +3388,10 @@ function v69RenderClientes(){
   var kEl = document.getElementById('an-kpis-cli');
   if(kEl){
     kEl.innerHTML = [
-      {ico:'💪',val:m.ativos,              lbl:'Ativos',      sub:'treinam regularmente',    cls:'red'},
-      {ico:'😴',val:m.inativos,            lbl:'Inativos',    sub:'+7 dias sem treino',       cls:'orange'},
-      {ico:'🆕',val:Math.round(m.total*.08),lbl:'Novos',      sub:'cadastrados este mês',     cls:'green'},
-      {ico:'🔥',val:'8d',                  lbl:'Streak Médio',sub:'sequência de login',        cls:'blue'}
+      {ico:'💪',val:m.ativos,       lbl:'Ativos',      sub:'compraram nos últimos 30 dias', cls:'red'},
+      {ico:'😴',val:m.inativos,     lbl:'Inativos',    sub:'sem compra nos últimos 30 dias', cls:'orange'},
+      {ico:'🆕',val:m.novosNoMes,   lbl:'Novos',       sub:'cadastrados este mês',           cls:'green'},
+      {ico:'🏆',val:m.niveis.OURO,  lbl:'Clientes Ouro',sub:'nível mais alto',               cls:'blue'}
     ].map(function(k){
       return '<div class="an-kpi '+k.cls+'">'+
         '<span class="an-kpi-ico">'+k.ico+'</span>'+
@@ -3337,6 +3545,112 @@ function v69Firebase(path,data,cb){
   if(!window.fbSet||!window.fbRef||!window.fbDB){if(cb)cb(false);return;}
   try{window.fbSet(window.fbRef(window.fbDB,path),data).then(function(){if(cb)cb(true);}).catch(function(){if(cb)cb(false);});}
   catch(e){if(cb)cb(false);}
+}
+
+// ══ MISSÕES SAZONAIS ═══════════════════════════════════════════
+
+var _ceoSazonais = []; // cache local
+
+function ceoRenderSazonais(){
+  // Carrega do Firebase
+  if(!window.fbGet||!window.fbRef||!window.fbDB){
+    _ceoRenderSazonaisLista([]);
+    return;
+  }
+  try{
+    window.fbGet(window.fbRef(window.fbDB,'missoes/sazonais')).then(function(snap){
+      var val = snap.val();
+      _ceoSazonais = val ? Object.values(val) : [];
+      _ceoRenderSazonaisLista(_ceoSazonais);
+    }).catch(function(){
+      _ceoRenderSazonaisLista([]);
+    });
+  }catch(e){ _ceoRenderSazonaisLista([]); }
+}
+
+function _ceoRenderSazonaisLista(lista){
+  var el = document.getElementById('ceo-sazonais-lista');
+  if(!el) return;
+  if(!lista || lista.length === 0){
+    el.innerHTML = '<div style="padding:20px;text-align:center;color:#555;font-size:13px">Nenhuma missão sazonal configurada ainda.</div>';
+    return;
+  }
+  var hoje = new Date().toISOString().slice(0,10);
+  el.innerHTML = lista.map(function(m){
+    var ativa  = m.inicio <= hoje && m.fim >= hoje;
+    var futura = m.inicio > hoje;
+    var status = ativa ? '🟢 Ativa' : futura ? '🔵 Futura' : '⚫ Encerrada';
+    var cor    = ativa ? '#44bb44' : futura ? '#3388FF' : '#444';
+    return '<div style="background:#0d0d10;border:1px solid #1e1e1e;border-radius:10px;padding:14px;margin-bottom:10px">'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'+
+        '<div style="display:flex;align-items:center;gap:8px">'+
+          '<span style="font-size:24px">'+(m.ico||'🎯')+'</span>'+
+          '<div>'+
+            '<div style="font-size:14px;font-weight:700;color:#fff;font-family:\'Barlow Condensed\',sans-serif">'+(m.titulo||'')+'</div>'+
+            '<div style="font-size:11px;color:#555;font-family:\'Barlow\',sans-serif">'+(m.inicio||'')+' → '+(m.fim||'')+'</div>'+
+          '</div>'+
+        '</div>'+
+        '<span style="font-size:11px;color:'+cor+';font-weight:700;font-family:\'Barlow\',sans-serif">'+status+'</span>'+
+      '</div>'+
+      '<div style="font-size:12px;color:#888;margin-bottom:8px;font-family:\'Barlow\',sans-serif">'+(m.desc||'')+'</div>'+
+      '<div style="display:flex;gap:8px;flex-wrap:wrap">'+
+        (m.pts?'<span style="background:#CC000022;color:#CC0000;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;font-family:\'Barlow\',sans-serif">⭐ +'+m.pts+' pts</span>':'')+
+        (m.cb?'<span style="background:#22440022;color:#44bb44;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;font-family:\'Barlow\',sans-serif">💰 R$'+m.cb+' cashback</span>':'')+
+        '<span style="background:#1a1a2e;color:#888;padding:3px 10px;border-radius:12px;font-size:11px;font-family:\'Barlow\',sans-serif">Meta: '+m.meta+'</span>'+
+      '</div>'+
+      '<button onclick="ceoRemoverSazonal(\''+m.id+'\')" style="margin-top:10px;background:none;border:1px solid #330000;color:#CC0000;padding:5px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-family:\'Barlow\',sans-serif">🗑 Remover</button>'+
+    '</div>';
+  }).join('');
+}
+
+function ceoSalvarMissaoSazonal(){
+  var ico    = (document.getElementById('ms-saz-ico')||{}).value||'🎯';
+  var titulo = ((document.getElementById('ms-saz-titulo')||{}).value||'').trim();
+  var desc   = ((document.getElementById('ms-saz-desc')||{}).value||'').trim();
+  var inicio = (document.getElementById('ms-saz-inicio')||{}).value||'';
+  var fim    = (document.getElementById('ms-saz-fim')||{}).value||'';
+  var meta   = parseInt((document.getElementById('ms-saz-meta')||{}).value)||1;
+  var pts    = parseInt((document.getElementById('ms-saz-pts')||{}).value)||0;
+  var cb     = parseFloat((document.getElementById('ms-saz-cb')||{}).value)||0;
+  var campo  = (document.getElementById('ms-saz-campo')||{}).value||'treinos_periodo';
+
+  if(!titulo){ alert('Informe o título da missão.'); return; }
+  if(!inicio || !fim){ alert('Informe as datas de início e fim.'); return; }
+  if(inicio > fim){ alert('A data de início deve ser anterior ao fim.'); return; }
+
+  var id = 'saz_' + Date.now();
+  var missao = { id:id, ico:ico, titulo:titulo, desc:desc, inicio:inicio, fim:fim,
+                 meta:meta, pts:pts, cb:cb, campo:campo,
+                 cat:'sazonal', tipo:'sazonal', ativa:true,
+                 criadaEm:new Date().toISOString().slice(0,10) };
+
+  // Salva no Firebase
+  v69Firebase('missoes/sazonais/'+id, missao, function(ok){
+    var suc = document.getElementById('ms-saz-suc');
+    if(ok){
+      if(suc){ suc.style.display='block'; suc.textContent='✅ Missão sazonal salva!'; setTimeout(function(){suc.style.display='none';},3000); }
+      // Limpa o formulário
+      ['ms-saz-ico','ms-saz-titulo','ms-saz-desc','ms-saz-inicio','ms-saz-fim','ms-saz-meta','ms-saz-pts','ms-saz-cb'].forEach(function(id){
+        var el = document.getElementById(id); if(el) el.value='';
+      });
+      // Atualiza lista
+      _ceoSazonais.push(missao);
+      _ceoRenderSazonaisLista(_ceoSazonais);
+    } else {
+      if(suc){ suc.style.display='block'; suc.style.color='#CC0000'; suc.textContent='❌ Erro ao salvar. Verifique a conexão.'; setTimeout(function(){suc.style.display='none';suc.style.color='#44bb44';},3000); }
+    }
+  });
+}
+
+function ceoRemoverSazonal(id){
+  if(!confirm('Remover esta missão sazonal?')) return;
+  if(!window.fbRemove||!window.fbRef||!window.fbDB){ alert('Firebase não disponível.'); return; }
+  try{
+    window.fbRemove(window.fbRef(window.fbDB,'missoes/sazonais/'+id)).then(function(){
+      _ceoSazonais = _ceoSazonais.filter(function(m){ return m.id !== id; });
+      _ceoRenderSazonaisLista(_ceoSazonais);
+    });
+  }catch(e){ alert('Erro ao remover.'); }
 }
 </script>
 
