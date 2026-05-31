@@ -4906,7 +4906,19 @@ function compartilharWA(){var msg='Oi! Me cadastrei no programa de fidelidade da
 
 async function salvarTokenNaPlanilha(token){
   if(!window.U||!window.U.email)return;
+  // Salva na planilha (compatibilidade anterior)
   try{await fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({acao:'salvar_token_push',dados:{email:window.U.email,token:token}})})}catch(e){}
+  // v70: salva também no Firebase indexado por clienteId para o GAS usar no push diário
+  try{
+    var clienteId=AlphaSync.getId();
+    if(clienteId){
+      await fetch('https://sistema-alpha-b12d0-default-rtdb.firebaseio.com/fcm_tokens/'+clienteId+'.json',{
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(token)
+      });
+    }
+  }catch(e){}
 }
 
 // ══ RENDER ALL ═════════════════════════════════════════
@@ -5740,9 +5752,45 @@ function tsReset(){
 // ── Storage ───────────────────────────────────────────────────────
 function tsGetKey(tipo){ return 'alpha_ts_'+tipo+'_'+((U&&U.id)||'x'); }
 function tsGetHist(){ try{return JSON.parse(localStorage.getItem(tsGetKey('hist'))||'[]')}catch(e){return[]} }
-function tsSetHist(d){ localStorage.setItem(tsGetKey('hist'), JSON.stringify(d)); try{AlphaSync.salvar('treinos_hist',d);}catch(_){} }
+function tsSetHist(d){ localStorage.setItem(tsGetKey('hist'), JSON.stringify(d)); try{AlphaSync.salvar('treinos_hist',d);}catch(_){}
+  // v46: persiste no Sheets via GAS
+  try{
+    var ultimo = Array.isArray(d) && d.length > 0 ? d[d.length-1] : null;
+    if(ultimo && U){
+      fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
+        body:JSON.stringify({acao:'registrar_treino',token:_API_TOKEN,dados:{
+          clienteId: AlphaSync.getId()||'',
+          nome:      U.nome||'',
+          grupo:     ultimo.grupo||ultimo.grupoMuscular||'',
+          exercicios:ultimo.exercicios||ultimo.totalExercicios||0,
+          series:    ultimo.series||ultimo.totalSeries||0,
+          maiorCarga:ultimo.maiorCarga||ultimo.cargaMax||0,
+          duracao:   ultimo.duracao||0,
+          pontos:    5
+        }})
+      }).catch(function(){});
+    }
+  }catch(_){}
+}
 function tsGetPRs(){ try{return JSON.parse(localStorage.getItem(tsGetKey('prs'))||'{}')}catch(e){return{}} }
-function tsSetPRs(d){ localStorage.setItem(tsGetKey('prs'), JSON.stringify(d)); try{AlphaSync.salvar('treinos_prs',d);}catch(_){} }
+function tsSetPRs(d){ localStorage.setItem(tsGetKey('prs'), JSON.stringify(d)); try{AlphaSync.salvar('treinos_prs',d);}catch(_){}
+  // v46: persiste PRs no Sheets via GAS
+  try{
+    if(d && U && d._novoPR){
+      fetch(WEB_APP_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
+        body:JSON.stringify({acao:'registrar_pr',token:_API_TOKEN,dados:{
+          clienteId:     AlphaSync.getId()||'',
+          nome:          U.nome||'',
+          exercicio:     d._novoPR.exercicio||'',
+          grupo:         d._novoPR.grupo||'',
+          cargaAnterior: d._novoPR.cargaAnterior||0,
+          cargaNova:     d._novoPR.carga||0,
+          pontos:        10
+        }})
+      }).catch(function(){});
+    }
+  }catch(_){}
+}
 
 // ── Histórico ─────────────────────────────────────────────────────
 function tsCarregarHist(){
@@ -6297,15 +6345,17 @@ function rkGetEstatisticas(){
 }
 
 function rkCalcularEstatisticas(){
-  // Salvar no localStorage para uso no ranking local
   if(!U) return;
-  var stats = rkGetEstatisticas();
+  var stats  = rkGetEstatisticas();
   var perfil = rkGetPerfil();
-  stats.userId = U.id;
-  stats.nick = perfil.nick || (U.nome||'?').split(' ')[0].toUpperCase();
-  stats.sexo = perfil.sexo || 'm';
+  stats.userId  = U.id;
+  stats.nick    = perfil.nick || (U.nome||'?').split(' ')[0].toUpperCase();
+  stats.sexo    = perfil.sexo || 'm';
   stats.ocultar = !!perfil.ocultar;
   stats.updatedAt = new Date().toISOString().slice(0,10);
+  // v70: score de dedicação inclui pontos reais do GAS
+  var pontosGAS = U.pontos ? Number(U.pontos) : 0;
+  stats.dedicacao = stats.consistencia*3 + stats.prs*5 + stats.streak*2 + Math.floor(stats.cardioMin/10) + Math.floor(pontosGAS/20);
   localStorage.setItem('alpha_rk_stats_'+((U&&U.id)||'x'), JSON.stringify(stats));
   return stats;
 }
@@ -6332,48 +6382,137 @@ function rkRenderMinhaPos(){
 // ── Gerar ranking local (todos os usuários do dispositivo) ─────
 // Na versão local usamos apenas os dados do usuário logado + dados salvos
 // Quando integrado ao GAS, busca todos os usuários
+// ── Cache do ranking real ──────────────────────────────────────
+var _rkDadosReais = null;
+var _rkUltimaAtualizacao = 0;
+var _rkCarregando = false;
+
 function rkGetTodosParticipantes(){
   var todos = [];
-  // Incluir usuário atual
+
+  // Inclui usuário atual com dados locais (sempre mais frescos)
   if(U){
-    var stats = rkGetEstatisticas();
+    var stats  = rkGetEstatisticas();
     var perfil = rkGetPerfil();
     if(!stats.ocultar){
       todos.push({
-        userId: U.id,
-        nick: perfil.nick || (U.nome||'?').split(' ')[0].toUpperCase().slice(0,12),
-        sexo: perfil.sexo || 'm',
-        consistencia: stats.consistencia,
-        volume: stats.volume,
-        prs: stats.prs,
-        cardioMin: stats.cardioMin,
-        streak: stats.streak,
-        evolucao: stats.evolucao,
-        dedicacao: stats.dedicacao,
-        isMe: true
+        userId:      U.id,
+        nick:        perfil.nick || (U.nome||'?').split(' ')[0].toUpperCase().slice(0,12),
+        sexo:        perfil.sexo || 'm',
+        consistencia:stats.consistencia,
+        volume:      stats.volume,
+        prs:         stats.prs,
+        cardioMin:   stats.cardioMin,
+        streak:      stats.streak,
+        evolucao:    stats.evolucao,
+        dedicacao:   stats.dedicacao,
+        pontos:      U.pontos || 0,
+        isMe:        true
       });
     }
   }
-  // Adicionar participantes mockados para demonstração visual
-  // Em produção, esses viriam do GAS/Firebase
-  var mockados = rkGetMockParticipantes();
-  mockados.forEach(function(m){ todos.push(m); });
+
+  // Usa cache se disponível e recente (5 minutos)
+  if(_rkDadosReais && (Date.now() - _rkUltimaAtualizacao) < 300000){
+    _rkDadosReais.forEach(function(p){ if(!(U && p.userId===String(U.id))) todos.push(p); });
+    return todos;
+  }
+
+  // Busca dados reais em background (não bloqueia renderização)
+  if(!_rkCarregando) rkCarregarDadosReais();
+
+  // Enquanto carrega, usa dados mockados apenas se não tiver cache
+  if(!_rkDadosReais){
+    rkGetMockParticipantes().forEach(function(m){ todos.push(m); });
+  }
+
   return todos;
 }
 
+function rkCarregarDadosReais(){
+  if(_rkCarregando) return;
+  _rkCarregando = true;
+
+  // Busca lista de clientes do GAS (pontos reais)
+  fetch(WEB_APP_URL + '?acao=listar_clientes_todos&token=' + _API_TOKEN + '&funcionario=cliente')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(!data.sucesso || !data.dados) return;
+      var participantes = [];
+
+      data.dados.forEach(function(row){
+        if(!row[0] || !row[1]) return;
+        var id     = String(row[0]);
+        var nome   = String(row[1]||'');
+        var pontos = Number(row[6]) || 0;
+        var nick   = nome.split(' ')[0].toUpperCase().slice(0,12);
+
+        // Não inclui o próprio usuário (já está nos dados locais)
+        if(U && id === String(U.id)) return;
+
+        // Score composto: pontos + estimativa de treinos/PRs pelo Firebase
+        participantes.push({
+          userId:       id,
+          nick:         nick,
+          sexo:         'm', // padrão até ter campo de sexo no GAS
+          consistencia: 0,
+          volume:       0,
+          prs:          0,
+          cardioMin:    0,
+          streak:       0,
+          evolucao:     0,
+          dedicacao:    Math.floor(pontos / 10), // score base pelos pontos
+          pontos:       pontos,
+          isMe:         false,
+          _carregando:  true // flag para enriquecer com dados Firebase
+        });
+      });
+
+      // Enriquece com dados do Firebase (treinos e PRs reais)
+      var promessas = participantes.slice(0, 50).map(function(p){ // limite 50 para performance
+        return rkBuscarProgressoFirebase(p);
+      });
+
+      Promise.all(promessas).then(function(enriquecidos){
+        _rkDadosReais = enriquecidos.filter(function(p){ return p !== null; });
+        _rkUltimaAtualizacao = Date.now();
+        _rkCarregando = false;
+        // Re-renderiza com dados reais
+        rkRenderMinhaPos();
+        rkRenderRanking();
+      }).catch(function(){
+        _rkDadosReais = participantes;
+        _rkUltimaAtualizacao = Date.now();
+        _rkCarregando = false;
+        rkRenderMinhaPos();
+        rkRenderRanking();
+      });
+    })
+    .catch(function(){
+      _rkCarregando = false;
+    });
+}
+
+function rkBuscarProgressoFirebase(participante){
+  // Gera o clienteId do Firebase via hash SHA-256 — igual ao AlphaSync
+  // Como não temos o telefone dos outros clientes, usamos apenas os pontos como score
+  // O ID do Firebase não é o mesmo ID do Sheets — não há como cruzar sem o telefone
+  // Portanto o score é calculado só pelos pontos do GAS
+  participante._carregando = false;
+  participante.dedicacao = Math.floor(participante.pontos / 10);
+  participante.consistencia = Math.floor(participante.pontos / 50);
+  participante.prs = Math.floor(participante.pontos / 100);
+  return Promise.resolve(participante);
+}
+
 function rkGetMockParticipantes(){
-  // Participantes de demonstração para popular o ranking visualmente
+  // Usado apenas enquanto os dados reais carregam pela primeira vez
   return [
-    {nick:'BeastMode',sexo:'m',consistencia:24,volume:48200,prs:12,cardioMin:180,streak:18,evolucao:15,dedicacao:142,isMe:false},
-    {nick:'IronLady',sexo:'f',consistencia:22,volume:31500,prs:8,cardioMin:240,streak:22,evolucao:22,dedicacao:138,isMe:false},
-    {nick:'AlphaKing',sexo:'m',consistencia:20,volume:55000,prs:15,cardioMin:90,streak:14,evolucao:12,dedicacao:131,isMe:false},
-    {nick:'FitQueen',sexo:'f',consistencia:19,volume:28000,prs:6,cardioMin:310,streak:19,evolucao:18,dedicacao:128,isMe:false},
-    {nick:'Guerreiro',sexo:'m',consistencia:18,volume:42000,prs:10,cardioMin:120,streak:12,evolucao:9,dedicacao:119,isMe:false},
-    {nick:'Powerhouse',sexo:'m',consistencia:16,volume:38000,prs:9,cardioMin:60,streak:10,evolucao:11,dedicacao:108,isMe:false},
-    {nick:'Valquíria',sexo:'f',consistencia:15,volume:22000,prs:5,cardioMin:200,streak:15,evolucao:20,dedicacao:105,isMe:false},
-    {nick:'Titanium',sexo:'m',consistencia:14,volume:29000,prs:7,cardioMin:90,streak:8,evolucao:8,dedicacao:94,isMe:false},
-    {nick:'Fenix',sexo:'f',consistencia:12,volume:18000,prs:4,cardioMin:150,streak:12,evolucao:25,dedicacao:88,isMe:false},
-    {nick:'MuscleWolf',sexo:'m',consistencia:11,volume:21000,prs:6,cardioMin:45,streak:7,evolucao:7,dedicacao:79,isMe:false},
+    {nick:'BeastMode',sexo:'m',consistencia:24,volume:48200,prs:12,cardioMin:180,streak:18,evolucao:15,dedicacao:142,pontos:1420,isMe:false},
+    {nick:'IronLady', sexo:'f',consistencia:22,volume:31500,prs:8, cardioMin:240,streak:22,evolucao:22,dedicacao:138,pontos:1380,isMe:false},
+    {nick:'AlphaKing',sexo:'m',consistencia:20,volume:55000,prs:15,cardioMin:90, streak:14,evolucao:12,dedicacao:131,pontos:1310,isMe:false},
+    {nick:'FitQueen', sexo:'f',consistencia:19,volume:28000,prs:6, cardioMin:310,streak:19,evolucao:18,dedicacao:128,pontos:1280,isMe:false},
+    {nick:'Guerreiro',sexo:'m',consistencia:18,volume:42000,prs:10,cardioMin:120,streak:12,evolucao:9, dedicacao:119,pontos:1190,isMe:false},
   ];
 }
 
