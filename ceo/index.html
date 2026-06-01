@@ -457,8 +457,128 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
 
 
 /* =========================================================
-   PATCH FINAL — módulos tardios no mesmo comportamento do Story
+   MENU HAMBÚRGUER MOBILE — CEO v69.1
    ========================================================= */
+@media(max-width:900px){
+  /* Botão hambúrguer */
+  #ceo-hamburger{
+    display:flex!important;
+    align-items:center;justify-content:center;
+    width:40px;height:40px;
+    background:rgba(255,8,40,.15);
+    border:1px solid rgba(255,8,40,.3);
+    border-radius:10px;
+    cursor:pointer;
+    flex-shrink:0;
+    margin-left:auto;
+    font-size:20px;
+    color:#fff;
+    transition:background .2s;
+  }
+  #ceo-hamburger:active{ background:rgba(255,8,40,.35); }
+
+  /* Esconde tabs horizontais — substitui pelo drawer */
+  .tbtabs{ display:none!important; }
+
+  /* Overlay escuro atrás do drawer */
+  #ceo-drawer-overlay{
+    display:none;
+    position:fixed;inset:0;
+    background:rgba(0,0,0,.65);
+    z-index:199;
+    backdrop-filter:blur(2px);
+  }
+  #ceo-drawer-overlay.open{ display:block; }
+
+  /* Drawer lateral */
+  #ceo-drawer{
+    position:fixed;
+    top:0;left:-100%;
+    width:80%;max-width:300px;
+    height:100%;
+    background:#0d0d10;
+    border-right:1px solid rgba(255,8,40,.2);
+    z-index:200;
+    transition:left .25s cubic-bezier(.4,0,.2,1);
+    overflow-y:auto;
+    padding:0 0 40px;
+    display:flex;flex-direction:column;
+  }
+  #ceo-drawer.open{ left:0; }
+
+  /* Cabeçalho do drawer */
+  #ceo-drawer-header{
+    display:flex;align-items:center;gap:10px;
+    padding:16px 14px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    position:sticky;top:0;
+    background:#0d0d10;
+    z-index:1;
+  }
+  #ceo-drawer-header img{ height:36px;border-radius:8px; }
+  #ceo-drawer-header .dr-title{ font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:#fff; }
+  #ceo-drawer-header .dr-badge{ font-size:10px;color:rgba(255,8,40,.8);font-weight:700;font-family:'Barlow',sans-serif; }
+  #ceo-drawer-close{
+    margin-left:auto;background:none;border:none;
+    color:#666;font-size:22px;cursor:pointer;padding:4px;
+  }
+
+  /* Itens do drawer */
+  .dr-item{
+    display:flex;align-items:center;gap:12px;
+    padding:13px 16px;
+    color:#ccc;font-size:14px;font-weight:600;
+    font-family:'Barlow',sans-serif;
+    cursor:pointer;
+    border-bottom:1px solid rgba(255,255,255,.04);
+    transition:background .15s;
+    background:none;border-left:none;width:100%;text-align:left;
+  }
+  .dr-item:active{ background:rgba(255,8,40,.1); }
+  .dr-item.on{
+    color:#ff0828;
+    background:rgba(255,8,40,.08);
+    border-left:3px solid #ff0828;
+    padding-left:13px;
+  }
+  .dr-item-ico{ font-size:20px;width:28px;text-align:center;flex-shrink:0; }
+  .dr-section{
+    font-size:10px;color:#444;font-weight:700;letter-spacing:1px;
+    padding:14px 16px 4px;font-family:'Barlow',sans-serif;
+    text-transform:uppercase;
+  }
+
+  /* Barra de navegação inferior rápida (ações principais) */
+  #ceo-bottom-nav{
+    display:flex!important;
+    position:fixed;bottom:0;left:0;right:0;
+    background:#0d0d10;
+    border-top:1px solid rgba(255,255,255,.06);
+    z-index:100;
+    padding:4px 0 env(safe-area-inset-bottom, 4px);
+  }
+  .ceo-bn{
+    flex:1;display:flex;flex-direction:column;align-items:center;
+    gap:2px;padding:8px 4px;
+    font-size:9px;color:#555;font-weight:700;
+    font-family:'Barlow',sans-serif;cursor:pointer;
+    background:none;border:none;text-transform:uppercase;letter-spacing:.3px;
+    transition:color .15s;
+  }
+  .ceo-bn.on{ color:#ff0828; }
+  .ceo-bn-ico{ font-size:20px; }
+
+  /* Padding inferior para não ficar atrás da nav bar */
+  .main{ padding-bottom:80px!important; }
+}
+
+@media(min-width:901px){
+  #ceo-hamburger{ display:none!important; }
+  #ceo-drawer{ display:none!important; }
+  #ceo-drawer-overlay{ display:none!important; }
+  #ceo-bottom-nav{ display:none!important; }
+}
+
 @media (min-width:901px){
   #p-auditoria,
   #p-colaboradores,
@@ -511,6 +631,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
   <style>@keyframes loadbar{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}</style>
   <div class="topbar">
     <div class="tblogo"><img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha"><span class="tbnome">ALPHA <span>SUPLEMENTOS</span></span><span class="tbbadge">👑 CEO</span></div>
+    <button id="ceo-hamburger" onclick="ceoDrawerAbrir()" aria-label="Menu">☰</button>
     <div class="tbtabs">
       <button class="tbt on" onclick="ir('dashboard',this)">📊 Dashboard</button>
       <button class="tbt" onclick="ir('clientes',this)">👥 Clientes</button>
@@ -528,6 +649,88 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
       <button class="tbt" onclick="ir('analytics',this);v69Init();setTimeout(_topo,50)">📊 Analytics v69</button>
     </div>
     <div class="tbright"><span id="unome">CEO</span><button id="sbtn">Sair</button></div>
+  </div>
+
+  <!-- Overlay -->
+  <div id="ceo-drawer-overlay" onclick="ceoDrawerFechar()"></div>
+
+  <!-- Drawer lateral mobile -->
+  <div id="ceo-drawer">
+    <div id="ceo-drawer-header">
+      <img src="https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/logo.png" alt="Alpha">
+      <div><div class="dr-title">ALPHA CEO</div><div class="dr-badge">👑 Painel de Controle</div></div>
+      <button id="ceo-drawer-close" onclick="ceoDrawerFechar()">✕</button>
+    </div>
+    <div class="dr-section">Principal</div>
+    <button class="dr-item on" id="dr-dashboard" onclick="ceoDrawerIr('dashboard',function(){})">
+      <span class="dr-item-ico">📊</span> Dashboard
+    </button>
+    <button class="dr-item" id="dr-clientes" onclick="ceoDrawerIr('clientes',function(){})">
+      <span class="dr-item-ico">👥</span> Clientes
+    </button>
+    <button class="dr-item" id="dr-ranking" onclick="ceoDrawerIr('ranking',function(){})">
+      <span class="dr-item-ico">🏆</span> Ranking
+    </button>
+    <button class="dr-item" id="dr-financeiro" onclick="ceoDrawerIr('financeiro',function(){rFinAsync()})">
+      <span class="dr-item-ico">💰</span> Financeiro
+    </button>
+    <div class="dr-section">Vendas & CRM</div>
+    <button class="dr-item" id="dr-crm" onclick="ceoDrawerIr('crm',function(){})">
+      <span class="dr-item-ico">📦</span> CRM
+    </button>
+    <button class="dr-item" id="dr-desempenho" onclick="ceoDrawerIr('desempenho',function(){rDesemp()})">
+      <span class="dr-item-ico">📈</span> Desempenho
+    </button>
+    <button class="dr-item" id="dr-indicacoes" onclick="ceoDrawerIr('indicacoes',function(){})">
+      <span class="dr-item-ico">🎯</span> Indicações
+    </button>
+    <div class="dr-section">Marketing</div>
+    <button class="dr-item" id="dr-promocoes" onclick="ceoDrawerIr('promocoes',function(){})">
+      <span class="dr-item-ico">⚡</span> Promoções
+    </button>
+    <button class="dr-item" id="dr-banner" onclick="ceoDrawerIr('banner',function(){carregarStatusBanner()})">
+      <span class="dr-item-ico">🖼️</span> Banner
+    </button>
+    <button class="dr-item" id="dr-story" onclick="ceoDrawerIr('story',function(){rStory()})">
+      <span class="dr-item-ico">📸</span> Story Premiado
+    </button>
+    <div class="dr-section">Analytics & Config</div>
+    <button class="dr-item" id="dr-missoes" onclick="ceoDrawerIr('missoes',function(){ceoMissoesInit();setTimeout(_topo,150)})">
+      <span class="dr-item-ico">🎯</span> Missões
+    </button>
+    <button class="dr-item" id="dr-analytics" onclick="ceoDrawerIr('analytics',function(){v69Init();setTimeout(_topo,50)})">
+      <span class="dr-item-ico">📊</span> Analytics
+    </button>
+    <button class="dr-item" id="dr-auditoria" onclick="ceoDrawerIr('auditoria',function(){rAuditoria();setTimeout(_topo,50)})">
+      <span class="dr-item-ico">🔍</span> Auditoria
+    </button>
+    <button class="dr-item" id="dr-colaboradores" onclick="ceoDrawerIr('colaboradores',function(){rColab();setTimeout(_topo,100)})">
+      <span class="dr-item-ico">🧑‍💼</span> Colaboradores
+    </button>
+    <div style="padding:16px;margin-top:auto">
+      <button onclick="document.getElementById('sbtn').click();ceoDrawerFechar()" style="width:100%;padding:12px;background:rgba(255,8,40,.15);border:1px solid rgba(255,8,40,.3);color:#ff0828;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">
+        Sair da conta
+      </button>
+    </div>
+  </div>
+
+  <!-- Bottom nav mobile — ações rápidas -->
+  <div id="ceo-bottom-nav">
+    <button class="ceo-bn on" id="ceo-bn-dashboard" onclick="ceoDrawerIr('dashboard',function(){});ceoBnAtivo('dashboard')">
+      <span class="ceo-bn-ico">📊</span>Dashboard
+    </button>
+    <button class="ceo-bn" id="ceo-bn-clientes" onclick="ceoDrawerIr('clientes',function(){});ceoBnAtivo('clientes')">
+      <span class="ceo-bn-ico">👥</span>Clientes
+    </button>
+    <button class="ceo-bn" id="ceo-bn-crm" onclick="ceoDrawerIr('crm',function(){});ceoBnAtivo('crm')">
+      <span class="ceo-bn-ico">📦</span>CRM
+    </button>
+    <button class="ceo-bn" id="ceo-bn-analytics" onclick="ceoDrawerIr('analytics',function(){v69Init()});ceoBnAtivo('analytics')">
+      <span class="ceo-bn-ico">📊</span>Analytics
+    </button>
+    <button class="ceo-bn" id="ceo-bn-menu" onclick="ceoDrawerAbrir()">
+      <span class="ceo-bn-ico">☰</span>Menu
+    </button>
   </div>
   <div class="main">
 
@@ -3652,6 +3855,74 @@ function ceoRemoverSazonal(id){
     });
   }catch(e){ alert('Erro ao remover.'); }
 }
+
+// ══ CEO MOBILE — Drawer & Bottom Nav ═══════════════════════════
+
+function ceoDrawerAbrir(){
+  document.getElementById('ceo-drawer').classList.add('open');
+  document.getElementById('ceo-drawer-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function ceoDrawerFechar(){
+  document.getElementById('ceo-drawer').classList.remove('open');
+  document.getElementById('ceo-drawer-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+var _ceoDrawerAtivo = 'dashboard';
+
+function ceoDrawerIr(painel, callback){
+  // Atualiza estilo da sidebar desktop
+  document.querySelectorAll('.tbt').forEach(function(b){ b.classList.remove('on'); });
+
+  // Atualiza itens do drawer
+  document.querySelectorAll('.dr-item').forEach(function(b){ b.classList.remove('on'); });
+  var drItem = document.getElementById('dr-'+painel);
+  if(drItem) drItem.classList.add('on');
+
+  _ceoDrawerAtivo = painel;
+
+  // Executa a navegação padrão
+  var btnDesktop = document.querySelector('.tbt[onclick*="\''+painel+'\'"]');
+  if(btnDesktop){
+    ir(painel, btnDesktop);
+  } else {
+    // Fallback direto
+    document.querySelectorAll('.pnl').forEach(function(p){ p.classList.remove('on'); });
+    var pnl = document.getElementById('p-'+painel);
+    if(pnl) pnl.classList.add('on');
+  }
+
+  // Executa callback específico
+  try{ if(callback) callback(); }catch(e){}
+
+  // Fecha drawer
+  ceoDrawerFechar();
+
+  // Scroll to top
+  window.scrollTo(0,0);
+}
+
+function ceoBnAtivo(painel){
+  document.querySelectorAll('.ceo-bn').forEach(function(b){ b.classList.remove('on'); });
+  var bn = document.getElementById('ceo-bn-'+painel);
+  if(bn) bn.classList.add('on');
+}
+
+// Fecha drawer com swipe para a esquerda
+(function(){
+  var startX = 0;
+  document.addEventListener('touchstart', function(e){
+    startX = e.touches[0].clientX;
+  }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    var dx = e.changedTouches[0].clientX - startX;
+    if(dx < -60 && document.getElementById('ceo-drawer').classList.contains('open')){
+      ceoDrawerFechar();
+    }
+  }, {passive:true});
+})();
 </script>
 
 </body>
