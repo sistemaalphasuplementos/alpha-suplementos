@@ -5294,53 +5294,85 @@ function _perfilRenderMissoes(){
 
 // ── Notificações — botão manual (compatível com iOS) ───────────
 function ativarNotificacoes(){
-  if(!('serviceWorker' in navigator) || !('Notification' in window)){
+  // IMPORTANTE: Notification.requestPermission() deve ser chamado
+  // IMEDIATAMENTE no toque — antes de qualquer await/then — para o iOS aceitar.
+  if(!('Notification' in window)){
     toast('❌ Notificações não suportadas neste dispositivo');
     return;
   }
-  navigator.serviceWorker.ready.then(function(reg){
-    Notification.requestPermission().then(function(perm){
-      if(perm !== 'granted'){
-        toast('Notificações não permitidas');
-        return;
-      }
-      // Dentro do gesto do usuário — iOS aceita aqui
+  if(Notification.permission === 'denied'){
+    toast('🔕 Notificações bloqueadas. Vá em Ajustes > Notificações para ativar.');
+    return;
+  }
+
+  // Pede permissão AGORA — dentro do gesto do usuário
+  Notification.requestPermission().then(function(perm){
+    if(perm !== 'granted'){
+      toast('Notificações não permitidas');
+      return;
+    }
+    toast('🔔 Permissão concedida! Registrando...');
+
+    // Após permissão, registra a subscription
+    if(!('serviceWorker' in navigator)){
+      toast('❌ Service Worker não suportado');
+      return;
+    }
+
+    var VAPID_KEY = 'BL2KdPeb1VExfCJ2cGHrhY4_dMoGBMHZZh08pl9HnsvRcSz3TRllo59EkgNOAex_4UzWCr4V4GRq4lY5qohER6M';
+    function vapidToUint8(b64){
+      var p='='.repeat((4-b64.length%4)%4);
+      var b=(b64+p).replace(/-/g,'+').replace(/_/g,'/');
+      var r=atob(b); var a=new Uint8Array(r.length);
+      for(var i=0;i<r.length;i++) a[i]=r.charCodeAt(i);
+      return a;
+    }
+
+    navigator.serviceWorker.ready.then(function(reg){
       reg.pushManager.getSubscription().then(function(subExistente){
-        var promise = subExistente
+        var subscribePromise = subExistente
           ? Promise.resolve(subExistente)
           : reg.pushManager.subscribe({
               userVisibleOnly: true,
-              applicationServerKey: (function(){
-                var b64='BL2KdPeb1VExfCJ2cGHrhY4_dMoGBMHZZh08pl9HnsvRcSz3TRllo59EkgNOAex_4UzWCr4V4GRq4lY5qohER6M';
-                var p='='.repeat((4-b64.length%4)%4);
-                var b=(b64+p).replace(/-/g,'+').replace(/_/g,'/');
-                var r=atob(b); var a=new Uint8Array(r.length);
-                for(var i=0;i<r.length;i++) a[i]=r.charCodeAt(i);
-                return a;
-              })()
+              applicationServerKey: vapidToUint8(VAPID_KEY)
             });
-        promise.then(function(sub){
-          if(!sub){ toast('❌ Erro ao ativar notificações'); return; }
+
+        subscribePromise.then(function(sub){
+          if(!sub){ toast('❌ Erro ao criar subscription'); return; }
+
           var id = AlphaSync ? AlphaSync.getId() : null;
-          if(!id){ toast('⚠️ Faça login primeiro'); return; }
-          var p256dh = btoa(String.fromCharCode.apply(null, new Uint8Array(sub.getKey('p256dh'))));
-          var auth   = btoa(String.fromCharCode.apply(null, new Uint8Array(sub.getKey('auth'))));
-          fetch('https://sistema-alpha-b12d0-default-rtdb.firebaseio.com/push_subscriptions/'+id+'.json',{
-            method:'PUT',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({endpoint:sub.endpoint,p256dh:p256dh,auth:auth,ts:Date.now(),ativo:true})
-          }).then(function(r){
-            if(r.ok){
-              toast('🔔 Notificações ativadas!');
-              localStorage.setItem('alpha_notif_ativo','1');
-              var b=document.getElementById('notif-banner');
-              if(b) b.style.display='none';
-            } else {
-              toast('❌ Erro ao salvar. Tente novamente.');
-            }
-          }).catch(function(){ toast('❌ Sem conexão. Tente novamente.'); });
-        }).catch(function(e){ toast('❌ Erro: '+e.message); });
+          if(!id){ toast('⚠️ ID não disponível. Tente novamente em alguns segundos.'); return; }
+
+          try{
+            var p256dh = btoa(String.fromCharCode.apply(null, new Uint8Array(sub.getKey('p256dh'))));
+            var auth   = btoa(String.fromCharCode.apply(null, new Uint8Array(sub.getKey('auth'))));
+
+            fetch('https://sistema-alpha-b12d0-default-rtdb.firebaseio.com/push_subscriptions/'+id+'.json',{
+              method:'PUT',
+              headers:{'Content-Type':'application/json'},
+              body:JSON.stringify({endpoint:sub.endpoint,p256dh:p256dh,auth:auth,ts:Date.now(),ativo:true})
+            }).then(function(r){
+              if(r.ok){
+                toast('✅ Notificações ativadas com sucesso!');
+                localStorage.setItem('alpha_notif_ativo','1');
+                var b=document.getElementById('notif-banner');
+                if(b) b.style.display='none';
+              } else {
+                toast('❌ Erro ao salvar ('+r.status+'). Tente novamente.');
+              }
+            }).catch(function(e){ toast('❌ Sem conexão: '+e.message); });
+          }catch(e){
+            toast('❌ Erro ao processar chaves: '+e.message);
+          }
+
+        }).catch(function(e){
+          toast('❌ Falha na subscription: '+e.message);
+        });
+      }).catch(function(e){
+        toast('❌ Erro no pushManager: '+e.message);
       });
+    }).catch(function(e){
+      toast('❌ SW não pronto: '+e.message);
     });
   });
 }
