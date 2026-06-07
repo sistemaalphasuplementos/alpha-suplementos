@@ -5328,6 +5328,11 @@ function ativarNotificacoes(){
       return a;
     }
 
+    // Registra SW simples (compatível iOS) em vez do Firebase SW
+    var swUrl = 'https://sistemaalphasuplementos.github.io/alpha-suplementos/shared/alpha-sw.js';
+    navigator.serviceWorker.register(swUrl, {
+      scope: 'https://sistemaalphasuplementos.github.io/alpha-suplementos/'
+    }).catch(function(){});
     navigator.serviceWorker.ready.then(function(reg){
       reg.pushManager.getSubscription().then(function(subExistente){
         var subscribePromise = subExistente
