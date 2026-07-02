@@ -2210,6 +2210,16 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;opa
     </div>
   </div>
 
+<!-- POPUP ROLETA JÁ USADA NO MÊS -->
+  <div id="roleta-popup-bloqueada" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:99999;align-items:center;justify-content:center;padding:20px">
+    <div style="background:linear-gradient(135deg,#1a1a1a,#0a0a0a);border:2px solid rgba(255,215,0,.35);border-radius:20px;padding:32px 24px;text-align:center;max-width:340px;width:100%">
+      <div style="font-size:56px;margin-bottom:12px">🔒</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:#fff;margin-bottom:10px">Roleta já usada esse mês</div>
+      <div style="font-size:13px;color:#aaa;margin-bottom:20px;line-height:1.5">Você já girou a roleta este mês. Por favor, entre em contato com a loja se tiver dúvidas ou acredita que isso é um engano.</div>
+      <button onclick="roletaFecharBloqueada()" style="background:#ff1919;color:#fff;border:none;border-radius:10px;padding:12px 32px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;width:100%">Entendi</button>
+    </div>
+  </div>
+
   <div class="bnav">
     <button class="bn on" id="bn-home" onclick="goScreen('home')"><span class="bn-ico">🏠</span><span class="bn-lbl">Início</span></button>
     <button class="bn" id="bn-premios" onclick="goScreen('premios')"><span class="bn-ico">🏆</span><span class="bn-lbl">Prêmios</span></button>
@@ -8238,7 +8248,7 @@ function msAtualizarAposTreino(){
     // Primeiro verifica disponibilidade — só abre popup se puder girar
     carregarConfig(function(){
       verificarDisponibilidade(clienteId, function(pode, dados, extras, creditos){
-        if(!pode) return; // não abre nada se já usou e não tem liberação
+        if(!pode){ roletaMostrarBloqueada(); return; } // já usou e não tem liberação — avisa o cliente
 
         var pop = document.getElementById('roleta-popup-flutuante');
         if(!pop) return;
@@ -8269,6 +8279,16 @@ function msAtualizarAposTreino(){
 
   window.roletaFecharFlutuante = function(){
     var pop = document.getElementById('roleta-popup-flutuante');
+    if(pop) pop.style.display = 'none';
+  };
+
+  window.roletaMostrarBloqueada = function(){
+    var pop = document.getElementById('roleta-popup-bloqueada');
+    if(pop) pop.style.display = 'flex';
+  };
+
+  window.roletaFecharBloqueada = function(){
+    var pop = document.getElementById('roleta-popup-bloqueada');
     if(pop) pop.style.display = 'none';
   };
 
