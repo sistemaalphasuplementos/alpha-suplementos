@@ -8235,40 +8235,33 @@ function msAtualizarAposTreino(){
     var clienteId = (window.U && window.U.id) ? window.U.id : localStorage.getItem('alpha_uid');
     if(!clienteId) return;
 
-    var pop = document.getElementById('roleta-popup-flutuante');
-    if(!pop) return;
-    pop.style.display = 'flex';
-
-    // Carrega config e verifica disponibilidade
+    // Primeiro verifica disponibilidade — só abre popup se puder girar
     carregarConfig(function(){
-      desenharRoletaFlutuante(0);
-      renderizarListaPremiosFlutuante();
-      buscarContadorGlobal(function(contador){
-        atualizarContadorFlutuanteUI(contador);
-        verificarDisponibilidade(clienteId, function(pode, dados, extras, creditos){
+      verificarDisponibilidade(clienteId, function(pode, dados, extras, creditos){
+        if(!pode) return; // não abre nada se já usou e não tem liberação
+
+        var pop = document.getElementById('roleta-popup-flutuante');
+        if(!pop) return;
+        pop.style.display = 'flex';
+
+        desenharRoletaFlutuante(0);
+        renderizarListaPremiosFlutuante();
+
+        buscarContadorGlobal(function(contador){
+          atualizarContadorFlutuanteUI(contador);
+
           var statusEl  = document.getElementById('roleta-fl-status-txt');
           var statusSub = document.getElementById('roleta-fl-status-sub');
           var btnGirar  = document.getElementById('roleta-fl-btn-girar');
+          var btnGrande = document.getElementById('roleta-fl-btn-girar-grande');
 
-          if(pode){
-            statusEl.textContent  = '🎰 Você tem ' + creditos + ' giro' + (creditos>1?'s':'') + ' disponível' + (creditos>1?'is':'') + '!';
-            statusEl.style.color  = '#00cc66';
-            statusSub.textContent = 'Boa sorte! Pressione GIRAR para começar.';
-            btnGirar.disabled     = false;
-            btnGirar.style.opacity= '1';
-            btnGirar.style.cursor = 'pointer';
-            var bg=document.getElementById('roleta-fl-btn-girar-grande');
-            if(bg){bg.disabled=false;bg.style.opacity='1';bg.style.cursor='pointer';}
-          } else {
-            statusEl.textContent  = '🔒 Roleta já utilizada este mês';
-            statusEl.style.color  = '#ff4444';
-            statusSub.textContent = 'Dúvidas? Entre em contato com a loja.';
-            btnGirar.disabled     = true;
-            btnGirar.style.opacity= '.4';
-            btnGirar.style.cursor = 'not-allowed';
-            var bg=document.getElementById('roleta-fl-btn-girar-grande');
-            if(bg){bg.disabled=true;bg.style.opacity='.4';bg.style.cursor='not-allowed';bg.textContent='🔒 Já utilizada este mês';}
-          }
+          statusEl.textContent  = '🎰 Você tem ' + creditos + ' giro' + (creditos>1?'s':'') + ' disponível' + (creditos>1?'is':'') + '!';
+          statusEl.style.color  = '#00cc66';
+          statusSub.textContent = 'Boa sorte! Pressione GIRAR para começar.';
+          btnGirar.disabled     = false;
+          btnGirar.style.opacity= '1';
+          btnGirar.style.cursor = 'pointer';
+          if(btnGrande){ btnGrande.disabled=false; btnGrande.style.opacity='1'; btnGrande.style.cursor='pointer'; btnGrande.textContent='🎰 GIRAR AGORA!'; }
         });
       });
     });
