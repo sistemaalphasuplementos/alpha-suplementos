@@ -8015,51 +8015,53 @@ function msAtualizarAposTreino(){
   function registrarGiro(clienteId, premio, especial, novoContador){
     var mesAtual = new Date().toISOString().slice(0,7);
     var agora    = new Date().toISOString();
-    // Atualiza dados do cliente
     var dadosCliente = {
-      ultimo_mes:    mesAtual,
-      ultimo_giro:   agora,
+      ultimo_mes:      mesAtual,
+      ultimo_giro:     agora,
       giros_mes_atual: 1,
-      ultimo_premio: premio.label,
-      liberacoes_extras: 0 // consome a liberação
+      ultimo_premio:   premio.label,
+      liberacoes_extras: 0
     };
-    fetch(FB+'/roleta/'+clienteId+'.json',{
+    // Grava IMEDIATAMENTE e de forma síncrona antes de qualquer outra coisa
+    return fetch(FB+'/roleta/'+clienteId+'.json',{
       method:'PATCH',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify(dadosCliente)
-    }).catch(function(){});
-    // Atualiza contador global
-    fetch(FB+'/roleta_global/contador.json',{
-      method:'PUT',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(novoContador)
-    }).catch(function(){});
-    // Registra no histórico
-    fetch(FB+'/roleta_historico.json',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        clienteId: clienteId,
-        premio:    premio.label,
-        especial:  especial ? especial.label : null,
-        contador:  novoContador,
-        data:      agora
-      })
-    }).catch(function(){});
-    // Se especial → avisa funcionários
-    if(especial){
-      fetch(FB+'/roleta_premios_especiais.json',{
+    }).then(function(){
+      // Só após confirmar gravação, atualiza contador global e histórico
+      fetch(FB+'/roleta_global/contador.json',{
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(novoContador)
+      }).catch(function(){});
+      fetch(FB+'/roleta_historico.json',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify({
-          clienteId:  clienteId,
-          premio:     especial.label,
-          contador:   novoContador,
-          data:       agora,
-          retirado:   false
+          clienteId: clienteId,
+          premio:    premio.label,
+          especial:  especial ? especial.label : null,
+          contador:  novoContador,
+          data:      agora
         })
       }).catch(function(){});
-    }
+      if(especial){
+        fetch(FB+'/roleta_premios_especiais.json',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({
+            clienteId:  clienteId,
+            premio:     especial.label,
+            contador:   novoContador,
+            data:       agora,
+            retirado:   false
+          })
+        }).catch(function(){});
+      }
+    }).catch(function(){
+      // Mesmo se falhar a rede, mantém bloqueio em memória
+      console.warn('Falha ao gravar giro no Firebase');
+    });
   }
 
   // ── Mostra popup de resultado ───────────────────────────────────────
@@ -8128,12 +8130,16 @@ function msAtualizarAposTreino(){
     });
   };
 
+  var _jaGirou = false; // flag em memória — impede duplo giro na mesma sessão
+
   window.roletaGirar = function(){
-    if(_girando) return;
+    if(_girando || _jaGirou) return;
     var clienteId = (window.U && window.U.id) ? window.U.id : localStorage.getItem('alpha_uid');
     if(!clienteId){ toast('⚠️ Erro: faça login novamente'); return; }
 
+    // Bloqueia IMEDIATAMENTE em memória e na UI
     _girando = true;
+    _jaGirou = true;
     habilitarBotao(false);
     document.getElementById('roleta-status-txt').textContent='Girando...';
 
@@ -8143,12 +8149,20 @@ function msAtualizarAposTreino(){
       var premioIdx    = especial ? 0 : sortearPremioIdx();
       var premio       = PREMIOS_COMUNS[premioIdx];
 
-      animarGiro(premioIdx, function(){
+      // Grava no Firebase PRIMEIRO, animação depois
+      registrarGiro(clienteId, premio, especial, novoContador).then(function(){
+        animarGiro(premioIdx, function(){
+          _girando = false;
+          atualizarContadorUI(novoContador);
+          atualizarStatus('🔒','Roleta utilizada este mês','Volte após sua próxima compra!','bloqueado');
+          setTimeout(function(){ mostrarPopup(premio, especial, novoContador); }, 300);
+        });
+      }).catch(function(){
+        // Se falhou a gravação, permite tentar de novo
         _girando = false;
-        registrarGiro(clienteId, premio, especial, novoContador);
-        atualizarContadorUI(novoContador);
-        atualizarStatus('🔒','Roleta utilizada este mês','Volte após sua próxima compra!','bloqueado');
-        setTimeout(function(){ mostrarPopup(premio, especial, novoContador); }, 300);
+        _jaGirou = false;
+        habilitarBotao(true);
+        toast('⚠️ Erro de conexão. Tente novamente.');
       });
     });
   };
@@ -8266,13 +8280,17 @@ function msAtualizarAposTreino(){
   };
 
   window.roletaGirarFlutuante = function(){
-    if(_girando) return;
+    if(_girando || _jaGirou) return;
     var clienteId = (window.U && window.U.id) ? window.U.id : localStorage.getItem('alpha_uid');
     if(!clienteId) return;
 
+    // Bloqueia IMEDIATAMENTE em memória e na UI
     _girando = true;
+    _jaGirou = true;
     var btn = document.getElementById('roleta-fl-btn-girar');
     if(btn){ btn.disabled=true; btn.style.opacity='.4'; }
+    var btnG = document.getElementById('roleta-fl-btn-girar-grande');
+    if(btnG){ btnG.disabled=true; btnG.style.opacity='.4'; }
     var statusEl = document.getElementById('roleta-fl-status-txt');
     if(statusEl){ statusEl.textContent='Girando...'; statusEl.style.color='#ffd700'; }
 
@@ -8282,18 +8300,28 @@ function msAtualizarAposTreino(){
       var premioIdx    = especial ? 0 : sortearPremioIdx();
       var premio       = PREMIOS_COMUNS[premioIdx];
 
-      animarRoletaFlutuante(premioIdx, function(){
+      // Grava no Firebase PRIMEIRO, animação depois
+      registrarGiro(clienteId, premio, especial, novoContador).then(function(){
+        animarRoletaFlutuante(premioIdx, function(){
+          _girando = false;
+          atualizarContadorFlutuanteUI(novoContador);
+          if(statusEl){ statusEl.textContent='🔒 Roleta utilizada este mês'; statusEl.style.color='#ff4444'; }
+          var sub = document.getElementById('roleta-fl-status-sub');
+          if(sub) sub.textContent = 'Volte após sua próxima compra!';
+          setTimeout(function(){
+            roletaFecharFlutuante();
+            mostrarPopup(premio, especial, novoContador);
+          }, 400);
+        });
+      }).catch(function(){
+        // Se falhou a gravação, libera para tentar de novo
         _girando = false;
-        registrarGiro(clienteId, premio, especial, novoContador);
-        atualizarContadorFlutuanteUI(novoContador);
-        if(statusEl){ statusEl.textContent='🔒 Roleta utilizada este mês'; statusEl.style.color='#ff4444'; }
-        var sub = document.getElementById('roleta-fl-status-sub');
-        if(sub) sub.textContent = 'Volte após sua próxima compra!';
-        setTimeout(function(){
-          roletaFecharFlutuante();
-          mostrarPopup(premio, especial, novoContador);
-        }, 400);
+        _jaGirou = false;
+        if(btn){ btn.disabled=false; btn.style.opacity='1'; }
+        if(btnG){ btnG.disabled=false; btnG.style.opacity='1'; }
+        if(statusEl){ statusEl.textContent='⚠️ Erro de conexão. Tente novamente.'; statusEl.style.color='#ff9900'; }
       });
+    });
     });
   };
 
