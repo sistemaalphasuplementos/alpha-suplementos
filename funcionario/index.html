@@ -125,6 +125,12 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font
 /* ── GRIDS ──────────────────────────────────────────── */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
 .venda-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:16px}
+.vcat-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:11px 6px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;text-align:center}
+.vcat-btn.on{border-color:var(--red);background:#E2453522;color:#fff}
+.vqtd-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);border-radius:16px;padding:6px 13px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif}
+.vqtd-btn.on{border-color:var(--red);color:#fff;background:#E2453522}
+.vitem-card{display:flex;justify-content:space-between;align-items:center;background:var(--bg4);border-radius:8px;padding:9px 11px;margin-bottom:6px}
+.vitem-rm{color:#E24B4A;cursor:pointer;font-size:17px;line-height:1;padding:2px 4px}
 .g2-stack{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 
 /* ── INPUTS ─────────────────────────────────────────── */
@@ -989,14 +995,37 @@ body::before{
             <button onclick="abrirCad()" style="background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;white-space:nowrap;flex-shrink:0">+ Novo</button>
           </div>
           <div id="vinfo" style="display:none;background:var(--bg4);border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px"></div>
-          <label class="lbl">Valor (R$)</label>
+          <label class="lbl">Itens da venda</label>
+          <div id="vitens-lista" style="margin-bottom:6px"></div>
+          <div id="vitens-vazio" style="font-size:12px;color:var(--text3);margin-bottom:10px">Nenhum item adicionado ainda.</div>
+          <button type="button" onclick="abrirItemForm()" style="width:100%;background:var(--bg4);border:1px dashed var(--border);color:var(--text2);border-radius:8px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;margin-bottom:12px">+ Adicionar item</button>
+
+          <!-- FORM DE NOVO ITEM -->
+          <div id="vitem-form" style="display:none;background:var(--bg4);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px">
+            <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Categoria do produto</div>
+            <div id="vitem-cats" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px"></div>
+            <div id="vitem-detalhes" style="display:none;margin-top:10px">
+              <label class="lbl">Nome do produto</label>
+              <input type="text" class="inp" id="vitem-nome" placeholder="Ex: Creatina 300g">
+              <label class="lbl">Gramatura / Quantidade</label>
+              <div id="vitem-qtd-presets" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px"></div>
+              <input type="text" class="inp" id="vitem-qtd-manual" placeholder="Ou digite (ex: 250g, 45 cáps, 1un)">
+              <label class="lbl">Valor do item (R$)</label>
+              <input type="number" class="inp" id="vitem-valor" placeholder="0,00" min="0.01" step="0.01">
+              <label class="lbl">Dias de consumo estimado</label>
+              <input type="number" class="inp" id="vitem-dias" value="30" min="1">
+              <div style="font-size:10px;color:var(--text3);margin:-8px 0 10px">Usado pelo CRM para alertar quando o produto do cliente estiver acabando</div>
+              <div id="vitem-err" style="display:none;background:#E24B4A22;border:.5px solid #E24B4A33;border-radius:8px;padding:8px;font-size:11px;color:#E24B4A;margin-bottom:10px"></div>
+              <div style="display:flex;gap:8px">
+                <button type="button" class="bg" style="flex:1" onclick="confirmarItem()">✅ Adicionar ao carrinho</button>
+                <button type="button" onclick="fecharItemForm()" class="bgh">Cancelar</button>
+              </div>
+            </div>
+          </div>
+
+          <label class="lbl">Valor total (R$)</label>
           <input type="number" class="inp" id="vval" placeholder="0,00" min="0.01" step="0.01" oninput="calcV()">
-          <label class="lbl">Descrição</label>
-          <input type="text" class="inp" id="vdesc" placeholder="Ex: Creatina 300g + Whey 900g">
-          <label class="lbl">Produto p/ CRM</label>
-          <input type="text" class="inp" id="vprod" placeholder="Ex: Creatina 300g">
-          <label class="lbl">Dias de consumo</label>
-          <input type="number" class="inp" id="vdias" value="30" min="1">
+          <div style="font-size:10px;color:var(--text3);margin:-10px 0 12px">Preenchido automaticamente pelos itens — pode ajustar se houver desconto</div>
           <!-- CASHBACK -->
           <div id="vcb-wrap" style="display:none;background:var(--bg4);border:1px solid #1D9E7544;border-radius:10px;padding:12px;margin-bottom:12px">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
@@ -1762,6 +1791,122 @@ function toggleCB(){
   calcV();
 }
 
+// ══ CARRINHO DE ITENS DA VENDA ══════════════════════════════
+var CATEGORIAS_PRODUTO = {
+  'Creatina':      {icone:'💊', presets:[{q:'150g',dias:30},{q:'300g',dias:60}]},
+  'Whey Protein':  {icone:'🥤', presets:[{q:'900g',dias:30},{q:'1kg',dias:33},{q:'2kg',dias:66}]},
+  'Pré-treino':    {icone:'⚡', presets:[{q:'150g',dias:30},{q:'300g',dias:60}]},
+  'Termogênico':   {icone:'🔥', presets:[{q:'60 cáps',dias:30},{q:'90 cáps',dias:45},{q:'120 cáps',dias:60}]},
+  'Encapsulado':   {icone:'💊', presets:[{q:'60 cáps',dias:30},{q:'90 cáps',dias:45},{q:'120 cáps',dias:60},{q:'180 cáps',dias:60}]},
+  'Hipercalórico': {icone:'🍫', presets:[{q:'1kg',dias:15},{q:'3kg',dias:45}]},
+  'Outro':         {icone:'✏️', presets:[]}
+};
+var carrinho=[];
+var _catSelecionada=null;
+
+function abrirItemForm(){
+  var form=el('vitem-form');
+  var cats=el('vitem-cats');
+  cats.innerHTML='';
+  Object.keys(CATEGORIAS_PRODUTO).forEach(function(cat){
+    var c=CATEGORIAS_PRODUTO[cat];
+    var btn=document.createElement('button');
+    btn.type='button';
+    btn.className='vcat-btn';
+    btn.textContent=c.icone+' '+cat;
+    btn.onclick=function(){selecionarCategoria(cat,btn);};
+    cats.appendChild(btn);
+  });
+  form.style.display='block';
+  el('vitem-detalhes').style.display='none';
+  _catSelecionada=null;
+  form.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function selecionarCategoria(cat,btnEl){
+  _catSelecionada=cat;
+  Array.prototype.forEach.call(el('vitem-cats').children,function(b){b.classList.remove('on');});
+  btnEl.classList.add('on');
+  el('vitem-detalhes').style.display='block';
+  el('vitem-nome').value=cat==='Outro'?'':cat;
+  var presetsWrap=el('vitem-qtd-presets');
+  presetsWrap.innerHTML='';
+  var presets=CATEGORIAS_PRODUTO[cat].presets;
+  var qtdManual=el('vitem-qtd-manual');
+  qtdManual.value='';
+  presets.forEach(function(p){
+    var pb=document.createElement('button');
+    pb.type='button';
+    pb.className='vqtd-btn';
+    pb.textContent=p.q;
+    pb.onclick=function(){
+      Array.prototype.forEach.call(presetsWrap.children,function(b2){b2.classList.remove('on');});
+      pb.classList.add('on');
+      qtdManual.value=p.q;
+      el('vitem-dias').value=p.dias;
+      if(_catSelecionada!=='Outro') el('vitem-nome').value=_catSelecionada+' '+p.q;
+    };
+    presetsWrap.appendChild(pb);
+  });
+  el('vitem-valor').value='';
+  el('vitem-dias').value=presets.length?presets[0].dias:30;
+  el('vitem-err').style.display='none';
+  setTimeout(function(){var f=el(cat==='Outro'?'vitem-nome':'vitem-valor');if(f)f.focus();},50);
+}
+
+function fecharItemForm(){
+  el('vitem-form').style.display='none';
+}
+
+function confirmarItem(){
+  var nome=(el('vitem-nome')||{value:''}).value.trim();
+  var qtd=(el('vitem-qtd-manual')||{value:''}).value.trim();
+  var valor=parseFloat((el('vitem-valor')||{value:''}).value)||0;
+  var dias=parseInt((el('vitem-dias')||{value:'30'}).value)||30;
+  var err=el('vitem-err');
+  if(!_catSelecionada){err.textContent='Escolha uma categoria.';err.style.display='block';return;}
+  if(!nome||!qtd||valor<=0){
+    err.textContent='Preencha nome, gramatura/quantidade e valor do item.';
+    err.style.display='block';
+    return;
+  }
+  err.style.display='none';
+  carrinho.push({categoria:_catSelecionada,nome:nome,qtd:qtd,valor:valor,dias:dias});
+  renderCarrinho();
+  fecharItemForm();
+}
+
+function removerItemCarrinho(idx){
+  carrinho.splice(idx,1);
+  renderCarrinho();
+}
+
+function totalCarrinho(){
+  return carrinho.reduce(function(s,it){return s+it.valor;},0);
+}
+
+function renderCarrinho(){
+  var lista=el('vitens-lista');
+  var vazio=el('vitens-vazio');
+  if(!carrinho.length){
+    lista.innerHTML='';
+    vazio.style.display='block';
+  } else {
+    vazio.style.display='none';
+    lista.innerHTML=carrinho.map(function(it,i){
+      return '<div class="vitem-card"><div><div style="font-size:12px;font-weight:700">'+it.nome+'</div>'+
+        '<div style="font-size:11px;color:var(--text3)">'+it.qtd+' · '+it.dias+' dias</div></div>'+
+        '<div style="display:flex;align-items:center;gap:10px"><span style="font-size:13px;font-weight:700;color:var(--gold)">'+fR(it.valor)+'</span>'+
+        '<span class="vitem-rm" onclick="removerItemCarrinho('+i+')">&#215;</span></div></div>';
+    }).join('');
+  }
+  var soma=totalCarrinho();
+  var vvalEl=el('vval');
+  if(vvalEl && carrinho.length) vvalEl.value=soma.toFixed(2);
+  else if(vvalEl && !carrinho.length) vvalEl.value='';
+  calcV();
+}
+
 function calcV(){
   var v=parseFloat((el('vval')||{value:''}).value)||0;
   var btn=el('vbtn');
@@ -1804,9 +1949,10 @@ async function registrarVenda(){
   if(!cliSel)return;
   var v=parseFloat((el('vval')||{value:''}).value)||0;
   if(v<=0)return;
-  var desc=(el('vdesc')||{value:''}).value||'Compra registrada';
-  var prod=(el('vprod')||{value:''}).value;
-  var dias=parseInt((el('vdias')||{value:'30'}).value)||30;
+  var desc=carrinho.length?carrinho.map(function(it){return it.nome+' ('+it.qtd+')';}).join(' + '):'Compra registrada';
+  var produtosVenda=carrinho.map(function(it){
+    return {produtoId:'P'+it.nome.replace(/[^A-Za-z0-9]/g,'').substr(0,6).toUpperCase(),nome:it.nome,quantidade:1,unidade:it.qtd,diasConsumo:it.dias,categoria:it.categoria};
+  });
   var nc=NC[cliSel.nivel];
   var funcNome = window._funcNome || '';
 
@@ -1833,12 +1979,12 @@ async function registrarVenda(){
     ? { token:_API_TOKEN, acao:'resgate_cashback', dados:{
           email:cliSel.email, valorCompra:v, cashbackUsado:cbUsado,
           descricao:desc, funcionario:funcNome,
-          produtos:prod?[{produtoId:'P'+prod.substr(0,4).toUpperCase(),nome:prod,quantidade:1,unidade:'un',diasConsumo:dias,categoria:'Produto'}]:[]
+          produtos:produtosVenda
         }}
     : { token:_API_TOKEN, acao:'registrar_compra', dados:{
           email:cliSel.email, valorCompra:v, descricao:desc, loja:'Alpha Suplementos',
           funcionario:funcNome,
-          produtos:prod?[{produtoId:'P'+prod.substr(0,4).toUpperCase(),nome:prod,quantidade:1,unidade:'un',diasConsumo:dias,categoria:'Produto'}]:[]
+          produtos:produtosVenda
         }};
 
   var salvoAPI = false;
@@ -1881,7 +2027,7 @@ async function registrarVenda(){
     var payloadFallback = { token:_API_TOKEN, acao:'registrar_compra', dados:{
       email:cliSel.email, valorCompra:v, descricao:desc, loja:'Alpha Suplementos',
       funcionario:funcNome,
-      produtos:prod?[{produtoId:'P'+prod.substr(0,4).toUpperCase(),nome:prod,quantidade:1,unidade:'un',diasConsumo:dias,categoria:'Produto'}]:[]
+      produtos:produtosVenda
     }};
     var salvoFallback=false;
     try{
@@ -1925,7 +2071,7 @@ async function registrarVenda(){
   }
 
   CL=CL.map(function(c){return c.id===cliSel.id?cliSel:c;});
-  if(prod)PRD.push({cid:cliSel.id,nome:prod,cat:'Produto',dias:dias});
+  carrinho.forEach(function(it){PRD.push({cid:cliSel.id,nome:it.nome,cat:it.categoria,dias:it.dias});});
   renderCRM();renderClis();
 }
 
@@ -1942,9 +2088,10 @@ function mostrarSucVenda(v,pts,cb,desc,cbUsado,planilha){
 function resetV(){
   cliSel=null;
   limparBusca();
-  var ids=['vval','vdesc','vprod'];
-  ids.forEach(function(id){var e=el(id);if(e)e.value='';});
-  var dias=el('vdias');if(dias)dias.value='30';
+  var e=el('vval');if(e)e.value='';
+  carrinho=[];
+  renderCarrinho();
+  fecharItemForm();
   var info=el('vinfo');if(info)info.style.display='none';
   var btn=el('vbtn');if(btn){btn.disabled=true;btn.textContent='✅ REGISTRAR VENDA';}
   // Limpar cashback
