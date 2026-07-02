@@ -584,7 +584,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
   #p-colaboradores,
   #p-missoes,
   #p-analytics,
-  #p-story{
+  #p-story,
+  #p-roleta{
     width:100%!important;
     max-width:100%!important;
     min-width:0!important;
@@ -602,7 +603,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
   #p-colaboradores > *,
   #p-missoes > *,
   #p-analytics > *,
-  #p-story > *{
+  #p-story > *,
+  #p-roleta > *{
     max-width:100%!important;
     box-sizing:border-box!important;
   }
@@ -647,6 +649,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
       <button class="tbt" onclick="ir('story',this);rStory()">📸 Story Premiado</button>
       <button class="tbt" onclick="ir('missoes',this);ceoMissoesInit();setTimeout(_topo,150)">🎯 Missões v68</button>
       <button class="tbt" onclick="ir('analytics',this);v69Init();setTimeout(_topo,50)">📊 Analytics v69</button>
+      <button class="tbt" onclick="ir('roleta',this);roletaCeoInit();setTimeout(_topo,50)">🎰 Roleta</button>
     </div>
     <div class="tbright"><span id="unome">CEO</span><button id="sbtn">Sair</button></div>
   </div>
@@ -1557,6 +1560,63 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
   </div>
 </div>
 
+
+<!-- ══ PAINEL ROLETA ALPHA (CEO) ═══════════════════════════════════ -->
+<div id="p-roleta" class="pnl">
+  <div style="margin-bottom:18px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#CC0000">🎰 Roleta Alpha</div>
+    <div style="font-size:13px;color:#aaa;margin-top:4px">Configure os prêmios, marcos globais e acompanhe estatísticas</div>
+  </div>
+
+  <!-- Stats rápidos -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+    <div class="card" style="text-align:center;padding:16px">
+      <div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:6px">Total de Giros</div>
+      <div id="ceo-roleta-stat-total" style="font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;color:#fff">—</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px">
+      <div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:6px">Especiais Emitidos</div>
+      <div id="ceo-roleta-stat-esp" style="font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;color:#ffd700">—</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px">
+      <div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:6px">Pendentes Retirada</div>
+      <div id="ceo-roleta-stat-pend" style="font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;color:#ff9900">—</div>
+    </div>
+  </div>
+
+  <!-- Prêmios Comuns -->
+  <div class="card" style="margin-bottom:14px">
+    <div class="ct" style="justify-content:space-between">
+      <span>🎟️ Prêmios Comuns (Aleatórios)</span>
+      <button onclick="ceoRoletaSalvarComuns()" style="background:#CC000022;color:#CC0000;border:1px solid #CC000044;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">💾 Salvar</button>
+    </div>
+    <div style="font-size:12px;color:#666;margin-bottom:14px">O peso determina a frequência — maior peso = aparece mais. Total não precisa somar 100.</div>
+    <div id="ceo-roleta-comuns-lista"></div>
+    <button onclick="ceoRoletaAdicionarComum()" style="width:100%;margin-top:10px;background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.15);border-radius:8px;padding:10px;color:#888;font-size:13px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif">+ Adicionar prêmio</button>
+  </div>
+
+  <!-- Prêmios Especiais (marcos globais) -->
+  <div class="card" style="margin-bottom:14px">
+    <div class="ct" style="justify-content:space-between">
+      <span>⭐ Prêmios Especiais (Marcos Globais)</span>
+      <button onclick="ceoRoletaSalvarEspeciais()" style="background:#ffd70022;color:#ffd700;border:1px solid #ffd70044;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">💾 Salvar</button>
+    </div>
+    <div style="font-size:12px;color:#666;margin-bottom:14px">Define em quais giros globais os prêmios especiais aparecem e com qual frequência se repetem.</div>
+    <div id="ceo-roleta-especiais-lista"></div>
+    <button onclick="ceoRoletaAdicionarEspecial()" style="width:100%;margin-top:10px;background:rgba(255,215,0,.04);border:1px dashed rgba(255,215,0,.2);border-radius:8px;padding:10px;color:#aaa;font-size:13px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif">+ Adicionar marco especial</button>
+  </div>
+
+  <!-- Histórico de prêmios especiais -->
+  <div class="card">
+    <div class="ct" style="justify-content:space-between">
+      <span>📋 Histórico de Prêmios Especiais</span>
+      <button onclick="ceoRoletaCarregarHistEspeciais()" style="background:none;border:none;color:#666;font-size:12px;cursor:pointer;font-family:'Barlow',sans-serif">🔄 Atualizar</button>
+    </div>
+    <div id="ceo-roleta-hist-especiais">
+      <div style="text-align:center;padding:20px;color:#555;font-size:13px">Clique em Atualizar para carregar</div>
+    </div>
+  </div>
+</div>
 
 <!-- ══ MODAL HISTÓRICO DE COMPRAS (CEO) ══════════════════════════ -->
 <div id="mhist" class="mfundo" onclick="if(event.target===this)fecharHistorico()">
@@ -2988,7 +3048,7 @@ function renderStoryHist(codigos){
     /* Correção estrutural: alguns módulos foram declarados fora da .main.
        Isso fazia Auditoria, Colaboradores, Missões e Analytics aparecerem abaixo/atrás da sidebar.
        Aqui todos entram no mesmo fluxo do Story Premiado, sem alterar estética. */
-    ['p-auditoria','p-colaboradores','p-missoes','p-analytics','p-story'].forEach(function(id){
+    ['p-auditoria','p-colaboradores','p-missoes','p-analytics','p-story','p-roleta'].forEach(function(id){
       var painel=document.getElementById(id);
       if(main && painel && painel.parentElement!==main){ main.appendChild(painel); }
       if(painel){
@@ -3922,6 +3982,171 @@ function ceoBnAtivo(painel){
       ceoDrawerFechar();
     }
   }, {passive:true});
+})();
+</script>
+
+<!-- ══ ROLETA ALPHA — JS CEO ═════════════════════════════════════════ -->
+<script>
+(function(){
+  var FB = 'https://sistema-alpha-b12d0-default-rtdb.firebaseio.com';
+
+  var _comuns = [
+    { id:'v5',  label:'Voucher R$5',  emoji:'🎟️', cor:'#2a7a2a', peso:40 },
+    { id:'v10', label:'Voucher R$10', emoji:'🎟️', cor:'#1a6a8a', peso:30 },
+    { id:'v15', label:'Voucher R$15', emoji:'🎟️', cor:'#6a3aaa', peso:20 },
+    { id:'coq', label:'Coqueteleira', emoji:'🥤', cor:'#8a4a00', peso:10 }
+  ];
+  var _especiais = [
+    { giro:251,  label:'Whey Protein',       emoji:'💪', multiplo:250 },
+    { giro:351,  label:'Creatina Inf. Labs', emoji:'⚡', multiplo:350 },
+    { giro:1001, label:'Voucher R$150',      emoji:'💰', multiplo:1000 }
+  ];
+
+  window.roletaCeoInit = function(){
+    // Carrega config salva do Firebase
+    fetch(FB+'/roleta_config.json')
+      .then(function(r){return r.json()})
+      .then(function(d){
+        if(d && d.premios_comuns)    _comuns    = d.premios_comuns;
+        if(d && d.premios_especiais) _especiais = d.premios_especiais;
+        renderComuns();
+        renderEspeciais();
+      })
+      .catch(function(){ renderComuns(); renderEspeciais(); });
+
+    // Stats
+    fetch(FB+'/roleta_global/contador.json')
+      .then(function(r){return r.json()})
+      .then(function(d){
+        var el=document.getElementById('ceo-roleta-stat-total');
+        if(el) el.textContent=(typeof d==='number'?d:0).toLocaleString('pt-BR');
+      }).catch(function(){});
+
+    fetch(FB+'/roleta_premios_especiais.json')
+      .then(function(r){return r.json()})
+      .then(function(d){
+        var itens = d ? Object.values(d) : [];
+        var el=document.getElementById('ceo-roleta-stat-esp');
+        if(el) el.textContent=itens.length;
+        var pend=itens.filter(function(i){return !i.retirado}).length;
+        var elp=document.getElementById('ceo-roleta-stat-pend');
+        if(elp) elp.textContent=pend;
+      }).catch(function(){});
+
+    ceoRoletaCarregarHistEspeciais();
+  };
+
+  // ── Render prêmios comuns ───────────────────────────────────────────
+  function renderComuns(){
+    var cont=document.getElementById('ceo-roleta-comuns-lista');
+    if(!cont) return;
+    cont.innerHTML='';
+    _comuns.forEach(function(p,i){
+      var row=document.createElement('div');
+      row.style.cssText='display:grid;grid-template-columns:auto 1fr 1fr auto auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)';
+      row.innerHTML=
+        '<input type="text" value="'+p.emoji+'" style="width:44px;text-align:center;font-size:18px;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:8px;color:#fff;font-family:\'Barlow\',sans-serif" placeholder="🎟️" oninput="_comuns['+i+'].emoji=this.value">'+
+        '<input type="text" value="'+p.label+'" style="background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:8px;color:#fff;font-size:13px;font-family:\'Barlow\',sans-serif;width:100%" placeholder="Nome do prêmio" oninput="_comuns['+i+'].label=this.value">'+
+        '<div style="display:flex;align-items:center;gap:6px"><label style="font-size:11px;color:#666;white-space:nowrap">Peso</label><input type="number" value="'+p.peso+'" min="1" max="999" style="width:60px;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:8px;color:#fff;font-size:13px;font-family:\'Barlow\',sans-serif" oninput="_comuns['+i+'].peso=parseInt(this.value)||1"></div>'+
+        '<input type="color" value="'+(p.cor||'#333333')+'" style="width:36px;height:36px;padding:2px;background:#1a1a1a;border:1px solid #333;border-radius:8px;cursor:pointer" oninput="_comuns['+i+'].cor=this.value">'+
+        '<button onclick="ceoRemoverComum('+i+')" style="background:rgba(255,50,50,.1);border:1px solid rgba(255,50,50,.2);border-radius:8px;padding:8px 10px;color:#ff5555;font-size:12px;font-weight:700;cursor:pointer;font-family:\'Barlow\',sans-serif">✕</button>';
+      cont.appendChild(row);
+    });
+  }
+
+  window.ceoRoletaAdicionarComum = function(){
+    _comuns.push({ id:'p'+Date.now(), label:'Novo Prêmio', emoji:'🎁', cor:'#444444', peso:10 });
+    renderComuns();
+  };
+
+  window.ceoRemoverComum = function(i){
+    if(_comuns.length<=2){ alert('Mantenha ao menos 2 prêmios.'); return; }
+    _comuns.splice(i,1); renderComuns();
+  };
+
+  window.ceoRoletaSalvarComuns = function(){
+    fetch(FB+'/roleta_config.json',{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ premios_comuns: _comuns })
+    }).then(function(){ mostrarSucesso('✅ Prêmios comuns salvos!'); })
+    .catch(function(){ alert('Erro ao salvar. Tente novamente.'); });
+  };
+
+  // ── Render prêmios especiais ────────────────────────────────────────
+  function renderEspeciais(){
+    var cont=document.getElementById('ceo-roleta-especiais-lista');
+    if(!cont) return;
+    cont.innerHTML='';
+    _especiais.forEach(function(pe,i){
+      var row=document.createElement('div');
+      row.style.cssText='background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.12);border-radius:10px;padding:12px;margin-bottom:8px';
+      row.innerHTML=
+        '<div style="display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;margin-bottom:8px">'+
+          '<input type="text" value="'+pe.emoji+'" style="width:44px;text-align:center;font-size:18px;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:8px;color:#fff;font-family:\'Barlow\',sans-serif" oninput="_especiais['+i+'].emoji=this.value">'+
+          '<input type="text" value="'+pe.label+'" style="background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:8px;color:#fff;font-size:13px;font-family:\'Barlow\',sans-serif;width:100%" placeholder="Nome do prêmio especial" oninput="_especiais['+i+'].label=this.value">'+
+          '<button onclick="ceoRemoverEspecial('+i+')" style="background:rgba(255,50,50,.1);border:1px solid rgba(255,50,50,.2);border-radius:8px;padding:8px 10px;color:#ff5555;font-size:12px;font-weight:700;cursor:pointer;font-family:\'Barlow\',sans-serif">✕</button>'+
+        '</div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
+          '<div><label style="font-size:11px;color:#888;display:block;margin-bottom:4px">1º giro especial</label>'+
+          '<input type="number" value="'+pe.giro+'" min="1" style="width:100%;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:8px;color:#fff;font-size:13px;font-family:\'Barlow\',sans-serif" oninput="_especiais['+i+'].giro=parseInt(this.value)||1"></div>'+
+          '<div><label style="font-size:11px;color:#888;display:block;margin-bottom:4px">Repetir a cada N giros</label>'+
+          '<input type="number" value="'+pe.multiplo+'" min="1" style="width:100%;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:8px;color:#fff;font-size:13px;font-family:\'Barlow\',sans-serif" oninput="_especiais['+i+'].multiplo=parseInt(this.value)||1"></div>'+
+        '</div>'+
+        '<div style="font-size:11px;color:#888;margin-top:8px">📌 Ocorre no giro '+pe.giro+', '+(pe.giro+pe.multiplo)+', '+(pe.giro+pe.multiplo*2)+'...</div>';
+      cont.appendChild(row);
+    });
+  }
+
+  window.ceoRoletaAdicionarEspecial = function(){
+    _especiais.push({ giro:500, label:'Novo Prêmio Especial', emoji:'⭐', multiplo:500 });
+    renderEspeciais();
+  };
+
+  window.ceoRemoverEspecial = function(i){
+    _especiais.splice(i,1); renderEspeciais();
+  };
+
+  window.ceoRoletaSalvarEspeciais = function(){
+    fetch(FB+'/roleta_config.json',{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ premios_especiais: _especiais })
+    }).then(function(){ mostrarSucesso('✅ Prêmios especiais salvos!'); })
+    .catch(function(){ alert('Erro ao salvar. Tente novamente.'); });
+  };
+
+  // ── Histórico especiais ─────────────────────────────────────────────
+  window.ceoRoletaCarregarHistEspeciais = function(){
+    var cont=document.getElementById('ceo-roleta-hist-especiais');
+    if(!cont) return;
+    cont.innerHTML='<div style="text-align:center;padding:16px;color:#555;font-size:13px">Carregando...</div>';
+    fetch(FB+'/roleta_premios_especiais.json')
+      .then(function(r){return r.json()})
+      .then(function(d){
+        if(!d){ cont.innerHTML='<div style="text-align:center;padding:16px;color:#555;font-size:13px">Nenhum prêmio especial emitido ainda</div>'; return; }
+        var itens=Object.entries(d).map(function(e){return Object.assign({key:e[0]},e[1])});
+        itens.sort(function(a,b){return (b.contador||0)-(a.contador||0)});
+        cont.innerHTML='<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Giro</th><th>Prêmio</th><th>Cliente ID</th><th>Data</th><th>Status</th></tr></thead><tbody>'+
+          itens.map(function(item){
+            var data=item.data?new Date(item.data).toLocaleDateString('pt-BR'):'—';
+            var status=item.retirado
+              ?'<span style="color:#1D9E75;font-weight:700">✅ Retirado</span>'
+              :'<span style="color:#ff9900;font-weight:700">⏳ Pendente</span>';
+            return '<tr><td>#'+item.contador+'</td><td>'+item.premio+'</td><td style="font-size:11px;color:#666">'+item.clienteId+'</td><td>'+data+'</td><td>'+status+'</td></tr>';
+          }).join('')+
+          '</tbody></table></div>';
+      })
+      .catch(function(){ cont.innerHTML='<div style="text-align:center;padding:16px;color:#555;font-size:13px">Erro ao carregar</div>'; });
+  };
+
+  function mostrarSucesso(msg){
+    var d=document.createElement('div');
+    d.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1D9E75;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.4)';
+    d.textContent=msg;
+    document.body.appendChild(d);
+    setTimeout(function(){ d.remove(); },3000);
+  }
 })();
 </script>
 

@@ -961,6 +961,7 @@ body::before{
       <button class="tab" data-icon="🎯" data-short="Indicar" onclick="ir('indicacoes',this)">🎯 Indicações</button>
       <button class="tab" data-icon="🏆" data-short="Resgates" onclick="ir('resgates',this)">🏆 Resgates</button>
       <button class="tab" data-icon="📸" data-short="Story" onclick="ir('story',this)">📸 Story Premiado</button>
+      <button class="tab" data-icon="🎰" data-short="Roleta" onclick="ir('roleta',this);roletaFuncInit()">🎰 Roleta Alpha</button>
     </div>
     <div class="tbr"><span id="tnome">Funcionário</span><button id="sbtn">Sair</button></div>
   </div>
@@ -1193,10 +1194,69 @@ body::before{
     </div>
     <!-- ══ FIM STORY PREMIADO ══════════════════════════════════════ -->
 
+    <!-- ══ ROLETA ALPHA — PAINEL FUNCIONÁRIO ══════════════════════ -->
+    <div id="proleta" class="p">
+
+      <div style="margin-bottom:16px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:#CC0000">🎰 Roleta Alpha</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:3px">Libere giros extras e acompanhe prêmios especiais</div>
+      </div>
+
+      <!-- Busca cliente para liberar -->
+      <div class="card" style="margin-bottom:14px">
+        <div class="ct">🔓 Liberar Giro Extra</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:12px">Use quando o cliente apresentar 2 cartões QR Code (comprou 2x no mês)</div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+          <input id="roleta-busca-cli" class="inp" placeholder="Nome, telefone ou CPF do cliente..." style="flex:1;min-width:200px" oninput="roletaBuscarCliente(this.value)">
+          <button onclick="roletaBuscarCliente(document.getElementById('roleta-busca-cli').value)" style="background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;white-space:nowrap">🔍 Buscar</button>
+        </div>
+        <div id="roleta-resultado-busca" style="min-height:40px"></div>
+      </div>
+
+      <!-- Prêmios especiais pendentes -->
+      <div class="card">
+        <div class="ct" style="justify-content:space-between">
+          <span>⭐ Prêmios Especiais Pendentes</span>
+          <button onclick="roletaCarregarEspeciais()" style="background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;font-family:'Barlow',sans-serif">🔄 Atualizar</button>
+        </div>
+        <div id="roleta-especiais-pendentes">
+          <div style="text-align:center;padding:20px;color:#555;font-size:13px">Clique em Atualizar para carregar</div>
+        </div>
+      </div>
+
+      <!-- Contador global -->
+      <div class="card" style="margin-top:14px">
+        <div class="ct">📊 Estatísticas da Roleta</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="background:var(--bg3);border-radius:10px;padding:14px;text-align:center">
+            <div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:4px">Total de Giros</div>
+            <div id="roleta-stat-total" style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#fff">—</div>
+          </div>
+          <div style="background:var(--bg3);border-radius:10px;padding:14px;text-align:center">
+            <div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:4px">Especiais Emitidos</div>
+            <div id="roleta-stat-especiais" style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#ffd700">—</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- ══ FIM ROLETA ALPHA ═══════════════════════════════════════ -->
+
   </div>
 </div>
 
-<!-- MODAL WA -->
+<!-- MODAL CONFIRMAR LIBERAÇÃO ROLETA -->
+<div id="modal-roleta-liberar" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;align-items:center;justify-content:center;padding:16px">
+  <div style="background:var(--bg2);border:1px solid var(--red);border-radius:16px;padding:24px;max-width:360px;width:100%">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--red);margin-bottom:6px">🎰 Liberar Giro Extra</div>
+    <div id="roleta-modal-nome" style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px"></div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:16px">⚠️ Confirme que o cliente apresentou 2 cartões QR Code</div>
+    <div style="display:flex;gap:8px">
+      <button onclick="roletaConfirmarLiberar()" style="flex:1;background:var(--green);color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">✅ Confirmar Liberação</button>
+      <button onclick="document.getElementById('modal-roleta-liberar').style.display='none'" style="background:var(--bg4);color:var(--text2);border:.5px solid var(--border);border-radius:8px;padding:12px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif">Cancelar</button>
+    </div>
+  </div>
+</div>
 <div id="mwa" class="mov" onclick="if(event.target===this)fMWA()">
   <div class="mbox">
     <div class="mh"><span class="mt" id="mwa-t">📱 WhatsApp</span><button class="mc" onclick="fMWA()">×</button></div>
@@ -1473,11 +1533,12 @@ el('sbtn').onclick=function(){
 function ir(n,b){
   document.querySelectorAll('.p').forEach(function(p){p.classList.remove('on');});
   document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on');});
-  var mapa={venda:'pv',crm:'pc',clientes:'pclientes',indicacoes:'pind',resgates:'pres',story:'pstory'};
+  var mapa={venda:'pv',crm:'pc',clientes:'pclientes',indicacoes:'pind',resgates:'pres',story:'pstory',roleta:'proleta'};
   var e=el(mapa[n]||'pv');
   if(e)e.classList.add('on');
   if(b)b.classList.add('on');
   if(n==='story'){iniciarStory();}
+  if(n==='roleta'){roletaFuncInit();}
 }
 
 // RENDER
@@ -2951,6 +3012,147 @@ async function carregarMeusCodigos(){
     setTimeout(enhance, 300);
     setTimeout(enhance, 1200);
   });
+})();
+</script>
+
+<!-- ══ ROLETA ALPHA — JS Funcionário ════════════════════════════════ -->
+<script>
+(function(){
+  var FB = 'https://sistema-alpha-b12d0-default-rtdb.firebaseio.com';
+  var _clienteSelecionado = null;
+
+  window.roletaFuncInit = function(){
+    roletaCarregarStats();
+    roletaCarregarEspeciais();
+  };
+
+  // ── Busca cliente ───────────────────────────────────────────────────
+  window.roletaBuscarCliente = function(q){
+    var res = document.getElementById('roleta-resultado-busca');
+    if(!q || q.length<2){ res.innerHTML=''; return; }
+    var clientes = window.CL || [];
+    var q2 = q.toLowerCase();
+    var encontrados = clientes.filter(function(c){
+      return (c.nome||'').toLowerCase().includes(q2) ||
+             (c.fone||'').includes(q) ||
+             (c.cpf||'').includes(q);
+    }).slice(0,5);
+
+    if(!encontrados.length){
+      res.innerHTML='<div style="text-align:center;padding:12px;color:#555;font-size:13px">Nenhum cliente encontrado</div>';
+      return;
+    }
+
+    res.innerHTML = encontrados.map(function(c){
+      return '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--bg3);border-radius:8px;margin-bottom:6px;gap:8px">'+
+        '<div style="flex:1;min-width:0">'+
+          '<div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+c.nome+'</div>'+
+          '<div style="font-size:11px;color:var(--text3)">'+c.fone+'</div>'+
+        '</div>'+
+        '<button onclick="roletaSelecionarCliente(\''+c.id+'\',\''+c.nome+'\')" '+
+          'style="background:var(--red);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:\'Barlow\',sans-serif;white-space:nowrap">'+
+          '🎰 Liberar</button>'+
+      '</div>';
+    }).join('');
+  };
+
+  window.roletaSelecionarCliente = function(id, nome){
+    _clienteSelecionado = { id:id, nome:nome };
+    var modal = document.getElementById('modal-roleta-liberar');
+    document.getElementById('roleta-modal-nome').textContent = nome;
+    modal.style.display = 'flex';
+  };
+
+  window.roletaConfirmarLiberar = function(){
+    if(!_clienteSelecionado) return;
+    var id   = _clienteSelecionado.id;
+    var nome = _clienteSelecionado.nome;
+    // Incrementa liberacoes_extras no Firebase
+    fetch(FB+'/roleta/'+id+'.json')
+      .then(function(r){return r.json()})
+      .then(function(d){
+        var extras = ((d && d.liberacoes_extras) ? parseInt(d.liberacoes_extras) : 0) + 1;
+        return fetch(FB+'/roleta/'+id+'.json',{
+          method:'PATCH',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({ liberacoes_extras: extras })
+        });
+      })
+      .then(function(){
+        document.getElementById('modal-roleta-liberar').style.display='none';
+        document.getElementById('roleta-busca-cli').value='';
+        document.getElementById('roleta-resultado-busca').innerHTML=
+          '<div style="background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.3);border-radius:8px;padding:12px;text-align:center;color:#1D9E75;font-size:13px;font-weight:700">✅ Giro extra liberado para '+nome+'!</div>';
+        _clienteSelecionado = null;
+        setTimeout(function(){ document.getElementById('roleta-resultado-busca').innerHTML=''; },4000);
+      })
+      .catch(function(){
+        alert('Erro ao liberar giro. Tente novamente.');
+      });
+  };
+
+  // ── Prêmios especiais pendentes ─────────────────────────────────────
+  window.roletaCarregarEspeciais = function(){
+    var cont = document.getElementById('roleta-especiais-pendentes');
+    cont.innerHTML='<div style="text-align:center;padding:16px;color:#555;font-size:13px">Carregando...</div>';
+
+    fetch(FB+'/roleta_premios_especiais.json')
+      .then(function(r){return r.json()})
+      .then(function(d){
+        if(!d){ cont.innerHTML='<div style="text-align:center;padding:16px;color:#555;font-size:13px">Nenhum prêmio especial ainda 🎉</div>'; return; }
+        var itens = Object.entries(d).map(function(e){ return Object.assign({key:e[0]},e[1]); });
+        var pendentes = itens.filter(function(i){return !i.retirado});
+        if(!pendentes.length){
+          cont.innerHTML='<div style="text-align:center;padding:16px;color:#555;font-size:13px">Nenhum prêmio pendente de retirada ✅</div>';
+          return;
+        }
+        cont.innerHTML = pendentes.map(function(item){
+          var clientes = window.CL || [];
+          var cli = clientes.find(function(c){return c.id===item.clienteId}) || {};
+          var data = item.data ? new Date(item.data).toLocaleDateString('pt-BR') : '—';
+          return '<div style="background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);border-radius:10px;padding:14px;margin-bottom:8px">'+
+            '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap">'+
+              '<div>'+
+                '<div style="font-size:13px;font-weight:700;color:#ffd700;margin-bottom:3px">⭐ '+item.premio+'</div>'+
+                '<div style="font-size:12px;color:#fff;font-weight:600">'+(cli.nome||'Cliente #'+item.clienteId)+'</div>'+
+                '<div style="font-size:11px;color:#666;margin-top:2px">Giro #'+item.contador+' • '+data+'</div>'+
+                '<div style="font-size:11px;color:#ff9900;margin-top:4px;font-weight:700">⚠️ Exigir RG + CPF na retirada</div>'+
+              '</div>'+
+              '<button onclick="roletaMarcarRetirado(\''+item.key+'\')" '+
+                'style="background:var(--green);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:\'Barlow\',sans-serif;white-space:nowrap">'+
+                '✅ Marcar retirado</button>'+
+            '</div>'+
+          '</div>';
+        }).join('');
+
+        // Atualiza contador especiais
+        var statEsp = document.getElementById('roleta-stat-especiais');
+        if(statEsp) statEsp.textContent = itens.length;
+      })
+      .catch(function(){
+        cont.innerHTML='<div style="text-align:center;padding:16px;color:#555;font-size:13px">Erro ao carregar</div>';
+      });
+  };
+
+  window.roletaMarcarRetirado = function(key){
+    if(!confirm('Confirmar retirada? Exija RG e CPF antes de prosseguir.')) return;
+    fetch(FB+'/roleta_premios_especiais/'+key+'.json',{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ retirado:true, retirado_em: new Date().toISOString() })
+    }).then(function(){ roletaCarregarEspeciais(); })
+    .catch(function(){ alert('Erro ao atualizar. Tente novamente.'); });
+  };
+
+  // ── Estatísticas ────────────────────────────────────────────────────
+  function roletaCarregarStats(){
+    fetch(FB+'/roleta_global/contador.json')
+      .then(function(r){return r.json()})
+      .then(function(d){
+        var el = document.getElementById('roleta-stat-total');
+        if(el) el.textContent = (typeof d==='number'?d:0).toLocaleString('pt-BR');
+      }).catch(function(){});
+  }
 })();
 </script>
 

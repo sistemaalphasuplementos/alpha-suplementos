@@ -1357,6 +1357,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;opa
       <button class="side-btn" id="side-games" onclick="goScreen('games')"><span class="side-ico">🎮</span><span><span class="side-title">Games</span><span class="side-sub">Jogue e ganhe</span></span><span class="side-new">NOVO</span></button>
       <button class="side-btn" id="side-ranking" onclick="goScreen('ranking')"><span class="side-ico">🏆</span><span><span class="side-title">Ranking</span><span class="side-sub">Top treinos</span></span></button>
       <button class="side-btn" id="side-missoes" onclick="goScreen('missoes')"><span class="side-ico">🎯</span><span><span class="side-title">Missões</span><span class="side-sub">Desafios e vouchers</span></span></button>
+      <button class="side-btn" id="side-roleta" onclick="goScreen('roleta');roletaInit()"><span class="side-ico">🎰</span><span><span class="side-title">Roleta Alpha</span><span class="side-sub">Gire e ganhe!</span></span><span class="side-new" id="roleta-badge-side" style="display:none">GIRAR</span></button>
       <button class="side-btn" onclick="toast('🎧 Fale com a equipe Alpha pelo WhatsApp')"><span class="side-ico">🎧</span><span><span class="side-title">Suporte</span><span class="side-sub">Fale conosco</span></span></button>
     </div>
     <div class="side-level-card">
@@ -2085,6 +2086,130 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;opa
     </div>
 
   </div><!-- end sc-missoes -->
+
+  <!-- ══ ROLETA ALPHA v71 ══════════════════════════════════════════ -->
+  <div id="sc-roleta" class="screen">
+    <div style="max-width:480px;margin:0 auto;padding:16px 16px 100px">
+
+      <!-- Header -->
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;color:#ff1919;text-shadow:0 0 20px rgba(255,25,25,.4)">🎰 ROLETA ALPHA</div>
+        <div style="font-size:13px;color:#aaa;margin-top:4px">Escaneie o QR Code da sua compra e gire!</div>
+      </div>
+
+      <!-- Status card -->
+      <div id="roleta-status-card" style="background:linear-gradient(135deg,rgba(255,25,25,.12),rgba(0,0,0,.4));border:1px solid rgba(255,25,25,.3);border-radius:16px;padding:16px;margin-bottom:20px;text-align:center">
+        <div id="roleta-status-ico" style="font-size:40px;margin-bottom:8px">⏳</div>
+        <div id="roleta-status-txt" style="font-size:15px;font-weight:700;color:#fff">Verificando...</div>
+        <div id="roleta-status-sub" style="font-size:12px;color:#888;margin-top:4px"></div>
+      </div>
+
+      <!-- Contador global -->
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 16px;margin-bottom:20px;text-align:center">
+        <div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:.7px;font-weight:700">Giro Global</div>
+        <div style="font-size:22px;font-weight:900;font-family:'Barlow Condensed',sans-serif;color:#ffd84a" id="roleta-contador-global">—</div>
+      </div>
+
+      <!-- CANVAS DA ROLETA -->
+      <div style="position:relative;display:flex;flex-direction:column;align-items:center;margin-bottom:24px">
+        <!-- Seta indicadora -->
+        <div style="position:relative;z-index:10;margin-bottom:-14px">
+          <div style="width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-top:28px solid #ff1919;filter:drop-shadow(0 0 8px rgba(255,25,25,.8))"></div>
+        </div>
+        <canvas id="roleta-canvas" width="300" height="300" style="border-radius:50%;box-shadow:0 0 40px rgba(255,25,25,.25),0 0 0 4px rgba(255,25,25,.3);max-width:100%"></canvas>
+        <!-- Botão central -->
+        <button id="roleta-btn-girar" onclick="roletaGirar()" disabled
+          style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+                 width:70px;height:70px;border-radius:50%;
+                 background:radial-gradient(circle,#ff1919,#8b0000);
+                 border:4px solid #fff;color:#fff;font-family:'Barlow Condensed',sans-serif;
+                 font-size:13px;font-weight:900;cursor:pointer;
+                 box-shadow:0 0 20px rgba(255,25,25,.6);
+                 transition:.2s;letter-spacing:.5px">GIRAR</button>
+      </div>
+
+      <!-- Prêmios da roleta -->
+      <div style="margin-bottom:20px">
+        <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin-bottom:10px">🏆 Prêmios possíveis</div>
+        <div id="roleta-premios-lista" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+      </div>
+
+    </div>
+  </div><!-- end sc-roleta -->
+
+  <!-- ══ POPUP FLUTUANTE ROLETA (disparado pelo QR Code) ═══════════════ -->
+<div id="roleta-popup-flutuante" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:99999;align-items:flex-end;justify-content:center;padding:0">
+  <div style="background:linear-gradient(180deg,#141414,#0a0a0a);border:2px solid rgba(255,25,25,.35);border-radius:24px 24px 0 0;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;padding:20px 20px 32px;animation:roletaSlideUp .35s ease-out">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:#ff1919;line-height:1">🎰 ROLETA ALPHA</div>
+        <div style="font-size:12px;color:#888;margin-top:2px">Prêmio da sua compra!</div>
+      </div>
+      <button onclick="roletaFecharFlutuante()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:50%;width:36px;height:36px;color:#aaa;font-size:18px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center">×</button>
+    </div>
+
+    <!-- Status -->
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
+      <div style="flex:1">
+        <div id="roleta-fl-status-txt" style="font-size:14px;font-weight:700;color:#fff">Verificando...</div>
+        <div id="roleta-fl-status-sub" style="font-size:11px;color:#777;margin-top:3px"></div>
+      </div>
+    </div>
+
+    <!-- Contador + próximo especial -->
+    <div style="margin-bottom:16px;text-align:center">
+      <div style="background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.15);border-radius:10px;padding:10px">
+        <div id="roleta-fl-contador" style="font-size:12px;font-weight:700;color:#ffd700">—</div>
+      </div>
+    </div>
+
+    <!-- Roleta canvas -->
+    <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:18px;position:relative">
+      <div style="margin-bottom:-14px;z-index:2">
+        <div style="width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-top:28px solid #ff1919;filter:drop-shadow(0 0 8px rgba(255,25,25,.8))"></div>
+      </div>
+      <canvas id="roleta-canvas-fl" width="300" height="300" style="border-radius:50%;box-shadow:0 0 40px rgba(255,25,25,.2),0 0 0 4px rgba(255,25,25,.25);max-width:280px;max-height:280px"></canvas>
+      <button id="roleta-fl-btn-girar" onclick="roletaGirarFlutuante()" disabled
+        style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+               width:68px;height:68px;border-radius:50%;
+               background:radial-gradient(circle,#ff1919,#8b0000);
+               border:4px solid #fff;color:#fff;
+               font-family:'Barlow Condensed',sans-serif;
+               font-size:13px;font-weight:900;cursor:not-allowed;
+               box-shadow:0 0 20px rgba(255,25,25,.5);
+               opacity:.4;letter-spacing:.5px">GIRAR</button>
+    </div>
+
+    <!-- Prêmios -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:.7px;font-weight:700;margin-bottom:8px">Você pode ganhar</div>
+      <div id="roleta-fl-premios" style="display:grid;grid-template-columns:1fr 1fr;gap:6px"></div>
+    </div>
+
+    <!-- Botão girar grande (acessível fora do canvas) -->
+    <button id="roleta-fl-btn-girar-grande" onclick="roletaGirarFlutuante()"
+      style="width:100%;padding:16px;background:linear-gradient(135deg,#ff1919,#cc0000);color:#fff;border:none;border-radius:14px;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;cursor:pointer;letter-spacing:1px;box-shadow:0 4px 20px rgba(255,25,25,.35);margin-top:4px">
+      🎰 GIRAR AGORA!
+    </button>
+
+  </div>
+</div>
+
+<!-- POPUP RESULTADO ROLETA -->
+  <div id="roleta-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px">
+    <div style="background:linear-gradient(135deg,#1a1a1a,#0a0a0a);border:2px solid rgba(255,25,25,.4);border-radius:20px;padding:32px 24px;text-align:center;max-width:340px;width:100%;position:relative">
+      <div id="roleta-pop-confete" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:20px"></div>
+      <div id="roleta-pop-ico" style="font-size:64px;margin-bottom:12px">🎉</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;color:#ff1919;letter-spacing:2px;margin-bottom:6px">VOCÊ GANHOU!</div>
+      <div id="roleta-pop-premio" style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:#fff;margin-bottom:8px">—</div>
+      <div id="roleta-pop-desc" style="font-size:13px;color:#aaa;margin-bottom:20px;line-height:1.5">—</div>
+      <div id="roleta-pop-aviso" style="display:none;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:10px;padding:12px;font-size:12px;color:#ffd700;margin-bottom:16px;line-height:1.5"></div>
+      <button onclick="roletaFecharPopup()" style="background:#ff1919;color:#fff;border:none;border-radius:10px;padding:12px 32px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;width:100%">Fechar</button>
+    </div>
+  </div>
+
   <div class="bnav">
     <button class="bn on" id="bn-home" onclick="goScreen('home')"><span class="bn-ico">🏠</span><span class="bn-lbl">Início</span></button>
     <button class="bn" id="bn-premios" onclick="goScreen('premios')"><span class="bn-ico">🏆</span><span class="bn-lbl">Prêmios</span></button>
@@ -5105,6 +5230,13 @@ function iniciar(){
   renderAll();goScreen('home');
   if(typeof pedirPermissaoNotificacao==='function')pedirPermissaoNotificacao();
   iniciarGames();
+  // Detecta QR Code da roleta (?roleta=true na URL)
+  try{
+    var params = new URLSearchParams(window.location.search);
+    if(params.get('roleta')==='true'){
+      setTimeout(function(){ roletaAbrirPopupFlutuante(); }, 800);
+    }
+  }catch(e){}
 }
 
 function fazerLogout(){
@@ -7696,6 +7828,7 @@ function msAtualizarAposTreino(){
     if(name==='treino'){var st=document.getElementById('side-treino'); if(st)st.classList.add('on'); setTimeout(function(){if(typeof tsInit==='function')tsInit();},50);}
     if(name==='ranking'){var sr=document.getElementById('side-ranking'); if(sr)sr.classList.add('on'); setTimeout(function(){if(typeof rkInit==='function')rkInit();},50);}
     if(name==='missoes'){var sm=document.getElementById('side-missoes'); if(sm)sm.classList.add('on'); setTimeout(function(){if(typeof msInit==='function')msInit();},50);}
+    if(name==='roleta'){var srl=document.getElementById('side-roleta'); if(srl)srl.classList.add('on'); setTimeout(function(){if(typeof roletaInit==='function')roletaInit();},50);}
   };
   function alphaClientPremiumSync(){
     try{
@@ -7715,6 +7848,522 @@ function msAtualizarAposTreino(){
   var oldRender=window.renderAll;
   window.renderAll=function(){ if(typeof oldRender==='function') oldRender(); setTimeout(alphaClientPremiumSync,30); setTimeout(function(){if(typeof rkRenderHomeWidget==='function')rkRenderHomeWidget();},60); };
   setInterval(alphaClientPremiumSync,1200);
+})();
+</script>
+
+<!-- ══ ROLETA ALPHA v71 — JavaScript ═══════════════════════════════ -->
+<script>
+(function(){
+  var FB = 'https://sistema-alpha-b12d0-default-rtdb.firebaseio.com';
+
+  // ── Configuração padrão dos prêmios (sobrescrita pelo Firebase/CEO) ──
+  var PREMIOS_COMUNS = [
+    { id:'v5',    label:'Voucher R$5',    emoji:'🎟️', cor:'#2a7a2a', peso:40 },
+    { id:'v10',   label:'Voucher R$10',   emoji:'🎟️', cor:'#1a6a8a', peso:30 },
+    { id:'v15',   label:'Voucher R$15',   emoji:'🎟️', cor:'#6a3aaa', peso:20 },
+    { id:'coq',   label:'Coqueteleira',   emoji:'🥤', cor:'#8a4a00', peso:10 }
+  ];
+  var PREMIOS_ESPECIAIS = [
+    { giro:251,  label:'Whey Protein',      emoji:'💪', multiplo:250 },
+    { giro:351,  label:'Creatina Inf. Labs',emoji:'⚡', multiplo:350 },
+    { giro:1001, label:'Voucher R$150',     emoji:'💰', multiplo:1000 }
+  ];
+
+  var _girando = false;
+  var _config  = null;
+  var _angAtual = 0;
+
+  // ── Carrega config do Firebase ──────────────────────────────────────
+  function carregarConfig(cb){
+    fetch(FB+'/roleta_config.json')
+      .then(function(r){return r.json()})
+      .then(function(d){
+        if(d && d.premios_comuns)  PREMIOS_COMUNS   = d.premios_comuns;
+        if(d && d.premios_especiais) PREMIOS_ESPECIAIS = d.premios_especiais;
+        _config = d;
+        if(cb) cb();
+      })
+      .catch(function(){ if(cb) cb(); });
+  }
+
+  // ── Verifica se cliente pode girar este mês ─────────────────────────
+  function verificarDisponibilidade(clienteId, cb){
+    var mesAtual = new Date().toISOString().slice(0,7); // "2026-06"
+    fetch(FB+'/roleta/'+clienteId+'.json')
+      .then(function(r){return r.json()})
+      .then(function(d){
+        var podeGirar = false;
+        var motivo    = '';
+        var liberacoes = (d && d.liberacoes_extras) ? d.liberacoes_extras : 0;
+        var ultimoMes  = (d && d.ultimo_mes) ? d.ultimo_mes : '';
+        var girosUsados= (d && d.giros_mes_atual) ? parseInt(d.giros_mes_atual) : 0;
+
+        // créditos: 1 base por mês + liberações extras do funcionário
+        var totalCreditos = (ultimoMes === mesAtual ? 0 : 1) + liberacoes;
+        // se virou o mês, reseta
+        if(ultimoMes !== mesAtual){ totalCreditos = 1 + liberacoes; girosUsados = 0; }
+
+        podeGirar = totalCreditos > 0;
+        cb(podeGirar, d, liberacoes, totalCreditos);
+      })
+      .catch(function(){ cb(false, null, 0, 0); });
+  }
+
+  // ── Busca contador global ───────────────────────────────────────────
+  function buscarContadorGlobal(cb){
+    fetch(FB+'/roleta_global/contador.json')
+      .then(function(r){return r.json()})
+      .then(function(d){ cb(typeof d==='number'?d:0); })
+      .catch(function(){ cb(0); });
+  }
+
+  // ── Sorteia prêmio comum ────────────────────────────────────────────
+  function sortearPremio(){
+    var total = PREMIOS_COMUNS.reduce(function(s,p){return s+p.peso},0);
+    var rand  = Math.random()*total;
+    var acc   = 0;
+    for(var i=0;i<PREMIOS_COMUNS.length;i++){
+      acc += PREMIOS_COMUNS[i].peso;
+      if(rand<=acc) return PREMIOS_COMUNS[i];
+    }
+    return PREMIOS_COMUNS[0];
+  }
+
+  // ── Verifica se é prêmio especial ──────────────────────────────────
+  function verificarEspecial(novoContador){
+    for(var i=0;i<PREMIOS_ESPECIAIS.length;i++){
+      var pe = PREMIOS_ESPECIAIS[i];
+      if(novoContador % pe.multiplo === (pe.giro % pe.multiplo) || novoContador === pe.giro){
+        // verifica múltiplos: 251, 501, 751... | 351, 701... | 1001, 2001...
+        var base = pe.giro - pe.multiplo; // 1, 1, 1
+        if(pe.multiplo > 0 && (novoContador - (pe.giro % pe.multiplo === 0 ? pe.multiplo : pe.giro % pe.multiplo)) % pe.multiplo === 0 && novoContador >= pe.giro){
+          return pe;
+        }
+        if(novoContador === pe.giro) return pe;
+      }
+    }
+    return null;
+  }
+
+  // ── Desenha a roleta no canvas ──────────────────────────────────────
+  function desenharRoleta(angOffset){
+    var canvas = document.getElementById('roleta-canvas');
+    if(!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var cx = 150, cy = 150, r = 145;
+    var n = PREMIOS_COMUNS.length;
+    var slice = (2*Math.PI)/n;
+    ctx.clearRect(0,0,300,300);
+
+    for(var i=0;i<n;i++){
+      var start = angOffset + i*slice;
+      var end   = start + slice;
+      var p     = PREMIOS_COMUNS[i];
+      // fatia
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.arc(cx,cy,r,start,end);
+      ctx.closePath();
+      ctx.fillStyle = p.cor || '#333';
+      ctx.fill();
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // texto
+      ctx.save();
+      ctx.translate(cx,cy);
+      ctx.rotate(start + slice/2);
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 11px Barlow,sans-serif';
+      ctx.shadowColor='rgba(0,0,0,.8)';ctx.shadowBlur=4;
+      ctx.fillText(p.emoji+' '+p.label, r-8, 5);
+      ctx.restore();
+    }
+
+    // círculo central
+    ctx.beginPath();
+    ctx.arc(cx,cy,34,0,2*Math.PI);
+    ctx.fillStyle='#111';ctx.fill();
+    ctx.strokeStyle='rgba(255,25,25,.5)';ctx.lineWidth=3;ctx.stroke();
+  }
+
+  // ── Animação de giro ────────────────────────────────────────────────
+  function animarGiro(premioIdx, cb){
+    var duracao   = 4000;
+    var inicio    = performance.now();
+    var voltas    = 5 + Math.random()*3;
+    var n         = PREMIOS_COMUNS.length;
+    var slice     = (2*Math.PI)/n;
+    // ângulo final: prêmio idx na posição da seta (topo = -π/2)
+    var angFinal  = (voltas*2*Math.PI) + (-Math.PI/2) - (premioIdx*slice + slice/2);
+
+    function frame(now){
+      var t = Math.min((now-inicio)/duracao, 1);
+      // ease-out cubic
+      var ease = 1-Math.pow(1-t,3);
+      var ang   = _angAtual + (angFinal - _angAtual)*ease;
+      desenharRoleta(ang);
+      if(t<1){ requestAnimationFrame(frame); }
+      else{ _angAtual = angFinal % (2*Math.PI); cb(); }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // ── Registra giro no Firebase ───────────────────────────────────────
+  function registrarGiro(clienteId, premio, especial, novoContador){
+    var mesAtual = new Date().toISOString().slice(0,7);
+    var agora    = new Date().toISOString();
+    // Atualiza dados do cliente
+    var dadosCliente = {
+      ultimo_mes:    mesAtual,
+      ultimo_giro:   agora,
+      giros_mes_atual: 1,
+      ultimo_premio: premio.label,
+      liberacoes_extras: 0 // consome a liberação
+    };
+    fetch(FB+'/roleta/'+clienteId+'.json',{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(dadosCliente)
+    }).catch(function(){});
+    // Atualiza contador global
+    fetch(FB+'/roleta_global/contador.json',{
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(novoContador)
+    }).catch(function(){});
+    // Registra no histórico
+    fetch(FB+'/roleta_historico.json',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        clienteId: clienteId,
+        premio:    premio.label,
+        especial:  especial ? especial.label : null,
+        contador:  novoContador,
+        data:      agora
+      })
+    }).catch(function(){});
+    // Se especial → avisa funcionários
+    if(especial){
+      fetch(FB+'/roleta_premios_especiais.json',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          clienteId:  clienteId,
+          premio:     especial.label,
+          contador:   novoContador,
+          data:       agora,
+          retirado:   false
+        })
+      }).catch(function(){});
+    }
+  }
+
+  // ── Mostra popup de resultado ───────────────────────────────────────
+  function mostrarPopup(premio, especial, contador){
+    var pop = document.getElementById('roleta-popup');
+    document.getElementById('roleta-pop-ico').textContent    = especial ? especial.emoji : premio.emoji;
+    document.getElementById('roleta-pop-premio').textContent = especial ? especial.label : premio.label;
+    var desc = especial
+      ? '🎉 Você foi o giro #'+contador+' da Alpha! Prêmio especial desbloqueado!'
+      : 'Seu prêmio foi registrado. Apresente este app na loja para resgatar!';
+    document.getElementById('roleta-pop-desc').textContent = desc;
+    var aviso = document.getElementById('roleta-pop-aviso');
+    if(especial){
+      aviso.style.display='block';
+      aviso.innerHTML='⚠️ <strong>Retirada presencial obrigatória</strong><br>Apresente RG e CPF na loja Alpha para retirar seu prêmio. Só o ganhador pode retirar.';
+    } else {
+      aviso.style.display='none';
+    }
+    pop.style.display='flex';
+    // confete simples
+    lancarConfete();
+  }
+
+  function lancarConfete(){
+    var cont = document.getElementById('roleta-pop-confete');
+    if(!cont) return;
+    cont.innerHTML='';
+    var cores=['#ff1919','#ffd700','#00ff88','#ff9900','#fff'];
+    for(var i=0;i<40;i++){
+      var d=document.createElement('div');
+      d.style.cssText='position:absolute;width:8px;height:8px;border-radius:2px;'+
+        'background:'+cores[i%cores.length]+';'+
+        'left:'+(Math.random()*100)+'%;top:-10px;'+
+        'animation:confete '+(1+Math.random())+'s linear forwards;'+
+        'animation-delay:'+(Math.random()*.5)+'s;opacity:0.9';
+      cont.appendChild(d);
+    }
+  }
+
+  // ── Init principal ──────────────────────────────────────────────────
+  window.roletaInit = function(){
+    var clienteId = (window.U && window.U.id) ? window.U.id : localStorage.getItem('alpha_uid');
+    if(!clienteId){ atualizarStatus('⚠️','Faça login para girar','','locked'); return; }
+
+    atualizarStatus('⏳','Verificando seu acesso...','','loading');
+    desenharRoleta(0);
+    renderizarListaPremios();
+
+    carregarConfig(function(){
+      desenharRoleta(0);
+      renderizarListaPremios();
+      buscarContadorGlobal(function(contador){
+        atualizarContadorUI(contador);
+        verificarDisponibilidade(clienteId, function(pode, dados, extras, creditos){
+          if(pode){
+            atualizarStatus('🎰','Você tem '+creditos+' giro'+(creditos>1?'s':'')+' disponível'+(creditos>1?'is':'')+'!',
+              'Boa sorte! Pressione GIRAR para começar.','disponivel');
+            habilitarBotao(true);
+          } else {
+            atualizarStatus('🔒','Roleta já utilizada este mês',
+              'Dúvidas? Entre em contato com a loja.','bloqueado');
+            habilitarBotao(false);
+          }
+        });
+      });
+    });
+  };
+
+  window.roletaGirar = function(){
+    if(_girando) return;
+    var clienteId = (window.U && window.U.id) ? window.U.id : localStorage.getItem('alpha_uid');
+    if(!clienteId){ toast('⚠️ Erro: faça login novamente'); return; }
+
+    _girando = true;
+    habilitarBotao(false);
+    document.getElementById('roleta-status-txt').textContent='Girando...';
+
+    buscarContadorGlobal(function(contadorAtual){
+      var novoContador = contadorAtual + 1;
+      var especial     = verificarEspecialPorContador(novoContador);
+      var premioIdx    = especial ? 0 : sortearPremioIdx();
+      var premio       = PREMIOS_COMUNS[premioIdx];
+
+      animarGiro(premioIdx, function(){
+        _girando = false;
+        registrarGiro(clienteId, premio, especial, novoContador);
+        atualizarContadorUI(novoContador);
+        atualizarStatus('🔒','Roleta utilizada este mês','Volte após sua próxima compra!','bloqueado');
+        setTimeout(function(){ mostrarPopup(premio, especial, novoContador); }, 300);
+      });
+    });
+  };
+
+  window.roletaFecharPopup = function(){
+    document.getElementById('roleta-popup').style.display='none';
+  };
+
+  function verificarEspecialPorContador(n){
+    for(var i=0;i<PREMIOS_ESPECIAIS.length;i++){
+      var pe = PREMIOS_ESPECIAIS[i];
+      var base = pe.giro % pe.multiplo || pe.multiplo;
+      if(n >= pe.giro && (n - base) % pe.multiplo === 0){ return pe; }
+      if(n === pe.giro){ return pe; }
+    }
+    return null;
+  }
+
+  function sortearPremioIdx(){
+    var total = PREMIOS_COMUNS.reduce(function(s,p){return s+(p.peso||10)},0);
+    var rand  = Math.random()*total, acc=0;
+    for(var i=0;i<PREMIOS_COMUNS.length;i++){
+      acc += (PREMIOS_COMUNS[i].peso||10);
+      if(rand<=acc) return i;
+    }
+    return 0;
+  }
+
+  function atualizarStatus(ico, txt, sub, tipo){
+    var card = document.getElementById('roleta-status-card');
+    document.getElementById('roleta-status-ico').textContent  = ico;
+    document.getElementById('roleta-status-txt').textContent  = txt;
+    document.getElementById('roleta-status-sub').textContent  = sub;
+    var cores = { disponivel:'rgba(0,200,100,.12)', bloqueado:'rgba(255,25,25,.08)', loading:'rgba(255,255,255,.04)', locked:'rgba(255,165,0,.08)' };
+    var bordas= { disponivel:'rgba(0,200,100,.3)',  bloqueado:'rgba(255,25,25,.2)',  loading:'rgba(255,255,255,.1)',  locked:'rgba(255,165,0,.3)' };
+    card.style.background = 'linear-gradient(135deg,'+( cores[tipo]||cores.loading)+',rgba(0,0,0,.4))';
+    card.style.borderColor = bordas[tipo]||bordas.loading;
+    // badge sidebar
+    var badge = document.getElementById('roleta-badge-side');
+    if(badge) badge.style.display = tipo==='disponivel' ? 'inline-block' : 'none';
+  }
+
+  function habilitarBotao(sim){
+    var btn = document.getElementById('roleta-btn-girar');
+    if(!btn) return;
+    btn.disabled = !sim;
+    btn.style.opacity = sim ? '1' : '.4';
+    btn.style.cursor  = sim ? 'pointer' : 'not-allowed';
+  }
+
+  function atualizarContadorUI(contador){
+    var el = document.getElementById('roleta-contador-global');
+    if(el) el.textContent = '#'+contador.toLocaleString('pt-BR');
+  }
+
+  function renderizarListaPremios(){
+    var lista = document.getElementById('roleta-premios-lista');
+    if(!lista) return;
+    lista.innerHTML='';
+    PREMIOS_COMUNS.forEach(function(p){
+      var div=document.createElement('div');
+      div.style.cssText='background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px;display:flex;align-items:center;gap:8px';
+      div.innerHTML='<span style="font-size:22px">'+p.emoji+'</span><span style="font-size:12px;font-weight:700;color:#ddd">'+p.label+'</span>';
+      lista.appendChild(div);
+    });
+  }
+
+  // ── Popup flutuante (disparado pelo QR Code) ───────────────────────
+  window.roletaAbrirPopupFlutuante = function(){
+    var clienteId = (window.U && window.U.id) ? window.U.id : localStorage.getItem('alpha_uid');
+    if(!clienteId) return;
+
+    var pop = document.getElementById('roleta-popup-flutuante');
+    if(!pop) return;
+    pop.style.display = 'flex';
+
+    // Carrega config e verifica disponibilidade
+    carregarConfig(function(){
+      desenharRoletaFlutuante(0);
+      renderizarListaPremiosFlutuante();
+      buscarContadorGlobal(function(contador){
+        atualizarContadorFlutuanteUI(contador);
+        verificarDisponibilidade(clienteId, function(pode, dados, extras, creditos){
+          var statusEl  = document.getElementById('roleta-fl-status-txt');
+          var statusSub = document.getElementById('roleta-fl-status-sub');
+          var btnGirar  = document.getElementById('roleta-fl-btn-girar');
+
+          if(pode){
+            statusEl.textContent  = '🎰 Você tem ' + creditos + ' giro' + (creditos>1?'s':'') + ' disponível' + (creditos>1?'is':'') + '!';
+            statusEl.style.color  = '#00cc66';
+            statusSub.textContent = 'Boa sorte! Pressione GIRAR para começar.';
+            btnGirar.disabled     = false;
+            btnGirar.style.opacity= '1';
+            btnGirar.style.cursor = 'pointer';
+            var bg=document.getElementById('roleta-fl-btn-girar-grande');
+            if(bg){bg.disabled=false;bg.style.opacity='1';bg.style.cursor='pointer';}
+          } else {
+            statusEl.textContent  = '🔒 Roleta já utilizada este mês';
+            statusEl.style.color  = '#ff4444';
+            statusSub.textContent = 'Dúvidas? Entre em contato com a loja.';
+            btnGirar.disabled     = true;
+            btnGirar.style.opacity= '.4';
+            btnGirar.style.cursor = 'not-allowed';
+            var bg=document.getElementById('roleta-fl-btn-girar-grande');
+            if(bg){bg.disabled=true;bg.style.opacity='.4';bg.style.cursor='not-allowed';bg.textContent='🔒 Já utilizada este mês';}
+          }
+        });
+      });
+    });
+  };
+
+  window.roletaFecharFlutuante = function(){
+    var pop = document.getElementById('roleta-popup-flutuante');
+    if(pop) pop.style.display = 'none';
+  };
+
+  window.roletaGirarFlutuante = function(){
+    if(_girando) return;
+    var clienteId = (window.U && window.U.id) ? window.U.id : localStorage.getItem('alpha_uid');
+    if(!clienteId) return;
+
+    _girando = true;
+    var btn = document.getElementById('roleta-fl-btn-girar');
+    if(btn){ btn.disabled=true; btn.style.opacity='.4'; }
+    var statusEl = document.getElementById('roleta-fl-status-txt');
+    if(statusEl){ statusEl.textContent='Girando...'; statusEl.style.color='#ffd700'; }
+
+    buscarContadorGlobal(function(contadorAtual){
+      var novoContador = contadorAtual + 1;
+      var especial     = verificarEspecialPorContador(novoContador);
+      var premioIdx    = especial ? 0 : sortearPremioIdx();
+      var premio       = PREMIOS_COMUNS[premioIdx];
+
+      animarRoletaFlutuante(premioIdx, function(){
+        _girando = false;
+        registrarGiro(clienteId, premio, especial, novoContador);
+        atualizarContadorFlutuanteUI(novoContador);
+        if(statusEl){ statusEl.textContent='🔒 Roleta utilizada este mês'; statusEl.style.color='#ff4444'; }
+        var sub = document.getElementById('roleta-fl-status-sub');
+        if(sub) sub.textContent = 'Volte após sua próxima compra!';
+        setTimeout(function(){
+          roletaFecharFlutuante();
+          mostrarPopup(premio, especial, novoContador);
+        }, 400);
+      });
+    });
+  };
+
+  function desenharRoletaFlutuante(angOffset){
+    var canvas = document.getElementById('roleta-canvas-fl');
+    if(!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var cx=150, cy=150, r=145;
+    var n=PREMIOS_COMUNS.length, slice=(2*Math.PI)/n;
+    ctx.clearRect(0,0,300,300);
+    for(var i=0;i<n;i++){
+      var start=angOffset+i*slice, end=start+slice, p=PREMIOS_COMUNS[i];
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath();
+      ctx.fillStyle=p.cor||'#333'; ctx.fill();
+      ctx.strokeStyle='#000'; ctx.lineWidth=2; ctx.stroke();
+      ctx.save(); ctx.translate(cx,cy); ctx.rotate(start+slice/2);
+      ctx.textAlign='right'; ctx.fillStyle='#fff';
+      ctx.font='bold 11px Barlow,sans-serif';
+      ctx.shadowColor='rgba(0,0,0,.8)'; ctx.shadowBlur=4;
+      ctx.fillText(p.emoji+' '+p.label, r-8, 5);
+      ctx.restore();
+    }
+    ctx.beginPath(); ctx.arc(cx,cy,34,0,2*Math.PI);
+    ctx.fillStyle='#111'; ctx.fill();
+    ctx.strokeStyle='rgba(255,25,25,.5)'; ctx.lineWidth=3; ctx.stroke();
+  }
+
+  var _angFlutuante = 0;
+  function animarRoletaFlutuante(premioIdx, cb){
+    var duracao=4000, inicio=performance.now();
+    var voltas=5+Math.random()*3, n=PREMIOS_COMUNS.length, slice=(2*Math.PI)/n;
+    var angFinal=_angFlutuante+(voltas*2*Math.PI)+(-Math.PI/2)-(premioIdx*slice+slice/2)-_angFlutuante;
+    var angStart=_angFlutuante;
+    function frame(now){
+      var t=Math.min((now-inicio)/duracao,1), ease=1-Math.pow(1-t,3);
+      var ang=angStart+(angFinal)*ease;
+      desenharRoletaFlutuante(ang);
+      if(t<1){ requestAnimationFrame(frame); }
+      else{ _angFlutuante=(angStart+angFinal)%(2*Math.PI); cb(); }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function atualizarContadorFlutuanteUI(contador){
+    var el=document.getElementById('roleta-fl-contador');
+    if(el) el.textContent='Giro global #'+contador.toLocaleString('pt-BR');
+  }
+
+  function renderizarListaPremiosFlutuante(){
+    var lista=document.getElementById('roleta-fl-premios');
+    if(!lista) return;
+    lista.innerHTML='';
+    PREMIOS_COMUNS.forEach(function(p){
+      var d=document.createElement('div');
+      d.style.cssText='background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:8px;font-size:12px;color:#ddd';
+      d.innerHTML='<span style="font-size:18px">'+p.emoji+'</span>'+p.label;
+      lista.appendChild(d);
+    });
+  }
+
+  // CSS confete
+  var s=document.createElement('style');
+  s.textContent='@keyframes confete{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(400px) rotate(720deg);opacity:0}}'+
+    '@keyframes roletaSlideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}';
+  document.head.appendChild(s);
+
+  // Auto-init se já estiver na tela
+  if(document.getElementById('sc-roleta') && document.getElementById('sc-roleta').classList.contains('on')){
+    roletaInit();
+  }
 })();
 </script>
 
