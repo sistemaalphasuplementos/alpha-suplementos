@@ -1249,10 +1249,21 @@ body::before{
 <div id="modal-roleta-liberar" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;align-items:center;justify-content:center;padding:16px">
   <div style="background:var(--bg2);border:1px solid var(--red);border-radius:16px;padding:24px;max-width:360px;width:100%">
     <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--red);margin-bottom:6px">🎰 Liberar Giro Extra</div>
-    <div id="roleta-modal-nome" style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px"></div>
+    <div id="roleta-modal-nome" style="font-size:15px;font-weight:700;color:#fff;margin-bottom:8px"></div>
+
+    <!-- Info de liberações do mês -->
+    <div id="roleta-modal-info" style="background:var(--bg3);border-radius:10px;padding:12px;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;font-weight:700">Liberações este mês</span>
+        <span id="roleta-modal-contador" style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:#fff">—</span>
+      </div>
+      <div id="roleta-modal-dots" style="display:flex;gap:6px;margin-bottom:8px"></div>
+      <div id="roleta-modal-aviso" style="font-size:11px;color:var(--text3)"></div>
+    </div>
+
     <div style="font-size:12px;color:var(--text3);margin-bottom:16px">⚠️ Confirme que o cliente apresentou 2 cartões QR Code</div>
-    <div style="display:flex;gap:8px">
-      <button onclick="roletaConfirmarLiberar()" style="flex:1;background:var(--green);color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">✅ Confirmar Liberação</button>
+    <div id="roleta-modal-acoes" style="display:flex;gap:8px">
+      <button id="roleta-modal-btn-confirmar" onclick="roletaConfirmarLiberar()" style="flex:1;background:var(--green);color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">✅ Confirmar Liberação</button>
       <button onclick="document.getElementById('modal-roleta-liberar').style.display='none'" style="background:var(--bg4);color:var(--text2);border:.5px solid var(--border);border-radius:8px;padding:12px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif">Cancelar</button>
     </div>
   </div>
@@ -3056,35 +3067,116 @@ async function carregarMeusCodigos(){
     }).join('');
   };
 
+  var LIMITE_LIBERACOES = 2;
+
   window.roletaSelecionarCliente = function(id, nome){
     _clienteSelecionado = { id:id, nome:nome };
     var modal = document.getElementById('modal-roleta-liberar');
     document.getElementById('roleta-modal-nome').textContent = nome;
+    document.getElementById('roleta-modal-contador').textContent = '...';
+    document.getElementById('roleta-modal-dots').innerHTML = '';
+    document.getElementById('roleta-modal-aviso').textContent = 'Carregando...';
     modal.style.display = 'flex';
+
+    // Busca dados do cliente no Firebase para mostrar liberações do mês
+    var mesAtual = new Date().toISOString().slice(0,7);
+    fetch(FB+'/roleta/'+id+'.json')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var ultimoMes  = (d && d.ultimo_mes) ? d.ultimo_mes : '';
+        var extras     = (d && d.liberacoes_extras && ultimoMes === mesAtual) ? parseInt(d.liberacoes_extras) : 0;
+        var jaGirou    = (d && d.ultimo_mes === mesAtual);
+        var total      = extras; // liberações pendentes ainda não usadas
+        var usadas     = jaGirou ? 1 : 0; // giro base do mês
+
+        // Reconstrói histórico de liberações feitas (extras usadas + pendentes)
+        var liberacoesFeitas = (d && d.liberacoes_feitas_mes && ultimoMes === mesAtual) ? parseInt(d.liberacoes_feitas_mes) : 0;
+
+        // Dots visuais
+        var dots = document.getElementById('roleta-modal-dots');
+        dots.innerHTML = '';
+        for(var i=0; i<LIMITE_LIBERACOES; i++){
+          var dot = document.createElement('div');
+          var usado = i < liberacoesFeitas;
+          dot.style.cssText = 'width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;' +
+            (usado
+              ? 'background:rgba(255,25,25,.2);border:2px solid rgba(255,25,25,.4);color:#ff4444'
+              : 'background:rgba(29,158,117,.15);border:2px solid rgba(29,158,117,.3);color:#1D9E75');
+          dot.textContent = usado ? '✓' : (i+1);
+          dots.appendChild(dot);
+        }
+
+        var contador = document.getElementById('roleta-modal-contador');
+        var aviso    = document.getElementById('roleta-modal-aviso');
+        var btnConf  = document.getElementById('roleta-modal-btn-confirmar');
+
+        contador.textContent = liberacoesFeitas + ' / ' + LIMITE_LIBERACOES;
+
+        if(liberacoesFeitas >= LIMITE_LIBERACOES){
+          // Bloqueado
+          contador.style.color = '#ff4444';
+          aviso.textContent    = '🚫 Limite de ' + LIMITE_LIBERACOES + ' liberações extras atingido este mês.';
+          aviso.style.color    = '#ff4444';
+          btnConf.disabled     = true;
+          btnConf.style.opacity = '.4';
+          btnConf.style.cursor  = 'not-allowed';
+          btnConf.textContent   = '🚫 Limite atingido';
+        } else {
+          contador.style.color = liberacoesFeitas > 0 ? '#ff9900' : '#1D9E75';
+          aviso.textContent    = 'Restam ' + (LIMITE_LIBERACOES - liberacoesFeitas) + ' liberação(ões) disponível(eis) este mês.';
+          aviso.style.color    = 'var(--text3)';
+          btnConf.disabled     = false;
+          btnConf.style.opacity = '1';
+          btnConf.style.cursor  = 'pointer';
+          btnConf.textContent   = '✅ Confirmar Liberação';
+        }
+
+        // Salva dados para usar no confirmar
+        _clienteSelecionado.liberacoesFeitas = liberacoesFeitas;
+        _clienteSelecionado.extras = extras;
+      })
+      .catch(function(){
+        document.getElementById('roleta-modal-aviso').textContent = 'Erro ao carregar dados.';
+      });
   };
 
   window.roletaConfirmarLiberar = function(){
     if(!_clienteSelecionado) return;
     var id   = _clienteSelecionado.id;
     var nome = _clienteSelecionado.nome;
-    // Incrementa liberacoes_extras no Firebase
+    var mesAtual = new Date().toISOString().slice(0,7);
+
     fetch(FB+'/roleta/'+id+'.json')
-      .then(function(r){return r.json()})
+      .then(function(r){ return r.json(); })
       .then(function(d){
-        var extras = ((d && d.liberacoes_extras) ? parseInt(d.liberacoes_extras) : 0) + 1;
+        var ultimoMes        = (d && d.ultimo_mes) ? d.ultimo_mes : '';
+        var extras           = (d && d.liberacoes_extras) ? parseInt(d.liberacoes_extras) : 0;
+        var liberacoesFeitas = (d && d.liberacoes_feitas_mes && ultimoMes === mesAtual) ? parseInt(d.liberacoes_feitas_mes) : 0;
+
+        // Checa limite novamente (segurança)
+        if(liberacoesFeitas >= LIMITE_LIBERACOES){
+          alert('Limite de ' + LIMITE_LIBERACOES + ' liberações já atingido para este cliente este mês.');
+          return;
+        }
+
         return fetch(FB+'/roleta/'+id+'.json',{
           method:'PATCH',
           headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({ liberacoes_extras: extras })
+          body:JSON.stringify({
+            liberacoes_extras:    extras + 1,
+            liberacoes_feitas_mes: liberacoesFeitas + 1,
+            liberacoes_mes:       mesAtual
+          })
         });
       })
-      .then(function(){
+      .then(function(r){
+        if(!r) return; // bloqueado pelo limite
         document.getElementById('modal-roleta-liberar').style.display='none';
         document.getElementById('roleta-busca-cli').value='';
         document.getElementById('roleta-resultado-busca').innerHTML=
           '<div style="background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.3);border-radius:8px;padding:12px;text-align:center;color:#1D9E75;font-size:13px;font-weight:700">✅ Giro extra liberado para '+nome+'!</div>';
         _clienteSelecionado = null;
-        setTimeout(function(){ document.getElementById('roleta-resultado-busca').innerHTML=''; },4000);
+        setTimeout(function(){ document.getElementById('roleta-resultado-busca').innerHTML=''; }, 4000);
       })
       .catch(function(){
         alert('Erro ao liberar giro. Tente novamente.');
