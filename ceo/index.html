@@ -650,6 +650,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
       <button class="tbt" onclick="ir('missoes',this);ceoMissoesInit();setTimeout(_topo,150)">🎯 Missões v68</button>
       <button class="tbt" onclick="ir('analytics',this);v69Init();setTimeout(_topo,50)">📊 Analytics v69</button>
       <button class="tbt" onclick="ir('roleta',this);roletaCeoInit();setTimeout(_topo,50)">🎰 Roleta</button>
+      <button class="tbt" onclick="ir('premios',this);ceoPremiosInit()">🎁 Prêmios</button>
     </div>
     <div class="tbright"><span id="unome">CEO</span><button id="sbtn">Sair</button></div>
   </div>
@@ -1615,6 +1616,24 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.13;z
     <div id="ceo-roleta-hist-especiais">
       <div style="text-align:center;padding:20px;color:#555;font-size:13px">Clique em Atualizar para carregar</div>
     </div>
+  </div>
+</div>
+
+<!-- ══ PRÊMIOS DE RESGATE (loja de pontos do cliente) ══════════════════ -->
+<div id="p-premios" class="pnl">
+  <div style="margin-bottom:18px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#CC0000">🎁 Prêmios de Resgate</div>
+    <div style="font-size:13px;color:#aaa;margin-top:4px">Cadastre, edite os pontos ou remova os prêmios que aparecem na tela "Meus Pontos" do cliente</div>
+  </div>
+
+  <div class="card">
+    <div class="ct" style="justify-content:space-between">
+      <span>🏷️ Catálogo de Prêmios</span>
+      <button onclick="ceoPremiosSalvar()" style="background:#CC000022;color:#CC0000;border:1px solid #CC000044;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif">💾 Salvar catálogo</button>
+    </div>
+    <div style="font-size:12px;color:#666;margin-bottom:14px">O cliente só consegue resgatar quando tiver pontos suficientes E o nível mínimo exigido. Alterações só valem para todos os clientes após clicar em Salvar.</div>
+    <div id="ceo-premios-lista"></div>
+    <button onclick="ceoPremiosAdicionar()" style="width:100%;margin-top:10px;background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.15);border-radius:8px;padding:10px;color:#888;font-size:13px;font-weight:600;cursor:pointer;font-family:'Barlow',sans-serif">+ Adicionar prêmio</button>
   </div>
 </div>
 
@@ -4141,6 +4160,88 @@ function ceoBnAtivo(painel){
   };
 
   function mostrarSucesso(msg){
+    var d=document.createElement('div');
+    d.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1D9E75;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.4)';
+    d.textContent=msg;
+    document.body.appendChild(d);
+    setTimeout(function(){ d.remove(); },3000);
+  }
+})();
+</script>
+
+<!-- ══ PRÊMIOS DE RESGATE — JS CEO ═══════════════════════════════════ -->
+<script>
+(function(){
+  var FBR = 'https://sistema-alpha-b12d0-default-rtdb.firebaseio.com';
+
+  var _premios = [
+    {id:'PRM_001',nome:'Coqueteleira Alpha',pts:300,nivel:'BRONZE',cat:'Acessório',emoji:'🥤'},
+    {id:'PRM_002',nome:'Pré-Treino Olimpia',pts:1100,nivel:'BRONZE',cat:'Pré-Treino',emoji:'⚡'},
+    {id:'PRM_003',nome:'Pré-Treino Oxan Pump',pts:1000,nivel:'BRONZE',cat:'Pré-Treino',emoji:'💪'},
+    {id:'PRM_004',nome:'Creatina 300g',pts:900,nivel:'BRONZE',cat:'Creatina',emoji:'🔬'},
+    {id:'PRM_005',nome:'Wheyzinho',pts:1500,nivel:'PRATA',cat:'Proteína',emoji:'🥛'},
+    {id:'PRM_006',nome:'Deca Whey',pts:1800,nivel:'PRATA',cat:'Proteína',emoji:'🏆'}
+  ];
+
+  window.ceoPremiosInit = function(){
+    fetch(FBR+'/premios_catalogo.json')
+      .then(function(r){return r.json()})
+      .then(function(d){
+        if(Array.isArray(d) && d.length>0) _premios = d;
+        renderPremios();
+      })
+      .catch(function(){ renderPremios(); });
+  };
+
+  function renderPremios(){
+    var cont=document.getElementById('ceo-premios-lista');
+    if(!cont) return;
+    cont.innerHTML='';
+    _premios.forEach(function(p,i){
+      var row=document.createElement('div');
+      row.style.cssText='background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px;margin-bottom:8px';
+      row.innerHTML=
+        '<div style="display:grid;grid-template-columns:44px 1fr auto;gap:8px;align-items:center;margin-bottom:8px">'+
+          '<input type="text" value="'+p.emoji+'" style="width:44px;text-align:center;font-size:18px;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:8px;color:#fff;font-family:\'Barlow\',sans-serif" oninput="_premiosCEO['+i+'].emoji=this.value">'+
+          '<input type="text" value="'+p.nome+'" style="background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:8px;color:#fff;font-size:13px;font-family:\'Barlow\',sans-serif;width:100%" placeholder="Nome do prêmio" oninput="_premiosCEO['+i+'].nome=this.value">'+
+          '<button onclick="ceoRemoverPremio('+i+')" style="background:rgba(255,50,50,.1);border:1px solid rgba(255,50,50,.2);border-radius:8px;padding:8px 10px;color:#ff5555;font-size:12px;font-weight:700;cursor:pointer;font-family:\'Barlow\',sans-serif">✕</button>'+
+        '</div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">'+
+          '<div><label style="font-size:10px;color:#888;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Pontos p/ resgate</label>'+
+          '<input type="number" value="'+p.pts+'" min="1" style="width:100%;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:8px;color:#fff;font-size:13px;font-family:\'Barlow\',sans-serif" oninput="_premiosCEO['+i+'].pts=parseInt(this.value)||1"></div>'+
+          '<div><label style="font-size:10px;color:#888;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Nível mínimo</label>'+
+          '<select style="width:100%;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:8px;color:#fff;font-size:13px;font-family:\'Barlow\',sans-serif" onchange="_premiosCEO['+i+'].nivel=this.value">'+
+            ['BRONZE','PRATA','OURO'].map(function(nv){return '<option value="'+nv+'"'+(p.nivel===nv?' selected':'')+'>'+nv+'</option>';}).join('')+
+          '</select></div>'+
+          '<div><label style="font-size:10px;color:#888;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Categoria</label>'+
+          '<input type="text" value="'+(p.cat||'')+'" style="width:100%;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:8px;color:#fff;font-size:13px;font-family:\'Barlow\',sans-serif" placeholder="Ex: Proteína" oninput="_premiosCEO['+i+'].cat=this.value"></div>'+
+        '</div>';
+      cont.appendChild(row);
+    });
+    window._premiosCEO = _premios;
+  }
+
+  window.ceoPremiosAdicionar = function(){
+    _premios.push({id:'PRM_'+Date.now(), nome:'Novo Prêmio', pts:500, nivel:'BRONZE', cat:'', emoji:'🎁'});
+    renderPremios();
+  };
+
+  window.ceoRemoverPremio = function(i){
+    if(!confirm('Remover este prêmio da loja de pontos? Os clientes não poderão mais resgatá-lo.')) return;
+    _premios.splice(i,1);
+    renderPremios();
+  };
+
+  window.ceoPremiosSalvar = function(){
+    fetch(FBR+'/premios_catalogo.json',{
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(_premios)
+    }).then(function(){ ceoPremiosSucesso('✅ Catálogo de prêmios salvo! Já vale para todos os clientes.'); })
+    .catch(function(){ alert('Erro ao salvar. Verifique sua conexão e tente novamente.'); });
+  };
+
+  function ceoPremiosSucesso(msg){
     var d=document.createElement('div');
     d.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1D9E75;color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.4)';
     d.textContent=msg;
