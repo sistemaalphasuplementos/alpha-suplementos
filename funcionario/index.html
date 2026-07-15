@@ -1065,6 +1065,16 @@ body::before{
         <div><div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900">CRM — Alertas</div></div>
         <button class="bv" style="width:auto;padding:9px 16px" onclick="toast('🔔 Push enviado!')">🔔 Push para todos</button>
       </div>
+      <div id="crm-contato-progresso" style="margin-bottom:14px;background:var(--bg3);border:.5px solid var(--border);border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:12px">
+        <div style="font-size:20px">✅</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11px;color:var(--text3)">Contatos feitos hoje</div>
+          <div style="font-weight:800;font-size:16px" id="crm-contato-txt">0 / 0</div>
+        </div>
+        <div style="flex:1;background:var(--bg4);border-radius:6px;height:6px;overflow:hidden;max-width:120px">
+          <div id="crm-contato-barra" style="height:100%;width:0%;background:var(--green);transition:width .3s"></div>
+        </div>
+      </div>
       <div class="cards-grid-4" style="margin-bottom:16px">
         <div class="big-card bc-red" style="padding:14px">
           <div style="font-size:24px">⛔</div>
@@ -1482,6 +1492,7 @@ var PREMIOS=[
 ];
 var NC={OURO:{emoji:'🥇',cor:'#FFD700',pts:2.0,cb:0.07},PRATA:{emoji:'🥈',cor:'#C8C8C8',pts:1.5,cb:0.05},BRONZE:{emoji:'🥉',cor:'#CD7F32',pts:1.0,cb:0.02}};
 var cliSel=null, waAtual=null, cbCli=null, ptsCli=null, ptsPremioSel=null;
+var _waPendente=null, _crmContatosHoje=0, _crmTotalAlertasHoje=0;
 function fR(v){return 'R$'+Number(v).toFixed(2).replace('.',',');}
 function fP(v){return Number(v).toLocaleString('pt-BR')+' pts';}
 function el(id){return document.getElementById(id);}
@@ -1676,6 +1687,8 @@ function renderCRM(){
   var ct={a:0,u:0,p:0,v:0};
   s.forEach(function(x){if(x.dias<=0)ct.a++;else if(x.dias<=2)ct.u++;else if(x.dias<=5)ct.p++;else ct.v++;});
   ['ca','cu','cp','cv'].forEach(function(id,i){var e=el(id);if(e)e.textContent=[ct.a,ct.u,ct.p,ct.v][i];});
+  _crmTotalAlertasHoje = s.length;
+  _atualizarContadorContatosCRM();
   var e=el('crm-lista');if(!e)return;
   window._crmData=s;
   e.innerHTML=s.map(function(a,idx){
@@ -2170,8 +2183,74 @@ function enviarWA(){
   if(!msg.trim()){toast('Digite uma mensagem!','var(--red)');return;}
   fMWA();
   var tel=waAtual.tel.replace(/[^0-9]/g,'');
-  if(tel.length>=10)window.open('https://wa.me/55'+tel+'?text='+encodeURIComponent(msg),'_blank');
+  if(tel.length>=10){
+    window.open('https://wa.me/55'+tel+'?text='+encodeURIComponent(msg),'_blank');
+    _waMarcarPendente(waAtual);
+  }
   toast('📱 WhatsApp aberto para '+waAtual.nome+'!');
+}
+
+// ── Confirmação passiva de contato CRM ──────────────────────────────
+// Em vez de pedir um segundo clique "confirmei que mandei", usamos a
+// Page Visibility API: quando a funcionária volta pro app depois de
+// abrir o WhatsApp e ficar fora tempo suficiente pra ter mandado a
+// mensagem, o sistema registra o contato sozinho — zero fricção extra.
+function _waMarcarPendente(cli){
+  _waPendente = { cid: cli.id||cli.cid||'', nome: cli.nome||'', tel: cli.tel||'', ts: Date.now() };
+  try{ localStorage.setItem('alpha_wa_pendente', JSON.stringify(_waPendente)); }catch(e){}
+}
+function _waVerificarRetorno(){
+  var p = _waPendente;
+  if(!p){ try{ p = JSON.parse(localStorage.getItem('alpha_wa_pendente')||'null'); }catch(e){} }
+  if(!p) return;
+  var elapsed = Date.now()-p.ts;
+  // desiste depois de 5min parado — provavelmente não tem mais relação com aquele retorno de tela
+  if(elapsed > 5*60*1000){
+    _waPendente=null; try{ localStorage.removeItem('alpha_wa_pendente'); }catch(e){}
+    return;
+  }
+  // tempo mínimo fora do app pra considerar que ela realmente digitou/mandou algo
+  if(elapsed >= 6000){
+    _waConfirmarContato(p);
+    _waPendente=null; try{ localStorage.removeItem('alpha_wa_pendente'); }catch(e){}
+  }
+  // senão, mantém pendente aguardando a próxima vez que a tela ficar visível
+}
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState==='visible') _waVerificarRetorno();
+});
+window.addEventListener('focus', function(){ _waVerificarRetorno(); });
+
+function _waConfirmarContato(p){
+  fetch(WEB_APP_URL, {
+    method:'POST', headers:{'Content-Type':'text/plain'},
+    body: JSON.stringify({
+      token: _API_TOKEN, acao: 'registrar_contato_crm',
+      dados: { clienteId:p.cid, nomeCliente:p.nome, telefone:p.tel, funcionario: window._funcNome||'', canal:'whatsapp' }
+    })
+  }).then(function(r){ return r.json(); }).then(function(d){
+    if(d && d.sucesso){
+      toast('✅ Contato registrado com '+p.nome+'!');
+      _crmContatosHoje = (_crmContatosHoje||0)+1;
+      _atualizarContadorContatosCRM();
+    }
+  }).catch(function(){ /* silencioso — não atrapalha o fluxo dela */ });
+}
+function _atualizarContadorContatosCRM(){
+  var txt=el('crm-contato-txt'); var barra=el('crm-contato-barra');
+  var total=_crmTotalAlertasHoje||0, feitos=Math.min(_crmContatosHoje||0, total||_crmContatosHoje||0);
+  if(txt) txt.textContent=(_crmContatosHoje||0)+' / '+total;
+  if(barra) barra.style.width=(total>0?Math.min(100,Math.round((feitos/total)*100)):0)+'%';
+}
+function carregarContatosHojeCRM(){
+  fetch(WEB_APP_URL+'?acao=listar_contatos_crm_hoje&token='+_API_TOKEN+'&funcionario='+encodeURIComponent(window._funcNome||''))
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d && d.sucesso && d.dados){
+        _crmContatosHoje = Number(d.dados.contatosHoje)||0;
+        _atualizarContadorContatosCRM();
+      }
+    }).catch(function(){});
 }
 
 // CONFIRMAR INDICAÇÃO
@@ -2434,6 +2513,7 @@ async function cadastrar(){
 
 // ── ALERTA CRM NO LOGIN ─────────────────────────────
 function mostrarAlertaCRM(nomeFunc) {
+  carregarContatosHojeCRM();
   // Buscar alertas reais da API ou usar PRD local
   var alertas = [];
   
