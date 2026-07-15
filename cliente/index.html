@@ -303,6 +303,130 @@ const AlphaPWA=(()=>{
 window.AlphaPWA=AlphaPWA;
 </script>
 
+<!-- ══ ALPHA INSTALL v73 — Banner/Modal de instalação do PWA ═══════
+     Android/Chrome: botão flutuante usando beforeinstallprompt nativo.
+     iOS Safari: modal com tutorial passo a passo (sem API nativa).
+     ══════════════════════════════════════════════════════════════ -->
+<script>
+const AlphaInstall=(()=>{
+  var _deferredPrompt=null;
+  var LS_DISMISS='alpha_install_dismiss_until';
+  var LS_INSTALLED='alpha_install_done';
+
+  function isStandalone(){
+    try{
+      return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+    }catch(e){ return false; }
+  }
+  function isIOS(){
+    return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+  }
+  function podeSugerir(){
+    if(isStandalone()) return false;
+    if(localStorage.getItem(LS_INSTALLED)) return false;
+    var until=parseInt(localStorage.getItem(LS_DISMISS)||'0',10);
+    if(until && Date.now()<until) return false;
+    return true;
+  }
+  function adiar(dias){
+    try{ localStorage.setItem(LS_DISMISS, String(Date.now()+dias*24*60*60*1000)); }catch(e){}
+  }
+
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    _deferredPrompt = e;
+    _mostrarBotaoAndroid();
+  });
+  window.addEventListener('appinstalled', function(){
+    try{ localStorage.setItem(LS_INSTALLED,'1'); }catch(e){}
+    _removerBotaoAndroid();
+    fecharModalIOS();
+  });
+
+  function _mostrarBotaoAndroid(){
+    if(!podeSugerir()) return;
+    if(document.getElementById('alpha-install-btn')) return;
+    var b=document.createElement('button');
+    b.id='alpha-install-btn';
+    b.innerHTML='📲&nbsp; Instalar App';
+    b.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:calc(78px + var(--safe));z-index:9998;'+
+      'background:linear-gradient(135deg,#CC0000,#EE1111);color:#fff;border:none;border-radius:30px;padding:12px 22px;'+
+      'font-weight:700;font-size:13px;font-family:Barlow,sans-serif;box-shadow:0 6px 20px rgba(204,0,0,.5);cursor:pointer;'+
+      'display:flex;align-items:center;gap:6px;animation:alphaInstallPulse 2s ease-in-out infinite;white-space:nowrap';
+    b.onclick=function(){
+      if(b.parentNode) b.remove();
+      if(!_deferredPrompt) return;
+      _deferredPrompt.prompt();
+      _deferredPrompt.userChoice.then(function(choice){
+        if(choice && choice.outcome==='accepted'){ try{ localStorage.setItem(LS_INSTALLED,'1'); }catch(e){} }
+        else{ adiar(3); }
+        _deferredPrompt=null;
+      });
+    };
+    document.body.appendChild(b);
+    // some depois de um tempo pra não incomodar
+    setTimeout(function(){ if(b && b.parentNode) b.remove(); }, 20000);
+  }
+  function _removerBotaoAndroid(){
+    var b=document.getElementById('alpha-install-btn'); if(b) b.remove();
+  }
+
+  function mostrarModalIOS(){
+    if(!podeSugerir()) return;
+    if(!isIOS()) return;
+    if(document.getElementById('alpha-install-ios')) return;
+    var wrap=document.createElement('div');
+    wrap.id='alpha-install-ios';
+    wrap.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:flex;'+
+      'align-items:flex-end;justify-content:center;animation:fadeIn .25s';
+    wrap.innerHTML=
+      '<div style="background:linear-gradient(135deg,#141414,#0a0a0a);border-radius:20px 20px 0 0;'+
+        'padding:22px 20px calc(24px + var(--safe));width:100%;max-width:440px;border-top:1px solid rgba(204,0,0,.4)">'+
+        '<div style="text-align:center;margin-bottom:16px">'+
+          '<div style="font-size:32px">📲</div>'+
+          '<div style="font-size:16px;font-weight:800;color:#fff;font-family:Barlow,sans-serif;margin-top:6px">Instale o App da Alpha</div>'+
+          '<div style="font-size:12px;color:#999;font-family:Barlow,sans-serif;margin-top:4px">Acesso rápido na tela inicial, sem abrir o navegador toda vez</div>'+
+        '</div>'+
+        '<div style="display:flex;align-items:center;gap:12px;background:#1a1a1a;border-radius:12px;padding:12px;margin-bottom:10px">'+
+          '<div style="background:#CC0000;color:#fff;font-weight:800;font-size:13px;width:26px;height:26px;border-radius:50%;'+
+            'display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>'+
+          '<div style="font-size:13px;color:#ddd;font-family:Barlow,sans-serif">Toque no ícone <b>Compartilhar</b> ⬆️ na barra do Safari (embaixo da tela)</div>'+
+        '</div>'+
+        '<div style="display:flex;align-items:center;gap:12px;background:#1a1a1a;border-radius:12px;padding:12px;margin-bottom:10px">'+
+          '<div style="background:#CC0000;color:#fff;font-weight:800;font-size:13px;width:26px;height:26px;border-radius:50%;'+
+            'display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>'+
+          '<div style="font-size:13px;color:#ddd;font-family:Barlow,sans-serif">Role as opções e toque em <b>"Adicionar à Tela de Início"</b> ➕</div>'+
+        '</div>'+
+        '<div style="display:flex;align-items:center;gap:12px;background:#1a1a1a;border-radius:12px;padding:12px;margin-bottom:18px">'+
+          '<div style="background:#CC0000;color:#fff;font-weight:800;font-size:13px;width:26px;height:26px;border-radius:50%;'+
+            'display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>'+
+          '<div style="font-size:13px;color:#ddd;font-family:Barlow,sans-serif">Toque em <b>"Adicionar"</b> no canto superior direito</div>'+
+        '</div>'+
+        '<button id="alpha-install-ios-ok" style="width:100%;background:linear-gradient(135deg,#CC0000,#EE1111);color:#fff;'+
+          'border:none;border-radius:10px;padding:13px;font-weight:700;font-size:14px;font-family:Barlow,sans-serif;cursor:pointer;margin-bottom:8px">'+
+          'Entendi!</button>'+
+        '<button id="alpha-install-ios-later" style="width:100%;background:none;color:#777;border:none;padding:6px;'+
+          'font-size:12px;font-family:Barlow,sans-serif;cursor:pointer">Lembrar depois</button>'+
+      '</div>';
+    document.body.appendChild(wrap);
+    document.getElementById('alpha-install-ios-ok').onclick=function(){ adiar(3); fecharModalIOS(); };
+    document.getElementById('alpha-install-ios-later').onclick=function(){ adiar(3); fecharModalIOS(); };
+  }
+  function fecharModalIOS(){
+    var w=document.getElementById('alpha-install-ios'); if(w) w.remove();
+  }
+
+  function init(){
+    if(isStandalone()){ try{ localStorage.setItem(LS_INSTALLED,'1'); }catch(e){} return; }
+    if(isIOS()){ mostrarModalIOS(); }
+    // Android/Chrome: aguarda o evento nativo beforeinstallprompt (listener já registrado acima)
+  }
+
+  return {init:init, mostrarModalIOS:mostrarModalIOS, podeSugerir:podeSugerir};
+})();
+window.AlphaInstall=AlphaInstall;
+</script>
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -1096,6 +1220,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;opa
 .ms-hist-data{font-size:10px;color:var(--text3);margin-top:1px}
 .ms-hist-recomp{text-align:right;flex-shrink:0;font-size:11px;font-weight:700;color:var(--gold)}
 @keyframes fadeIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+@keyframes alphaInstallPulse{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.05)}}
 </style>
 </head>
 <body>
@@ -5598,6 +5723,7 @@ function pedirPermissaoNotificacao(){if('Notification'in window&&Notification.pe
       AlphaSync.init(U.nome,U.tel||U.telefone||'').then(()=>{
         AlphaPWA.init();
         setTimeout(notifBannerVerificar, 2000);
+        setTimeout(function(){ try{ AlphaInstall.init(); }catch(e){} }, 3500);
       }).catch(function(){});
       // Atualiza dados do servidor em background
       fetch(WEB_APP_URL+'?acao=listar_clientes_todos&token='+_API_TOKEN+'&funcionario=cliente')
@@ -8214,6 +8340,8 @@ function msAtualizarAposTreino(){
 
   window.roletaFecharPopup = function(){
     document.getElementById('roleta-popup').style.display='none';
+    // Momento de alto engajamento — bom instante pra sugerir instalar o app
+    setTimeout(function(){ try{ AlphaInstall.mostrarModalIOS(); }catch(e){} }, 600);
   };
 
   function verificarEspecialPorContador(n){
